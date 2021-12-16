@@ -5,13 +5,15 @@ Loads all the data required by vcstools from the data directory.
 import os
 import re
 import glob
+import yaml
 import psrqpy
+import numpy as np
 
 # Hard code the path of the flux catalouge directories
 CAT_DIR = os.path.join(os.path.dirname(__file__), 'catalouges')
 
 # Grab all the catalogue yamls
-CAT_YAMLS = glob.glob("{}/*yaml".format(CAT_DIR))
+CAT_YAMLS = glob.glob("{}/*json".format(CAT_DIR))
 
 # Hard code the path of the ATNF psrcat database file
 ATNF_LOC = os.path.join(CAT_DIR, 'psrcat.db')
@@ -36,10 +38,9 @@ def flux_from_atnf(pulsar, query=None, assumed_error=0.5):
         The flux values corresponding to the freq_all list in mJy.
     flux_err_all : `list`
         The uncertainty in the flux_all values.
-    spind : `float`
-        The spectral index from ATNF, will be None if not available.
-    spind_err : `float`
-        The ucnertainty in spind from ATNF, will be None if not available.
+    references : `list`
+        The reference keys from:
+        https://www.atnf.csiro.au/research/pulsar/psrcat/psrcat_ref.html
     """
     if query is None:
         query = psrqpy.QueryATNF(psrs=[pulsar], loadfromdb=ATNF_LOC).pandas
@@ -50,7 +51,7 @@ def flux_from_atnf(pulsar, query=None, assumed_error=0.5):
     flux_queries = []
     for table_param in query.keys():
         if re.match("S\d*\d$", table_param) or re.match("S\d*G$", table_param):
-            flux_queries.append(flux_queries)
+            flux_queries.append(table_param)
 
     freq_all     = []
     flux_all     = []
@@ -94,3 +95,66 @@ def flux_from_atnf(pulsar, query=None, assumed_error=0.5):
             references.append(query[flux_query+"_REF"][query_id])
 
     return freq_all, flux_all, flux_err_all, references
+
+
+def collect_catalogue_fluxes():
+    """Collect the fluxes from all of the catalogues recorded in this repo.
+
+    Returns
+    -------
+    jname_cat_dict[jname][ref]['Frequency MHz', 'Flux Density mJy', 'Flux Density error mJy'] : `dict`
+        `jname` : `str`
+            The pulsar's Jname.
+        `ref` : `str`
+            The reference label.
+        ``'Frequency MHz'``
+            The observing frequency in MHz.
+        ``'Flux Density mJy'``
+            The flux density in mJy.
+        ``'Flux Density error mJy'`
+            The error of the flux density in mJy.
+    jname_cat_list[jname] : `dict`
+        `jname` : `str`
+            The pulsar's Jname.
+        Each dictionary contains a list of lists of ['Frequency MHz', 'Flux Density mJy', 'Flux Density error mJy', 'ref']
+            ``'Frequency MHz'``
+                The observing frequency in MHz.
+            ``'Flux Density mJy'``
+                The flux density in mJy.
+            ``'Flux Density error mJy'`
+                The error of the flux density in mJy.
+            `ref` : `str`
+                The reference label.
+    """
+    # Make a dictionary for each pulsar
+    query = psrqpy.QueryATNF(params=['PSRJ'], loadfromdb=ATNF_LOC).pandas
+    jnames = list(query['PSRJ'])
+    jname_cat_dict = {}
+    jname_cat_list = {}
+    for jname in jnames:
+        jname_cat_dict[jname] = {}
+        # freq, flux, flux_err, references
+        jname_cat_list[jname] = [[],[],[],[]]
+
+    # Loop over catalogues and put them into the database
+    for cat_file in CAT_YAMLS:
+        cat_label = cat_file.split("/")[-1].split(".")[0]
+
+        # Load in the dict
+        with open(cat_file, "r") as stream:
+            cat_dict = yaml.safe_load(stream)
+
+        # Find which pulsars in the dictionary
+        for jname in jnames:
+            if jname in cat_dict.keys():
+                # Update dict
+                jname_cat_dict[jname][cat_label] = cat_dict[jname]
+                # Update list
+                jname_cat_list[jname][0] += cat_dict[jname]['Frequency MHz']
+                jname_cat_list[jname][1] += cat_dict[jname]['Flux Density mJy']
+                jname_cat_list[jname][2] += cat_dict[jname]['Flux Density error mJy']
+                jname_cat_list[jname][3] += [cat_label] * len(cat_dict[jname]['Frequency MHz'])
+
+    return jname_cat_dict, jname_cat_list
+
+            
