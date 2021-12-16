@@ -9,7 +9,7 @@ for row in lines[7:]:
     row = row.replace(" ± ", "±").split()
     print(row)
     print(len(row))
-    pulsar = row[0]
+    pulsar = row[0].replace("–", "-").replace("+", "+")
     print(row[7])
     if '†' in row[7]:
         freqs = fluxs = flux_errs = []
