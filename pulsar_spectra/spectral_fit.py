@@ -1,5 +1,19 @@
+"""
+Function used to fit different spectral models to the flux densities of pulsars
+"""
 
+import numpy as np
+from iminuit import Minuit
+from iminuit.cost import LeastSquares
 
+import matplotlib.pyplot as plt
+from matplotlib.ticker import ScalarFormatter
+
+from pulsar_spectra.models import simple_power_law, broken_power_law, log_parabolic_spectrum, \
+                                  high_frequency_cut_off_power_law, low_frequency_turn_over_power_law
+
+import logging
+logger = logging.getLogger(__name__)
 
 def robust_cost_function(f_y, y, sigma_y, k=1.345):
     beta_array = []
