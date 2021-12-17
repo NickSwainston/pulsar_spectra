@@ -9,6 +9,9 @@ import yaml
 import psrqpy
 import numpy as np
 
+import logging
+logger = logging.getLogger(__name__)
+
 # Hard code the path of the flux catalouge directories
 CAT_DIR = os.path.join(os.path.dirname(__file__), 'catalouges')
 
@@ -86,7 +89,7 @@ def flux_from_atnf(pulsar, query=None, assumed_error=0.5):
             # Converts key to frequency in MHz
             if flux_query.endswith("G"):
                 # In GHz to convert to MHz
-                freq = int(flux_query[1:])*1e3
+                freq = int(flux_query[1:-1])*1e3
             else:
                 freq = int(flux_query[1:])
             freq_all.append(freq) 
@@ -96,6 +99,15 @@ def flux_from_atnf(pulsar, query=None, assumed_error=0.5):
 
     return freq_all, flux_all, flux_err_all, references
 
+def all_flux_from_atnf():
+    query = psrqpy.QueryATNF(loadfromdb=ATNF_LOC).pandas
+    jnames = list(query['PSRJ'])
+    jname_cat = {}
+    for jname in jnames:
+        freq_all, flux_all, flux_err_all, references = flux_from_atnf(jname, query=query)
+        jname_cat[jname] = {"Frequency MHz":freq_all, "Flux Density mJy":flux_all, "Flux Density error mJy":flux_err_all}
+    return jname_cat
+    
 
 def collect_catalogue_fluxes():
     """Collect the fluxes from all of the catalogues recorded in this repo.
@@ -136,13 +148,18 @@ def collect_catalogue_fluxes():
         # freq, flux, flux_err, references
         jname_cat_list[jname] = [[],[],[],[]]
 
-    # Loop over catalogues and put them into the database
-    for cat_file in CAT_YAMLS:
-        cat_label = cat_file.split("/")[-1].split(".")[0]
+    # Loop over catalogues and put them into a dictionary
+    cat_dicts = []
+    for cat_file in CAT_YAMLS + ['ATNF']:
+        if cat_file == 'ATNF':
+            cat_label = 'ATNF'
+            cat_dict = all_flux_from_atnf()
+        else:
+            cat_label = cat_file.split("/")[-1].split(".")[0]
 
-        # Load in the dict
-        with open(cat_file, "r") as stream:
-            cat_dict = yaml.safe_load(stream)
+            # Load in the dict
+            with open(cat_file, "r") as stream:
+                cat_dict = yaml.safe_load(stream)
 
         # Find which pulsars in the dictionary
         for jname in jnames:
