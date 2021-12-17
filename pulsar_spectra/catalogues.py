@@ -12,8 +12,8 @@ import numpy as np
 import logging
 logger = logging.getLogger(__name__)
 
-# Hard code the path of the flux catalouge directories
-CAT_DIR = os.path.join(os.path.dirname(__file__), 'catalouges')
+# Hard code the path of the flux catalogue directories
+CAT_DIR = os.path.join(os.path.dirname(__file__), 'catalogues')
 
 # Grab all the catalogue yamls
 CAT_YAMLS = glob.glob("{}/*json".format(CAT_DIR))

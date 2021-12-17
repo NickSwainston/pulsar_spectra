@@ -58,7 +58,7 @@ reqs = [
        ]
 
 # Download the ANTF_pulsar_database_file file if it doesn't exist
-datadir = os.path.join(os.path.dirname(__file__), 'pulsar_spectra', 'catalouges')
+datadir = os.path.join(os.path.dirname(__file__), 'pulsar_spectra', 'catalogues')
 download_ANTF_pulsar_database_file(datadir)
 
 
@@ -72,7 +72,7 @@ setup(name="pulsar_spectra",
       description="A simple interface to record pulsar's flux density measurements for a large number of papers and perform fitting of spectral models. ",
       url="https://github.com/NickSwainston/pulsar_spectra.git",
       packages=['pulsar_spectra'],
-      package_data={'pulsar_spectra':['catalouges/*.json', 'catalouges/*.db']},
+      package_data={'pulsar_spectra':['catalogues/*.json', 'catalogues/*.db']},
       python_requires='>=3.6',
       install_requires=reqs,
       setup_requires=['pytest-runner'],
