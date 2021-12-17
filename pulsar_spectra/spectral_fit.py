@@ -26,7 +26,7 @@ def robust_cost_function(f_y, y, sigma_y, k=1.345):
     return sum(beta_array)
 
     
-def iminuit_fit_spectral_model(freq, flux, flux_err, model=simple_power_law, plot=False, save_name="fit.png"):
+def iminuit_fit_spectral_model(freq, flux, flux_err, model=simple_power_law, plot=False, save_name="fit.png", data_dict=None):
     # Model dependent defaults
     if model == simple_power_law:
         # a, b
@@ -80,15 +80,23 @@ def iminuit_fit_spectral_model(freq, flux, flux_err, model=simple_power_law, plo
     if plot:
         fitted_freq = np.linspace(min(freq), max(freq), 100)
         fitted_flux = model(fitted_freq, *m.values)#, v0=np.mean(freq))
+        fitted_freq /= 1e6 # Convert to MHz
         #fitted_flux = model(fitted_freq, *(-1.5, 0.1, 3., 4000000))
         fig, ax = plt.subplots()
-        plt.errorbar(np.array(freq) / 1e9, flux, yerr=flux_err, fmt='o', label="Input data", color="orange")
-        plt.plot(fitted_freq / 1e9, fitted_flux, 'k--', label=fit_info) # Modelled line
+        if data_dict:
+            for ref in data_dict.keys():
+                freq_all = np.array(data_dict[ref]['Frequency MHz'])
+                flux_all = np.array(data_dict[ref]['Flux Density mJy'])*1e-3
+                flux_err_all = np.array(data_dict[ref]['Flux Density error mJy'])*1e-3
+                plt.errorbar(freq_all, flux_all, yerr=flux_err_all, fmt='o', label=ref)
+        else:
+            plt.errorbar(np.array(freq) / 1e6, flux, yerr=flux_err, fmt='o', label="Input data", color="orange")
+        plt.plot(fitted_freq, fitted_flux, 'k--', label=fit_info) # Modelled line
         plt.xscale('log')
         plt.yscale('log')
         ax.get_xaxis().set_major_formatter(ScalarFormatter())
         ax.get_yaxis().set_major_formatter(ScalarFormatter())
-        plt.xlabel('Frequency (GHz)')
+        plt.xlabel('Frequency (MHz)')
         plt.ylabel('Flux (Jy)')
         plt.legend()
         plt.savefig(save_name)
@@ -96,7 +104,7 @@ def iminuit_fit_spectral_model(freq, flux, flux_err, model=simple_power_law, plo
     return aic, m.parameters, m.values, m.errors
 
 
-def find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all, plot=False):
+def find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all, plot=False, data_dict=None):
     # loop over models
     models = [
             [simple_power_law, "simple_power_law"],
@@ -109,7 +117,7 @@ def find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all, plot=False)
     fit_results = []
     for model, label in models:
         #curve_fit_spectral_model(freq_all, flux_all, flux_err_all, model=model, plot=True, save_name=f"{pulsar}_{label}_fit.png")
-        aic, parameters, values, errors = iminuit_fit_spectral_model(freq_all, flux_all, flux_err_all, model=model, plot=plot, save_name=f"{pulsar}_{label}_fit.png")
+        aic, parameters, values, errors = iminuit_fit_spectral_model(freq_all, flux_all, flux_err_all, model=model, plot=plot, save_name=f"{pulsar}_{label}_fit.png", data_dict=data_dict)
         logger.debug(f"{label} model fit gave AIC {aic}.")
         aics.append(aic)
         fit_results.append([parameters, values, errors])
