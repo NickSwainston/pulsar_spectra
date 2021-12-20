@@ -98,8 +98,8 @@ def iminuit_fit_spectral_model(freq, flux, flux_err, model=simple_power_law, plo
         ax.get_yaxis().set_major_formatter(ScalarFormatter())
         plt.xlabel('Frequency (MHz)')
         plt.ylabel('Flux (Jy)')
-        plt.legend()
-        plt.savefig(save_name)
+        plt.legend(loc='center left', bbox_to_anchor=(1.1, 0.5))
+        plt.savefig(save_name, bbox_inches='tight', dpi=200)
         plt.clf()
     return aic, m.parameters, m.values, m.errors
 

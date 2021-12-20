@@ -21,7 +21,38 @@ CAT_YAMLS = glob.glob("{}/*json".format(CAT_DIR))
 # Hard code the path of the ATNF psrcat database file
 ATNF_LOC = os.path.join(CAT_DIR, 'psrcat.db')
 
-def flux_from_atnf(pulsar, query=None, assumed_error=0.5):
+
+def convert_antf_ref(ref_code, ref_dict=None):
+    """Converts an ATNF psrcat reference code to a reference in the format "Author Year"
+
+    Parameters
+    ----------
+    ref_code : `str`
+        An ATNF psrcat reference code as found from `psrqpy.get_references()` and https://www.atnf.csiro.au/research/pulsar/psrcat/psrcat_ref.html.
+    ref_dict : `dict`, optional
+        A previous psrqpy.get_references query. Can be supplied to prevent performing a new query.
+
+    Returns
+    -------
+    ref : `str`
+        Reference in the format "Author Year".
+    """
+    if ref_dict is None:
+        ref_dict  = psrqpy.get_references()
+    ref_string_list = ref_dict[ref_code].split()
+
+    # Find the parts we need
+    author = ref_string_list[0][:-1]
+    logger.debug(ref_string_list)
+    for ref_part in ref_string_list:
+        if ref_part.endswith('.') and len(ref_part) == 5 and ref_part[:-1].isnumeric():
+            year = ref_part[:-1]
+        elif ref_part.endswith('.') and len(ref_part) == 6 and ref_part[:-2].isnumeric():
+            year = ref_part[:-2]
+    return f"{author}_{year}"
+
+
+def flux_from_atnf(pulsar, query=None, ref_dict=None, assumed_error=0.5):
     """Queries the ATNF database for flux and spectral index info on a particular pulsar at all frequencies
 
     Parameters
@@ -30,6 +61,8 @@ def flux_from_atnf(pulsar, query=None, assumed_error=0.5):
         The Jname of the pulsar.
     query : psrqpy object, optional
         A previous psrqpy.QueryATNF query. Can be supplied to prevent performing a new query.
+    ref_dict : `dict`, optional
+        A previous psrqpy.get_references query. Can be supplied to prevent performing a new query.
     assumed_error : `float`, optional
         If no error found, apply this factor to flux to make an assumed error. |b| Default: 0.5.
 
@@ -45,9 +78,11 @@ def flux_from_atnf(pulsar, query=None, assumed_error=0.5):
         The reference keys from:
         https://www.atnf.csiro.au/research/pulsar/psrcat/psrcat_ref.html
     """
+    # Handle psrqpy queries if None were given
     if query is None:
         query = psrqpy.QueryATNF(psrs=[pulsar], loadfromdb=ATNF_LOC).pandas
-        print(ATNF_LOC)
+    if ref_dict is None:
+        ref_dict  = psrqpy.get_references()
     query_id = list(query['PSRJ']).index(pulsar)
 
     # Find all flux queries from keys
@@ -94,18 +129,27 @@ def flux_from_atnf(pulsar, query=None, assumed_error=0.5):
                 freq = int(flux_query[1:])
             freq_all.append(freq) 
 
-            # Grab reference code
-            references.append(query[flux_query+"_REF"][query_id])
+            # Grab reference code and convert to "Author Year" format
+            ref_code = query[flux_query+"_REF"][query_id]
+            ref = convert_antf_ref(ref_code, ref_dict=ref_dict)
+            references.append(ref)
 
     return freq_all, flux_all, flux_err_all, references
 
 def all_flux_from_atnf():
     query = psrqpy.QueryATNF(loadfromdb=ATNF_LOC).pandas
+    ref_dict  = psrqpy.get_references()
     jnames = list(query['PSRJ'])
     jname_cat = {}
     for jname in jnames:
-        freq_all, flux_all, flux_err_all, references = flux_from_atnf(jname, query=query)
-        jname_cat[jname] = {"Frequency MHz":freq_all, "Flux Density mJy":flux_all, "Flux Density error mJy":flux_err_all}
+        jname_cat[jname] = {}
+        freq_all, flux_all, flux_err_all, references = flux_from_atnf(jname, query=query, ref_dict=ref_dict)
+        for freq, flux, flux_err, ref in zip(freq_all, flux_all, flux_err_all, references):
+            if ref not in jname_cat[jname].keys():
+                jname_cat[jname][ref] = {"Frequency MHz":[], "Flux Density mJy":[], "Flux Density error mJy":[]}
+            jname_cat[jname][ref]['Frequency MHz'] += [freq]
+            jname_cat[jname][ref]['Flux Density mJy'] += [flux]
+            jname_cat[jname][ref]['Flux Density error mJy'] += [flux_err]
     return jname_cat
     
 
@@ -150,16 +194,12 @@ def collect_catalogue_fluxes():
 
     # Loop over catalogues and put them into a dictionary
     cat_dicts = []
-    for cat_file in CAT_YAMLS + ['ATNF']:
-        if cat_file == 'ATNF':
-            cat_label = 'ATNF'
-            cat_dict = all_flux_from_atnf()
-        else:
-            cat_label = cat_file.split("/")[-1].split(".")[0]
+    for cat_file in CAT_YAMLS:
+        cat_label = cat_file.split("/")[-1].split(".")[0]
 
-            # Load in the dict
-            with open(cat_file, "r") as stream:
-                cat_dict = yaml.safe_load(stream)
+        # Load in the dict
+        with open(cat_file, "r") as stream:
+            cat_dict = yaml.safe_load(stream)
 
         # Find which pulsars in the dictionary
         for jname in jnames:
@@ -171,6 +211,41 @@ def collect_catalogue_fluxes():
                 jname_cat_list[jname][1] += cat_dict[jname]['Flux Density mJy']
                 jname_cat_list[jname][2] += cat_dict[jname]['Flux Density error mJy']
                 jname_cat_list[jname][3] += [cat_label] * len(cat_dict[jname]['Frequency MHz'])
+
+    # Add the antf to the cataogues
+    antf_dict = all_flux_from_atnf()
+    for jname in jnames:
+        for ref in antf_dict[jname].keys():
+            if ref in jname_cat_dict[jname].keys():
+                # Check for redundant data
+                for freq, flux, flux_err in zip(antf_dict[jname][ref]['Frequency MHz'],
+                                                antf_dict[jname][ref]['Flux Density mJy'],
+                                                antf_dict[jname][ref]['Flux Density error mJy']):
+                    if flux     in jname_cat_dict[jname][ref]['Flux Density mJy'] and \
+                       flux_err in jname_cat_dict[jname][ref]['Flux Density error mJy']:
+                        logger.debug(f"Redundant data  pulsar:{jname}  ref:{ref}  freq:{freq}  flux:{flux}  flux_err:{flux_err}")
+                    else:
+                        # Update dict
+                        jname_cat_dict[jname][ref]['Frequency MHz'] += [freq]
+                        jname_cat_dict[jname][ref]['Flux Density mJy'] += [flux]
+                        jname_cat_dict[jname][ref]['Flux Density error mJy'] += [flux_err]
+                        # Update list
+                        jname_cat_list[jname][0] += [freq]
+                        jname_cat_list[jname][1] += [flux]
+                        jname_cat_list[jname][2] += [flux_err]
+                        jname_cat_list[jname][3] += [ref]
+            else:
+                # Update dict
+                jname_cat_dict[jname][ref] = antf_dict[jname][ref]
+                # Update list
+                for freq, flux, flux_err in zip(antf_dict[jname][ref]['Frequency MHz'],
+                                                antf_dict[jname][ref]['Flux Density mJy'],
+                                                antf_dict[jname][ref]['Flux Density error mJy']):
+                    jname_cat_list[jname][0] += [freq]
+                    jname_cat_list[jname][1] += [flux]
+                    jname_cat_list[jname][2] += [flux_err]
+                    jname_cat_list[jname][3] += [ref]
+
 
     return jname_cat_dict, jname_cat_list
 

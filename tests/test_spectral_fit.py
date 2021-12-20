@@ -20,7 +20,7 @@ def test_find_best_spectral_fit():
     """Tests the find_best_spectral_fit funtion.
     """
     cat_dict, cat_list = collect_catalogue_fluxes()
-    print(cat_dict)
+    #print(cat_dict)
     pulsars = ['J0034-0534','J0953+0755', 'J1645-0317']
     for pulsar in pulsars:
         print(f"\nFitting {pulsar}")
