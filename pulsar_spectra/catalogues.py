@@ -136,8 +136,9 @@ def flux_from_atnf(pulsar, query=None, ref_dict=None, assumed_error=0.5):
 
     return freq_all, flux_all, flux_err_all, references
 
-def all_flux_from_atnf():
-    query = psrqpy.QueryATNF(loadfromdb=ATNF_LOC).pandas
+def all_flux_from_atnf(query=None):
+    if query is None:
+        query = psrqpy.QueryATNF(loadfromdb=ATNF_LOC).pandas
     ref_dict  = psrqpy.get_references()
     jnames = list(query['PSRJ'])
     jname_cat = {}
@@ -183,7 +184,7 @@ def collect_catalogue_fluxes():
                 The reference label.
     """
     # Make a dictionary for each pulsar
-    query = psrqpy.QueryATNF(params=['PSRJ'], loadfromdb=ATNF_LOC).pandas
+    query = psrqpy.QueryATNF(loadfromdb=ATNF_LOC).pandas
     jnames = list(query['PSRJ'])
     jname_cat_dict = {}
     jname_cat_list = {}
@@ -213,7 +214,7 @@ def collect_catalogue_fluxes():
                 jname_cat_list[jname][3] += [cat_label] * len(cat_dict[jname]['Frequency MHz'])
 
     # Add the antf to the cataogues
-    antf_dict = all_flux_from_atnf()
+    antf_dict = all_flux_from_atnf(query=query)
     for jname in jnames:
         for ref in antf_dict[jname].keys():
             if ref in jname_cat_dict[jname].keys():
