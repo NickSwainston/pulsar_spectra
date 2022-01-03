@@ -1,7 +1,7 @@
 import numpy as np
 import json
 
-raw = np.loadtxt("han_2016_raw.txt", dtype=str)
+raw = np.loadtxt("Han_2016_raw.txt", dtype=str)
 
 pulsar_dict = {}
 for row in raw[1:]:
@@ -17,6 +17,6 @@ for row in raw[1:]:
     
     pulsar_dict[pulsar] = {"Frequency MHz":freqs, "Flux Density mJy":fluxs, "Flux Density error mJy":flux_errs}
 json = json.dumps(pulsar_dict)
-with open("han_2016.json", "w") as cat_file:
+with open("Han_2016.json", "w") as cat_file:
     cat_file.write(json)
 print(pulsar_dict)
