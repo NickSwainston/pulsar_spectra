@@ -79,15 +79,15 @@ def iminuit_fit_spectral_model(freq, flux, flux_err, model=simple_power_law, plo
 
     if plot:
         fitted_freq = np.linspace(min(freq), max(freq), 100)
-        fitted_flux = model(fitted_freq, *m.values)#, v0=np.mean(freq))
+        fitted_flux = model(fitted_freq, *m.values) * 1e3
         fitted_freq /= 1e6 # Convert to MHz
         #fitted_flux = model(fitted_freq, *(-1.5, 0.1, 3., 4000000))
         fig, ax = plt.subplots()
         if data_dict:
             for ref in data_dict.keys():
                 freq_all = np.array(data_dict[ref]['Frequency MHz'])
-                flux_all = np.array(data_dict[ref]['Flux Density mJy'])*1e-3
-                flux_err_all = np.array(data_dict[ref]['Flux Density error mJy'])*1e-3
+                flux_all = np.array(data_dict[ref]['Flux Density mJy'])
+                flux_err_all = np.array(data_dict[ref]['Flux Density error mJy'])
                 plt.errorbar(freq_all, flux_all, yerr=flux_err_all, fmt='o', label=ref)
         else:
             plt.errorbar(np.array(freq) / 1e6, flux, yerr=flux_err, fmt='o', label="Input data", color="orange")
@@ -97,7 +97,7 @@ def iminuit_fit_spectral_model(freq, flux, flux_err, model=simple_power_law, plo
         ax.get_xaxis().set_major_formatter(ScalarFormatter())
         ax.get_yaxis().set_major_formatter(ScalarFormatter())
         plt.xlabel('Frequency (MHz)')
-        plt.ylabel('Flux (Jy)')
+        plt.ylabel('Flux (mJy)')
         plt.legend(loc='center left', bbox_to_anchor=(1.1, 0.5))
         plt.savefig(save_name, bbox_inches='tight', dpi=200)
         plt.clf()
