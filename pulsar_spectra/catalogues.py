@@ -104,20 +104,18 @@ def flux_from_atnf(pulsar, query=None, ref_dict=None, assumed_error=0.5):
             flux_all.append(flux) # in mJy
 
             # Check for flux error. Sometimes error values don't exist, causing a key error in pandas
+            flux_error_found = True
             try:
                 flux_err = query[flux_query+"_ERR"][query_id]
                 if flux_err == 0.0:
-                    logger.debug("{0} flux error for query: {1}, is zero. Assuming 20% uncertainty"\
-                                 .format(pulsar, flux_query))
-                    flux_err = flux*assumed_error
+                    flux_error_found = False
             except KeyError:
-                logger.debug("{0} flux error value {1}, not available. assuming 20% uncertainty"\
-                             .format(pulsar, flux_query))
-                flux_err = flux*assumed_error
-
+                flux_error_found = False
             if np.isnan(flux_err):
-                logger.debug("{0} flux error value for {1} not available. assuming 20% uncertainty"\
-                             .format(pulsar, flux_query))
+                flux_error_found = False
+            if not flux_error_found:
+                logger.debug("{0} flux error for query: {1}, is zero. Assuming {2:.1f}% uncertainty"\
+                                .format(pulsar, flux_query, assumed_error*100))
                 flux_err = flux*assumed_error
             flux_err_all.append(flux_err) # in mJy
 
