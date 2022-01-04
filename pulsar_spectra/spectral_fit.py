@@ -39,15 +39,17 @@ def iminuit_fit_spectral_model(freq, flux, flux_err, model=simple_power_law, plo
     elif model == log_parabolic_spectrum:
         # a, b, c
         start_params = (-1.6, 1., 1.)
-        mod_limits = [(None, 0), (0, None), (0, None)]
+        mod_limits = [(-5, 2), (-5, 2), (None, None)]
     elif model == high_frequency_cut_off_power_law:
         # a, b, vc
         start_params = (-1.6, 1., 1.3e9)
         mod_limits = [(None, 0), (0, None), (1e3, 1e12)]
     elif model == low_frequency_turn_over_power_law:
         # a, b, beta, vc
-        start_params = (-2, 1.e1, 1., 2e8)
-        mod_limits = [(None, 0), (0, None) , (0., 2.1), (1e3, 1e10)]
+        start_params = (-2.5, 1.e1, 1., 100e6)
+        #mod_limits = [(None, 0), (0, None) , (1e-3, 2.1), (1e6, 1e9)]
+        mod_limits = [(-10, -0.1), (0, 100) , (.1, 2.1), (10e6, 500e6)]
+        #-3.4, 1e-2, .5, 53e6
     model_str = str(model).split(" ")[1]
     k = len(start_params) # number of model parameters
 
@@ -61,7 +63,7 @@ def iminuit_fit_spectral_model(freq, flux, flux_err, model=simple_power_law, plo
     least_squares.loss = "soft_l1"
     m = Minuit(least_squares, *start_params)
     m.limits = mod_limits
-    m.scan(ncall=50)
+    m.scan(ncall=500)
     m.migrad()  # finds minimum of least_squares function
     m.hesse()   # accurately computes uncertainties
     logger.debug(m)
