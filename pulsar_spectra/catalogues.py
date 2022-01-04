@@ -28,7 +28,7 @@ def convert_antf_ref(ref_code, ref_dict=None):
     Parameters
     ----------
     ref_code : `str`
-        An ATNF psrcat reference code as found from `psrqpy.get_references()` and https://www.atnf.csiro.au/research/pulsar/psrcat/psrcat_ref.html.
+        An ATNF psrcat reference code as found from `psrqpy.get_references(updaterefcache=True)` and https://www.atnf.csiro.au/research/pulsar/psrcat/psrcat_ref.html.
     ref_dict : `dict`, optional
         A previous psrqpy.get_references query. Can be supplied to prevent performing a new query.
 
@@ -38,7 +38,7 @@ def convert_antf_ref(ref_code, ref_dict=None):
         Reference in the format "Author Year".
     """
     if ref_dict is None:
-        ref_dict  = psrqpy.get_references()
+        ref_dict  = psrqpy.get_references(updaterefcache=True)
     ref_string_list = ref_dict[ref_code].split()
 
     # Find the parts we need
@@ -82,7 +82,7 @@ def flux_from_atnf(pulsar, query=None, ref_dict=None, assumed_error=0.5):
     if query is None:
         query = psrqpy.QueryATNF(psrs=[pulsar], loadfromdb=ATNF_LOC).pandas
     if ref_dict is None:
-        ref_dict  = psrqpy.get_references()
+        ref_dict  = psrqpy.get_references(updaterefcache=True)
     query_id = list(query['PSRJ']).index(pulsar)
 
     # Find all flux queries from keys
@@ -137,7 +137,7 @@ def flux_from_atnf(pulsar, query=None, ref_dict=None, assumed_error=0.5):
 def all_flux_from_atnf(query=None):
     if query is None:
         query = psrqpy.QueryATNF(loadfromdb=ATNF_LOC).pandas
-    ref_dict  = psrqpy.get_references()
+    ref_dict  = psrqpy.get_references(updaterefcache=True)
     jnames = list(query['PSRJ'])
     jname_cat = {}
     for jname in jnames:
