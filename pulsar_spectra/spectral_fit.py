@@ -56,7 +56,7 @@ def iminuit_fit_spectral_model(freq, flux, flux_err, model=simple_power_law, plo
     # Check if enough inputs
     if len(freq) <= k + 1:
         logger.warn(f"Only {len(freq)} supplied for {model_str} model fit. This is not enough so skipping")
-        return 1e9, None, None, None
+        return 1e9, None, None, None, None
 
     # Fit model
     least_squares = LeastSquares(freq, flux, flux_err, model)
@@ -92,7 +92,7 @@ def iminuit_fit_spectral_model(freq, flux, flux_err, model=simple_power_law, plo
                 flux_err_all = np.array(data_dict[ref]['Flux Density error mJy'])
                 plt.errorbar(freq_all, flux_all, yerr=flux_err_all, fmt='o', label=ref)
         else:
-            plt.errorbar(np.array(freq) / 1e6, flux, yerr=flux_err, fmt='o', label="Input data", color="orange")
+            plt.errorbar(np.array(freq), flux, yerr=flux_err, fmt='o', label="Input data", color="orange")
         plt.plot(fitted_freq, fitted_flux, 'k--', label=fit_info) # Modelled line
         plt.xscale('log')
         plt.yscale('log')
@@ -103,11 +103,20 @@ def iminuit_fit_spectral_model(freq, flux, flux_err, model=simple_power_law, plo
         plt.legend(loc='center left', bbox_to_anchor=(1.1, 0.5))
         plt.savefig(save_name, bbox_inches='tight', dpi=200)
         plt.clf()
-    return aic, m.parameters, m.values, m.errors
+    return aic, m.parameters, m.values, m.errors, fit_info
 
 
-def find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all, plot=False, data_dict=None):
-    # loop over models
+def find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all,
+                           plot_all=False, plot_compare=False,
+                           data_dict=None):
+    if plot_compare:
+        # prepare comparison plot
+        nrows = 5
+        plot_size = 3
+        fig, axs = plt.subplots(nrows, 1, figsize=(plot_size, plot_size * nrows))
+        fitted_freq = np.linspace(min(freq_all), max(freq_all), 100) / 1e6 # Convert to MHz
+
+    # loop over models and fit
     models = [
             [simple_power_law, "simple_power_law"],
             [broken_power_law, "broken_power_law"],
@@ -117,12 +126,51 @@ def find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all, plot=False,
             ]
     aics = []
     fit_results = []
-    for model, label in models:
+    for i, model_pair in enumerate(models):
+        model, label = model_pair
         #curve_fit_spectral_model(freq_all, flux_all, flux_err_all, model=model, plot=True, save_name=f"{pulsar}_{label}_fit.png")
-        aic, parameters, values, errors = iminuit_fit_spectral_model(freq_all, flux_all, flux_err_all, model=model, plot=plot, save_name=f"{pulsar}_{label}_fit.png", data_dict=data_dict)
+        aic, parameters, values, errors, fit_info = iminuit_fit_spectral_model(freq_all, flux_all, flux_err_all,
+                        model=model, plot=plot_all, save_name=f"{pulsar}_{label}_fit.png", data_dict=data_dict)
         logger.debug(f"{label} model fit gave AIC {aic}.")
-        aics.append(aic)
-        fit_results.append([parameters, values, errors])
-    aici = aics.index(min(aics))
-    logger.info(f"Best model for {pulsar} is {models[aici][1]}")
-    return models[aici], fit_results[aici]
+        if parameters is not None:
+            aics.append(aic)
+            fit_results.append([parameters, values, errors])
+
+        # Add to comparison plot
+        if plot_compare and parameters is not None:
+            if data_dict:
+                for ref in data_dict.keys():
+                    freq_ref = np.array(data_dict[ref]['Frequency MHz'])
+                    flux_ref = np.array(data_dict[ref]['Flux Density mJy'])
+                    flux_err_ref = np.array(data_dict[ref]['Flux Density error mJy'])
+                    axs[i].errorbar(freq_ref, flux_ref, yerr=flux_err_ref, fmt='o', label=ref)
+            else:
+                axs[i].errorbar(np.array(freq), flux, yerr=flux_err, fmt='o', label="Input data", color="orange")
+            fitted_flux = model(fitted_freq * 1e6, *values) * 1e3
+            axs[i].plot(fitted_freq, fitted_flux, 'k--', label=fit_info + f"\nAIC: {aic}") # Modelled line
+            axs[i].set_xscale('log')
+            axs[i].set_yscale('log')
+            axs[i].get_xaxis().set_major_formatter(ScalarFormatter())
+            axs[i].get_yaxis().set_major_formatter(ScalarFormatter())
+            axs[i].set_xlabel('Frequency (MHz)')
+            axs[i].set_ylabel('Flux (mJy)')
+            axs[i].legend(loc='center left', bbox_to_anchor=(1.1, 0.5), fontsize=6)
+
+    # Return best result
+    if len(aics) == 0:
+        logger.info(f"No model found for {pulsar}")
+        return ["no_fit", "no_fit"], [None, None, None]
+    else:
+        aici = aics.index(min(aics))
+        logger.info(f"Best model for {pulsar} is {models[aici][1]}")
+        if plot_compare:
+            # highlight best fit
+            rect = plt.Rectangle(
+                # (lower-left corner), width, height
+                (-0.4, -0.13), 2.4, 1.2, fill=False, color="k", lw=2, 
+                zorder=1000, transform=axs[aici].transAxes, figure=fig
+            )
+            fig.patches.extend([rect])
+            plt.savefig(f"{pulsar}_comparison_fit.png", bbox_inches='tight', dpi=300)
+            plt.clf()
+        return models[aici], fit_results[aici]
