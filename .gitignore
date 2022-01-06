@@ -1,2 +1,3 @@
 .eggs/
 pulsar_spectra/catalogues/psrcat.db
+pulsar_spectra/__pycache__
