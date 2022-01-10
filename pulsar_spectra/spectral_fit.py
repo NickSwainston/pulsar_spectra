@@ -25,6 +25,31 @@ def robust_cost_function(f_y, y, sigma_y, k=1.345):
             beta_array.append( k * abs(relative_error) - 1./2. * k**2 )
     return sum(beta_array)
 
+
+def plot_fit(freq, flux, flux_err, model, values, fit_info,
+             save_name="fit.png", data_dict=None):
+    fitted_freq = np.linspace(min(freq), max(freq), 100) / 1e6 # Convert to MHz
+    fitted_flux = model(fitted_freq * 1e6, *values) * 1e3
+    fig, ax = plt.subplots()
+    if data_dict:
+        for ref in data_dict.keys():
+            freq_all = np.array(data_dict[ref]['Frequency MHz'])
+            flux_all = np.array(data_dict[ref]['Flux Density mJy'])
+            flux_err_all = np.array(data_dict[ref]['Flux Density error mJy'])
+            plt.errorbar(freq_all, flux_all, yerr=flux_err_all, fmt='o', label=ref)
+    else:
+        plt.errorbar(np.array(freq), flux, yerr=flux_err, fmt='o', label="Input data", color="orange")
+    plt.plot(fitted_freq, fitted_flux, 'k--', label=fit_info) # Modelled line
+    plt.xscale('log')
+    plt.yscale('log')
+    ax.get_xaxis().set_major_formatter(ScalarFormatter())
+    ax.get_yaxis().set_major_formatter(ScalarFormatter())
+    plt.xlabel('Frequency (MHz)')
+    plt.ylabel('Flux (mJy)')
+    plt.legend(loc='center left', bbox_to_anchor=(1.1, 0.5))
+    plt.savefig(save_name, bbox_inches='tight', dpi=200)
+    plt.clf()
+
     
 def iminuit_fit_spectral_model(freq, flux, flux_err, model=simple_power_law, plot=False, save_name="fit.png", data_dict=None):
     # Model dependent defaults
@@ -80,41 +105,20 @@ def iminuit_fit_spectral_model(freq, flux, flux_err, model=simple_power_law, plo
     aic = 2*beta * 2*k + (2*k*(k+1)) / (len(freq) - k -1)
 
     if plot:
-        fitted_freq = np.linspace(min(freq), max(freq), 100)
-        fitted_flux = model(fitted_freq, *m.values) * 1e3
-        fitted_freq /= 1e6 # Convert to MHz
-        #fitted_flux = model(fitted_freq, *(-1.5, 0.1, 3., 4000000))
-        fig, ax = plt.subplots()
-        if data_dict:
-            for ref in data_dict.keys():
-                freq_all = np.array(data_dict[ref]['Frequency MHz'])
-                flux_all = np.array(data_dict[ref]['Flux Density mJy'])
-                flux_err_all = np.array(data_dict[ref]['Flux Density error mJy'])
-                plt.errorbar(freq_all, flux_all, yerr=flux_err_all, fmt='o', label=ref)
-        else:
-            plt.errorbar(np.array(freq), flux, yerr=flux_err, fmt='o', label="Input data", color="orange")
-        plt.plot(fitted_freq, fitted_flux, 'k--', label=fit_info) # Modelled line
-        plt.xscale('log')
-        plt.yscale('log')
-        ax.get_xaxis().set_major_formatter(ScalarFormatter())
-        ax.get_yaxis().set_major_formatter(ScalarFormatter())
-        plt.xlabel('Frequency (MHz)')
-        plt.ylabel('Flux (mJy)')
-        plt.legend(loc='center left', bbox_to_anchor=(1.1, 0.5))
-        plt.savefig(save_name, bbox_inches='tight', dpi=200)
-        plt.clf()
+        plot_fit(freq, flux, flux_err, model, m.values,
+                 save_name=save_name, data_dict=data_dict)
     return aic, m.parameters, m.values, m.errors, fit_info
 
 
 def find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all,
-                           plot_all=False, plot_compare=False,
+                           plot_all=False, plot_best=False, plot_compare=False,
                            data_dict=None):
+    # Prepare plots and fitting frequencies
     if plot_compare:
-        # prepare comparison plot
         nrows = 5
         plot_size = 3
-        fig, axs = plt.subplots(nrows, 1, figsize=(plot_size, plot_size * nrows))
         fitted_freq = np.linspace(min(freq_all), max(freq_all), 100) / 1e6 # Convert to MHz
+        fig, axs = plt.subplots(nrows, 1, figsize=(plot_size, plot_size * nrows))
 
     # loop over models and fit
     models = [
@@ -134,7 +138,7 @@ def find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all,
         logger.debug(f"{label} model fit gave AIC {aic}.")
         if parameters is not None:
             aics.append(aic)
-            fit_results.append([parameters, values, errors])
+            fit_results.append([parameters, values, errors, fit_info])
 
         # Add to comparison plot
         if plot_compare and parameters is not None:
@@ -173,4 +177,7 @@ def find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all,
             fig.patches.extend([rect])
             plt.savefig(f"{pulsar}_comparison_fit.png", bbox_inches='tight', dpi=300)
             plt.clf()
+        elif plot_best:
+            plot_fit(freq_all, flux_all, flux_err_all, models[aici][0], fit_results[aici][1], fit_results[aici][3],
+                     save_name=f"{pulsar}_{models[aici][1]}_fit.png", data_dict=data_dict)
         return models[aici], fit_results[aici]
