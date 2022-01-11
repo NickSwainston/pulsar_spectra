@@ -22,6 +22,14 @@ CAT_YAMLS = glob.glob("{}/*json".format(CAT_DIR))
 ATNF_LOC = os.path.join(CAT_DIR, 'psrcat.db')
 
 
+def get_antf_references():
+    ref_dict  = psrqpy.get_references()
+    if not isinstance(ref_dict, dict):
+        # Reference error so update the cache
+        ref_dict  = psrqpy.get_references(updaterefcache=True)
+    return ref_dict
+
+
 def convert_antf_ref(ref_code, ref_dict=None):
     """Converts an ATNF psrcat reference code to a reference in the format "Author Year"
 
@@ -38,7 +46,7 @@ def convert_antf_ref(ref_code, ref_dict=None):
         Reference in the format "Author Year".
     """
     if ref_dict is None:
-        ref_dict  = psrqpy.get_references(updaterefcache=True)
+        ref_dict = get_antf_references()
     ref_string_list = ref_dict[ref_code].split()
 
     # Find the parts we need
@@ -82,7 +90,7 @@ def flux_from_atnf(pulsar, query=None, ref_dict=None, assumed_error=0.5):
     if query is None:
         query = psrqpy.QueryATNF(psrs=[pulsar], loadfromdb=ATNF_LOC).pandas
     if ref_dict is None:
-        ref_dict  = psrqpy.get_references(updaterefcache=True)
+        ref_dict = get_antf_references()
     query_id = list(query['PSRJ']).index(pulsar)
 
     # Find all flux queries from keys
@@ -137,7 +145,7 @@ def flux_from_atnf(pulsar, query=None, ref_dict=None, assumed_error=0.5):
 def all_flux_from_atnf(query=None):
     if query is None:
         query = psrqpy.QueryATNF(loadfromdb=ATNF_LOC).pandas
-    ref_dict  = psrqpy.get_references(updaterefcache=True)
+    ref_dict = get_antf_references()
     jnames = list(query['PSRJ'])
     jname_cat = {}
     for jname in jnames:
