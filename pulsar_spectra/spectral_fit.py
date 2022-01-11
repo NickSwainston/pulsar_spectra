@@ -84,12 +84,21 @@ def iminuit_fit_spectral_model(freq, flux, flux_err, model=simple_power_law, plo
         return 1e9, None, None, None, None
 
     # Fit model
-    least_squares = LeastSquares(freq, flux, flux_err, model)
+    least_squares = LeastSquares(np.array(freq,     dtype=np.float128),
+                                 np.array(flux,     dtype=np.float128),
+                                 np.array(flux_err, dtype=np.float128),
+                                 model)
     least_squares.loss = "soft_l1"
     m = Minuit(least_squares, *start_params)
     m.limits = mod_limits
-    m.scan(ncall=500)
     m.migrad()  # finds minimum of least_squares function
+    if not m.valid:
+        # Failed so try simplix method
+        m.simplex()
+        m.migrad()
+    if not m.valid:
+        # Use scan
+        m.scan(ncall=500)
     m.hesse()   # accurately computes uncertainties
     logger.debug(m)
 
