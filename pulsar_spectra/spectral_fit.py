@@ -10,7 +10,8 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import ScalarFormatter
 
 from pulsar_spectra.models import simple_power_law, broken_power_law, log_parabolic_spectrum, \
-                                  high_frequency_cut_off_power_law, low_frequency_turn_over_power_law
+                                  high_frequency_cut_off_power_law, low_frequency_turn_over_power_law, \
+                                  double_broken_power_law
 
 import logging
 logger = logging.getLogger(__name__)
@@ -36,6 +37,10 @@ def iminuit_fit_spectral_model(freq, flux, flux_err, model=simple_power_law, plo
         # a1, a2, b, vb
         start_params = (-2.6, -2.6, 0.1, 5e8)
         mod_limits = [(None, 0), (None, 0), (0, None), (1e3, 1e9)]
+    elif model == double_broken_power_law:
+        # a1, a2, a3, b, vb1, vb2
+        start_params = (-2.6, -2.6, -2.6, 0.1, 5e8, 5e8)
+        mod_limits = [(None, 0), (None, 0), (None, 0), (0, None), (1e3, 1e9), (1e3, 1e9)]
     elif model == log_parabolic_spectrum:
         # a, b, c
         start_params = (-1.6, 1., 1.)
@@ -114,6 +119,7 @@ def find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all, plot=False,
             [log_parabolic_spectrum, "log_parabolic_spectrum"],
             [high_frequency_cut_off_power_law, "high_frequency_cut_off_power_law"],
             [low_frequency_turn_over_power_law, "low_frequency_turn_over_power_law"],
+            [double_broken_power_law, "double_broken_power_law"],
             ]
     aics = []
     fit_results = []
