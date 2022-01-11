@@ -160,8 +160,15 @@ def all_flux_from_atnf(query=None):
     return jname_cat
     
 
-def collect_catalogue_fluxes():
+def collect_catalogue_fluxes(only_use=None, exclude=None):
     """Collect the fluxes from all of the catalogues recorded in this repo.
+
+    Parameters
+    ----------
+    only_use : `list`, optional
+        A list of reference labels (in the format 'Author_year') of all the papers you want to use.
+    exclude : `list`, optional
+        A list of reference labels (in the format 'Author_year') of all the papers you want to exclude.
 
     Returns
     -------
@@ -199,9 +206,30 @@ def collect_catalogue_fluxes():
         # freq, flux, flux_err, references
         jname_cat_list[jname] = [[],[],[],[]]
 
+    # Work out which yamls/catalogues to use
+    if only_use is None:
+        # Use all yamls
+        yamls_to_use = CAT_YAMLS
+    else:
+        yamls_to_use = []
+        for yaml_label in only_use:
+            y_dir = f"{CAT_DIR}/{yaml_label}.json"
+            if os.path.isfile(y_dir):
+                yamls_to_use.append(y_dir)
+            else:
+                logger.warning(f"{yaml_label} not found in {CAT_DIR}")
+
+    # Work out which yamls/catalogues to exclude
+    if exclude is not None:
+        yamls_to_check = yamls_to_use
+        yamls_to_use = []
+        for y_dir in yamls_to_check:
+            yaml_label = y_dir.split("/")[-1].split(".")[0]
+            if yaml_label not in exclude:
+                yamls_to_use.append(y_dir)
+
     # Loop over catalogues and put them into a dictionary
-    cat_dicts = []
-    for cat_file in CAT_YAMLS:
+    for cat_file in yamls_to_use:
         cat_label = cat_file.split("/")[-1].split(".")[0]
 
         # Load in the dict
@@ -223,6 +251,16 @@ def collect_catalogue_fluxes():
     antf_dict = all_flux_from_atnf(query=query)
     for jname in jnames:
         for ref in antf_dict[jname].keys():
+            # Check if only_use or exclude allow this ref
+            if only_use is not None:
+                if ref not in only_use:
+                    # Not in only_use so skip
+                    continue
+            if exclude is not None:
+                if ref in exclude:
+                    # exclude by skipping
+                    continue
+
             if ref in jname_cat_dict[jname].keys():
                 # Check for redundant data
                 for freq, flux, flux_err in zip(antf_dict[jname][ref]['Frequency MHz'],
