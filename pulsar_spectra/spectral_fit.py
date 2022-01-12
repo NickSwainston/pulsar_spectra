@@ -8,6 +8,7 @@ from iminuit.cost import LeastSquares
 
 import matplotlib.pyplot as plt
 from matplotlib.ticker import ScalarFormatter
+from cycler import cycler
 
 from pulsar_spectra.models import simple_power_law, broken_power_law, log_parabolic_spectrum, \
                                   high_frequency_cut_off_power_law, low_frequency_turn_over_power_law, \
@@ -32,12 +33,17 @@ def plot_fit(freq, flux, flux_err, model, values, fit_info,
     fitted_freq = np.linspace(min(freq), max(freq), 100) / 1e6 # Convert to MHz
     fitted_flux = model(fitted_freq * 1e6, *values) * 1e3
     fig, ax = plt.subplots()
+    marker_scale = 0.7
+    custom_cycler = (cycler(color = ["#006ddb","#24ff24",'r',"#920000","#6db6ff","#ff6db6",'m',"#b6dbff","#db6d00","#b66dff","#009292","#490092","#ffb6db","#004949",'k']) 
+                    + cycler(marker = [            'o', '^', 'D', 's', 'p', 'P', '*', 'v', 'd', 'h', '>', 'H', 'X', '<', 'x'])
+                    + cycler(markersize = np.array([6,   7,   5,   5.5, 6.5, 7,   9,   7,   7,   7,   7,   7,   7,   7,   7])*marker_scale))
+    ax.set_prop_cycle(custom_cycler)
     if data_dict:
         for ref in data_dict.keys():
             freq_all = np.array(data_dict[ref]['Frequency MHz'])
             flux_all = np.array(data_dict[ref]['Flux Density mJy'])
             flux_err_all = np.array(data_dict[ref]['Flux Density error mJy'])
-            plt.errorbar(freq_all, flux_all, yerr=flux_err_all, fmt='o', label=ref)
+            plt.errorbar(freq_all, flux_all, yerr=flux_err_all, linestyle='None', mec='k', markeredgewidth=0.5, elinewidth=0.9, label=ref)
     else:
         plt.errorbar(np.array(freq), flux, yerr=flux_err, fmt='o', label="Input data", color="orange")
     plt.plot(fitted_freq, fitted_flux, 'k--', label=fit_info) # Modelled line
@@ -45,6 +51,7 @@ def plot_fit(freq, flux, flux_err, model, values, fit_info,
     plt.yscale('log')
     ax.get_xaxis().set_major_formatter(ScalarFormatter())
     ax.get_yaxis().set_major_formatter(ScalarFormatter())
+    ax.tick_params(which='both', direction='in', top=1, right=1)
     plt.xlabel('Frequency (MHz)')
     plt.ylabel('Flux (mJy)')
     plt.legend(loc='center left', bbox_to_anchor=(1.1, 0.5))
@@ -98,7 +105,6 @@ def iminuit_fit_spectral_model(freq, flux, flux_err, model=simple_power_law, plo
     m.hesse()   # accurately computes uncertainties
     logger.debug(m)
 
-
     # display legend with some fit info
     fit_info = [model_str]
     for p, v, e in zip(m.parameters, m.values, m.errors):
@@ -132,7 +138,7 @@ def find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all,
             [log_parabolic_spectrum, "log_parabolic_spectrum"],
             [high_frequency_cut_off_power_law, "high_frequency_cut_off_power_law"],
             [low_frequency_turn_over_power_law, "low_frequency_turn_over_power_law"],
-            [double_broken_power_law, "double_broken_power_law"],
+            #[double_broken_power_law, "double_broken_power_law"],
             ]
     aics = []
     fit_results = []
@@ -145,7 +151,11 @@ def find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all,
         if parameters is not None:
             aics.append(aic)
             fit_results.append([parameters, values, errors, fit_info])
-
+        marker_scale = 0.7
+        custom_cycler = (cycler(color = ["#006ddb","#24ff24",'r',"#920000","#6db6ff","#ff6db6",'m',"#b6dbff","#db6d00","#b66dff","#009292","#490092","#ffb6db","#004949",'k']) 
+                       + cycler(marker = [            'o', '^', 'D', 's', 'p', 'P', '*', 'v', 'd', 'h', '>', 'H', 'X', '<', 'x'])
+                       + cycler(markersize = np.array([6,   7,   5,   5.5, 6.5, 7,   9,   7,   7,   7,   7,   7,   7,   7,   7])*marker_scale))
+        axs[i].set_prop_cycle(custom_cycler)
         # Add to comparison plot
         if plot_compare and parameters is not None:
             if data_dict:
@@ -153,7 +163,7 @@ def find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all,
                     freq_ref = np.array(data_dict[ref]['Frequency MHz'])
                     flux_ref = np.array(data_dict[ref]['Flux Density mJy'])
                     flux_err_ref = np.array(data_dict[ref]['Flux Density error mJy'])
-                    axs[i].errorbar(freq_ref, flux_ref, yerr=flux_err_ref, fmt='o', label=ref)
+                    axs[i].errorbar(freq_ref, flux_ref, yerr=flux_err_ref, linestyle='None', mec='k', markeredgewidth=0.5, elinewidth=0.9, label=ref)
             else:
                 axs[i].errorbar(np.array(freq), flux, yerr=flux_err, fmt='o', label="Input data", color="orange")
             fitted_flux = model(fitted_freq * 1e6, *values) * 1e3
@@ -162,6 +172,7 @@ def find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all,
             axs[i].set_yscale('log')
             axs[i].get_xaxis().set_major_formatter(ScalarFormatter())
             axs[i].get_yaxis().set_major_formatter(ScalarFormatter())
+            axs[i].tick_params(which='both', direction='in', top=1, right=1)
             axs[i].set_xlabel('Frequency (MHz)')
             axs[i].set_ylabel('Flux (mJy)')
             axs[i].legend(loc='center left', bbox_to_anchor=(1.1, 0.5), fontsize=6)
