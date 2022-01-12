@@ -5,6 +5,7 @@ Function used to fit different spectral models to the flux densities of pulsars
 import numpy as np
 from iminuit import Minuit
 from iminuit.cost import LeastSquares
+from iminuit.util import propagate
 
 import matplotlib.pyplot as plt
 from matplotlib.ticker import ScalarFormatter
@@ -26,10 +27,14 @@ def robust_cost_function(f_y, y, sigma_y, k=1.345):
     return sum(beta_array)
 
 
-def plot_fit(freq, flux, flux_err, model, values, fit_info,
-             save_name="fit.png", data_dict=None):
+def plot_fit(freq, flux, flux_err, model, iminuit_result, fit_info,
+             save_name="fit.png", plot_error=True, data_dict=None):
     fitted_freq = np.linspace(min(freq), max(freq), 100) / 1e6 # Convert to MHz
-    fitted_flux = model(fitted_freq * 1e6, *values) * 1e3
+    if iminuit_result.valid:
+        fitted_flux, fitted_flux_cov = propagate(lambda p: model(fitted_freq * 1e6, *p) * 1e3, iminuit_result.values, iminuit_result.covariance)
+    else:
+        # No convariance values so use old method
+        fitted_flux = model(fitted_freq * 1e6, *iminuit_result.values) * 1e3
     fig, ax = plt.subplots()
     if data_dict:
         for ref in data_dict.keys():
@@ -40,6 +45,10 @@ def plot_fit(freq, flux, flux_err, model, values, fit_info,
     else:
         plt.errorbar(np.array(freq), flux, yerr=flux_err, fmt='o', label="Input data", color="orange")
     plt.plot(fitted_freq, fitted_flux, 'k--', label=fit_info) # Modelled line
+    if plot_error and iminuit_result.valid:
+        # draw 1 sigma error band
+        fitted_flux_prop = np.diag(fitted_flux_cov) ** 0.5
+        plt.fill_between(fitted_freq, fitted_flux - fitted_flux_prop, fitted_flux + fitted_flux_prop, facecolor="C1", alpha=0.5)
     plt.xscale('log')
     plt.yscale('log')
     ax.get_xaxis().set_major_formatter(ScalarFormatter())
@@ -51,7 +60,9 @@ def plot_fit(freq, flux, flux_err, model, values, fit_info,
     plt.clf()
 
     
-def iminuit_fit_spectral_model(freq, flux, flux_err, model=simple_power_law, plot=False, save_name="fit.png", data_dict=None):
+def iminuit_fit_spectral_model(freq, flux, flux_err, model=simple_power_law,
+                               plot=False, plot_error=True,
+                               save_name="fit.png", data_dict=None):
     # Model dependent defaults
     if model == simple_power_law:
         # a, b
@@ -81,15 +92,24 @@ def iminuit_fit_spectral_model(freq, flux, flux_err, model=simple_power_law, plo
     # Check if enough inputs
     if len(freq) <= k + 1:
         logger.warn(f"Only {len(freq)} supplied for {model_str} model fit. This is not enough so skipping")
-        return 1e9, None, None, None, None
+        return 1e9, None, None
 
     # Fit model
-    least_squares = LeastSquares(freq, flux, flux_err, model)
+    least_squares = LeastSquares(np.array(freq,     dtype=np.float128),
+                                 np.array(flux,     dtype=np.float128),
+                                 np.array(flux_err, dtype=np.float128),
+                                 model)
     least_squares.loss = "soft_l1"
     m = Minuit(least_squares, *start_params)
     m.limits = mod_limits
-    m.scan(ncall=500)
     m.migrad()  # finds minimum of least_squares function
+    if not m.valid:
+        # Failed so try simplix method
+        m.simplex()
+        m.migrad()
+    if not m.valid:
+        # Use scan
+        m.scan(ncall=500)
     m.hesse()   # accurately computes uncertainties
     logger.debug(m)
 
@@ -105,14 +125,14 @@ def iminuit_fit_spectral_model(freq, flux, flux_err, model=simple_power_law, plo
     aic = 2*beta * 2*k + (2*k*(k+1)) / (len(freq) - k -1)
 
     if plot:
-        plot_fit(freq, flux, flux_err, model, m.values,
-                 save_name=save_name, data_dict=data_dict)
-    return aic, m.parameters, m.values, m.errors, fit_info
+        plot_fit(freq, flux, flux_err, model, m, fit_info,
+                 save_name=save_name, data_dict=data_dict, plot_error=plot_error)
+    return aic, m, fit_info
 
 
 def find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all,
                            plot_all=False, plot_best=False, plot_compare=False,
-                           data_dict=None):
+                           plot_error=True, data_dict=None):
     # Prepare plots and fitting frequencies
     if plot_compare:
         nrows = 5
@@ -133,15 +153,15 @@ def find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all,
     for i, model_pair in enumerate(models):
         model, label = model_pair
         #curve_fit_spectral_model(freq_all, flux_all, flux_err_all, model=model, plot=True, save_name=f"{pulsar}_{label}_fit.png")
-        aic, parameters, values, errors, fit_info = iminuit_fit_spectral_model(freq_all, flux_all, flux_err_all,
-                        model=model, plot=plot_all, save_name=f"{pulsar}_{label}_fit.png", data_dict=data_dict)
+        aic, iminuit_result, fit_info = iminuit_fit_spectral_model(freq_all, flux_all, flux_err_all,
+                        model=model, plot=plot_all, plot_error=plot_error, save_name=f"{pulsar}_{label}_fit.png", data_dict=data_dict)
         logger.debug(f"{label} model fit gave AIC {aic}.")
-        if parameters is not None:
+        if iminuit_result is not None:
             aics.append(aic)
-            fit_results.append([parameters, values, errors, fit_info])
+            fit_results.append([iminuit_result, fit_info])
 
         # Add to comparison plot
-        if plot_compare and parameters is not None:
+        if plot_compare and iminuit_result is not None:
             if data_dict:
                 for ref in data_dict.keys():
                     freq_ref = np.array(data_dict[ref]['Frequency MHz'])
@@ -150,8 +170,16 @@ def find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all,
                     axs[i].errorbar(freq_ref, flux_ref, yerr=flux_err_ref, fmt='o', label=ref)
             else:
                 axs[i].errorbar(np.array(freq), flux, yerr=flux_err, fmt='o', label="Input data", color="orange")
-            fitted_flux = model(fitted_freq * 1e6, *values) * 1e3
+            if iminuit_result.valid:
+                fitted_flux, fitted_flux_cov = propagate(lambda p: model(fitted_freq * 1e6, *p) * 1e3, iminuit_result.values, iminuit_result.covariance)
+            else:
+                # No convariance values so use old method
+                fitted_flux = model(fitted_freq * 1e6, *iminuit_result.values) * 1e3
             axs[i].plot(fitted_freq, fitted_flux, 'k--', label=fit_info + f"\nAIC: {aic}") # Modelled line
+            if plot_error and iminuit_result.valid:
+                # draw 1 sigma error band
+                fitted_flux_prop = np.diag(fitted_flux_cov) ** 0.5
+                axs[i].fill_between(fitted_freq, fitted_flux - fitted_flux_prop, fitted_flux + fitted_flux_prop, facecolor="C1", alpha=0.5)
             axs[i].set_xscale('log')
             axs[i].set_yscale('log')
             axs[i].get_xaxis().set_major_formatter(ScalarFormatter())
@@ -178,6 +206,6 @@ def find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all,
             plt.savefig(f"{pulsar}_comparison_fit.png", bbox_inches='tight', dpi=300)
             plt.clf()
         elif plot_best:
-            plot_fit(freq_all, flux_all, flux_err_all, models[aici][0], fit_results[aici][1], fit_results[aici][3],
-                     save_name=f"{pulsar}_{models[aici][1]}_fit.png", data_dict=data_dict)
+            plot_fit(freq_all, flux_all, flux_err_all, models[aici][0], fit_results[aici][0], fit_results[aici][1],
+                     save_name=f"{pulsar}_{models[aici][1]}_fit.png", plot_error=plot_error, data_dict=data_dict)
         return models[aici], fit_results[aici]
