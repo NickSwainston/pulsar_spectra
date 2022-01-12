@@ -31,7 +31,7 @@ def robust_cost_function(f_y, y, sigma_y, k=1.345):
 
 def plot_fit(freq, flux, flux_err, model, iminuit_result, fit_info,
              save_name="fit.png", plot_error=True, data_dict=None):
-    fitted_freq = np.linspace(min(freq), max(freq), 100) / 1e6 # Convert to MHz
+    fitted_freq = np.linspace(min(freq), max(freq), 10000) / 1e6 # Convert to MHz
     if iminuit_result.valid:
         fitted_flux, fitted_flux_cov = propagate(lambda p: model(fitted_freq * 1e6, *p) * 1e3, iminuit_result.values, iminuit_result.covariance)
     else:
@@ -39,16 +39,19 @@ def plot_fit(freq, flux, flux_err, model, iminuit_result, fit_info,
         fitted_flux = model(fitted_freq * 1e6, *iminuit_result.values) * 1e3
     fig, ax = plt.subplots()
     marker_scale = 0.7
+    capsize = 1.5
+    errorbar_linewidth = 0.7
+    marker_border_thickness = 0.5
     custom_cycler = (cycler(color = ["#006ddb","#24ff24",'r',"#920000","#6db6ff","#ff6db6",'m',"#b6dbff","#db6d00","#b66dff","#009292","#490092","#ffb6db","#004949",'k']) 
-                    + cycler(marker = [            'o', '^', 'D', 's', 'p', 'P', '*', 'v', 'd', 'h', '>', 'H', 'X', '<', 'x'])
-                    + cycler(markersize = np.array([6,   7,   5,   5.5, 6.5, 7,   9,   7,   7,   7,   7,   7,   7,   7,   7])*marker_scale))
+                    + cycler(marker = [            'o', '^', 'D', 's', 'p', '*', 'v', 'd', 'P','h', '>', 'H', 'X', '<', 'x'])
+                    + cycler(markersize = np.array([6,   7,   5,   5.5, 6.5, 9,   7,   7,   7.5,  7,   7,   7,   7.5,   7,   7])*marker_scale))
     ax.set_prop_cycle(custom_cycler)
     if data_dict:
         for ref in data_dict.keys():
             freq_all = np.array(data_dict[ref]['Frequency MHz'])
             flux_all = np.array(data_dict[ref]['Flux Density mJy'])
             flux_err_all = np.array(data_dict[ref]['Flux Density error mJy'])
-            plt.errorbar(freq_all, flux_all, yerr=flux_err_all, linestyle='None', mec='k', markeredgewidth=0.5, elinewidth=0.9, label=ref)
+            plt.errorbar(freq_all, flux_all, yerr=flux_err_all, linestyle='None', mec='k', markeredgewidth=marker_border_thickness, elinewidth=errorbar_linewidth, capsize=capsize, label=ref)
     else:
         plt.errorbar(np.array(freq), flux, yerr=flux_err, fmt='o', label="Input data", color="orange")
     plt.plot(fitted_freq, fitted_flux, 'k--', label=fit_info) # Modelled line
@@ -90,13 +93,14 @@ def iminuit_fit_spectral_model(freq, flux, flux_err, model=simple_power_law,
         mod_limits = [(-5, 2), (-5, 2), (None, None)]
     elif model == high_frequency_cut_off_power_law:
         # a, b, vc
-        start_params = (-1.6, 1., 1.3e9)
-        mod_limits = [(None, 0), (0, None), (1e3, 1e12)]
+        start_params = (-1.6, 1., 4e9)
+        mod_limits = [(None, 0), (0, None), (3e9, 1e12)]
     elif model == low_frequency_turn_over_power_law:
         # a, b, beta, vc
         start_params = (-2.5, 1.e1, 1., 100e6)
         #mod_limits = [(None, 0), (0, None) , (1e-3, 2.1), (1e6, 1e9)]
-        mod_limits = [(-10, -0.1), (0, 100) , (.1, 2.1), (10e6, 500e6)]
+        #mod_limits = [(-10, -0.1), (0, 100) , (.1, 2.1), (10e6, 500e6)]
+        mod_limits = [(-5, -.5), (0, 100) , (.1, 2.1), (10e6, 500e6)]
         #-3.4, 1e-2, .5, 53e6
     model_str = str(model).split(" ")[1]
     k = len(start_params) # number of model parameters
@@ -148,7 +152,7 @@ def find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all,
     if plot_compare:
         nrows = 5
         plot_size = 3
-        fitted_freq = np.linspace(min(freq_all), max(freq_all), 100) / 1e6 # Convert to MHz
+        fitted_freq = np.linspace(min(freq_all), max(freq_all), 10000) / 1e6 # Convert to MHz
         fig, axs = plt.subplots(nrows, 1, figsize=(plot_size, plot_size * nrows))
 
     # loop over models and fit
@@ -170,11 +174,14 @@ def find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all,
         logger.debug(f"{label} model fit gave AIC {aic}.")
         if iminuit_result is not None:
             aics.append(aic)
-            fit_results.append([parameters, values, errors, fit_info])
+            fit_results.append([iminuit_result, fit_info])
         marker_scale = 0.7
+        capsize = 1.5
+        errorbar_linewidth = 0.7
+        marker_border_thickness = 0.5
         custom_cycler = (cycler(color = ["#006ddb","#24ff24",'r',"#920000","#6db6ff","#ff6db6",'m',"#b6dbff","#db6d00","#b66dff","#009292","#490092","#ffb6db","#004949",'k']) 
-                       + cycler(marker = [            'o', '^', 'D', 's', 'p', 'P', '*', 'v', 'd', 'h', '>', 'H', 'X', '<', 'x'])
-                       + cycler(markersize = np.array([6,   7,   5,   5.5, 6.5, 7,   9,   7,   7,   7,   7,   7,   7,   7,   7])*marker_scale))
+                       + cycler(marker = [            'o', '^', 'D', 's', 'p', '*', 'v', 'd', 'P','h', '>', 'H', 'X', '<', 'x'])
+                       + cycler(markersize = np.array([6,   7,   5,   5.5, 6.5, 9,   7,   7,   7.5,  7,   7,   7,   7.5,   7,   7])*marker_scale))
         axs[i].set_prop_cycle(custom_cycler)
         # Add to comparison plot
         if plot_compare and iminuit_result is not None:
@@ -183,7 +190,9 @@ def find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all,
                     freq_ref = np.array(data_dict[ref]['Frequency MHz'])
                     flux_ref = np.array(data_dict[ref]['Flux Density mJy'])
                     flux_err_ref = np.array(data_dict[ref]['Flux Density error mJy'])
-                    axs[i].errorbar(freq_ref, flux_ref, yerr=flux_err_ref, linestyle='None', mec='k', markeredgewidth=0.5, elinewidth=0.9, label=ref)
+                    (_, caps, _) = axs[i].errorbar(freq_ref, flux_ref, yerr=flux_err_ref, linestyle='None', mec='k', markeredgewidth=marker_border_thickness, elinewidth=errorbar_linewidth, capsize=capsize, label=ref)
+                    for cap in caps:
+                        cap.set_markeredgewidth(errorbar_linewidth)
             else:
                 axs[i].errorbar(np.array(freq), flux, yerr=flux_err, fmt='o', label="Input data", color="orange")
             if iminuit_result.valid:
