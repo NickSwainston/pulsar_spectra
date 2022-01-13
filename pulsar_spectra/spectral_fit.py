@@ -31,7 +31,7 @@ def robust_cost_function(f_y, y, sigma_y, k=1.345):
 
 def plot_fit(freq, flux, flux_err, model, iminuit_result, fit_info,
              save_name="fit.png", plot_error=True, data_dict=None):
-    fitted_freq = np.linspace(min(freq), max(freq), 10000) / 1e6 # Convert to MHz
+    fitted_freq = np.logspace(np.log10(min(freq)), np.log10(max(freq)), 100) / 1e6 # Convert to MHz
     if iminuit_result.valid:
         fitted_flux, fitted_flux_cov = propagate(lambda p: model(fitted_freq * 1e6, *p) * 1e3, iminuit_result.values, iminuit_result.covariance)
     else:
@@ -152,7 +152,7 @@ def find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all,
     if plot_compare:
         nrows = 5
         plot_size = 3
-        fitted_freq = np.linspace(min(freq_all), max(freq_all), 10000) / 1e6 # Convert to MHz
+        fitted_freq = np.logspace(np.log10(min(freq_all)), np.log10(max(freq_all)), 100) / 1e6 # Convert to MHz
         fig, axs = plt.subplots(nrows, 1, figsize=(plot_size, plot_size * nrows))
 
     # loop over models and fit
