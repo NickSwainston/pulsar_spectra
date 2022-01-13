@@ -1,9 +1,25 @@
-# pulsar_spectra
+pulsar_spectra
+======
+
 A simple interface to record pulsar's flux density measurements for a large number of papers and perform fitting of spectral models.
 
 
-# Journals
-The following are the references that we have or are planning to turn into catalogues
+Installation
+=====
+You can install via pip using
+`pip install pulsar_spectra` (stable)
+
+Or you can clone or download the repository and then use `python setup.py install` or `pip install .`
+
+
+Documentation
+=====
+Some basic documentation can be found [here](https://pulsar-spectra.readthedocs.io/en/latest/)
+
+
+Journals
+=====
+The following are the references that we have or are planning to turn into catalogues. If you would like to add another please raise an [issue](https://github.com/NickSwainston/pulsar_spectra/issues).
 - [x] [ATNF pulsar catalogue](https://www.atnf.csiro.au/research/pulsar/psrcat/)
 - [x] [Sieber (1973)](https://ui.adsabs.harvard.edu/abs/1973A%26A....28..237S/abstract)
 - [x] [Bartel et al. (1978)](https://ui.adsabs.harvard.edu/abs/1978A%26A....68..361B/abstract)
@@ -36,3 +52,8 @@ The following are the references that we have or are planning to turn into catal
 - [x] [Jankowski et al. (2018)](https://ui.adsabs.harvard.edu/abs/2018MNRAS.473.4436J/abstract)
 - [x] [Bondonneu et al. (2020)](https://ui.adsabs.harvard.edu/abs/2020A%26A...635A..76B/abstract)
 - [x] [Johnston et al. (2021)](https://ui.adsabs.harvard.edu/abs/2021MNRAS.502.1253J/abstract)
+
+
+Status
+=====
+[![Documentation Status](https://readthedocs.org/projects/pulsar-spectra/badge/?version=latest)](https://pulsar-spectra.readthedocs.io/en/latest/?badge=latest)

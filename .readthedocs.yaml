@@ -1,0 +1,21 @@
+# File: .readthedocs.yaml
+
+version: 1
+
+# Build from the docs/ directory with Sphinx
+sphinx:
+  configuration: docs/conf.py
+
+# Install mpi
+#build:
+#  apt_packages:
+#    - python3-mpi4py
+#    - libopenmpi-dev
+
+# Explicitly set the version of Python and its requirements
+python:
+  version: 3.7
+  install:
+    - method: pip
+      path: .
+    - requirements: docs/requirements.txt
