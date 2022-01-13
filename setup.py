@@ -55,7 +55,8 @@ reqs = [
         'numpy>=1.13.3',
         'matplotlib>=2.1.0',
         'psrqpy>=1.0.5',
-        'iminuit'
+        'iminuit',
+        'PyYAML',
        ]
 
 # Download the ANTF_pulsar_database_file file if it doesn't exist
@@ -63,7 +64,8 @@ datadir = os.path.join(os.path.dirname(__file__), 'pulsar_spectra', 'catalogues'
 download_ANTF_pulsar_database_file(datadir)
 
 
-pulsar_spectra_version = get_git_version()
+#pulsar_spectra_version = get_git_version()
+pulsar_spectra_version = '1.1.0'
 #make a temporary version file to be installed then delete it
 with open('version.py', 'a') as the_file:
     the_file.write('__version__ = "{}"\n'.format(pulsar_spectra_version))
