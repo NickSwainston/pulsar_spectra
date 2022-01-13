@@ -55,6 +55,7 @@ reqs = [
         'numpy>=1.13.3',
         'matplotlib>=2.1.0',
         'psrqpy>=1.0.5',
+        'iminuit'
        ]
 
 # Download the ANTF_pulsar_database_file file if it doesn't exist
