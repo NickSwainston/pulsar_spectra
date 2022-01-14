@@ -42,7 +42,7 @@ def plot_fit(freq, flux, flux_err, model, iminuit_result, fit_info,
     capsize = 1.5
     errorbar_linewidth = 0.7
     marker_border_thickness = 0.5
-    custom_cycler = (cycler(color = ["#006ddb","#24ff24",'r',"#920000","#6db6ff","#ff6db6",'m',"#b6dbff","#db6d00","#b66dff","#009292","#490092","#ffb6db","#004949",'k']) 
+    custom_cycler = (cycler(color = ["#006ddb","#24ff24",'r',"#920000","#6db6ff","#ff6db6",'m',"#b6dbff","#db6d00","#b66dff","#009292","#490092","#ffb6db","#004949",'k'])
                     + cycler(marker = [            'o', '^', 'D', 's', 'p', '*', 'v', 'd', 'P','h', '>', 'H', 'X', '<', 'x'])
                     + cycler(markersize = np.array([6,   7,   5,   5.5, 6.5, 9,   7,   7,   7.5,  7,   7,   7,   7.5,   7,   7])*marker_scale))
     ax.set_prop_cycle(custom_cycler)
@@ -70,7 +70,7 @@ def plot_fit(freq, flux, flux_err, model, iminuit_result, fit_info,
     plt.savefig(save_name, bbox_inches='tight', dpi=200)
     plt.clf()
 
-    
+
 def iminuit_fit_spectral_model(freq, flux, flux_err, model=simple_power_law,
                                plot=False, plot_error=True,
                                save_name="fit.png", data_dict=None):
@@ -150,10 +150,15 @@ def find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all,
                            plot_error=True, data_dict=None):
     # Prepare plots and fitting frequencies
     if plot_compare:
+        # Set up plots
         nrows = 5
         plot_size = 3
         fitted_freq = np.logspace(np.log10(min(freq_all)), np.log10(max(freq_all)), 100) / 1e6 # Convert to MHz
         fig, axs = plt.subplots(nrows, 1, figsize=(plot_size, plot_size * nrows))
+        marker_scale = 0.7
+        capsize = 1.5
+        errorbar_linewidth = 0.7
+        marker_border_thickness = 0.5
 
     # loop over models and fit
     models = [
@@ -175,16 +180,12 @@ def find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all,
         if iminuit_result is not None:
             aics.append(aic)
             fit_results.append([iminuit_result, fit_info])
-        marker_scale = 0.7
-        capsize = 1.5
-        errorbar_linewidth = 0.7
-        marker_border_thickness = 0.5
-        custom_cycler = (cycler(color = ["#006ddb","#24ff24",'r',"#920000","#6db6ff","#ff6db6",'m',"#b6dbff","#db6d00","#b66dff","#009292","#490092","#ffb6db","#004949",'k']) 
-                       + cycler(marker = [            'o', '^', 'D', 's', 'p', '*', 'v', 'd', 'P','h', '>', 'H', 'X', '<', 'x'])
-                       + cycler(markersize = np.array([6,   7,   5,   5.5, 6.5, 9,   7,   7,   7.5,  7,   7,   7,   7.5,   7,   7])*marker_scale))
-        axs[i].set_prop_cycle(custom_cycler)
         # Add to comparison plot
         if plot_compare and iminuit_result is not None:
+            custom_cycler = (cycler(color = ["#006ddb","#24ff24",'r',"#920000","#6db6ff","#ff6db6",'m',"#b6dbff","#db6d00","#b66dff","#009292","#490092","#ffb6db","#004949",'k'])
+                        + cycler(marker = [            'o', '^', 'D', 's', 'p', '*', 'v', 'd', 'P','h', '>', 'H', 'X', '<', 'x'])
+                        + cycler(markersize = np.array([6,   7,   5,   5.5, 6.5, 9,   7,   7,   7.5,  7,   7,   7,   7.5,   7,   7])*marker_scale))
+            axs[i].set_prop_cycle(custom_cycler)
             if data_dict:
                 for ref in data_dict.keys():
                     freq_ref = np.array(data_dict[ref]['Frequency MHz'])
@@ -225,7 +226,7 @@ def find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all,
             # highlight best fit
             rect = plt.Rectangle(
                 # (lower-left corner), width, height
-                (-0.4, -0.13), 2.4, 1.2, fill=False, color="k", lw=2, 
+                (-0.4, -0.13), 2.4, 1.2, fill=False, color="k", lw=2,
                 zorder=1000, transform=axs[aici].transAxes, figure=fig
             )
             fig.patches.extend([rect])
