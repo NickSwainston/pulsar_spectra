@@ -56,7 +56,7 @@ def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fi
         The name of the saved plot. |br| Default: "fit.png".
     """
     # Set up plot
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(3, 3))
     marker_scale = 0.7
     capsize = 1.5
     errorbar_linewidth = 0.7
