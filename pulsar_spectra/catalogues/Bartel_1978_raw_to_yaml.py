@@ -8,7 +8,7 @@ with open("Bartel_1978_raw.csv") as file:
     lines = []
     for line in tsv_file:
         lines.append(line)
-query = psrqpy.QueryATNF(params=['PSRJ', 'NAME', 'PSRB']).pandas
+query = psrqpy.QueryATNF(params=['PSRJ', 'NAME', 'PSRB', 'P0']).pandas
 print(lines)
 print(list(query['PSRB']))
 
@@ -27,7 +27,7 @@ for row in lines[2:]:
             pulsar_dict[pulsar] = {"Frequency MHz":[],
                                    "Flux Density mJy":[],
                                    "Flux Density error mJy":[]}
-    
+
     if not "<" in row[2]:
         pulsar_dict[pulsar]["Frequency MHz"] += [14800]
         # 10^-29Jm^-2Hz^-1 = mJy
@@ -43,8 +43,8 @@ for row in lines[2:]:
             flux = float(row[2])
             # no error mentioned so I assumed
             flux_err = flux * 0.5
-        pulsar_dict[pulsar]["Flux Density mJy"] += [flux]
-        pulsar_dict[pulsar]["Flux Density error mJy"] += [round(flux_err, 3)]
+        pulsar_dict[pulsar]["Flux Density mJy"] += [flux/query['P0'][pid]]
+        pulsar_dict[pulsar]["Flux Density error mJy"] += [round(flux_err/query['P0'][pid], 3)]
 
     if not "<" in row[6]:
         pulsar_dict[pulsar]["Frequency MHz"] += [22700]
