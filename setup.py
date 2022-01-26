@@ -52,12 +52,12 @@ def download_ANTF_pulsar_database_file(datadir):
         os.remove("psrcat_pkg.tar")
 
 reqs = [
-        'python>=3.7
         'numpy>=1.13.3',
         'matplotlib>=3.4.0',
         'psrqpy>=1.0.5',
         'iminuit',
         'PyYAML',
+        'panda<=1.3.5',
        ]
 
 # Download the ANTF_pulsar_database_file file if it doesn't exist
