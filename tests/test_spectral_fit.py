@@ -31,8 +31,8 @@ def test_find_best_spectral_fit():
         flux_err_all = np.array(cat_list[pulsar][2])
         ref_all      = np.array(cat_list[pulsar][3])
         #print(freq_all, flux_all, flux_err_all)
-        models, fit_results = find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all, ref_all, plot_compare=True)
-        print(models)
+        model, iminuit_result, fit_info = find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all, ref_all, plot_compare=True)
+        print(model)
 
 
 def test_plot_methods():
@@ -42,11 +42,11 @@ def test_plot_methods():
     pulsar = 'J0820-1350'
     print(f"Fitting {pulsar}")
     print("Plotting Compare")
-    models, fit_results = find_best_spectral_fit(pulsar, cat_list[pulsar][0], cat_list[pulsar][1], cat_list[pulsar][2], cat_list[pulsar][3], plot_compare=True)
+    find_best_spectral_fit(pulsar, cat_list[pulsar][0], cat_list[pulsar][1], cat_list[pulsar][2], cat_list[pulsar][3], plot_compare=True)
     print("Plotting Best")
-    models, fit_results = find_best_spectral_fit(pulsar, cat_list[pulsar][0], cat_list[pulsar][1], cat_list[pulsar][2], cat_list[pulsar][3], plot_best=True)
+    find_best_spectral_fit(pulsar, cat_list[pulsar][0], cat_list[pulsar][1], cat_list[pulsar][2], cat_list[pulsar][3], plot_best=True)
     print("Plotting All")
-    models, fit_results = find_best_spectral_fit(pulsar, cat_list[pulsar][0], cat_list[pulsar][1], cat_list[pulsar][2], cat_list[pulsar][3], plot_all=True)
+    find_best_spectral_fit(pulsar, cat_list[pulsar][0], cat_list[pulsar][1], cat_list[pulsar][2], cat_list[pulsar][3], plot_all=True)
 
 
 def test_compare_fits_to_Jankowski_2018():

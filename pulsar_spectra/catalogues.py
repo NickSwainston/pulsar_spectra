@@ -73,7 +73,7 @@ def flux_from_atnf(pulsar, query=None, ref_dict=None, assumed_error=0.5):
     ref_dict : `dict`, optional
         A previous psrqpy.get_references query. Can be supplied to prevent performing a new query.
     assumed_error : `float`, optional
-        If no error found, apply this factor to flux to make an assumed error. |b| Default: 0.5.
+        If no error found, apply this factor to flux to make an assumed error. |br| Default: 0.5.
 
     Returns
     -------
@@ -211,7 +211,7 @@ def collect_catalogue_fluxes(only_use=None, exclude=None):
             Flux Density error mJy : `list`
                 The error of the flux density in mJy.
             ref : `list`
-                The reference label.
+                The reference label (in the format 'Author_year').
     """
     # Make a dictionary for each pulsar
     query = psrqpy.QueryATNF(loadfromdb=ATNF_LOC).pandas

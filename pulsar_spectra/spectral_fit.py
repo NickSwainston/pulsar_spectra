@@ -31,7 +31,30 @@ def robust_cost_function(f_y, y, sigma_y, k=1.345):
 
 
 def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fit_info,
-             save_name="fit.png", plot_error=True):
+             plot_error=True, save_name="fit.png"):
+    """Create a plot of the pulsar spectral fit.
+
+    Parameters
+    ----------
+    freqs_MHz : `list`
+        A list of the frequencies in MHz.
+    fluxs_mJy : `list`
+        A list of the flux density in mJy.
+    flux_errs_mJy : `list`
+        A list of the uncertainty of the flux density in mJy.
+    ref : `list`
+        A list of the reference label (in the format 'Author_year').
+    model : `function`
+        One of the model functions from :py:meth:`pulsar_spectra.models`.
+    iminuit_result : `iminuit.Minuit`
+        The Minuit class after being fit in :py:meth:`pulsar_spectra.spectral_fit.iminuit_fit_spectral_model`.
+    fit_info : `str`
+        The string to label the fit with from :py:meth:`pulsar_spectra.spectral_fit.iminuit_fit_spectral_model`.
+    plot_error : `boolean`, optional
+        If you want to include the fit error in the plot. |br| Default: True.
+    save_name : `str`, optional
+        The name of the saved plot. |br| Default: "fit.png".
+    """
     # Set up plot
     fig, ax = plt.subplots()
     marker_scale = 0.7
@@ -81,6 +104,36 @@ def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fi
 def iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model=simple_power_law,
                                plot=False, plot_error=True,
                                save_name="fit.png"):
+    """Fit pulsar spectra with iminuit.
+
+    Parameters
+    ----------
+    freqs_MHz : `list`
+        A list of the frequencies in MHz.
+    fluxs_mJy : `list`
+        A list of the flux density in mJy.
+    flux_errs_mJy : `list`
+        A list of the uncertainty of the flux density in mJy.
+    ref : `list`
+        A list of the reference label (in the format 'Author_year').
+    model : `function`, optional
+        One of the model functions from :py:meth:`pulsar_spectra.models`. Default: :py:meth:`pulsar_spectra.models.simple_power_law`.
+    plot : `boolean`, optional
+        If you want to plot the result of the fit. |br| Default: False.
+    plot_error : `boolean`, optional
+        If you want to include the fit error in the plot. |br| Default: True.
+    save_name : `str`, optional
+        The name of the saved plot. |br| Default: "fit.png".
+
+    Returns
+    -------
+    aic : `float`
+        The Akaike information criterion of the fit.
+    m : `iminuit.Minuit`
+        The Minuit class after being fit in :py:meth:`pulsar_spectra.spectral_fit.iminuit_fit_spectral_model`.
+    fit_info : `str`
+        The string to label the fit with from :py:meth:`pulsar_spectra.spectral_fit.iminuit_fit_spectral_model`.
+    """
     # Model dependent defaults
     if model == simple_power_law:
         # a, b
@@ -156,6 +209,38 @@ def iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model=s
 def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
                            plot_all=False, plot_best=False, plot_compare=False,
                            plot_error=True):
+    """Fit pulsar spectra with iminuit.
+
+    Parameters
+    ----------
+    pulsar : `str`
+        The Jname of the pulsar to be fit.
+    freqs_MHz : `list`
+        A list of the frequencies in MHz.
+    fluxs_mJy : `list`
+        A list of the flux density in mJy.
+    flux_errs_mJy : `list`
+        A list of the uncertainty of the flux density in mJy.
+    ref_all : `list`
+        A list of the reference label (in the format 'Author_year').
+    plot_all : `boolean`, optional
+        If you want to plot the result of all fits. |br| Default: False.
+    plot_best : `boolean`, optional
+        If you want to only plot the best fit. |br| Default: False.
+    plot_compare : `boolean`, optional
+        If you want to make a single plot with the result of all fits. |br| Default: False.
+    plot_error : `boolean`, optional
+        If you want to include the fit error in the plot. |br| Default: True.
+
+    Returns
+    -------
+    model : `function`
+        The best model functions from :py:meth:`pulsar_spectra.models`. Default: :py:meth:`pulsar_spectra.models.simple_power_law`.
+    m : `iminuit.Minuit`
+        The Minuit class after being fit in :py:meth:`pulsar_spectra.spectral_fit.iminuit_fit_spectral_model`.
+    fit_info : `str`
+        The string to label the fit with from :py:meth:`pulsar_spectra.spectral_fit.iminuit_fit_spectral_model`.
+    """
     # Prepare plots and fitting frequencies
     if plot_compare:
         # Set up plots
@@ -178,7 +263,8 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
             #[double_broken_power_law, "double_broken_power_law"],
             ]
     aics = []
-    fit_results = []
+    iminuit_results = []
+    fit_infos = []
     for i, model_pair in enumerate(models):
         model, label = model_pair
         aic, iminuit_result, fit_info = iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
@@ -186,7 +272,8 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
         logger.debug(f"{label} model fit gave AIC {aic}.")
         if iminuit_result is not None:
             aics.append(aic)
-            fit_results.append([iminuit_result, fit_info])
+            iminuit_results.append(iminuit_result)
+            fit_infos.append(fit_info)
 
         # Add to comparison plot
         if plot_compare and iminuit_result is not None:
@@ -239,6 +326,6 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
             plt.savefig(f"{pulsar}_comparison_fit.png", bbox_inches='tight', dpi=300)
             plt.clf()
         elif plot_best:
-            plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all, models[aici][0], fit_results[aici][0], fit_results[aici][1],
+            plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all, models[aici][0], iminuit_results[aici], fit_infos[aici],
                      save_name=f"{pulsar}_{models[aici][1]}_fit.png", plot_error=plot_error)
-        return models[aici], fit_results[aici]
+        return models[aici], iminuit_results[aici], fit_infos[aici]
