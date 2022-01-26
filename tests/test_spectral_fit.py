@@ -9,7 +9,7 @@ import csv
 
 from pulsar_spectra import catalogues
 from pulsar_spectra.spectral_fit import find_best_spectral_fit
-from pulsar_spectra.catalogues import collect_catalogue_fluxes
+from pulsar_spectra.catalogues import collect_catalogue_fluxes, convert_cat_list_to_dict
 
 import logging
 logger = logging.getLogger(__name__)
@@ -18,20 +18,36 @@ logger = logging.getLogger(__name__)
 def test_find_best_spectral_fit():
     """Tests the find_best_spectral_fit funtion.
     """
-    cat_dict, cat_list = collect_catalogue_fluxes()
+    cat_list = collect_catalogue_fluxes()
     #print(cat_dict)
     #pulsars = ['J0034-0534','J0953+0755', 'J1645-0317']
-    pulsars = ['J0820-1350', 'J0835-4510', 'J0837+0610', 'J0953+0755', 'J1453-6413', 'J1456-6843', 'J1645-0317', 'J1731-4744']
+    pulsars = ['J0820-1350', 'J0835-4510', 'J0837+0610', 'J0953+0755', 'J1453-6413', 'J1456-6843', 'J1645-0317', 'J1731-4744', "J0332+5434"]
     for pulsar in pulsars:
         print(f"\nFitting {pulsar}")
         #print(cat_dict[pulsar])
         #print(cat_list[pulsar])
-        freq_all = np.array(cat_list[pulsar][0])*1e6
-        flux_all = np.array(cat_list[pulsar][1])*1e-3
-        flux_err_all = np.array(cat_list[pulsar][2])*1e-3
+        freq_all     = np.array(cat_list[pulsar][0])
+        flux_all     = np.array(cat_list[pulsar][1])
+        flux_err_all = np.array(cat_list[pulsar][2])
+        ref_all      = np.array(cat_list[pulsar][3])
         #print(freq_all, flux_all, flux_err_all)
-        models, fit_results = find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all, plot_compare=True, data_dict=cat_dict[pulsar])
+        models, fit_results = find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all, ref_all, plot_compare=True)
         print(models)
+
+
+def test_plot_methods():
+    """Tests the find_best_spectral_fit plotting methods.
+    """
+    cat_list = collect_catalogue_fluxes()
+    pulsar = 'J0820-1350'
+    print(f"Fitting {pulsar}")
+    print("Plotting Compare")
+    models, fit_results = find_best_spectral_fit(pulsar, cat_list[pulsar][0], cat_list[pulsar][1], cat_list[pulsar][2], cat_list[pulsar][3], plot_compare=True)
+    print("Plotting Best")
+    models, fit_results = find_best_spectral_fit(pulsar, cat_list[pulsar][0], cat_list[pulsar][1], cat_list[pulsar][2], cat_list[pulsar][3], plot_best=True)
+    print("Plotting All")
+    models, fit_results = find_best_spectral_fit(pulsar, cat_list[pulsar][0], cat_list[pulsar][1], cat_list[pulsar][2], cat_list[pulsar][3], plot_all=True)
+
 
 def test_compare_fits_to_Jankowski_2018():
     # Get the pulsars in the Jankowski paper
