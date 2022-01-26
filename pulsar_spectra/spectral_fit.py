@@ -134,6 +134,11 @@ def iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model=s
     fit_info : `str`
         The string to label the fit with from :py:meth:`pulsar_spectra.spectral_fit.iminuit_fit_spectral_model`.
     """
+    # Covert to SI (Hz and Jy)
+    freqs_Hz     = np.array(freqs_MHz,     dtype=np.float128) * 1e6
+    fluxs_Jy     = np.array(fluxs_mJy,     dtype=np.float128) / 1e3
+    flux_errs_Jy = np.array(flux_errs_mJy, dtype=np.float128) / 1e3
+
     # Model dependent defaults
     if model == simple_power_law:
         # a, b
@@ -142,7 +147,7 @@ def iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model=s
     elif model == broken_power_law:
         # vb, a1, a2, b
         start_params = (5e8, -2.6, -2.6, 0.1)
-        mod_limits = [(1e3, 1e9), (-10, 0), (-10, 0), (0, None)]
+        mod_limits = [(min(freqs_Hz)+5e7, max(freqs_Hz)-5e7), (-10, 0), (-10, 0), (0, None)]
     elif model == double_broken_power_law:
         # vb1, vb2, a1, a2, a3, b
         start_params = (5e8, 5e8, -2.6, -2.6, -2.6, 0.1)
@@ -159,18 +164,14 @@ def iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model=s
         # vc, a, b, beta
         start_params = (100e6, -2.5, 1.e1, 1.)
         mod_limits = [(10e6, 500e6), (-5, -.5), (0, 100) , (.1, 2.1)]
-    model_str = str(model).split(" ")[1]
-    k = len(start_params) # number of model parameters
 
     # Check if enough inputs
+    model_str = str(model).split(" ")[1]
+    k = len(start_params) # number of model parameters
     if len(freqs_MHz) <= k + 1:
         logger.warn(f"Only {len(freqs_MHz)} supplied for {model_str} model fit. This is not enough so skipping")
         return 1e9, None, None
 
-    # Covert to SI (Hz and Jy)
-    freqs_Hz     = np.array(freqs_MHz,     dtype=np.float128) * 1e6
-    fluxs_Jy     = np.array(fluxs_mJy,     dtype=np.float128) / 1e3
-    flux_errs_Jy = np.array(flux_errs_mJy, dtype=np.float128) / 1e3
     # Fit model
     least_squares = LeastSquares(freqs_Hz, fluxs_Jy, flux_errs_Jy, model)
     least_squares.loss = "soft_l1"
