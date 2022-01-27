@@ -8,7 +8,7 @@ with open("Sieber_1973_raw.csv") as file:
     lines = []
     for line in tsv_file:
         lines.append(line)
-query = psrqpy.QueryATNF(params=['PSRJ', 'NAME', 'PSRB']).pandas
+query = psrqpy.QueryATNF(params=['PSRJ', 'NAME', 'PSRB', 'P0']).pandas
 print(lines)
 print(list(query['PSRB']))
 
@@ -29,15 +29,16 @@ for row in lines[2:]:
             pulsar_dict[pulsar] = {"Frequency MHz":[],
                                 "Flux Density mJy":[],
                                 "Flux Density error mJy":[]}
-    
+
     if not (">" in row[3] or "<" in row[3] or "A" in row[1]):
         pulsar_dict[pulsar]["Frequency MHz"] += [float(row[2])]
-        # 10^-29Jm^-2Hz^-1 = mJy
+        # 10^-29Jm^-2Hz^-1 = mJys
         if "m" in row[3]:
             flux = float(row[3][:-2])
         else:
             flux = float(row[3].replace("'", "").strip())
-        pulsar_dict[pulsar]["Flux Density mJy"] += [flux]
+        # Remove the s term by dividing by the period
+        pulsar_dict[pulsar]["Flux Density mJy"] += [flux/query['P0'][pid]]
 
         if "a" in row[4]:
             fact_err = 0.25

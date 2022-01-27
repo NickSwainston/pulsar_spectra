@@ -10,7 +10,7 @@ with open("Izvekova_1981_raw.csv") as file:
     lines = []
     for line in tsv_file:
         lines.append(line)
-query = psrqpy.QueryATNF(params=['PSRJ', 'NAME', 'PSRB']).pandas
+query = psrqpy.QueryATNF(params=['PSRJ', 'NAME', 'PSRB', 'P0']).pandas
 print(lines)
 for i in list(query['PSRB']):
     if isinstance(i, str):
@@ -55,13 +55,13 @@ for row in lines[2:]:
             pulsar_dict[pulsar] = {"Frequency MHz":[],
                                    "Flux Density mJy":[],
                                    "Flux Density error mJy":[]}
-    
+
     if not ("^" in row[3] or "<" in row[3]):
         pulsar_dict[pulsar]["Frequency MHz"] += [float(row[2])]
         flux, flux_err = row[3].replace("*", "").replace(" ", "").replace("+", "±").split("±")
-        # 10^-29Jm^-2Hz^-1 = mJy
-        pulsar_dict[pulsar]["Flux Density mJy"] += [float(flux)*1e3]
-        pulsar_dict[pulsar]["Flux Density error mJy"] += [float(flux_err)*1e3]
+        # 10^-29Jm^-2Hz^-1 = mJys
+        pulsar_dict[pulsar]["Flux Density mJy"] += [float(flux)*1e3/query['P0'][pid]]
+        pulsar_dict[pulsar]["Flux Density error mJy"] += [float(flux_err)*1e3/query['P0'][pid]]
 
 with open("Izvekova_1981.json", "w") as cat_file:
     cat_file.write(json.dumps(pulsar_dict))

@@ -23,6 +23,7 @@ ATNF_LOC = os.path.join(CAT_DIR, 'psrcat.db')
 
 
 def get_antf_references():
+    """Wrapper for psrqpy.get_references() that ensures the cache is only Updated once."""
     ref_dict  = psrqpy.get_references()
     if not isinstance(ref_dict, dict):
         # Reference error so update the cache
@@ -61,7 +62,7 @@ def convert_antf_ref(ref_code, ref_dict=None):
 
 
 def flux_from_atnf(pulsar, query=None, ref_dict=None, assumed_error=0.5):
-    """Queries the ATNF database for flux and spectral index info on a particular pulsar at all frequencies
+    """Queries the ATNF database for flux info on a particular pulsar at all frequencies.
 
     Parameters
     ----------
@@ -72,7 +73,7 @@ def flux_from_atnf(pulsar, query=None, ref_dict=None, assumed_error=0.5):
     ref_dict : `dict`, optional
         A previous psrqpy.get_references query. Can be supplied to prevent performing a new query.
     assumed_error : `float`, optional
-        If no error found, apply this factor to flux to make an assumed error. |b| Default: 0.5.
+        If no error found, apply this factor to flux to make an assumed error. |br| Default: 0.5.
 
     Returns
     -------
@@ -106,7 +107,7 @@ def flux_from_atnf(pulsar, query=None, ref_dict=None, assumed_error=0.5):
     # Get all available data from dataframe and check for missing values
     for flux_query in flux_queries:
         flux = query[flux_query][query_id]
-        
+
         # Check for flux
         if not np.isnan(flux):
             flux_all.append(flux) # in mJy
@@ -133,7 +134,7 @@ def flux_from_atnf(pulsar, query=None, ref_dict=None, assumed_error=0.5):
                 freq = int(flux_query[1:-1])*1e3
             else:
                 freq = int(flux_query[1:])
-            freq_all.append(freq) 
+            freq_all.append(freq)
 
             # Grab reference code and convert to "Author Year" format
             ref_code = query[flux_query+"_REF"][query_id]
@@ -143,6 +144,29 @@ def flux_from_atnf(pulsar, query=None, ref_dict=None, assumed_error=0.5):
     return freq_all, flux_all, flux_err_all, references
 
 def all_flux_from_atnf(query=None):
+    """Queries the ATNF database for flux info for all pulsar at all frequencies.
+
+    Parameters
+    ----------
+    query : psrqpy object, optional
+        A previous psrqpy.QueryATNF query. Can be supplied to prevent performing a new query.
+
+    Returns
+    -------
+    jname_cat_dict : `dict`
+        Catalgoues dictionary with the keys in the format jname_cat_dict[jname][ref]['Frequency MHz', 'Flux Density mJy', 'Flux Density error mJy']
+
+        ``'jname'`` : `str`
+            The pulsar's Jname.
+        ``'ref'`` : `str`
+            The reference label.
+        ``'Frequency MHz'``
+            The observing frequency in MHz.
+        ``'Flux Density mJy'``
+            The flux density in mJy.
+        ``'Flux Density error mJy'``
+            The error of the flux density in mJy.
+    """
     if query is None:
         query = psrqpy.QueryATNF(loadfromdb=ATNF_LOC).pandas
     ref_dict = get_antf_references()
@@ -158,7 +182,7 @@ def all_flux_from_atnf(query=None):
             jname_cat[jname][ref]['Flux Density mJy'] += [flux]
             jname_cat[jname][ref]['Flux Density error mJy'] += [flux_err]
     return jname_cat
-    
+
 
 def collect_catalogue_fluxes(only_use=None, exclude=None):
     """Collect the fluxes from all of the catalogues recorded in this repo.
@@ -172,29 +196,22 @@ def collect_catalogue_fluxes(only_use=None, exclude=None):
 
     Returns
     -------
-    jname_cat_dict[jname][ref]['Frequency MHz', 'Flux Density mJy', 'Flux Density error mJy'] : `dict`
-        `jname` : `str`
-            The pulsar's Jname.
-        `ref` : `str`
-            The reference label.
-        ``'Frequency MHz'``
-            The observing frequency in MHz.
-        ``'Flux Density mJy'``
-            The flux density in mJy.
-        ``'Flux Density error mJy'`
-            The error of the flux density in mJy.
     jname_cat_list[jname] : `dict`
-        `jname` : `str`
+        Catalgoues dictionary with the keys:
+
+        ``'jname'`` : `str`
             The pulsar's Jname.
-        Each dictionary contains a list of lists of ['Frequency MHz', 'Flux Density mJy', 'Flux Density error mJy', 'ref']
-            ``'Frequency MHz'``
+
+            Each dictionary contains a list of lists with the following:
+
+            Frequency MHz : `list`
                 The observing frequency in MHz.
-            ``'Flux Density mJy'``
+            Flux Density mJy : `list`
                 The flux density in mJy.
-            ``'Flux Density error mJy'`
+            Flux Density error mJy : `list`
                 The error of the flux density in mJy.
-            `ref` : `str`
-                The reference label.
+            ref : `list`
+                The reference label (in the format 'Author_year').
     """
     # Make a dictionary for each pulsar
     query = psrqpy.QueryATNF(loadfromdb=ATNF_LOC).pandas
@@ -270,18 +287,12 @@ def collect_catalogue_fluxes(only_use=None, exclude=None):
                        flux_err in jname_cat_dict[jname][ref]['Flux Density error mJy']:
                         logger.debug(f"Redundant data  pulsar:{jname}  ref:{ref}  freq:{freq}  flux:{flux}  flux_err:{flux_err}")
                     else:
-                        # Update dict
-                        jname_cat_dict[jname][ref]['Frequency MHz'] += [freq]
-                        jname_cat_dict[jname][ref]['Flux Density mJy'] += [flux]
-                        jname_cat_dict[jname][ref]['Flux Density error mJy'] += [flux_err]
                         # Update list
                         jname_cat_list[jname][0] += [freq]
                         jname_cat_list[jname][1] += [flux]
                         jname_cat_list[jname][2] += [flux_err]
                         jname_cat_list[jname][3] += [ref]
             else:
-                # Update dict
-                jname_cat_dict[jname][ref] = antf_dict[jname][ref]
                 # Update list
                 for freq, flux, flux_err in zip(antf_dict[jname][ref]['Frequency MHz'],
                                                 antf_dict[jname][ref]['Flux Density mJy'],
@@ -292,6 +303,42 @@ def collect_catalogue_fluxes(only_use=None, exclude=None):
                     jname_cat_list[jname][3] += [ref]
 
 
-    return jname_cat_dict, jname_cat_list
+    return jname_cat_list
 
-            
+def convert_cat_list_to_dict(jname_cat_list):
+    """
+    Returns
+    -------
+    jname_cat_dict : `dict`
+        Catalgoues dictionary with the keys in the format jname_cat_dict[jname][ref]['Frequency MHz', 'Flux Density mJy', 'Flux Density error mJy']
+
+        ``'jname'`` : `str`
+            The pulsar's Jname.
+        ``'ref'`` : `str`
+            The reference label.
+        ``'Frequency MHz'``
+            The observing frequency in MHz.
+        ``'Flux Density mJy'``
+            The flux density in mJy.
+        ``'Flux Density error mJy'``
+            The error of the flux density in mJy.
+    """
+    jname_cat_dict = {}
+    for jname in jname_cat_list.keys():
+        freqs, fluxs, flux_errs, refs = jname_cat_list[jname]
+        jname_cat_dict[jname] = {}
+
+        # Loop over and put references into the same dict
+        for freq, flux, flux_err, ref in zip(freqs, fluxs, flux_errs, refs):
+            if ref in jname_cat_dict[jname].keys():
+                # Update
+                jname_cat_dict[jname][ref]['Frequency MHz'] += [freq]
+                jname_cat_dict[jname][ref]['Flux Density mJy'] += [flux]
+                jname_cat_dict[jname][ref]['Flux Density error mJy'] += [flux_err]
+            else:
+                # Make new
+                jname_cat_dict[jname][ref] = {}
+                jname_cat_dict[jname][ref]['Frequency MHz'] = [freq]
+                jname_cat_dict[jname][ref]['Flux Density mJy'] = [flux]
+                jname_cat_dict[jname][ref]['Flux Density error mJy'] = [flux_err]
+    return jname_cat_dict
