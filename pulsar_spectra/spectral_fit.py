@@ -38,20 +38,20 @@ def plot_fit(freq, flux, flux_err, model, iminuit_result, fit_info,
         # No convariance values so use old method
         fitted_flux = model(fitted_freq * 1e6, *iminuit_result.values) * 1e3
     fig, ax = plt.subplots()
-    marker_scale = 0.7
+    marker_scale = 0.9
     capsize = 1.5
     errorbar_linewidth = 0.7
     marker_border_thickness = 0.5
-    custom_cycler = (cycler(color = ["#006ddb","#24ff24",'r',"#920000","#6db6ff","#ff6db6",'m',"#b6dbff","#db6d00","#b66dff","#009292","#490092","#ffb6db","#004949",'k']) 
-                    + cycler(marker = [            'o', '^', 'D', 's', 'p', '*', 'v', 'd', 'P','h', '>', 'H', 'X', '<', 'x'])
-                    + cycler(markersize = np.array([6,   7,   5,   5.5, 6.5, 9,   7,   7,   7.5,  7,   7,   7,   7.5,   7,   7])*marker_scale))
+    custom_cycler = (cycler(color = ["#006ddb","#24ff24",'r',"#920000","#6db6ff","#ff6db6",'m',"#b6dbff","#db6d00","#b66dff","#009292","#490092","#ffb6db","#004949",'k', 'm']) 
+                    + cycler(marker = [            'o', '^', 'D', 's', 'p', '*', 'v', 'd', 'P',  'h', '>', 'H', 'X',   '<', 'x', 's'])
+                    + cycler(markersize = np.array([6,   7,   5,   5.5, 6.5, 9,   7,   7,   7.5,  7,   7,   7,   7.5,   7,   7,   5.5])*marker_scale))
     ax.set_prop_cycle(custom_cycler)
     if data_dict:
         for ref in data_dict.keys():
             freq_all = np.array(data_dict[ref]['Frequency MHz'])
             flux_all = np.array(data_dict[ref]['Flux Density mJy'])
             flux_err_all = np.array(data_dict[ref]['Flux Density error mJy'])
-            plt.errorbar(freq_all, flux_all, yerr=flux_err_all, linestyle='None', mec='k', markeredgewidth=marker_border_thickness, elinewidth=errorbar_linewidth, capsize=capsize, label=ref)
+            plt.errorbar(freq_all, flux_all, yerr=flux_err_all, linestyle='None', mec='k', markeredgewidth=marker_border_thickness, elinewidth=errorbar_linewidth, capsize=capsize, label=ref.replace('_', ' '))
     else:
         plt.errorbar(np.array(freq), flux, yerr=flux_err, fmt='o', label="Input data", color="orange")
     plt.plot(fitted_freq, fitted_flux, 'k--', label=fit_info) # Modelled line
@@ -154,6 +154,15 @@ def find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all,
         plot_size = 3
         fitted_freq = np.logspace(np.log10(min(freq_all)), np.log10(max(freq_all)), 100) / 1e6 # Convert to MHz
         fig, axs = plt.subplots(nrows, 1, figsize=(plot_size, plot_size * nrows))
+        marker_scale = 0.6 # 0.7
+        capsize = 1.5
+        errorbar_linewidth = 0.6
+        marker_border_thickness = 0.5
+        custom_cycler = (cycler(color = ["#006ddb","#24ff24",'r',"#920000","#6db6ff","#ff6db6",'m',"#b6dbff","#db6d00","#b66dff","#009292","#490092","#ffb6db","#004949",'k', 'm']) 
+                        + cycler(marker = [            'o', '^', 'D', 's', 'p', '*', 'v', 'd', 'P',  'h', '>', 'H', 'X',   'o', 'x', 's'])
+                        + cycler(markersize = np.array([6,   7,   5,   5.5, 6.5, 9,   7,   7,   7.5,  7,   7,   7,   7.5,   7,   7,   5.5])*marker_scale))
+        for i in range(nrows):
+            axs[i].set_prop_cycle(custom_cycler)
 
     # loop over models and fit
     models = [
@@ -175,14 +184,6 @@ def find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all,
         if iminuit_result is not None:
             aics.append(aic)
             fit_results.append([iminuit_result, fit_info])
-        marker_scale = 0.7
-        capsize = 1.5
-        errorbar_linewidth = 0.7
-        marker_border_thickness = 0.5
-        custom_cycler = (cycler(color = ["#006ddb","#24ff24",'r',"#920000","#6db6ff","#ff6db6",'m',"#b6dbff","#db6d00","#b66dff","#009292","#490092","#ffb6db","#004949",'k']) 
-                       + cycler(marker = [            'o', '^', 'D', 's', 'p', '*', 'v', 'd', 'P','h', '>', 'H', 'X', '<', 'x'])
-                       + cycler(markersize = np.array([6,   7,   5,   5.5, 6.5, 9,   7,   7,   7.5,  7,   7,   7,   7.5,   7,   7])*marker_scale))
-        axs[i].set_prop_cycle(custom_cycler)
         # Add to comparison plot
         if plot_compare and iminuit_result is not None:
             if data_dict:
@@ -190,7 +191,7 @@ def find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all,
                     freq_ref = np.array(data_dict[ref]['Frequency MHz'])
                     flux_ref = np.array(data_dict[ref]['Flux Density mJy'])
                     flux_err_ref = np.array(data_dict[ref]['Flux Density error mJy'])
-                    (_, caps, _) = axs[i].errorbar(freq_ref, flux_ref, yerr=flux_err_ref, linestyle='None', mec='k', markeredgewidth=marker_border_thickness, elinewidth=errorbar_linewidth, capsize=capsize, label=ref)
+                    (_, caps, _) = axs[i].errorbar(freq_ref, flux_ref, yerr=flux_err_ref, linestyle='None', mec='k', markeredgewidth=marker_border_thickness, elinewidth=errorbar_linewidth, capsize=capsize, label=ref.replace('_', ' '))
                     for cap in caps:
                         cap.set_markeredgewidth(errorbar_linewidth)
             else:
