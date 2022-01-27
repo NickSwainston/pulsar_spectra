@@ -154,13 +154,13 @@ def find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all,
         plot_size = 3
         fitted_freq = np.logspace(np.log10(min(freq_all)), np.log10(max(freq_all)), 100) / 1e6 # Convert to MHz
         fig, axs = plt.subplots(nrows, 1, figsize=(plot_size, plot_size * nrows))
-        marker_scale = 0.6 # 0.7
+        marker_scale = 0.6
         capsize = 1.5
         errorbar_linewidth = 0.6
         marker_border_thickness = 0.5
         custom_cycler = (cycler(color = ["#006ddb","#24ff24",'r',"#920000","#6db6ff","#ff6db6",'m',"#b6dbff","#db6d00","#b66dff","#009292","#490092","#ffb6db","#004949",'k', 'm']) 
-                        + cycler(marker = [            'o', '^', 'D', 's', 'p', '*', 'v', 'd', 'P',  'h', '>', 'H', 'X',   'o', 'x', 's'])
-                        + cycler(markersize = np.array([6,   7,   5,   5.5, 6.5, 9,   7,   7,   7.5,  7,   7,   7,   7.5,   7,   7,   5.5])*marker_scale))
+                    + cycler(marker = [            'o', '^', 'D', 's', 'p', '*', 'v', 'd', 'P',  'h', '>', 'H', 'X',   '<', 'x', 's'])
+                    + cycler(markersize = np.array([6,   7,   5,   5.5, 6.5, 9,   7,   7,   7.5,  7,   7,   7,   7.5,   7,   7,   5.5])*marker_scale))
         for i in range(nrows):
             axs[i].set_prop_cycle(custom_cycler)
 
