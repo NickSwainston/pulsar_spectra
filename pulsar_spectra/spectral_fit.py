@@ -89,19 +89,7 @@ def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fi
     if plot_error and iminuit_result.valid:
         # draw 1 sigma error band
         fitted_flux_prop = np.diag(fitted_flux_cov) ** 0.5
-<<<<<<< HEAD
-        plt.fill_between(fitted_freq, fitted_flux - fitted_flux_prop, fitted_flux + fitted_flux_prop, facecolor="C1", alpha=0.5)
-
-    # Add data
-    data_dict = convert_cat_list_to_dict({"dummy_pulsar":[freqs_MHz, fluxs_mJy, flux_errs_mJy, ref]})["dummy_pulsar"]
-    for ref in data_dict.keys():
-        freqs_MHz = np.array(data_dict[ref]['Frequency MHz'])
-        fluxs_mJy = np.array(data_dict[ref]['Flux Density mJy'])
-        flux_errs_mJy = np.array(data_dict[ref]['Flux Density error mJy'])
-        plt.errorbar(freqs_MHz, fluxs_mJy, yerr=flux_errs_mJy, linestyle='None', mec='k', markeredgewidth=marker_border_thickness, elinewidth=errorbar_linewidth, capsize=capsize, label=ref.replace('_', ' '))
-=======
         ax.fill_between(fitted_freq, fitted_flux - fitted_flux_prop, fitted_flux + fitted_flux_prop, facecolor="C1", alpha=0.5)
->>>>>>> main
 
     # Format plot and save
     plt.xscale('log')
@@ -299,14 +287,7 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
 
         # Add to comparison plot
         if plot_compare and iminuit_result is not None:
-<<<<<<< HEAD
-            custom_cycler = (cycler(color = ["#006ddb","#24ff24",'r',"#920000","#6db6ff","#ff6db6",'m',"#b6dbff","#db6d00","#b66dff","#009292","#490092","#ffb6db","#004949",'k', 'm']) 
-                           + cycler(marker = [            'o', '^', 'D', 's', 'p', '*', 'v', 'd', 'P',  'h', '>', 'H', 'X',   '<', 'x', 's'])
-                           + cycler(markersize = np.array([6,   7,   5,   5.5, 6.5, 9,   7,   7,   7.5,  7,   7,   7,   7.5,   7,   7,   5.5])*marker_scale))
-            axs[i].set_prop_cycle(custom_cycler)
-=======
             # plot data
->>>>>>> main
             data_dict = convert_cat_list_to_dict({"dummy_pulsar":[freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all]})["dummy_pulsar"]
             for ref in data_dict.keys():
                 freq_ref = np.array(data_dict[ref]['Frequency MHz'])
