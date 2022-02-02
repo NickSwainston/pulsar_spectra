@@ -56,14 +56,15 @@ def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fi
         The name of the saved plot. |br| Default: "fit.png".
     """
     # Set up plot
-    fig, ax = plt.subplots(figsize=(3, 3))
+    plotsize = 3.5
+    fig, ax = plt.subplots(figsize=(plotsize, plotsize))
     marker_scale = 0.7
     capsize = 1.5
     errorbar_linewidth = 0.7
     marker_border_thickness = 0.5
-    custom_cycler = (cycler(color = ["#006ddb","#24ff24",'r',"#920000","#6db6ff","#ff6db6",'m',"#b6dbff","#db6d00","#b66dff","#009292","#490092","#ffb6db","#004949",'k'])
-                    + cycler(marker = [            'o', '^', 'D', 's', 'p', '*', 'v', 'd', 'P','h', '>', 'H', 'X', '<', 'x'])
-                    + cycler(markersize = np.array([6,   7,   5,   5.5, 6.5, 9,   7,   7,   7.5,  7,   7,   7,   7.5,   7,   7])*marker_scale))
+    custom_cycler = (cycler(color = ["#006ddb", "#006ddb", "#24ff24",'r',"#920000","#6db6ff","#ff6db6",'m',"#b6dbff","#009292","#b66dff","#db6d00", 'c',"#ffb6db","#004949",'k'])
+                    + cycler(marker = [            'o', 'o', '^', 'D', 's', 'p', '*', 'v', 'd', 'P',  'h', '>', 'H', 'X', '<', 'x'])
+                    + cycler(markersize = np.array([6,   6,   7,   5,   5.5, 6.5, 9,   7,   7,   7.5,  7,   7,   7,   7.5,   7,   7])*marker_scale))
     ax.set_prop_cycle(custom_cycler)
 
     # Create fit line
@@ -86,7 +87,7 @@ def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fi
         freqs_MHz = np.array(data_dict[ref]['Frequency MHz'])
         fluxs_mJy = np.array(data_dict[ref]['Flux Density mJy'])
         flux_errs_mJy = np.array(data_dict[ref]['Flux Density error mJy'])
-        plt.errorbar(freqs_MHz, fluxs_mJy, yerr=flux_errs_mJy, linestyle='None', mec='k', markeredgewidth=marker_border_thickness, elinewidth=errorbar_linewidth, capsize=capsize, label=ref)
+        plt.errorbar(freqs_MHz, fluxs_mJy, yerr=flux_errs_mJy, linestyle='None', mec='k', markeredgewidth=marker_border_thickness, elinewidth=errorbar_linewidth, capsize=capsize, label=ref.replace('_', ' '))
 
     # Format plot and save
     plt.xscale('log')
@@ -97,7 +98,7 @@ def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fi
     plt.xlabel('Frequency (MHz)')
     plt.ylabel('Flux Density (mJy)')
     plt.legend(loc='center left', bbox_to_anchor=(1.1, 0.5))
-    plt.savefig(save_name, bbox_inches='tight', dpi=200)
+    plt.savefig(save_name, bbox_inches='tight', dpi=300)
     plt.clf()
 
 
@@ -287,7 +288,7 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
                 freq_ref = np.array(data_dict[ref]['Frequency MHz'])
                 flux_ref = np.array(data_dict[ref]['Flux Density mJy'])
                 flux_err_ref = np.array(data_dict[ref]['Flux Density error mJy'])
-                (_, caps, _) = axs[i].errorbar(freq_ref, flux_ref, yerr=flux_err_ref, linestyle='None', mec='k', markeredgewidth=marker_border_thickness, elinewidth=errorbar_linewidth, capsize=capsize, label=ref)
+                (_, caps, _) = axs[i].errorbar(freq_ref, flux_ref, yerr=flux_err_ref, linestyle='None', mec='k', markeredgewidth=marker_border_thickness, elinewidth=errorbar_linewidth, capsize=capsize, label=ref.replace('_', ' '))
                 for cap in caps:
                     cap.set_markeredgewidth(errorbar_linewidth)
             if iminuit_result.valid:
