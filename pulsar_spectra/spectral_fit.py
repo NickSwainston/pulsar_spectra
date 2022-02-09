@@ -8,7 +8,7 @@ from iminuit.cost import LeastSquares
 from iminuit.util import propagate
 
 import matplotlib.pyplot as plt
-from matplotlib.ticker import ScalarFormatter
+from matplotlib.ticker import ScalarFormatter, FormatStrFormatter
 from cycler import cycler
 
 from pulsar_spectra.models import simple_power_law, broken_power_law, log_parabolic_spectrum, \
@@ -64,9 +64,9 @@ def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fi
     capsize = 1.5
     errorbar_linewidth = 0.7
     marker_border_thickness = 0.5
-    custom_cycler = (cycler(color = ["#006ddb", "#24ff24",'r',"#920000","#6db6ff","#ff6db6",'m',"#b6dbff","#009292","#b66dff","#db6d00", 'c',"#ffb6db","#004949",'k'])
-                    + cycler(marker = [            'o', '^', 'D', 's', 'p', '*', 'v', 'd', 'P',  'h', '>', 'H', 'X', '<', 'x'])
-                    + cycler(markersize = np.array([6,   7,   5,   5.5, 6.5, 9,   7,   7,   7.5,  7,   7,   7,   7.5,   7,   7])*marker_scale))
+    custom_cycler = (cycler(color = ["#006ddb", "#24ff24",'r',"#920000","#6db6ff","#ff6db6",'m',"#b6dbff","#009292","#b66dff","#db6d00", 'c',"#ffb6db","#004949",'k','y','#009292'])
+                    + cycler(marker = [            'o', '^', 'D', 's', 'p', '*', 'v', 'd', 'P',  'h', '>', 'H', 'X', '<', 'x', 's', '^'])
+                    + cycler(markersize = np.array([6,   7,   5,   5.5, 6.5, 9,   7,   7,   7.5,  7,   7,   7,   7.5,   7,   7, 5.5, 7])*marker_scale))
     ax.set_prop_cycle(custom_cycler)
 
     # Add data
@@ -100,8 +100,10 @@ def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fi
     # Format plot and save
     plt.xscale('log')
     plt.yscale('log')
-    ax.get_xaxis().set_major_formatter(ScalarFormatter())
-    ax.get_yaxis().set_major_formatter(ScalarFormatter())
+    #ax.get_xaxis().set_major_formatter(ScalarFormatter())
+    #ax.get_yaxis().set_major_formatter(ScalarFormatter())
+    ax.get_xaxis().set_major_formatter(FormatStrFormatter('%g'))
+    ax.get_yaxis().set_major_formatter(FormatStrFormatter('%g'))
     ax.tick_params(which='both', direction='in', top=1, right=1)
     plt.xlabel('Frequency (MHz)')
     plt.ylabel('Flux Density (mJy)')
@@ -161,8 +163,8 @@ def iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model=s
         mod_limits = [(None, 0), (0, None)]
     elif model == broken_power_law:
         # vb, a1, a2, b
-        start_params = (5e8, -2.6, -2.6, 0.1)
-        mod_limits = [(min(freqs_Hz)+5e7, max(freqs_Hz)-5e7), (-10, 0), (-10, 0), (0, None)]
+        start_params = (5e8, -1.6, -1.6, 0.1)
+        mod_limits = [(min(freqs_Hz)+5e7, max(freqs_Hz)-5e7), (-10, 10), (-10, 0), (0, None)]
     elif model == double_broken_power_law:
         # vb1, vb2, a1, a2, a3, b
         start_params = (5e8, 5e8, -2.6, -2.6, -2.6, 0.1)
@@ -214,7 +216,7 @@ def iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model=s
 
     # Calculate AIC
     beta = robust_cost_function(model(freqs_Hz, *m.values), fluxs_Jy, flux_errs_Jy)
-    aic = 2*beta * 2*k + (2*k*(k+1)) / (len(freqs_Hz) - k -1)
+    aic = 2*beta + 2*k + (2*k*(k+1)) / (len(freqs_Hz) - k -1)
 
     if plot:
         plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, m, fit_info,
@@ -274,9 +276,9 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
         marker_border_thickness = 0.5
         for i in range(nrows):
             # Create cycler
-            custom_cycler = (cycler(color = ["#006ddb","#24ff24",'r',"#920000","#6db6ff","#ff6db6",'m',"#b6dbff","#db6d00","#b66dff","#009292","#490092","#ffb6db","#004949",'k'])
-                            + cycler(marker = [            'o', '^', 'D', 's', 'p', '*', 'v', 'd', 'P','h', '>', 'H', 'X', '<', 'x'])
-                            + cycler(markersize = np.array([6,   7,   5,   5.5, 6.5, 9,   7,   7,   7.5,  7,   7,   7,   7.5,   7,   7])*marker_scale))
+            custom_cycler = (cycler(color = ["#006ddb", "#24ff24",'r',"#920000","#6db6ff","#ff6db6",'m',"#b6dbff","#009292","#b66dff","#db6d00", 'c',"#ffb6db","#004949",'k','y','#009292'])
+                    + cycler(marker = [            'o', '^', 'D', 's', 'p', '*', 'v', 'd', 'P',  'h', '>', 'H', 'X', '<', 'x', 's', '^'])
+                    + cycler(markersize = np.array([6,   7,   5,   5.5, 6.5, 9,   7,   7,   7.5,  7,   7,   7,   7.5,   7,   7, 5.5, 7])*marker_scale))
             axs[i].set_prop_cycle(custom_cycler)
 
     # loop over models and fit
