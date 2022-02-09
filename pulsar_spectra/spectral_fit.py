@@ -8,7 +8,7 @@ from iminuit.cost import LeastSquares
 from iminuit.util import propagate
 
 import matplotlib.pyplot as plt
-from matplotlib.ticker import ScalarFormatter, FormatStrFormatter
+from matplotlib.ticker import FormatStrFormatter
 from cycler import cycler
 
 from pulsar_spectra.models import simple_power_law, broken_power_law, log_parabolic_spectrum, \
@@ -100,8 +100,6 @@ def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fi
     # Format plot and save
     plt.xscale('log')
     plt.yscale('log')
-    #ax.get_xaxis().set_major_formatter(ScalarFormatter())
-    #ax.get_yaxis().set_major_formatter(ScalarFormatter())
     ax.get_xaxis().set_major_formatter(FormatStrFormatter('%g'))
     ax.get_yaxis().set_major_formatter(FormatStrFormatter('%g'))
     ax.tick_params(which='both', direction='in', top=1, right=1)
@@ -328,8 +326,8 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
 
             axs[i].set_xscale('log')
             axs[i].set_yscale('log')
-            axs[i].get_xaxis().set_major_formatter(ScalarFormatter())
-            axs[i].get_yaxis().set_major_formatter(ScalarFormatter())
+            axs[i].get_xaxis().set_major_formatter(FormatStrFormatter('%g'))
+            axs[i].get_yaxis().set_major_formatter(FormatStrFormatter('%g'))
             axs[i].tick_params(which='both', direction='in', top=1, right=1)
             axs[i].set_xlabel('Frequency (MHz)')
             axs[i].set_ylabel('Flux Density (mJy)')
