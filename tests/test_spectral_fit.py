@@ -20,7 +20,6 @@ def test_find_best_spectral_fit():
     """
     cat_dict, cat_list = collect_catalogue_fluxes()
     #print(cat_dict)
-    #pulsars = ['J0034-0534','J0953+0755', 'J1645-0317']
     pulsars = ['J0820-1350', 'J0835-4510', 'J0837+0610', 'J0953+0755', 'J1453-6413', 'J1456-6843', 'J1645-0317', 'J1731-4744']
     for pulsar in pulsars:
         print(f"\nFitting {pulsar}")
@@ -32,6 +31,22 @@ def test_find_best_spectral_fit():
         #print(freq_all, flux_all, flux_err_all)
         models, fit_results = find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all, plot_compare=True, data_dict=cat_dict[pulsar])
         print(models)
+
+
+def test_Jankowski_fig_5():
+    cat_dict, cat_list = collect_catalogue_fluxes(exclude=["Xue_2017", "Bondonneau_2020", "Johnston_2021"])
+    # Jankowski figure 5
+    # low frequency turn over, high-frequency cut off, broken power law, log-parabolic
+    pulsars = ['J0837+0610', 'J0908-4913', 'J1359-6038', 'J1903-0632']
+    for pulsar in pulsars:
+        print(f"\nFitting {pulsar}")
+        freq_all = np.array(cat_list[pulsar][0])*1e6
+        flux_all = np.array(cat_list[pulsar][1])*1e-3
+        flux_err_all = np.array(cat_list[pulsar][2])*1e-3
+        #print(freq_all, flux_all, flux_err_all)
+        models, fit_results, p_best, p_catagory = find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all, plot_compare=True, data_dict=cat_dict[pulsar])
+        print(f"Best model {models[1]}, catagory {p_catagory}")
+
 
 def test_compare_fits_to_Jankowski_2018():
     # Get the pulsars in the Jankowski paper
