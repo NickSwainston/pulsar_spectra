@@ -337,14 +337,15 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
     # Return best result
     if len(aics) == 0:
         logger.info(f"No model found for {pulsar}")
-        return ["no_fit", "no_fit"], [None, None, None]
+        #models[aici], iminuit_results[aici], fit_infos[aici], p_best, p_category
+        return None, None, None, None, None
     else:
         aici = aics.index(min(aics))
         logger.info(f"Best model for {pulsar} is {models[aici][1]}")
 
         # Calc probability of best fit
         li = []
-        for i, _ in enumerate(models):
+        for i, _ in enumerate(aics):
             li.append(np.exp(-1/2 * np.abs(aics[i] - aics[aici])))
         p_best = 1 / np.sum(li)
         # Work out the catagory
@@ -369,7 +370,7 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
             fig.patches.extend([rect])
             plt.savefig(f"{pulsar}_comparison_fit.png", bbox_inches='tight', dpi=300)
             plt.clf()
-        elif plot_best:
+        if plot_best:
             plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all, models[aici][0], iminuit_results[aici], fit_infos[aici],
                     save_name=f"{pulsar}_{models[aici][1]}_fit.png", plot_error=plot_error, alternate_style=alternate_style)
         return models[aici], iminuit_results[aici], fit_infos[aici], p_best, p_category
