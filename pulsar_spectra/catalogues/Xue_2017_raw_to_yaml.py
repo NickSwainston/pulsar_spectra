@@ -12,7 +12,9 @@ for row in lines[7:]:
     pulsar = row[0].replace("–", "-").replace("+", "+")
     print(row[7])
     if '†' in row[7]:
-        freqs = fluxs = flux_errs = []
+        freqs = []
+        fluxs = []
+        flux_errs = []
     else:
         freqs     = [185.]
         fluxs     = [float(row[7].split("±")[0])]
@@ -22,6 +24,9 @@ for row in lines[7:]:
         freqs.append(200.)
         fluxs.append(float(row[8].split("±")[0]))
         flux_errs.append(float(row[8].split("±")[1]))
+    print(freqs)
+    print(fluxs)
+    print(flux_errs)
 
 
     pulsar_dict[pulsar] = {"Frequency MHz":freqs, "Flux Density mJy":fluxs, "Flux Density error mJy":flux_errs}
