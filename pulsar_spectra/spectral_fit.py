@@ -91,7 +91,7 @@ def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fi
         ax.plot(fitted_freq, fitted_flux, 'k--', label=fit_info.split()[0].replace('_', ' '))
     else:
         ax.plot(fitted_freq, fitted_flux, 'k--', label=fit_info)
-    
+
     if plot_error and iminuit_result.valid:
         # draw 1 sigma error band
         fitted_flux_prop = np.diag(fitted_flux_cov) ** 0.5
@@ -218,9 +218,9 @@ def iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model=s
 
     if plot:
         plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, m, fit_info,
-                save_name=save_name, plot_error=plot_error, 
-                alternate_style=alternate_style)    
-            
+                save_name=save_name, plot_error=plot_error,
+                alternate_style=alternate_style)
+
     return aic, m, fit_info
 
 
@@ -341,6 +341,24 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
     else:
         aici = aics.index(min(aics))
         logger.info(f"Best model for {pulsar} is {models[aici][1]}")
+
+        # Calc probability of best fit
+        li = []
+        for i, _ in enumerate(models):
+            li.append(np.exp(-1/2 * np.abs(aics[i] - aics[aici])))
+        p_best = 1 / np.sum(li)
+        # Work out the catagory
+        #TODO work out what the curvature paramter is and implimented it
+        if p_best > 0.8:
+            p_category = 'clear'
+        elif p_best > 0.7:
+            p_category = 'strong'
+        elif p_best > 0.5:
+            p_category = 'candidate'
+        else:
+            p_category = 'weak'
+
+        # Perform plots
         if plot_compare:
             # highlight best fit
             rect = plt.Rectangle(
@@ -354,4 +372,4 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
         elif plot_best:
             plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all, models[aici][0], iminuit_results[aici], fit_infos[aici],
                     save_name=f"{pulsar}_{models[aici][1]}_fit.png", plot_error=plot_error, alternate_style=alternate_style)
-        return models[aici], iminuit_results[aici], fit_infos[aici]
+        return models[aici], iminuit_results[aici], fit_infos[aici], p_best, p_category
