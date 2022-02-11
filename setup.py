@@ -57,6 +57,7 @@ reqs = [
         'psrqpy>=1.0.5',
         'iminuit',
         'PyYAML',
+        'panda<=1.3.5',
        ]
 
 # Download the ANTF_pulsar_database_file file if it doesn't exist
@@ -65,7 +66,7 @@ download_ANTF_pulsar_database_file(datadir)
 
 
 #pulsar_spectra_version = get_git_version()
-pulsar_spectra_version = '1.1.0'
+pulsar_spectra_version = '1.2.0'
 #make a temporary version file to be installed then delete it
 with open('version.py', 'a') as the_file:
     the_file.write('__version__ = "{}"\n'.format(pulsar_spectra_version))
