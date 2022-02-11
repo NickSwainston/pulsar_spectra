@@ -52,7 +52,6 @@ def download_ANTF_pulsar_database_file(datadir):
         os.remove("psrcat_pkg.tar")
 
 reqs = [
-        'python>=3.7
         'numpy>=1.13.3',
         'matplotlib>=3.4.0',
         'psrqpy>=1.0.5',
@@ -77,7 +76,7 @@ setup(name="pulsar_spectra",
       url="https://github.com/NickSwainston/pulsar_spectra.git",
       packages=['pulsar_spectra'],
       package_data={'pulsar_spectra':['catalogues/*.json', 'catalogues/*.db']},
-      python_requires='>=3.6',
+      python_requires='>=3.7',
       install_requires=reqs,
       setup_requires=['pytest-runner'],
       tests_require=['pytest']
