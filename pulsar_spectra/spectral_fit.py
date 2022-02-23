@@ -191,15 +191,17 @@ def iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model=s
     least_squares = LeastSquares(freqs_Hz, fluxs_Jy, flux_errs_Jy, model)
     least_squares.loss = "soft_l1"
     m = Minuit(least_squares, *start_params)
+    m.tol=0.01
     m.limits = mod_limits
-    m.migrad()  # finds minimum of least_squares function
+    m.scan(ncall=500)
+    m.migrad(ncall=300)  # finds minimum of least_squares function
     if not m.valid:
         # Failed so try simplix method
         m.simplex()
         m.migrad()
     if not m.valid:
         # Use scan
-        m.scan(ncall=500)
+        m.migrad(ncall=500)
     m.hesse()   # accurately computes uncertainties
     logger.debug(m)
 
