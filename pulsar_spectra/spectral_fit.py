@@ -405,3 +405,48 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
             plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all, models[model_i[aici]][0], iminuit_results[aici], fit_infos[aici],
                     save_name=f"{pulsar}_{models[model_i[aici]][1]}_fit.png", plot_error=plot_error, alternate_style=alternate_style, axis=axis)
         return models[model_i[aici]], iminuit_results[aici], fit_infos[aici], p_best, p_category
+
+
+def estimate_flux_density(
+    est_freq,
+    model,
+    iminuit_result,
+):
+    """Estimate a pulsar's flux density using a previous spectra fit.
+
+    Parameters
+    ----------
+    est_freq : `float` or `list`
+        A single or list of frequencies to estimate flux at (in MHz).
+    model : `function`
+        The pulsar spectra model function from :py:meth:`pulsar_spectra.models`.
+    m : `iminuit.Minuit`
+        The Minuit class after being fit in :py:meth:`pulsar_spectra.spectral_fit.iminuit_fit_spectral_model`.
+
+    Returns
+    -------
+    fitted_flux : `float` or `list`
+        The estimated flux density of the pulsar at the input frequencies.
+    fitted_flux_err : `float` or `list`
+        The estimated flux density errors of the pulsar at the input frequencies.
+    """
+    # make sure est_freq is a numpy array
+    single_value = False
+    if isinstance(est_freq, float) or isinstance(est_freq, int):
+        est_freq = np.array([est_freq])
+        single_value = True
+    elif isinstance(est_freq, list):
+        est_freq = np.array(est_freq)
+
+    if iminuit_result.valid:
+        fitted_flux, fitted_flux_cov = propagate(lambda p: model(est_freq * 1e6, *p) * 1e3, iminuit_result.values, iminuit_result.covariance)
+        fitted_flux_err = np.diag(fitted_flux_cov) ** 0.5
+    else:
+        # No convariance values so use old method
+        fitted_flux = model(est_freq * 1e6, *iminuit_result.values) * 1e3
+        fitted_flux_err = [None]*len(fitted_flux)
+
+    if single_value:
+        return fitted_flux[0], fitted_flux_err[0]
+    else:
+        return fitted_flux, fitted_flux_err
