@@ -31,7 +31,7 @@ def robust_cost_function(f_y, y, sigma_y, k=1.345):
 
 
 def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fit_info,
-             plot_error=True, save_name="fit.png", alternate_style=False):
+             plot_error=True, save_name="fit.png", alternate_style=False, axis=None):
     """Create a plot of the pulsar spectral fit.
 
     Parameters
@@ -56,10 +56,18 @@ def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fi
         The name of the saved plot. |br| Default: "fit.png".
     alternate_style : `boolean`, optional
         Plot with the alternate plot style based on Jankowski 2018. |br| Default: False.
+    axis : `Axes`, optional
+        The axes with which the spectrum will be plotted. |br| None.
     """
     # Set up plot
     plotsize = 3.2
-    fig, ax = plt.subplots(figsize=(plotsize*4/3, plotsize))
+
+    if axis==None:
+        make_plot=True
+        fig, ax = plt.subplots(figsize=(plotsize*4/3, plotsize))
+    else:
+        make_plot=False
+        ax = axis
     marker_scale = 0.7
     capsize = 1.5
     errorbar_linewidth = 0.7
@@ -88,7 +96,19 @@ def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fi
         fitted_flux = model(fitted_freq * 1e6, *iminuit_result.values) * 1e3
     # Plot fit line
     if alternate_style:
-        ax.plot(fitted_freq, fitted_flux, 'k--', label=fit_info.split()[0].replace('_', ' '))
+        if fit_info.split()[0]=="simple_power_law":
+            model_label="simple pl"
+        elif fit_info.split()[0]=="broken_power_law":
+            model_label="broken pl"
+        elif fit_info.split()[0]=="log_parabolic_spectrum":
+            model_label="lps"
+        elif fit_info.split()[0]=="high_frequency_cut_off_power_law":
+            model_label="pl high cut-off"
+        elif fit_info.split()[0]=="low_frequency_turn_over_power_law":
+            model_label="pl low turn-over"
+        else:
+            model_label=fit_info.split()[0]
+        ax.plot(fitted_freq, fitted_flux, 'k--', label=model_label)
     else:
         ax.plot(fitted_freq, fitted_flux, 'k--', label=fit_info)
 
@@ -98,25 +118,26 @@ def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fi
         ax.fill_between(fitted_freq, fitted_flux - fitted_flux_prop, fitted_flux + fitted_flux_prop, facecolor="C1", alpha=0.5)
 
     # Format plot and save
-    plt.xscale('log')
-    plt.yscale('log')
+    ax.set_xscale('log')
+    ax.set_yscale('log')
     ax.get_xaxis().set_major_formatter(FormatStrFormatter('%g'))
     ax.get_yaxis().set_major_formatter(FormatStrFormatter('%g'))
     ax.tick_params(which='both', direction='in', top=1, right=1)
-    plt.xlabel('Frequency (MHz)')
-    plt.ylabel('Flux Density (mJy)')
+    ax.set_xlabel('Frequency (MHz)')
+    ax.set_ylabel('Flux Density (mJy)')
     if alternate_style:
-        plt.legend(loc='lower left', ncol=2, fontsize=6)
+        ax.legend(loc='lower left', ncol=2, fontsize=6)
     else:
-        plt.legend(loc='center left', bbox_to_anchor=(1.1, 0.5))
-    plt.grid(ls=':', lw=0.6)
-    plt.savefig(save_name, bbox_inches='tight', dpi=300)
-    plt.clf()
+        ax.legend(loc='center left', bbox_to_anchor=(1.1, 0.5))
+    ax.grid(ls=':', lw=0.6)
+    if make_plot:
+        plt.savefig(save_name, bbox_inches='tight', dpi=300)
+        plt.clf()
 
 
 def iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model=simple_power_law,
-                               plot=False, plot_error=True,
-                               save_name="fit.png", alternate_style=False):
+                               plot=False, plot_error=True, save_name="fit.png",
+                               alternate_style=False, axis=None):
     """Fit pulsar spectra with iminuit.
 
     Parameters
@@ -139,6 +160,8 @@ def iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model=s
         The name of the saved plot. |br| Default: "fit.png".
     alternate_style : `boolean`, optional
         If you want to use the alternate plot style. |br| Default: False.
+    axis : `Axes`, optional
+        The axes with which the spectrum will be plotted. |br| None.
 
     Returns
     -------
@@ -191,15 +214,17 @@ def iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model=s
     least_squares = LeastSquares(freqs_Hz, fluxs_Jy, flux_errs_Jy, model)
     least_squares.loss = "soft_l1"
     m = Minuit(least_squares, *start_params)
+    m.tol=0.01
     m.limits = mod_limits
-    m.migrad()  # finds minimum of least_squares function
+    m.scan(ncall=300)
+    m.migrad(ncall=300)  # finds minimum of least_squares function
     if not m.valid:
         # Failed so try simplix method
         m.simplex()
         m.migrad()
     if not m.valid:
         # Use scan
-        m.scan(ncall=500)
+        m.migrad(ncall=500)
     m.hesse()   # accurately computes uncertainties
     logger.debug(m)
 
@@ -219,14 +244,14 @@ def iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model=s
     if plot:
         plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, m, fit_info,
                 save_name=save_name, plot_error=plot_error,
-                alternate_style=alternate_style)
+                alternate_style=alternate_style, axis=axis)
 
     return aic, m, fit_info
 
 
 def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
                            plot_all=False, plot_best=False, plot_compare=False,
-                           plot_error=True, alternate_style=False):
+                           plot_error=True, alternate_style=False, axis=None):
     """Fit pulsar spectra with iminuit.
 
     Parameters
@@ -251,6 +276,8 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
         If you want to include the fit error in the plot. |br| Default: True.
     alternate_style : `boolean`, optional
         Plot with the alternate plot style based on Jankowski 2018. |br| Default: False.
+    axis : `Axes`, optional
+        The axes with which the spectrum will be plotted. |br| Default: None
 
     Returns
     -------
@@ -295,7 +322,8 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
     for i, model_pair in enumerate(models):
         model, label = model_pair
         aic, iminuit_result, fit_info = iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
-                        model=model, plot=plot_all, plot_error=plot_error, save_name=f"{pulsar}_{label}_fit.png", alternate_style=alternate_style)
+                        model=model, plot=plot_all, plot_error=plot_error, save_name=f"{pulsar}_{label}_fit.png",
+                        alternate_style=alternate_style, axis=axis)
         logger.debug(f"{label} model fit gave AIC {aic}.")
         if iminuit_result is not None:
             aics.append(aic)
@@ -375,5 +403,5 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
             plt.clf()
         if plot_best:
             plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all, models[model_i[aici]][0], iminuit_results[aici], fit_infos[aici],
-                    save_name=f"{pulsar}_{models[model_i[aici]][1]}_fit.png", plot_error=plot_error, alternate_style=alternate_style)
+                    save_name=f"{pulsar}_{models[model_i[aici]][1]}_fit.png", plot_error=plot_error, alternate_style=alternate_style, axis=axis)
         return models[model_i[aici]], iminuit_results[aici], fit_infos[aici], p_best, p_category
