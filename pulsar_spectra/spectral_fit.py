@@ -162,7 +162,7 @@ def iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model=s
     elif model == broken_power_law:
         # vb, a1, a2, b
         start_params = (5e8, -1.6, -1.6, 0.1)
-        mod_limits = [(min(freqs_Hz)+5e7, max(freqs_Hz)-5e7), (-10, 10), (-10, 0), (0, None)]
+        mod_limits = [(min(freqs_Hz)+1e8, max(freqs_Hz)-1e8), (-10, 10), (-10, 0), (0, None)]
     elif model == double_broken_power_law:
         # vb1, vb2, a1, a2, a3, b
         start_params = (5e8, 5e8, -2.6, -2.6, -2.6, 0.1)
@@ -291,6 +291,7 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
     aics = []
     iminuit_results = []
     fit_infos = []
+    model_i = []
     for i, model_pair in enumerate(models):
         model, label = model_pair
         aic, iminuit_result, fit_info = iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
@@ -300,6 +301,7 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
             aics.append(aic)
             iminuit_results.append(iminuit_result)
             fit_infos.append(fit_info)
+            model_i.append(i)
 
         # Add to comparison plot
         if plot_compare and iminuit_result is not None:
@@ -341,6 +343,7 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
         return None, None, None, None, None
     else:
         aici = aics.index(min(aics))
+
         logger.info(f"Best model for {pulsar} is {models[aici][1]}")
 
         # Calc probability of best fit
@@ -365,12 +368,12 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
             rect = plt.Rectangle(
                 # (lower-left corner), width, height
                 (-0.4, -0.13), 2.4, 1.2, fill=False, color="k", lw=2,
-                zorder=1000, transform=axs[aici].transAxes, figure=fig
+                zorder=1000, transform=axs[model_i[aici]].transAxes, figure=fig
             )
             fig.patches.extend([rect])
             plt.savefig(f"{pulsar}_comparison_fit.png", bbox_inches='tight', dpi=300)
             plt.clf()
         if plot_best:
-            plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all, models[aici][0], iminuit_results[aici], fit_infos[aici],
-                    save_name=f"{pulsar}_{models[aici][1]}_fit.png", plot_error=plot_error, alternate_style=alternate_style)
-        return models[aici], iminuit_results[aici], fit_infos[aici], p_best, p_category
+            plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all, models[model_i[aici]][0], iminuit_results[aici], fit_infos[aici],
+                    save_name=f"{pulsar}_{models[model_i[aici]][1]}_fit.png", plot_error=plot_error, alternate_style=alternate_style)
+        return models[model_i[aici]], iminuit_results[aici], fit_infos[aici], p_best, p_category
