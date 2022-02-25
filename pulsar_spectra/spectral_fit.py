@@ -136,7 +136,7 @@ def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fi
 
 
 def iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model=simple_power_law,
-                               plot=False, plot_error=True, save_name="fit.png", 
+                               plot=False, plot_error=True, save_name="fit.png",
                                alternate_style=False, axis=None):
     """Fit pulsar spectra with iminuit.
 
@@ -185,7 +185,7 @@ def iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model=s
     elif model == broken_power_law:
         # vb, a1, a2, b
         start_params = (5e8, -1.6, -1.6, 0.1)
-        mod_limits = [(min(freqs_Hz)+5e7, max(freqs_Hz)-5e7), (-10, 10), (-10, 0), (0, None)]
+        mod_limits = [(min(freqs_Hz)+1e8, max(freqs_Hz)-1e8), (-10, 10), (-10, 0), (0, None)]
     elif model == double_broken_power_law:
         # vb1, vb2, a1, a2, a3, b
         start_params = (5e8, 5e8, -2.6, -2.6, -2.6, 0.1)
@@ -318,16 +318,18 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
     aics = []
     iminuit_results = []
     fit_infos = []
+    model_i = []
     for i, model_pair in enumerate(models):
         model, label = model_pair
         aic, iminuit_result, fit_info = iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
-                        model=model, plot=plot_all, plot_error=plot_error, save_name=f"{pulsar}_{label}_fit.png", 
+                        model=model, plot=plot_all, plot_error=plot_error, save_name=f"{pulsar}_{label}_fit.png",
                         alternate_style=alternate_style, axis=axis)
         logger.debug(f"{label} model fit gave AIC {aic}.")
         if iminuit_result is not None:
             aics.append(aic)
             iminuit_results.append(iminuit_result)
             fit_infos.append(fit_info)
+            model_i.append(i)
 
         # Add to comparison plot
         if plot_compare and iminuit_result is not None:
@@ -369,6 +371,7 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
         return None, None, None, None, None
     else:
         aici = aics.index(min(aics))
+
         logger.info(f"Best model for {pulsar} is {models[aici][1]}")
 
         # Calc probability of best fit
@@ -393,12 +396,57 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
             rect = plt.Rectangle(
                 # (lower-left corner), width, height
                 (-0.4, -0.13), 2.4, 1.2, fill=False, color="k", lw=2,
-                zorder=1000, transform=axs[aici].transAxes, figure=fig
+                zorder=1000, transform=axs[model_i[aici]].transAxes, figure=fig
             )
             fig.patches.extend([rect])
             plt.savefig(f"{pulsar}_comparison_fit.png", bbox_inches='tight', dpi=300)
             plt.clf()
         if plot_best:
-            plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all, models[aici][0], iminuit_results[aici], fit_infos[aici],
-                    save_name=f"{pulsar}_{models[aici][1]}_fit.png", plot_error=plot_error, alternate_style=alternate_style, axis=axis)
-        return models[aici], iminuit_results[aici], fit_infos[aici], p_best, p_category
+            plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all, models[model_i[aici]][0], iminuit_results[aici], fit_infos[aici],
+                    save_name=f"{pulsar}_{models[model_i[aici]][1]}_fit.png", plot_error=plot_error, alternate_style=alternate_style, axis=axis)
+        return models[model_i[aici]], iminuit_results[aici], fit_infos[aici], p_best, p_category
+
+
+def estimate_flux_density(
+    est_freq,
+    model,
+    iminuit_result,
+):
+    """Estimate a pulsar's flux density using a previous spectra fit.
+
+    Parameters
+    ----------
+    est_freq : `float` or `list`
+        A single or list of frequencies to estimate flux at (in MHz).
+    model : `function`
+        The pulsar spectra model function from :py:meth:`pulsar_spectra.models`.
+    m : `iminuit.Minuit`
+        The Minuit class after being fit in :py:meth:`pulsar_spectra.spectral_fit.iminuit_fit_spectral_model`.
+
+    Returns
+    -------
+    fitted_flux : `float` or `list`
+        The estimated flux density of the pulsar at the input frequencies.
+    fitted_flux_err : `float` or `list`
+        The estimated flux density errors of the pulsar at the input frequencies.
+    """
+    # make sure est_freq is a numpy array
+    single_value = False
+    if isinstance(est_freq, float) or isinstance(est_freq, int):
+        est_freq = np.array([est_freq])
+        single_value = True
+    elif isinstance(est_freq, list):
+        est_freq = np.array(est_freq)
+
+    if iminuit_result.valid:
+        fitted_flux, fitted_flux_cov = propagate(lambda p: model(est_freq * 1e6, *p) * 1e3, iminuit_result.values, iminuit_result.covariance)
+        fitted_flux_err = np.diag(fitted_flux_cov) ** 0.5
+    else:
+        # No convariance values so use old method
+        fitted_flux = model(est_freq * 1e6, *iminuit_result.values) * 1e3
+        fitted_flux_err = [None]*len(fitted_flux)
+
+    if single_value:
+        return fitted_flux[0], fitted_flux_err[0]
+    else:
+        return fitted_flux, fitted_flux_err
