@@ -95,7 +95,10 @@ def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fi
 
     # Create fit line
     if secondary_fit:
-        fitted_freq = np.logspace(*fit_range, 100)
+        if fit_range==None:
+            fitted_freq = np.logspace(np.log10(min(freqs_MHz)), np.log10(max(freqs_MHz)), 100)
+        else:
+            fitted_freq = np.logspace(*fit_range, 100)
     else:
         fitted_freq = np.logspace(np.log10(min(freqs_MHz)), np.log10(max(freqs_MHz)), 100)
     if iminuit_result.valid:
