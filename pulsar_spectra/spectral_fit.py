@@ -60,9 +60,9 @@ def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fi
     axis : `Axes`, optional
         The axes with which the spectrum will be plotted. |br| None.
     secondary_fit : `boolean`, optional
-        Plot as a secondary model fit. |br| Default: False.
+        Plot model with an alternate style and without markers. |br| Default: False.
     fit_range : `tuple`, optional
-        Frequency range to plot the secondary model over. |br| Default: None.
+        Frequency range to plot the second model over. |br| Default: None.
     """
     # Set up plot
     plotsize = 3.2
@@ -182,9 +182,9 @@ def iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model=s
     axis : `Axes`, optional
         The axes with which the spectrum will be plotted. |br| None.
     secondary_fit : `boolean`, optional
-        Plot as a secondary model fit. |br| Default: False.
+        Plot model with an alternate style and without markers. |br| Default: False.
     fit_range : `tuple`, optional
-        Frequency range to plot the secondary model over. |br| Default: None.
+        Frequency range to plot the second model over. |br| Default: None.
 
     Returns
     -------
@@ -304,9 +304,9 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
     axis : `Axes`, optional
         The axes with which the spectrum will be plotted. |br| Default: None.
     secondary_fit : `boolean`, optional
-        Plot as a secondary model fit. Does not work for plot_compare. |br| Default: False.
+        Plot model with an alternate style and without markers. Does not work for comparison plots. |br| Default: False.
     fit_range : `tuple`, optional
-        Frequency range to plot the secondary model over. |br| Default: None.
+        Frequency range to plot the second model over. |br| Default: None.
 
     Returns
     -------
