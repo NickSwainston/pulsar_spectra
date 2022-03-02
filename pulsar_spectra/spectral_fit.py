@@ -242,12 +242,12 @@ def iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model=s
     m = Minuit(least_squares, *start_params)
     m.tol=0.01
     m.limits = mod_limits
-    m.scan(ncall=300)
+    m.scan(ncall=500)
     m.migrad(ncall=300)  # finds minimum of least_squares function
     if not m.valid:
         # Failed so try simplix method
-        m.simplex()
-        m.migrad()
+        m.simplex(ncall=300)
+        m.migrad(ncall=300)
     if not m.valid:
         # Use scan
         m.migrad(ncall=500)
