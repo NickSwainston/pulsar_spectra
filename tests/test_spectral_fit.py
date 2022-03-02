@@ -43,10 +43,13 @@ def test_plot_methods():
     print(f"Fitting {pulsar}")
     print("Plotting Compare")
     find_best_spectral_fit(pulsar, cat_list[pulsar][0], cat_list[pulsar][1], cat_list[pulsar][2], cat_list[pulsar][3], plot_compare=True)
-    print("Plotting Best")
-    find_best_spectral_fit(pulsar, cat_list[pulsar][0], cat_list[pulsar][1], cat_list[pulsar][2], cat_list[pulsar][3], plot_best=True)
     print("Plotting All")
     find_best_spectral_fit(pulsar, cat_list[pulsar][0], cat_list[pulsar][1], cat_list[pulsar][2], cat_list[pulsar][3], plot_all=True)
+    print("Plotting Best")
+    find_best_spectral_fit(pulsar, cat_list[pulsar][0], cat_list[pulsar][1], cat_list[pulsar][2], cat_list[pulsar][3], plot_best=True)
+    print("Plotting Best alternate style and fit range")
+    find_best_spectral_fit(pulsar, cat_list[pulsar][0], cat_list[pulsar][1], cat_list[pulsar][2], cat_list[pulsar][3],
+                           plot_best=True, alternate_style=True, fit_range=(10, 1100))
 
 
 
