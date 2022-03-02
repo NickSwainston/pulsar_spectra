@@ -30,8 +30,22 @@ def robust_cost_function(f_y, y, sigma_y, k=1.345):
     return sum(beta_array)
 
 def huber_loss_function(sq_resi, k=1.345):
+    """Robust loss function which penalises outliers, as detailed in Jankowski et al (2018).
+    
+    Parameters
+    ----------
+    sq_resi : `float` or `list`
+        A single or list of the squared residuals.
+    k : `float`, optional
+        A constant that defines at which distance the loss function starts to penalize outliers. |br| Default: 1.345.
+
+    Returns
+    -------
+    rho : `float` or `list`
+       The modified squared residuals.
+    """
     single_value = False
-    if isinstance(sq_resi, float) or isinstance(sq_resi, int) or isinstance(sq_resi, np.float128): 
+    if isinstance(sq_resi, float) or isinstance(sq_resi, int): 
         sq_resi = np.array([sq_resi])
         single_value = True
     elif isinstance(sq_resi, list):
