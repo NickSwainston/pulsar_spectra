@@ -31,7 +31,7 @@ def robust_cost_function(f_y, y, sigma_y, k=1.345):
 
 def huber_loss_function(sq_resi, k=1.345):
     """Robust loss function which penalises outliers, as detailed in Jankowski et al (2018).
-    
+
     Parameters
     ----------
     sq_resi : `float` or `list`
@@ -45,7 +45,7 @@ def huber_loss_function(sq_resi, k=1.345):
        The modified squared residuals.
     """
     single_value = False
-    if isinstance(sq_resi, float) or isinstance(sq_resi, int): 
+    if isinstance(sq_resi, float) or isinstance(sq_resi, int):
         sq_resi = np.array([sq_resi])
         single_value = True
     elif isinstance(sq_resi, list):
@@ -93,17 +93,17 @@ def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fi
         The axes with which the spectrum will be plotted. |br| None.
     secondary_fit : `boolean`, optional
         Plot model with an alternate style and without markers. |br| Default: False.
-    fit_range : `tuple`, optional
-        Frequency range to plot the second model over. |br| Default: None.
+    fit_range : `tuple`, (`float`, `float`) optional
+        Frequency range to plot the second model over in MHz, eg. (100, 3000). |br| Default: None, will use input frequency range.
     """
     # Set up plot
     plotsize = 3.2
 
-    if axis==None:
-        make_plot=True
+    if axis is None:
+        make_plot = True
         fig, ax = plt.subplots(figsize=(plotsize*4/3, plotsize))
     else:
-        make_plot=False
+        make_plot = False
         ax = axis
     marker_scale = 0.7
     capsize = 1.5
@@ -126,49 +126,49 @@ def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fi
                 cap.set_markeredgewidth(errorbar_linewidth)
 
     # Create fit line
-    if secondary_fit:
-        if fit_range==None:
-            fitted_freq = np.logspace(np.log10(min(freqs_MHz)), np.log10(max(freqs_MHz)), 100)
-        else:
-            fitted_freq = np.logspace(*fit_range, 100)
-    else:
+    if fit_range is None:
+        # No fit range given so use full range
         fitted_freq = np.logspace(np.log10(min(freqs_MHz)), np.log10(max(freqs_MHz)), 100)
+    else:
+        # Use input fit range
+        min_freq, max_freq = fit_range
+        fitted_freq = np.logspace(np.log10(min_freq), np.log10(max_freq), 100)
     if iminuit_result.valid:
         fitted_flux, fitted_flux_cov = propagate(lambda p: model(fitted_freq * 1e6, *p) * 1e3, iminuit_result.values, iminuit_result.covariance)
     else:
         # No convariance values so use old method
         fitted_flux = model(fitted_freq * 1e6, *iminuit_result.values) * 1e3
+
     # Plot fit line
     if alternate_style:
-        if fit_info.split()[0]=="simple_power_law":
-            model_label="simple pl"
+        # Just use a simple label
+        if fit_info.split()[0] == "simple_power_law":
+            fit_info = "simple pl"
         elif fit_info.split()[0]=="broken_power_law":
-            model_label="broken pl"
+            fit_info = "broken pl"
         elif fit_info.split()[0]=="log_parabolic_spectrum":
-            model_label="lps"
+            fit_info = "lps"
         elif fit_info.split()[0]=="high_frequency_cut_off_power_law":
-            model_label="pl high cut-off"
+            fit_info = "pl high cut-off"
         elif fit_info.split()[0]=="low_frequency_turn_over_power_law":
-            model_label="pl low turn-over"
+            fit_info = "pl low turn-over"
         else:
-            model_label=fit_info.split()[0]
-        if secondary_fit:
-            ax.plot(fitted_freq, fitted_flux, 'k', marker="None", ls=(0, (0.7, 1)), lw=2, alpha=0.5, label=model_label)
-        else:
-            ax.plot(fitted_freq, fitted_flux, 'k--', label=model_label)
+            fit_info = fit_info.split()[0]
+    if secondary_fit:
+        ax.plot(fitted_freq, fitted_flux, 'k', marker="None", ls=(0, (0.7, 1)), lw=2, alpha=0.5, label=fit_info)
     else:
-        if secondary_fit:
-            ax.plot(fitted_freq, fitted_flux, 'k', marker="None", ls=(0, (0.7, 1)), lw=2, alpha=0.5, label=fit_info)
-        else:
-            ax.plot(fitted_freq, fitted_flux, 'k--', label=fit_info)
+        ax.plot(fitted_freq, fitted_flux, 'k--', label=fit_info)
 
     if plot_error and iminuit_result.valid:
         # draw 1 sigma error band
         fitted_flux_prop = np.diag(fitted_flux_cov) ** 0.5
         if secondary_fit:
-            ax.fill_between(fitted_freq, fitted_flux - fitted_flux_prop, fitted_flux + fitted_flux_prop, facecolor="r", alpha=0)
+            facecolor = "r"
+            alpha = 0
         else:
-            ax.fill_between(fitted_freq, fitted_flux - fitted_flux_prop, fitted_flux + fitted_flux_prop, facecolor="C1", alpha=0.5)
+            facecolor = "C1"
+            alpha = 0.5
+        ax.fill_between(fitted_freq, fitted_flux - fitted_flux_prop, fitted_flux + fitted_flux_prop, facecolor=facecolor, alpha=alpha)
 
     # Format plot and save
     ax.set_xscale('log')
@@ -183,7 +183,8 @@ def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fi
     else:
         ax.legend(loc='center left', bbox_to_anchor=(1.1, 0.5))
     ax.grid(visible=True, ls=':', lw=0.6)
-    if make_plot:
+    if axis is None:
+        # Not using axis mode so save figure
         plt.savefig(save_name, bbox_inches='tight', dpi=300)
         plt.clf()
 
