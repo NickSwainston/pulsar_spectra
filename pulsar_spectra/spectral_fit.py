@@ -357,19 +357,9 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
     if plot_compare:
         # Set up plots
         nrows = 5
-        plot_size = 3
+        plot_size = 4
         fitted_freqs_MHz = np.logspace(np.log10(min(freqs_MHz)), np.log10(max(freqs_MHz)), 100)
         fig, axs = plt.subplots(nrows, 1, figsize=(plot_size, plot_size * nrows))
-        marker_scale = 0.6
-        capsize = 1.5
-        errorbar_linewidth = 0.7
-        marker_border_thickness = 0.5
-        for i in range(nrows):
-            # Create cycler
-            custom_cycler = (cycler(color = ["#006ddb", "#24ff24",'r',"#920000","#6db6ff","#ff6db6",'m',"#b6dbff","#009292","#b66dff","#db6d00", 'c',"#ffb6db","#004949",'k','y','#009292', 'k'])
-                            + cycler(marker = [            'o', '^', 'D', 's', 'p', '*', 'v', 'd', 'P',  'h', '>', 'H', 'X', '<', 'x', 's', '^', 'd'])
-                            + cycler(markersize = np.array([6,   7,   5,   5.5, 6.5, 9,   7,   7,   7.5,  7,   7,   7,   7.5,   7,   7, 5.5, 7,   7])*marker_scale))
-            axs[i].set_prop_cycle(custom_cycler)
 
     # loop over models and fit
     models = [
@@ -396,37 +386,12 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
             fit_infos.append(fit_info)
             model_i.append(i)
 
-        # Add to comparison plot
-        if plot_compare and iminuit_result is not None:
-            # plot data
-            data_dict = convert_cat_list_to_dict({"dummy_pulsar":[freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all]})["dummy_pulsar"]
-            for ref in data_dict.keys():
-                freq_ref = np.array(data_dict[ref]['Frequency MHz'])
-                flux_ref = np.array(data_dict[ref]['Flux Density mJy'])
-                flux_err_ref = np.array(data_dict[ref]['Flux Density error mJy'])
-                (_, caps, _) = axs[i].errorbar(freq_ref, flux_ref, yerr=flux_err_ref, linestyle='None', mec='k', markeredgewidth=marker_border_thickness, elinewidth=errorbar_linewidth, capsize=capsize, label=ref.replace('_', ' '))
-                for cap in caps:
-                    cap.set_markeredgewidth(errorbar_linewidth)
-            # plot fit
-            if iminuit_result.valid:
-                fitted_flux, fitted_flux_cov = propagate(lambda p: model(fitted_freqs_MHz * 1e6, *p) * 1e3, iminuit_result.values, iminuit_result.covariance)
-            else:
-                # No convariance values so use old method
-                fitted_flux = model(fitted_freqs_MHz * 1e6, *iminuit_result.values) * 1e3
-            axs[i].plot(fitted_freqs_MHz, fitted_flux, 'k--', label=fit_info + f"\nAIC: {aic}") # Modelled line
-            if plot_error and iminuit_result.valid:
-                # draw 1 sigma error band
-                fitted_flux_prop = np.diag(fitted_flux_cov) ** 0.5
-                axs[i].fill_between(fitted_freqs_MHz, fitted_flux - fitted_flux_prop, fitted_flux + fitted_flux_prop, facecolor="C1", alpha=0.5)
-
-            axs[i].set_xscale('log')
-            axs[i].set_yscale('log')
-            axs[i].get_xaxis().set_major_formatter(FormatStrFormatter('%g'))
-            axs[i].get_yaxis().set_major_formatter(FormatStrFormatter('%g'))
-            axs[i].tick_params(which='both', direction='in', top=1, right=1)
-            axs[i].set_xlabel('Frequency (MHz)')
-            axs[i].set_ylabel('Flux Density (mJy)')
-            axs[i].legend(loc='center left', bbox_to_anchor=(1.1, 0.5), fontsize=6)
+            # Add to comparison plot
+            if plot_compare:
+                # plot data
+                plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all, model, iminuit_result, fit_info,
+                         plot_error=plot_error, alternate_style=alternate_style,
+                         axis=axs[i], secondary_fit=secondary_fit, fit_range=fit_range)
 
 
     # Return best result
