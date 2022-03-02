@@ -29,6 +29,24 @@ def robust_cost_function(f_y, y, sigma_y, k=1.345):
             beta_array.append( k * abs(relative_error) - 1./2. * k**2 )
     return sum(beta_array)
 
+def huber_loss_function(sq_resi, k=1.345):
+    single_value = False
+    if isinstance(sq_resi, float) or isinstance(sq_resi, int) or isinstance(sq_resi, np.float128): 
+        sq_resi = np.array([sq_resi])
+        single_value = True
+    elif isinstance(sq_resi, list):
+        sq_resi = np.array(sq_resi)
+    rho = []
+    residual = np.sqrt(abs(sq_resi))
+    for j in range(len(residual)):
+        if residual[j] < k:
+            rho.append( sq_resi[j]/2 )
+        else:
+            rho.append( k * residual[j] - 1./2. * k**2 )
+    if single_value:
+        return rho[0]
+    else:
+        return rho
 
 def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fit_info,
              plot_error=True, save_name="fit.png", alternate_style=False, axis=None,
@@ -238,7 +256,7 @@ def iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model=s
 
     # Fit model
     least_squares = LeastSquares(freqs_Hz, fluxs_Jy, flux_errs_Jy, model)
-    least_squares.loss = "soft_l1"
+    least_squares.loss = huber_loss_function
     m = Minuit(least_squares, *start_params)
     m.tol=0.01
     m.limits = mod_limits
