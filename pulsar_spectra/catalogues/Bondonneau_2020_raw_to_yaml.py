@@ -8,7 +8,7 @@ pulsar_dict = {}
 for row in lines[7:]:
     row = row.replace("()", "").replace("(τ)", "").split()
     print(row)
-    pulsar = row[0].replace("–", "-")
+    pulsar = row[0].replace("–", "-").replace("−", "-")
     flux, flux_err = row[10].split("(")
 
     pulsar_dict[pulsar] = {"Frequency MHz":[float(row[8])], "Flux Density mJy":[float(flux)], "Flux Density error mJy":[float(flux_err[:-1])]}
