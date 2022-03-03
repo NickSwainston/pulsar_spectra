@@ -47,6 +47,7 @@ The following are the references that we have or are planning to turn into catal
 - [x] [Hobbs et al. (2004)](https://ui.adsabs.harvard.edu/abs/2004MNRAS.352.1439H/abstract)
 
 
+- [x] [Johnston et al. 1993](https://ui.adsabs.harvard.edu/abs/1993Natur.361..613J/abstract)
 - [x] [Stovall et al. (2015)](https://ui.adsabs.harvard.edu/abs/2015ApJ...808..156S/abstract)
 - [x] [Xue et al. (2017)](https://ui.adsabs.harvard.edu/abs/2017PASA...34...70X/abstract)
 - [x] [Jankowski et al. (2018)](https://ui.adsabs.harvard.edu/abs/2018MNRAS.473.4436J/abstract)
