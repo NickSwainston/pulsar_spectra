@@ -350,6 +350,10 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
         The Minuit class after being fit in :py:meth:`pulsar_spectra.spectral_fit.iminuit_fit_spectral_model`.
     fit_info : `str`
         The string to label the fit with from :py:meth:`pulsar_spectra.spectral_fit.iminuit_fit_spectral_model`.
+    p_best : `float`
+        The probability that the best-fit model is actually the best-fit model.
+    p_category : `str`
+        Category based on the quality of spectral fit, as defined in Jankowski et al. (2018).
     """
     # Prepare plots and fitting frequencies
     if plot_compare:
