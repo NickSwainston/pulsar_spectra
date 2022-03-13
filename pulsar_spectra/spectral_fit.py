@@ -100,10 +100,8 @@ def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fi
     plotsize = 3.2
 
     if axis is None:
-        make_plot = True
         fig, ax = plt.subplots(figsize=(plotsize*4/3, plotsize))
     else:
-        make_plot = False
         ax = axis
     marker_scale = 0.7
     capsize = 1.5
