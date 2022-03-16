@@ -19,15 +19,6 @@ from pulsar_spectra.catalogues import convert_cat_list_to_dict
 import logging
 logger = logging.getLogger(__name__)
 
-def log_centre(v):
-    """Find logarithmic centre frequency.
-    """
-    if isinstance(v, list):
-        return 10**((np.log10(min(v))+np.log10(max(v)))/2)
-    else:
-        print("Defaulting to 1.3 GHz")
-        return 1.3e9
-
 def robust_cost_function(f_y, y, sigma_y, k=1.345):
     beta_array = []
     for fi, yi, sigma_i in zip(f_y, y, sigma_y):
@@ -252,7 +243,7 @@ def iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model=s
                 The frequency range of the fitted data in the form (min, max).
     """
     # Covert to SI (Hz and Jy)
-    v0_Hz        = log_centre(freqs_MHz) * 1e6 # reference frequency is the logarithmic centre frequency
+    v0_Hz        = 10**((np.log10(min(freqs_MHz))+np.log10(max(freqs_MHz)))/2) * 1e6 # reference frequency is the logarithmic centre frequency
     freqs_Hz     = np.array(freqs_MHz,     dtype=np.float128) * 1e6
     fluxs_Jy     = np.array(fluxs_mJy,     dtype=np.float128) / 1e3
     flux_errs_Jy = np.array(flux_errs_mJy, dtype=np.float128) / 1e3
