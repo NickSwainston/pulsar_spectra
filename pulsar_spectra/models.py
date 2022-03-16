@@ -4,7 +4,7 @@ Spectral models from Jankowski et al. 2018 and references within
 
 import numpy as np
 
-def simple_power_law(v, a, b):
+def simple_power_law(v, a, b, v0):
     """Simple power law:
 
     .. math::
@@ -20,16 +20,17 @@ def simple_power_law(v, a, b):
         Spectral Index.
     b : `float`
         Constant.
+    v0 : `float`
+        Reference frequency.
 
     Returns
     -------
     S_v : `list`
         The flux density predicted by the model.
     """
-    v0 = 1.3e9
     return b*(v/v0)**a
 
-def broken_power_law(v, vb, a1, a2, b):
+def broken_power_law(v, vb, a1, a2, b, v0):
     """Broken power law:
 
     .. math::
@@ -49,13 +50,14 @@ def broken_power_law(v, vb, a1, a2, b):
         The spectral index after the break.
     b : `float`
         Constant.
+    v0 : `float`
+        Reference frequency.
 
     Returns
     -------
     S_v : `list`
         The flux density predicted by the model.
     """
-    v0 = 1.3e9
     x = v / v0
     xb = vb / v0
     y1 = b*x**a1
@@ -72,7 +74,7 @@ def double_broken_power_law(v, vb1, vb2, a1, a2, a3, b):
     y3 = b*x**a3*(xb2)**(a2-a3)
     return np.piecewise(x, [x <= xb1, (x > xb1) & (x <= xb2), x > xb2], [y1, y2, y3])
 
-def log_parabolic_spectrum(v, a, b, c):
+def log_parabolic_spectrum(v, a, b, c, v0):
     """Log-parabolic spectrum:
 
     .. math::
@@ -90,17 +92,18 @@ def log_parabolic_spectrum(v, a, b, c):
         The spectral index for :math:`a = 0`.
     c : `float`
         Constant.
+    v0 : `float`
+        Reference frequency.
 
     Returns
     -------
     S_v : `list`
         The flux density predicted by the model.
     """
-    v0 = 1.3e9
     x = np.log10( v / v0 )
     return 10**(a*x**2 + b*x + c)
 
-def high_frequency_cut_off_power_law(v, vc, a, b):
+def high_frequency_cut_off_power_law(v, vc, b, v0):
     """Power law with high-frequency cut-off off:
 
     .. math::
@@ -114,24 +117,23 @@ def high_frequency_cut_off_power_law(v, vc, a, b):
         Frequency in Hz.
     v_c : `list`
         Cut off frequency in Hz.
-    a : `float`
-        The spectral index before the power cut-off.
     b : `float`
         Constant.
+    v0 : `float`
+        Reference frequency.
 
     Returns
     -------
     S_v : `list`
         The flux density predicted by the model.
     """
-    v0 = 1.3e9
     x = v / v0
     xc = vc / v0
     y1 = b*x**(-2) * ( 1 - x / xc )
-    y2 = b*x**a
+    y2 = 0
     return np.where(x < xc, y1, y2)
 
-def low_frequency_turn_over_power_law(v, vc, a, b, beta):
+def low_frequency_turn_over_power_law(v, vc, a, b, beta, v0):
     """power law with low-frequency turn-over:
 
     .. math::
@@ -151,13 +153,14 @@ def low_frequency_turn_over_power_law(v, vc, a, b, beta):
         Constant.
     beta : `float`
         The smoothness of the turn-over.
+    v0 : `float`
+        Reference frequency.
 
     Returns
     -------
     S_v : `list`
         The flux density predicted by the model.
     """
-    v0 = 1.3e9
     x = v / v0
     xc = v / vc
     return b * x**a * np.exp( a / beta * xc**(-beta) )
