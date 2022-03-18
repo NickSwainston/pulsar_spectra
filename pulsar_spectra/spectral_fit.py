@@ -296,27 +296,22 @@ def iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model=s
     m.tol=0.00001 # low tolerace improves likelihood of a sensible fit
     m.limits = mod_limits # limits are primarily to assist the scan minimiser
     migrad_calls = 10000 # more calls, better fit
+    ncall = 20000 # for simplex and scan
     m.migrad(ncall=migrad_calls)
-    if not m.valid:
-        m.simplex(ncall=1000)
+    if m.valid:
+        logger.debug(f"Found for fit with {model_str} using migrad and {migrad_calls} calls.")
+    else:
+        m.simplex(ncall=ncall)
         m.migrad(ncall=migrad_calls)
+        if m.valid:
+            logger.debug(f"Found for fit with {model_str} using simplex and {ncall} calls.")
+        else:
+            m.scan(ncall=ncall)
+            m.migrad(ncall=migrad_calls)
+            if m.valid:
+                logger.debug(f"Found for fit with {model_str} using scan and {ncall} calls.")
     if not m.valid:
-        m.scan(ncall=1000)
-        m.migrad(ncall=migrad_calls)
-    if not m.valid:
-        m.simplex(ncall=10000)
-        m.migrad(ncall=migrad_calls)
-    if not m.valid:
-        m.scan(ncall=10000)
-        m.migrad(ncall=migrad_calls)
-    if not m.valid:
-        m.simplex(ncall=20000)
-        m.migrad(ncall=migrad_calls)
-    if not m.valid:
-        m.scan(ncall=20000)
-        m.migrad(ncall=migrad_calls)
-    if not m.valid:
-        print(f"No valid minimum found for model {model_str}.")
+        logger.warning(f"No valid minimum found for model {model_str}.")
 
     m.hesse() # accurately computes uncertainties
     logger.debug(m)
@@ -330,13 +325,6 @@ def iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model=s
             fit_info.append(f"{p} = ${v:.5f} \\pm {e:.5}$")
     fit_info = "\n".join(fit_info)
 
-    best_fit = {} # create dictionary of best-fit parameters
-    best_fit["Model"] = model_str
-    best_fit["Parameters"] = m.parameters
-    best_fit["Values"] = [*m.values] # convert iminuit object to list
-    best_fit["Errors"] = [*m.errors]
-    best_fit["Fit Range"] = (min(freqs_MHz), max(freqs_MHz))
-
     # Calculate AIC
     beta = robust_cost_function(model(freqs_Hz, *m.values), fluxs_Jy, flux_errs_Jy)
     aic = 2*beta + 2*k + (2*k*(k+1)) / (len(freqs_Hz) - k -1)
@@ -347,7 +335,7 @@ def iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model=s
                 alternate_style=alternate_style, axis=axis,
                 secondary_fit=secondary_fit, fit_range=fit_range)
 
-    return aic, m, fit_info, best_fit
+    return aic, m, fit_info
 
 
 def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
@@ -434,14 +422,12 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
     iminuit_results = []
     fit_infos = []
     model_i = []
-    best_fits = {} # make dictionary of best-fit parameters for all models
     for i, model_pair in enumerate(models):
         model, label = model_pair
-        aic, iminuit_result, fit_info, best_fit = iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
+        aic, iminuit_result, fit_info = iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
                         model=model, plot=plot_all, plot_error=plot_error, save_name=f"{pulsar}_{label}_fit.png",
                         alternate_style=alternate_style, axis=axis, secondary_fit=secondary_fit)
         logger.debug(f"{label} model fit gave AIC {aic}.")
-        best_fits[label] = best_fit
         if iminuit_result is not None:
             aics.append(aic)
             iminuit_results.append(iminuit_result)
@@ -496,7 +482,7 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
             plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all, models[model_i[aici]][0], iminuit_results[aici], fit_infos[aici],
                     save_name=f"{pulsar}_{models[model_i[aici]][1]}_fit.png", plot_error=plot_error, alternate_style=alternate_style,
                     axis=axis, secondary_fit=secondary_fit, fit_range=fit_range)
-        return models[model_i[aici]], iminuit_results[aici], fit_infos[aici], p_best, p_category, best_fits
+        return models[model_i[aici]], iminuit_results[aici], fit_infos[aici], p_best, p_category
 
 
 def estimate_flux_density(
