@@ -7,10 +7,12 @@ Instead you should do your own search through the literature to find all papers
 
 
 
-Papers included in our catalgoue
+Papers included in our catalogue
 --------------------------------
-.. csv-table:: Papers included in our catalgoue
+
+.. csv-table:: Papers included in our catalogue
     :header: "Paper","Link"
+
     "ATNF pulsar catalogue","`Catalogue website <https://www.atnf.csiro.au/research/pulsar/psrcat/>`_"
     "Sieber (1973)","`adsabs <https://ui.adsabs.harvard.edu/abs/1973A%26A....28..237S/abstract>`_"
     "Bartel et al. (1978)","`adsabs <https://ui.adsabs.harvard.edu/abs/1978A%26A....68..361B/abstract>`_"
