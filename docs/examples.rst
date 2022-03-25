@@ -8,7 +8,7 @@ The following can be run to fit J1453-6413
 
 .. code-block:: python
 
-    from pulsar_spectra.catalogues import collect_catalogue_fluxes
+    from pulsar_spectra.catalogue import collect_catalogue_fluxes
     from pulsar_spectra.spectral_fit import find_best_spectral_fit
 
     cat_dict = collect_catalogue_fluxes()
@@ -29,7 +29,7 @@ Expanding on the previous example you add your own example like so
 
 .. code-block:: python
 
-    from pulsar_spectra.catalogues import collect_catalogue_fluxes
+    from pulsar_spectra. import collect_catalogue_fluxes
     from pulsar_spectra.spectral_fit import find_best_spectral_fit
 
     cat_dict = collect_catalogue_fluxes()
@@ -56,7 +56,7 @@ You can create a plot containing multiple pulsars by handing the find_best_spect
 
     import matplotlib.pyplot as plt
     from pulsar_spectra.spectral_fit import find_best_spectral_fit
-    from pulsar_spectra.catalogues import collect_catalogue_fluxes
+    from pulsar_spectra.catalogue import collect_catalogue_fluxes
 
     # Pulsar, flux, flux_err
     pulsar_flux = [
@@ -98,7 +98,7 @@ You can use the pulsar's fit to estimate a pulsar's flux density at a certain fr
 .. code-block:: python
 
     from pulsar_spectra.spectral_fit import find_best_spectral_fit, estimate_flux_density
-    from pulsar_spectra.catalogues import collect_catalogue_fluxes
+    from pulsar_spectra.catalogue import collect_catalogue_fluxes
 
     cat_dict = collect_catalogue_fluxes()
     pulsar = 'J0820-1350'

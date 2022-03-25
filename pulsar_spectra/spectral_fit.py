@@ -14,7 +14,7 @@ from cycler import cycler
 from pulsar_spectra.models import simple_power_law, broken_power_law, log_parabolic_spectrum, \
                                   high_frequency_cut_off_power_law, low_frequency_turn_over_power_law, \
                                   double_broken_power_law
-from pulsar_spectra.catalogues import convert_cat_list_to_dict
+from pulsar_spectra.catalogue import convert_cat_list_to_dict
 
 import logging
 logger = logging.getLogger(__name__)

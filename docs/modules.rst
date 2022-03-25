@@ -9,10 +9,10 @@ pulsar\_spectra modules
 **************************************
 
 .. _catalogue_module:
-catalogues
-==========
+catalogue
+=========
 
-.. automodule:: pulsar_spectra.catalogues
+.. automodule:: pulsar_spectra.catalogue
     :members:
 
 models
