@@ -164,3 +164,65 @@ def low_frequency_turn_over_power_law(v, vc, a, b, beta, v0):
     x = v / v0
     xc = v / vc
     return b * x**a * np.exp( a / beta * xc**(-beta) )
+
+
+def model_settings(print_models=False):
+    """Holds metadata about spectral models such as common names and default fit parameters.
+
+    Parameters
+    ----------
+    print_models : `boolean`, optional
+        If true, will print the models dictionary which is useful for debuging new models. Default False.
+
+    Returns
+    -------
+    model_dict : `dict`
+        Returns a dictionary in the format
+
+        {model_name: [model_function, short_name, start_params, mod_limits]}
+    """
+    model_dict = {
+        # Name: [model_function, short_name, start_params, mod_limits]
+        "simple_power_law" : [
+            simple_power_law,
+            "simple pl",
+            (-1.6, 0.003),
+            [(None, 0), (0, None)],
+        ],
+        "broken_power_law" : [
+            broken_power_law,
+            "broken pl",
+            (5e8, -1.6, -1.6, 0.1),
+            [(None, None), (-10, 10), (-10, 0), (0, None)],
+        ],
+        "log_parabolic_spectrum" : [
+            log_parabolic_spectrum,
+            "lps",
+            (-1.6, 1., 1.),
+            [(-5, 2), (-5, 2), (None, None)],
+        ],
+        "high_frequency_cut_off_power_law" : [
+            high_frequency_cut_off_power_law,
+            "pl high cut-off",
+            (4e9, 1.),
+            [(3e9, 1e12), (0, None)],
+        ],
+        "low_frequency_turn_over_power_law" : [
+            low_frequency_turn_over_power_law,
+            "pl low turn-over",
+            (100e6, -2.5, 1.e1, 1.),
+            [(10e6, 500e6), (-5, -.5), (0, 100) , (.1, 2.1)],
+        ],
+    }
+
+    if print_models:
+        # Print the models dictionary which is useful for debuging new models
+        for mod in model_dict.keys():
+            print(f"\n{mod}")
+            model_function, short_name, start_params, mod_limits = model_dict[mod]
+            print(f"    model_function: {model_function}")
+            print(f"    short_name: {short_name}")
+            print(f"    start_params: {start_params}")
+            print(f"    mod_limits: {mod_limits}")
+
+    return model_dict
