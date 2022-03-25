@@ -8,6 +8,7 @@
 pulsar\_spectra modules
 **************************************
 
+.. _catalogue_module:
 catalogues
 ==========
 

@@ -11,9 +11,9 @@ The following can be run to fit J1453-6413
     from pulsar_spectra.catalogues import collect_catalogue_fluxes
     from pulsar_spectra.spectral_fit import find_best_spectral_fit
 
-    cat_list = collect_catalogue_fluxes()
+    cat_dict = collect_catalogue_fluxes()
     pulsar = 'J1453-6413'
-    freqs, fluxs, flux_errs, refs = cat_list[pulsar]
+    freqs, fluxs, flux_errs, refs = cat_dict[pulsar]
     find_best_spectral_fit(pulsar, freqs, fluxs, flux_errs, refs, plot_best=True)
 
 This will produce J1453-6413_simple_power_law_fit.png
@@ -32,9 +32,9 @@ Expanding on the previous example you add your own example like so
     from pulsar_spectra.catalogues import collect_catalogue_fluxes
     from pulsar_spectra.spectral_fit import find_best_spectral_fit
 
-    cat_list = collect_catalogue_fluxes()
+    cat_dict = collect_catalogue_fluxes()
     pulsar = 'J1453-6413'
-    freqs, fluxs, flux_errs, refs = cat_list[pulsar]
+    freqs, fluxs, flux_errs, refs = cat_dict[pulsar]
     freqs += [150.]
     fluxs += [1000.]
     flux_errs += [100.]
@@ -71,9 +71,9 @@ You can create a plot containing multiple pulsars by handing the find_best_spect
     rows = 3
     fig, axs = plt.subplots(nrows=rows, ncols=cols, figsize=(5*cols, 3*rows))
 
-    cat_list = collect_catalogue_fluxes()
+    cat_dict = collect_catalogue_fluxes()
     for pulsar, flux, flux_err, ax_i in pulsar_flux:
-        freqs, fluxs, flux_errs, refs = cat_list[pulsar]
+        freqs, fluxs, flux_errs, refs = cat_dict[pulsar]
         freqs += [150.]
         fluxs += [flux]
         flux_errs += [flux_err]
@@ -100,9 +100,9 @@ You can use the pulsar's fit to estimate a pulsar's flux density at a certain fr
     from pulsar_spectra.spectral_fit import find_best_spectral_fit, estimate_flux_density
     from pulsar_spectra.catalogues import collect_catalogue_fluxes
 
-    cat_list = collect_catalogue_fluxes()
+    cat_dict = collect_catalogue_fluxes()
     pulsar = 'J0820-1350'
-    freqs, fluxs, flux_errs, refs = cat_list[pulsar]
+    freqs, fluxs, flux_errs, refs = cat_dict[pulsar]
     model, m, _, _, _ = find_best_spectral_fit(pulsar, freqs, fluxs, flux_errs, refs, plot_best=True)
     fitted_flux, fitted_flux_err = estimate_flux_density(150., model[0], m)
     print(f"{pulsar} estimated flux: {fitted_flux:.1f} ± {fitted_flux_err:.1f} mJy")
