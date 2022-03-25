@@ -132,6 +132,7 @@ This will put a YAML file of the paper in pulsar_spectra/catalogue_papers/.
 You should then reinstall the software (`python setup.py install`) then run a spectral fit to confirm it worked.
 
 So others can use this paper's data, you should
+
 1. Make a fork of the pulsar_spectra repository
 2. Clone your fork
 3. Add the new paper YAML file and make a commit
