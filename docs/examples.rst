@@ -91,7 +91,7 @@ This will produce the following plot.
   :width: 800
 
 Estimate flux density
-----------------------
+---------------------
 
 You can use the pulsar's fit to estimate a pulsar's flux density at a certain frequency like so:
 

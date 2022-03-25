@@ -323,11 +323,13 @@ def iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model=s
             fit_info.append(f"{p} = ${v/1e6:8.1f} \\pm {e/1e6:8.1}$ MHz")
         else:
             fit_info.append(f"{p} = ${v:.5f} \\pm {e:.5}$")
-    fit_info = "\n".join(fit_info)
 
     # Calculate AIC
     beta = robust_cost_function(model(freqs_Hz, *m.values), fluxs_Jy, flux_errs_Jy)
     aic = 2*beta + 2*k + (2*k*(k+1)) / (len(freqs_Hz) - k -1)
+    fit_info.append(f"AIC: {aic:.1f}")
+
+    fit_info = "\n".join(fit_info)
 
     if plot:
         plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, m, fit_info,
