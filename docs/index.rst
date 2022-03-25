@@ -13,4 +13,5 @@ Welcome to pulsar_spectra's documentation!
 
    installation
    examples
+   catalogue
    modules
