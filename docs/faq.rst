@@ -23,7 +23,7 @@ If you see an error that looks similar to this:
         ref_string_list = ref_dict[ref_code].split()
     KeyError: 'bgt+21'
 
-The KeyError is likely due to a change in the in `psrcat.db` file that `psrqpy` has not updated in their cache. To fix it run the following command
+The KeyError is likely due to a change in the in ``psrcat.db`` file that ``psrqpy`` has not updated in their cache. To fix it run the following command
 
 
 .. code-block:: python
