@@ -30,7 +30,7 @@ for row in lines[2:]:
                                 "Flux Density mJy":[],
                                 "Flux Density error mJy":[]}
 
-    if not (">" in row[3] or "<" in row[3] or "A" in row[1]):
+    if not (">" in row[3] or "<" in row[3] or "A" in row[1]or "*" in row[1]):
         pulsar_dict[pulsar]["Frequency MHz"] += [float(row[2])]
         # 10^-29Jm^-2Hz^-1 = mJys
         if "m" in row[3]:
@@ -48,6 +48,6 @@ for row in lines[2:]:
             fact_err = 0.75
         pulsar_dict[pulsar]["Flux Density error mJy"] += [round(flux*fact_err, 3)]
 
-with open("Sieber_1973.json", "w") as cat_file:
+with open("Sieber_1973.yaml", "w") as cat_file:
     cat_file.write(json.dumps(pulsar_dict))
 print(pulsar_dict)

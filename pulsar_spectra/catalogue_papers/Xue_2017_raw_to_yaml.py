@@ -31,6 +31,6 @@ for row in lines[7:]:
 
     pulsar_dict[pulsar] = {"Frequency MHz":freqs, "Flux Density mJy":fluxs, "Flux Density error mJy":flux_errs}
 
-with open("Xue_2017.json", "w") as cat_file:
+with open("Xue_2017.yaml", "w") as cat_file:
     cat_file.write(json.dumps(pulsar_dict))
 print(pulsar_dict)

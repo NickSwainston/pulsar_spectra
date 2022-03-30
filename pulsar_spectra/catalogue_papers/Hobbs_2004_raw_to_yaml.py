@@ -33,7 +33,7 @@ for row in lines[369:]:
     pulsar_dict[pulsar] = {"Frequency MHz":[1400],
                            "Flux Density mJy":[float(row[1])],
                            "Flux Density error mJy":[float(row[2])]}
-    
+
     # "Taking a typical uncertainty of 10 per cent leads to an error in the spectral index determination of ∼ 0.3"
     if '' != row[3]:
         pulsar_dict[pulsar]["Frequency MHz"] += [400]
@@ -45,6 +45,6 @@ for row in lines[369:]:
         pulsar_dict[pulsar]["Flux Density mJy"] += [float(row[4])]
         pulsar_dict[pulsar]["Flux Density error mJy"] += [round(float(row[4]) * 0.1, 4)]
 
-with open("Hobbs_2004.json", "w") as cat_file:
+with open("Hobbs_2004.yaml", "w") as cat_file:
     cat_file.write(json.dumps(pulsar_dict))
 print(pulsar_dict)

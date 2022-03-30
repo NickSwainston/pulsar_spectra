@@ -28,6 +28,6 @@ for row in lines[3:]:
         flux_errs.append(float(row[6].strip()))
     pulsar_dict[pulsar] = {"Frequency MHz":freqs, "Flux Density mJy":fluxs, "Flux Density error mJy":flux_errs}
 
-with open("Jankowski_2018.json", "w") as cat_file:
+with open("Jankowski_2018.yaml", "w") as cat_file:
     cat_file.write(json.dumps(pulsar_dict))
 print(pulsar_dict)

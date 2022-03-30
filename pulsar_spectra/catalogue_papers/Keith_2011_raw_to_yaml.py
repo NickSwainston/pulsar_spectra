@@ -20,6 +20,6 @@ for row in lines[:16]:
     pulsar_dict[pulsar]["Flux Density error mJy"] += [round(flux*.2, 4)]
 
 json = json.dumps(pulsar_dict)
-with open("Keith_2011.json", "w") as cat_file:
+with open("Keith_2011.yaml", "w") as cat_file:
     cat_file.write(json)
 print(pulsar_dict)

@@ -31,7 +31,7 @@ def convert_csv_to_yaml(csv_location, ref_label):
                 pulsar_dict[pulsar] = {"Frequency MHz":[float(freq)], "Flux Density mJy":[float(flux)], "Flux Density error mJy":[float(flux_err)]}
 
     # Dump the dict to the jsonfile in the catalogue directory
-    with open(f"{os.path.dirname(os.path.realpath(__file__))}/../pulsar_spectra/catalogue_papers/{ref_label}.json", "w") as cat_file:
+    with open(f"{os.path.dirname(os.path.realpath(__file__))}/../pulsar_spectra/catalogue_papers/{ref_label}.yaml", "w") as cat_file:
         cat_file.write(json.dumps(pulsar_dict))
 
     print("\nCatalogue data written:")

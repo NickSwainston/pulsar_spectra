@@ -18,7 +18,7 @@ for row in lines:
         freqs.append(730)
         fluxs.append(float(flux))
         flux_errs.append(float(flux_err))
-    
+
     flux, flux_err = row[-6].split("±")
     freqs.append(1400)
     fluxs.append(float(flux))
@@ -34,6 +34,6 @@ for row in lines:
                             "Flux Density error mJy":flux_errs}
 
 json = json.dumps(pulsar_dict)
-with open("Dai_2015.json", "w") as cat_file:
+with open("Dai_2015.yaml", "w") as cat_file:
     cat_file.write(json)
 print(pulsar_dict)

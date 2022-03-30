@@ -34,7 +34,7 @@ for row in lines[16:]:
     pulsar_dict[pulsar] = {"Frequency MHz":[25],
                            "Flux Density mJy":[float(flux)],
                            "Flux Density error mJy":[float(flux_err.replace("*", ""))]}
-    
+
     if "±" in row[3]:
         freq = float(row[-2][1:])
         flux, flux_err = row[3].split("±")
@@ -43,6 +43,6 @@ for row in lines[16:]:
         pulsar_dict[pulsar]["Flux Density error mJy"] += [float(flux_err.replace("*", ""))]
 
 json = json.dumps(pulsar_dict)
-with open("Zakharenko_2013.json", "w") as cat_file:
+with open("Zakharenko_2013.yaml", "w") as cat_file:
     cat_file.write(json)
 print(pulsar_dict)

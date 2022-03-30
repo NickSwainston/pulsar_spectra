@@ -13,14 +13,13 @@ import logging
 logger = logging.getLogger(__name__)
 
 # Hard code the path of the flux catalogue directories
-CAT_DIR = os.path.join(os.path.dirname(__file__), 'catalogues')
+CAT_DIR = os.path.join(os.path.dirname(__file__), 'catalogue_papers')
 
 # Grab all the catalogue yamls
-CAT_YAMLS = glob.glob("{}/*json".format(CAT_DIR))
+CAT_YAMLS = glob.glob("{}/*yaml".format(CAT_DIR))
 
 # Hard code the path of the ATNF psrcat database file
 ATNF_LOC = os.path.join(CAT_DIR, 'psrcat.db')
-
 
 def get_antf_references():
     """Wrapper for psrqpy.get_references() that ensures the cache is only Updated once."""
@@ -230,7 +229,7 @@ def collect_catalogue_fluxes(only_use=None, exclude=None):
     else:
         yamls_to_use = []
         for yaml_label in only_use:
-            y_dir = f"{CAT_DIR}/{yaml_label}.json"
+            y_dir = f"{CAT_DIR}/{yaml_label}.yaml"
             if os.path.isfile(y_dir):
                 yamls_to_use.append(y_dir)
             else:

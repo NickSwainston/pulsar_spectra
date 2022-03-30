@@ -19,6 +19,6 @@ for row in lines:
         pulsar_dict[pulsar]["Flux Density mJy"] += [float(row[2])]
         pulsar_dict[pulsar]["Flux Density error mJy"] += [float(row[2])*0.5]
 
-with open("Karastergiou_2005.json", "w") as cat_file:
+with open("Karastergiou_2005.yaml", "w") as cat_file:
     cat_file.write(json.dumps(pulsar_dict))
 print(pulsar_dict)
