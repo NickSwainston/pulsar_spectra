@@ -14,15 +14,15 @@ for row in lines:
         bname = "B" + row[0][:7].replace("–", "-")
         pid = list(query['PSRB']).index(bname)
         pulsar = query['PSRJ'][pid]
-        obs_period = row[2]
+        obs_period = row[-12]
         if obs_period == "1979":
             pe = .1
         elif obs_period == "1989" or obs_period == "1990":
             pe = .08
         elif obs_period == "1991":
             pe = .3
-        flux = float(row[6].replace("'", ""))
-        pulsar_dict[pulsar] = {"Frequency MHz":[float(row[3])],
+        flux = float(row[-8].replace("'", ""))
+        pulsar_dict[pulsar] = {"Frequency MHz":[float(row[-11])],
                                "Flux Density mJy":[flux],
                                "Flux Density error mJy":[round(flux*pe, 4)]}
     else:
