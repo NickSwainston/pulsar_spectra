@@ -238,19 +238,6 @@ def iminuit_fit_spectral_model(
         The Minuit class after being fit in :py:meth:`pulsar_spectra.spectral_fit.iminuit_fit_spectral_model`.
     fit_info : `str`
         The string to label the fit with from :py:meth:`pulsar_spectra.spectral_fit.iminuit_fit_spectral_model`.
-    best_fit : `dict`
-        Dictionary of best-fit model parameters in the format best_fit['Model', 'Parameters', 'Values', 'Errors', 'Fit Range']
-
-            ``'Model'`` : `str`
-                The name of the analytical model.
-            ``'Parameters'`` : `list`
-                The fitted parameters.
-            ``'Values'`` : `list`
-                The best-fit parameter values.
-            ``'Errors'`` : `list`
-                The 1-sigma uncertainty on each parameter value.
-            ``'Fit Range'`` : `tuple`
-                The frequency range of the fitted data in the form (min, max).
     """
     # Covert to SI (Hz and Jy)
     v0_Hz        = 10**((np.log10(min(freqs_MHz))+np.log10(max(freqs_MHz)))/2) * 1e6 # reference frequency is the logarithmic centre frequency
@@ -373,8 +360,8 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
 
     Returns
     -------
-    model : `function`
-        The best model functions from :py:meth:`pulsar_spectra.models`. Default: :py:meth:`pulsar_spectra.models.simple_power_law`.
+    model_name : `str`
+        The best fit model name from :py:meth:`pulsar_spectra.models`.
     m : `iminuit.Minuit`
         The Minuit class after being fit in :py:meth:`pulsar_spectra.spectral_fit.iminuit_fit_spectral_model`.
     fit_info : `str`
@@ -383,21 +370,6 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
         The probability that the best-fit model is actually the best-fit model.
     p_category : `str`
         Category based on the quality of spectral fit, as defined in Jankowski et al. (2018).
-    best_fits : `dict`
-        Dictionary of best_fit dictionaries in the form best_fits[model_name]['Model', 'Parameters', 'Values', 'Errors', 'Fit Range']
-
-            ``'model_name'`` : `str`
-                The name of the analytical model.
-            ``'Model'`` : `str`
-                The name of the analytical model.
-            ``'Parameters'`` : `list`
-                The fitted parameters.
-            ``'Values'`` : `list`
-                The best-fit parameter values.
-            ``'Errors'`` : `list`
-                The 1-sigma uncertainty on each parameter value.
-            ``'Fit Range'`` : `tuple`
-                The frequency range of the fitted data in the form (min, max).
     """
     # Prepare plots and fitting frequencies
     if plot_compare:
