@@ -14,13 +14,34 @@ The following can be run to fit J1453-6413
     cat_dict = collect_catalogue_fluxes()
     pulsar = 'J1453-6413'
     freqs, fluxs, flux_errs, refs = cat_dict[pulsar]
-    find_best_spectral_fit(pulsar, freqs, fluxs, flux_errs, refs, plot_best=True)
+    best_model_name, iminuit_result, fit_info, p_best, p_category = find_best_spectral_fit(pulsar, freqs, fluxs, flux_errs, refs, plot_best=True)
 
 This will produce J1453-6413_simple_power_law_fit.png
 
-.. image:: figures/J1453-6413_simple_power_law_fit.png
+.. image:: figures/J1453-6413_low_frequency_turn_over_power_law_fit.png
   :width: 800
 
+If you would like to see the result of the best fit you can print them like so
+
+.. code-block:: python
+
+    print(f"Best fit model: {best_model_name}")
+    for p, v, e in zip(iminuit_result.parameters, iminuit_result.values, iminuit_result.errors):
+        if p.startswith("v"):
+            print(f"{p} = {v/1e6:8.1f} +/- {e/1e6:8.1} MHz")
+        else:
+            print(f"{p} = {v:.5f} +/- {e:.5}")
+
+which will output
+
+.. code-block::
+
+    Best fit model: low_frequency_turn_over_power_law
+    vc =    181.3 +/-    6e+00 MHz
+    a = -2.41825 +/- 0.080367
+    b = 0.02733 +/- 0.0021376
+    beta = 2.10000 +/- 0.32991
+    v0 =   1122.5 +/-    1e+01 MHz
 
 Adding your data
 ----------------
