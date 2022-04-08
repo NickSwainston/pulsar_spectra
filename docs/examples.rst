@@ -6,6 +6,7 @@ Simple example
 
 The following can be run to fit J1453-6413
 
+.. script location: example_scripts/simple_example.py
 .. code-block:: python
 
     from pulsar_spectra.catalogue import collect_catalogue_fluxes
@@ -48,6 +49,7 @@ Adding your data
 
 Expanding on the previous example you add your own example like so
 
+.. script location: example_scripts/adding_your_data.py
 .. code-block:: python
 
     from pulsar_spectra. import collect_catalogue_fluxes
@@ -73,6 +75,7 @@ Making a multi pulsar plot
 
 You can create a plot containing multiple pulsars by handing the find_best_spectral_fit a matplotlib axes like so:
 
+.. script location: example_scripts/creating_a_multi_pulsar_plot.py
 .. code-block:: python
 
     import matplotlib.pyplot as plt
@@ -116,6 +119,7 @@ Estimate flux density
 
 You can use the pulsar's fit to estimate a pulsar's flux density at a certain frequency like so:
 
+.. script location: example_scripts/estimate_flux.py
 .. code-block:: python
 
     from pulsar_spectra.spectral_fit import find_best_spectral_fit, estimate_flux_density
