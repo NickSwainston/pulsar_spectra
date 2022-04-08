@@ -7,9 +7,9 @@ import numpy as np
 from numpy.testing import assert_almost_equal
 import csv
 
-from pulsar_spectra import catalogues
+from pulsar_spectra import catalogue
 from pulsar_spectra.spectral_fit import find_best_spectral_fit
-from pulsar_spectra.catalogues import collect_catalogue_fluxes, convert_cat_list_to_dict
+from pulsar_spectra.catalogue import collect_catalogue_fluxes, convert_cat_list_to_dict
 
 import logging
 logger = logging.getLogger(__name__)

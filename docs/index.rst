@@ -13,4 +13,7 @@ Welcome to pulsar_spectra's documentation!
 
    installation
    examples
+   catalogue
+   spectral_fit
    modules
+   faq

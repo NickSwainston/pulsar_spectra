@@ -1,5 +1,5 @@
 .eggs/
-pulsar_spectra/catalogues/psrcat.db
+pulsar_spectra/catalogue_papers/psrcat.db
 pulsar_spectra/__pycache__
 build/
 docs/build/

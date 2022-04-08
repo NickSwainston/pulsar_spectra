@@ -11,10 +11,11 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import FormatStrFormatter
 from cycler import cycler
 
-from pulsar_spectra.models import simple_power_law, broken_power_law, log_parabolic_spectrum, \
-                                  high_frequency_cut_off_power_law, low_frequency_turn_over_power_law, \
-                                  double_broken_power_law
-from pulsar_spectra.catalogues import convert_cat_list_to_dict
+# from pulsar_spectra.models import simple_power_law, broken_power_law, log_parabolic_spectrum, \
+#                                   high_frequency_cut_off_power_law, low_frequency_turn_over_power_law, \
+#                                   double_broken_power_law
+from pulsar_spectra.models import model_settings
+from pulsar_spectra.catalogue import convert_cat_list_to_dict
 
 import logging
 logger = logging.getLogger(__name__)
@@ -140,18 +141,8 @@ def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fi
     # Plot fit line
     if alternate_style:
         # Just use a simple label
-        if fit_info.split()[0] == "simple_power_law":
-            fit_info = "simple pl"
-        elif fit_info.split()[0]=="broken_power_law":
-            fit_info = "broken pl"
-        elif fit_info.split()[0]=="log_parabolic_spectrum":
-            fit_info = "lps"
-        elif fit_info.split()[0]=="high_frequency_cut_off_power_law":
-            fit_info = "pl high cut-off"
-        elif fit_info.split()[0]=="low_frequency_turn_over_power_law":
-            fit_info = "pl low turn-over"
-        else:
-            fit_info = fit_info.split()[0]
+        model_dict = model_settings()
+        fit_info = model_dict[fit_info.split()[0]][1]
     if secondary_fit:
         ax.plot(fitted_freq, fitted_flux, 'k', marker="None", ls=(0, (0.7, 1)), lw=2, alpha=0.5, label=fit_info)
     else:
@@ -187,10 +178,22 @@ def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fi
         plt.clf()
 
 
-def iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model=simple_power_law,
-                               plot=False, plot_error=True, save_name="fit.png",
-                               alternate_style=False, axis=None, secondary_fit=False,
-                               fit_range=None):
+def iminuit_fit_spectral_model(
+        freqs_MHz,
+        fluxs_mJy,
+        flux_errs_mJy,
+        ref,
+        model_name="simple_power_law",
+        start_params=None,
+        mod_limits=None,
+        plot=False,
+        plot_error=True,
+        save_name="fit.png",
+        alternate_style=False,
+        axis=None,
+        secondary_fit=False,
+        fit_range=None
+    ):
     """Fit pulsar spectra with iminuit.
 
     Parameters
@@ -203,8 +206,15 @@ def iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model=s
         A list of the uncertainty of the flux density in mJy.
     ref : `list`
         A list of the reference label (in the format 'Author_year').
-    model : `function`, optional
-        One of the model functions from :py:meth:`pulsar_spectra.models`. Default: :py:meth:`pulsar_spectra.models.simple_power_law`.
+    model_name : `function`, optional
+        One of the model names from :py:meth:`pulsar_spectra.models.model_settings`.
+        Default: :py:meth:`pulsar_spectra.models.simple_power_law`.
+    start_params : `tuple`, optional
+        A tuple of the starting paramaters for each input to the model that iminuit will use as an initial estimate.
+        If none provided, will use the defaults from :py:meth:`pulsar_spectra.models.model_settings`.
+    mod_limits : `list` of `tuple`s, optional
+        A list of tuples where each tuples is the minimum and maximum limits that will be applied to the model by iminuit.
+        If none provided, will use the defaults from :py:meth:`pulsar_spectra.models.model_settings`.
     plot : `boolean`, optional
         If you want to plot the result of the fit. |br| Default: False.
     plot_error : `boolean`, optional
@@ -228,19 +238,6 @@ def iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model=s
         The Minuit class after being fit in :py:meth:`pulsar_spectra.spectral_fit.iminuit_fit_spectral_model`.
     fit_info : `str`
         The string to label the fit with from :py:meth:`pulsar_spectra.spectral_fit.iminuit_fit_spectral_model`.
-    best_fit : `dict`
-        Dictionary of best-fit model parameters in the format best_fit['Model', 'Parameters', 'Values', 'Errors', 'Fit Range']
-
-            ``'Model'`` : `str`
-                The name of the analytical model.
-            ``'Parameters'`` : `list`
-                The fitted parameters.
-            ``'Values'`` : `list`
-                The best-fit parameter values.
-            ``'Errors'`` : `list`
-                The 1-sigma uncertainty on each parameter value.
-            ``'Fit Range'`` : `tuple`
-                The frequency range of the fitted data in the form (min, max).
     """
     # Covert to SI (Hz and Jy)
     v0_Hz        = 10**((np.log10(min(freqs_MHz))+np.log10(max(freqs_MHz)))/2) * 1e6 # reference frequency is the logarithmic centre frequency
@@ -248,41 +245,27 @@ def iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model=s
     fluxs_Jy     = np.array(fluxs_mJy,     dtype=np.float128) / 1e3
     flux_errs_Jy = np.array(flux_errs_mJy, dtype=np.float128) / 1e3
 
-    # Model dependent defaults
-    if model == simple_power_law:
-        # a, b, v0
-        start_params = (-1.6, 0.003, v0_Hz)
-        mod_limits = [(None, 0), (0, None), None]
-    elif model == broken_power_law:
-        # vb, a1, a2, b, v0
-        start_params = (5e8, -1.6, -1.6, 0.1, v0_Hz)
-        mod_limits = [(min(freqs_Hz)+1e8, max(freqs_Hz)-1e8), (-10, 10), (-10, 0), (0, None), None]
-    elif model == double_broken_power_law:
-        # vb1, vb2, a1, a2, a3, b, v0
-        start_params = (5e8, 5e8, -2.6, -2.6, -2.6, 0.1, v0_Hz)
-        mod_limits = [(1e3, 1e9), (1e3, 1e9), (None, 0), (None, 0), (None, 0), (0, None), None]
-    elif model == log_parabolic_spectrum:
-        # a, b, c, v0
-        start_params = (-1.6, 1., 1., v0_Hz)
-        mod_limits = [(-5, 2), (-5, 2), (None, None), None]
-    elif model == high_frequency_cut_off_power_law:
-        # vc, b, v0
-        start_params = (4e9, 1., v0_Hz)
-        mod_limits = [(3e9, 1e12), (0, None), None]
-    elif model == low_frequency_turn_over_power_law:
-        # vc, a, b, beta, v0
-        start_params = (100e6, -2.5, 1.e1, 1., v0_Hz)
-        mod_limits = [(10e6, 500e6), (-5, -.5), (0, 100) , (.1, 2.1), None]
+    # Load model settings
+    model_dict = model_settings()
+    model_function = model_dict[model_name][0]
+
+    # Check for model dependent defaults
+    if start_params is None:
+        start_params = model_dict[model_name][2]
+    if mod_limits is None:
+        mod_limits = model_dict[model_name][3]
+    # Add the reference frequency
+    start_params += (v0_Hz,)
+    mod_limits += [None]
 
     # Check if enough inputs
-    model_str = str(model).split(" ")[1]
     k = len(start_params)-1 # number of free model parameters
     if len(freqs_MHz) <= k + 1:
-        logger.warn(f"Only {len(freqs_MHz)} supplied for {model_str} model fit. This is not enough so skipping")
+        logger.warn(f"Only {len(freqs_MHz)} supplied for {model_name} model fit. This is not enough so skipping")
         return 1e9, None, None
 
     # Fit model
-    least_squares = LeastSquares(freqs_Hz, fluxs_Jy, flux_errs_Jy, model)
+    least_squares = LeastSquares(freqs_Hz, fluxs_Jy, flux_errs_Jy, model_function)
     least_squares.loss = huber_loss_function
     m = Minuit(least_squares, *start_params)
     m.fixed["v0"] = True # fix the reference frequency
@@ -299,38 +282,40 @@ def iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model=s
     ncall = 20000 # for simplex and scan
     m.migrad(ncall=migrad_calls)
     if m.valid:
-        logger.debug(f"Found for fit with {model_str} using migrad and {migrad_calls} calls.")
+        logger.debug(f"Found for fit with {model_name} using migrad and {migrad_calls} calls.")
     else:
         m.simplex(ncall=ncall)
         m.migrad(ncall=migrad_calls)
         if m.valid:
-            logger.debug(f"Found for fit with {model_str} using simplex and {ncall} calls.")
+            logger.debug(f"Found for fit with {model_name} using simplex and {ncall} calls.")
         else:
             m.scan(ncall=ncall)
             m.migrad(ncall=migrad_calls)
             if m.valid:
-                logger.debug(f"Found for fit with {model_str} using scan and {ncall} calls.")
+                logger.debug(f"Found for fit with {model_name} using scan and {ncall} calls.")
     if not m.valid:
-        logger.warning(f"No valid minimum found for model {model_str}.")
+        logger.warning(f"No valid minimum found for model {model_name}.")
 
     m.hesse() # accurately computes uncertainties
     logger.debug(m)
 
     # display legend with some fit info
-    fit_info = [model_str]
+    fit_info = [model_name]
     for p, v, e in zip(m.parameters, m.values, m.errors):
         if p.startswith("v"):
             fit_info.append(f"{p} = ${v/1e6:8.1f} \\pm {e/1e6:8.1}$ MHz")
         else:
             fit_info.append(f"{p} = ${v:.5f} \\pm {e:.5}$")
-    fit_info = "\n".join(fit_info)
 
     # Calculate AIC
-    beta = robust_cost_function(model(freqs_Hz, *m.values), fluxs_Jy, flux_errs_Jy)
+    beta = robust_cost_function(model_function(freqs_Hz, *m.values), fluxs_Jy, flux_errs_Jy)
     aic = 2*beta + 2*k + (2*k*(k+1)) / (len(freqs_Hz) - k -1)
+    fit_info.append(f"AIC: {aic:.1f}")
+
+    fit_info = "\n".join(fit_info)
 
     if plot:
-        plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, m, fit_info,
+        plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model_function, m, fit_info,
                 save_name=save_name, plot_error=plot_error,
                 alternate_style=alternate_style, axis=axis,
                 secondary_fit=secondary_fit, fit_range=fit_range)
@@ -375,8 +360,8 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
 
     Returns
     -------
-    model : `function`
-        The best model functions from :py:meth:`pulsar_spectra.models`. Default: :py:meth:`pulsar_spectra.models.simple_power_law`.
+    model_name : `str`
+        The best fit model name from :py:meth:`pulsar_spectra.models`.
     m : `iminuit.Minuit`
         The Minuit class after being fit in :py:meth:`pulsar_spectra.spectral_fit.iminuit_fit_spectral_model`.
     fit_info : `str`
@@ -385,21 +370,6 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
         The probability that the best-fit model is actually the best-fit model.
     p_category : `str`
         Category based on the quality of spectral fit, as defined in Jankowski et al. (2018).
-    best_fits : `dict`
-        Dictionary of best_fit dictionaries in the form best_fits[model_str]['Model', 'Parameters', 'Values', 'Errors', 'Fit Range']
-
-            ``'model_str'`` : `str`
-                The name of the analytical model.
-            ``'Model'`` : `str`
-                The name of the analytical model.
-            ``'Parameters'`` : `list`
-                The fitted parameters.
-            ``'Values'`` : `list`
-                The best-fit parameter values.
-            ``'Errors'`` : `list`
-                The 1-sigma uncertainty on each parameter value.
-            ``'Fit Range'`` : `tuple`
-                The frequency range of the fitted data in the form (min, max).
     """
     # Prepare plots and fitting frequencies
     if plot_compare:
@@ -409,25 +379,19 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
         fitted_freqs_MHz = np.logspace(np.log10(min(freqs_MHz)), np.log10(max(freqs_MHz)), 100)
         fig, axs = plt.subplots(nrows, 1, figsize=(plot_size, plot_size * nrows))
 
-    # loop over models and fit
-    models = [
-            [simple_power_law, "simple_power_law"],
-            [broken_power_law, "broken_power_law"],
-            [log_parabolic_spectrum, "log_parabolic_spectrum"],
-            [high_frequency_cut_off_power_law, "high_frequency_cut_off_power_law"],
-            [low_frequency_turn_over_power_law, "low_frequency_turn_over_power_law"],
-            #[double_broken_power_law, "double_broken_power_law"],
-            ]
+    # Load model settings
+    model_dict = model_settings()
     aics = []
     iminuit_results = []
     fit_infos = []
     model_i = []
-    for i, model_pair in enumerate(models):
-        model, label = model_pair
+    # loop over models and fit
+    for i, model_name in enumerate(model_dict.keys()):
+        model_function, short_name, start_params, mod_limits = model_dict[model_name]
         aic, iminuit_result, fit_info = iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
-                        model=model, plot=plot_all, plot_error=plot_error, save_name=f"{pulsar}_{label}_fit.png",
+                        model_name=model_name, plot=plot_all, plot_error=plot_error, save_name=f"{pulsar}_{model_name}_fit.png",
                         alternate_style=alternate_style, axis=axis, secondary_fit=secondary_fit)
-        logger.debug(f"{label} model fit gave AIC {aic}.")
+        logger.debug(f"{model_name} model fit gave AIC {aic}.")
         if iminuit_result is not None:
             aics.append(aic)
             iminuit_results.append(iminuit_result)
@@ -437,7 +401,7 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
             # Add to comparison plot
             if plot_compare:
                 # plot data
-                plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all, model, iminuit_result, fit_info,
+                plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all, model_function, iminuit_result, fit_info,
                          plot_error=plot_error, alternate_style=alternate_style,
                          axis=axs[i], secondary_fit=secondary_fit, fit_range=fit_range)
 
@@ -448,8 +412,9 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
         return None, None, None, None, None
     else:
         aici = aics.index(min(aics))
+        best_model_name = list(model_dict.keys())[model_i[aici]]
 
-        logger.info(f"Best model for {pulsar} is {models[aici][1]}")
+        logger.info(f"Best model for {pulsar} is {best_model_name}")
 
         # Calc probability of best fit
         li = []
@@ -479,10 +444,10 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
             plt.savefig(f"{pulsar}_comparison_fit.png", bbox_inches='tight', dpi=300)
             plt.clf()
         if plot_best:
-            plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all, models[model_i[aici]][0], iminuit_results[aici], fit_infos[aici],
-                    save_name=f"{pulsar}_{models[model_i[aici]][1]}_fit.png", plot_error=plot_error, alternate_style=alternate_style,
+            plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all, model_dict[best_model_name][0], iminuit_results[aici], fit_infos[aici],
+                    save_name=f"{pulsar}_{best_model_name}_fit.png", plot_error=plot_error, alternate_style=alternate_style,
                     axis=axis, secondary_fit=secondary_fit, fit_range=fit_range)
-        return models[model_i[aici]], iminuit_results[aici], fit_infos[aici], p_best, p_category
+        return best_model_name, iminuit_results[aici], fit_infos[aici], p_best, p_category
 
 
 def estimate_flux_density(
