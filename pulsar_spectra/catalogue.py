@@ -183,7 +183,7 @@ def all_flux_from_atnf(query=None):
     return jname_cat
 
 
-def collect_catalogue_fluxes(only_use=None, exclude=None):
+def collect_catalogue_fluxes(only_use=None, exclude=None, query=None):
     """Collect the fluxes from all of the catalogues recorded in this repo.
 
     Parameters
@@ -192,6 +192,8 @@ def collect_catalogue_fluxes(only_use=None, exclude=None):
         A list of reference labels (in the format 'Author_year') of all the papers you want to use.
     exclude : `list`, optional
         A list of reference labels (in the format 'Author_year') of all the papers you want to exclude.
+    query : psrqpy object, optional
+        A previous psrqpy.QueryATNF query. Can be supplied to prevent performing a new query.
 
     Returns
     -------
@@ -212,8 +214,9 @@ def collect_catalogue_fluxes(only_use=None, exclude=None):
             ref : `list`
                 The reference label (in the format 'Author_year').
     """
+    if query is None:
+        query = psrqpy.QueryATNF(loadfromdb=ATNF_LOC).pandas
     # Make a dictionary for each pulsar
-    query = psrqpy.QueryATNF(loadfromdb=ATNF_LOC).pandas
     jnames = list(query['PSRJ'])
     jname_cat_dict = {}
     jname_cat_list = {}
