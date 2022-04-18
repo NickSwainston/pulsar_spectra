@@ -47,7 +47,12 @@ def convert_antf_ref(ref_code, ref_dict=None):
     """
     if ref_dict is None:
         ref_dict = get_antf_references()
-    ref_string_list = ref_dict[ref_code].split()
+    try:
+        ref_string_list = ref_dict[ref_code].split()
+    except KeyError:
+        # If the psrcat database file is changed this will update the ref_code
+        psrqpy.QueryATNF(checkupdate=True)
+        ref_string_list = ref_dict[ref_code].split()
 
     # Find the parts we need
     author = ref_string_list[0][:-1]
@@ -138,7 +143,7 @@ def flux_from_atnf(pulsar, query=None, ref_dict=None, assumed_error=0.5):
             # Grab reference code and convert to "Author Year" format
             ref_code = query[flux_query+"_REF"][query_id]
             ref = convert_antf_ref(ref_code, ref_dict=ref_dict)
-            references.append(ref)
+            references.append(f"{ref}_ANTF")
 
     return freq_all, flux_all, flux_err_all, references
 
@@ -270,30 +275,32 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None):
     antf_dict = all_flux_from_atnf(query=query)
     for jname in jnames:
         for ref in antf_dict[jname].keys():
+            # Remove "_antf" from the end of  the reference
+            raw_ref = ref[:-5]
             # Check if only_use or exclude allow this ref
             if only_use is not None:
-                if ref not in only_use:
+                if raw_ref not in only_use:
                     # Not in only_use so skip
                     continue
             if exclude is not None:
-                if ref in exclude:
+                if raw_ref in exclude:
                     # exclude by skipping
                     continue
 
-            if ref in jname_cat_dict[jname].keys():
+            if raw_ref in jname_cat_dict[jname].keys():
                 # Check for redundant data
                 for freq, flux, flux_err in zip(antf_dict[jname][ref]['Frequency MHz'],
                                                 antf_dict[jname][ref]['Flux Density mJy'],
                                                 antf_dict[jname][ref]['Flux Density error mJy']):
-                    if flux     in jname_cat_dict[jname][ref]['Flux Density mJy'] and \
-                       flux_err in jname_cat_dict[jname][ref]['Flux Density error mJy']:
-                        logger.debug(f"Redundant data  pulsar:{jname}  ref:{ref}  freq:{freq}  flux:{flux}  flux_err:{flux_err}")
+                    if flux     in jname_cat_dict[jname][raw_ref]['Flux Density mJy'] and \
+                       flux_err in jname_cat_dict[jname][raw_ref]['Flux Density error mJy']:
+                        logger.debug(f"Redundant data  pulsar:{jname}  ref:{raw_ref}  freq:{freq}  flux:{flux}  flux_err:{flux_err}")
                     else:
                         # Update list
                         jname_cat_list[jname][0] += [freq]
                         jname_cat_list[jname][1] += [flux]
                         jname_cat_list[jname][2] += [flux_err]
-                        jname_cat_list[jname][3] += [ref]
+                        jname_cat_list[jname][3] += [raw_ref]
             else:
                 # Update list
                 for freq, flux, flux_err in zip(antf_dict[jname][ref]['Frequency MHz'],
