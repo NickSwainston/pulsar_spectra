@@ -278,7 +278,7 @@ def iminuit_fit_spectral_model(
     """
     m.tol=0.00001 # low tolerace improves likelihood of a sensible fit
     m.limits = mod_limits # limits are primarily to assist the scan minimiser
-    migrad_calls = 10000 # more calls, better fit
+    migrad_calls = 20000 # more calls, better fit
     ncall = 20000 # for simplex and scan
     m.migrad(ncall=migrad_calls)
     if m.valid:
