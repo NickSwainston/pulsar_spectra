@@ -5,7 +5,7 @@ with open("Bondonneau_2020_raw.txt", "r") as raw_file:
     print(lines)
 
 pulsar_dict = {}
-for row in lines[7:]:
+for row in lines:
     row = row.replace("()", "").replace("(τ)", "").split()
     print(row)
     pulsar = row[0].replace("–", "-").replace("−", "-")
