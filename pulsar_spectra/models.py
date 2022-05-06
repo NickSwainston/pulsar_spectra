@@ -192,13 +192,13 @@ def model_settings(print_models=False):
         "broken_power_law" : [
             broken_power_law,
             "broken pl",
-            (5e8, -1.6, -1.6, 0.1),
-            [(None, None), (-10, 10), (-10, 0), (0, None)],
+            (2e9, -1.6, -1.6, 0.1),
+            [(50e6, 3e9), (-5, 5), (-5, 5), (0, None)],
         ],
         "log_parabolic_spectrum" : [
             log_parabolic_spectrum,
             "lps",
-            (-1.6, 1., 1.),
+            (-1, -1., 1.),
             [(-5, 2), (-5, 2), (None, None)],
         ],
         "high_frequency_cut_off_power_law" : [
@@ -211,7 +211,7 @@ def model_settings(print_models=False):
             low_frequency_turn_over_power_law,
             "pl low turn-over",
             (100e6, -2.5, 1.e1, 1.),
-            [(10e6, 500e6), (-5, -.5), (0, 100) , (.1, 2.1)],
+            [(10e6, 1.3e9), (-5, -.5), (0, 1e4) , (.1, 2.1)],
         ],
     }
 
