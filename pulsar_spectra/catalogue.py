@@ -143,7 +143,7 @@ def flux_from_atnf(pulsar, query=None, ref_dict=None, assumed_error=0.5):
             # Grab reference code and convert to "Author Year" format
             ref_code = query[flux_query+"_REF"][query_id]
             ref = convert_antf_ref(ref_code, ref_dict=ref_dict)
-            references.append(f"{ref}_ANTF")
+            references.append(f"{ref}_ATNF")
 
     return freq_all, flux_all, flux_err_all, references
 
