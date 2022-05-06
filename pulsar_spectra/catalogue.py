@@ -273,6 +273,7 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None):
 
     # Add the antf to the cataogues
     antf_dict = all_flux_from_atnf(query=query)
+    antf_incorrect_refs = ["Zhao_2019", "Mignani_2017"]
     for jname in jnames:
         for ref in antf_dict[jname].keys():
             # Remove "_antf" from the end of  the reference
@@ -282,10 +283,11 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None):
                 if raw_ref not in only_use:
                     # Not in only_use so skip
                     continue
-            if exclude is not None:
-                if raw_ref in exclude:
-                    # exclude by skipping
-                    continue
+            if exclude is None:
+                exclude = []
+            if raw_ref in exclude + antf_incorrect_refs:
+                # exclude by skipping
+                continue
 
             if raw_ref in jname_cat_dict[jname].keys():
                 # Check for redundant data
