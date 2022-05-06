@@ -64,15 +64,14 @@ def broken_power_law(v, vb, a1, a2, b, v0):
     y2 = b*x**a2*(xb)**(a1-a2)
     return np.where(x <= xb, y1, y2)
 
-def double_broken_power_law(v, vb1, vb2, a1, a2, a3, b):
-    v0 = 1.3e9
+def double_broken_power_law(v, vb1, vb2, a1, a2, a3, b, v0):
     x = v / v0
     xb1 = vb1 / v0
     xb2 = vb2 / v0
-    y1 = b*x**a1
-    y2 = b*x**a2*(xb1)**(a1-a2)
-    y3 = b*x**a3*(xb2)**(a2-a3)
-    return np.piecewise(x, [x <= xb1, (x > xb1) & (x <= xb2), x > xb2], [y1, y2, y3])
+    return np.piecewise(x, [x <= xb1, (x > xb1) & (x <= xb2), x > xb2], \
+    [lambda x: b*x**a1, \
+     lambda x: b*x**a2*(xb1)**(a1-a2), \
+     lambda x: b*x**a3*(xb1)**(a1-a2)*(xb2)**(a2-a3)])
 
 def log_parabolic_spectrum(v, a, b, c, v0):
     """Log-parabolic spectrum:
@@ -193,7 +192,7 @@ def model_settings(print_models=False):
             broken_power_law,
             "broken pl",
             (2e9, -1.6, -1.6, 0.1),
-            [(50e6, 3e9), (-5, 5), (-5, 5), (0, None)],
+            [(50e6, 100e9), (-5, 5), (-5, 5), (0, None)],
         ],
         "log_parabolic_spectrum" : [
             log_parabolic_spectrum,
@@ -211,7 +210,13 @@ def model_settings(print_models=False):
             low_frequency_turn_over_power_law,
             "pl low turn-over",
             (100e6, -2.5, 1.e1, 1.),
-            [(10e6, 1.3e9), (-5, -.5), (0, 1e4) , (.1, 2.1)],
+            [(10e6, 2e9), (-5, -.5), (0, 1e4) , (.1, 2.1)],
+        ],
+        "double_broken_power_law" : [
+            double_broken_power_law,
+            "double bpl",
+            (100e6, 1e9, -1.6, -1.6, -1.6, 0.1),
+            [(10e6, 100e9), (1e9, 100e9), (-5, 5), (-5, 5), (-5, 5), (0, None)],
         ],
     }
 
