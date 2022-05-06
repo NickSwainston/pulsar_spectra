@@ -26,10 +26,10 @@ for row in lines:
         if float(row[row_id]) != 0.:
             pulsar_dict[pulsar]["Frequency MHz"] += [freq]
             pulsar_dict[pulsar]["Flux Density mJy"] += [float(row[row_id])]
-            pulsar_dict[pulsar]["Flux Density error mJy"] += [float(row[row_id])/2]
+            pulsar_dict[pulsar]["Flux Density error mJy"] += [float(row[row_id])*0.5]
     if len(pulsar_dict[pulsar]["Frequency MHz"]) == 0:
         del pulsar_dict[pulsar]
 
 with open("Taylor_1993.yaml", "w") as cat_file:
-    cat_file.write(json.dumps(pulsar_dict))
+    cat_file.write(json.dumps(pulsar_dict, indent=1))
 print(pulsar_dict)
