@@ -104,13 +104,32 @@ def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fi
         fig, ax = plt.subplots(figsize=(plotsize*4/3, plotsize))
     else:
         ax = axis
-    marker_scale = 0.7
     capsize = 1.5
     errorbar_linewidth = 0.7
     marker_border_thickness = 0.5
-    custom_cycler = (cycler(color = ["#006ddb", "#24ff24",'r',"#920000","#6db6ff","#ff6db6",'m',"#b6dbff","#009292","#b66dff","#db6d00", 'c',"#ffb6db","#004949",'k','y','#009292', 'k'])
-                    + cycler(marker = [            'o', '^', 'D', 's', 'p', '*', 'v', 'd', 'P',  'h', '>', 'H', 'X', '<', 'x', 's', '^', 'd'])
-                    + cycler(markersize = np.array([6,   7,   5,   5.5, 6.5, 9,   7,   7,   7.5,  7,   7,   7,   7.5,   7,   7, 5.5, 7,   7])*marker_scale))
+    marker_scale = 0.7
+    marker_types = [("#006ddb", "o", 6),    # blue circle
+                    ("#24ff24", "^", 7),    # green triangle
+                    ("r",       "D", 5),    # red diamond
+                    ("#920000", "s", 5.5),  # maroon square
+                    ("#6db6ff", "p", 6.5),  # sky blue pentagon
+                    ("#ff6db6", "*", 9),    # pink star
+                    ("m",       "v", 7),    # purple upside-down triangle
+                    ("#b6dbff", "d", 7),    # light blue thin diamond
+                    ("#009292", "P", 7.5),  # turqoise thick plus
+                    ("#b66dff", "h", 7),    # lavender hexagon
+                    ("#db6d00", ">", 7),    # orange right-pointing triangle
+                    ("c",       "H", 7),    # cyan sideways hexagon
+                    ("#ffb6db", "X", 7.5),  # light pink thick cross
+                    ("#004949", "<", 7),    # dark green right-pointing triangle
+                    ("k",       "x", 7),    # black thin cross
+                    ("y",       "s", 5.5),  # yellow square
+                    ("#009292", "^", 7),    # turquoise triangle
+                    ("k",       "d", 7),    # black thin diamond
+                    ("#b6dbff", "*", 9)]    # light blue star
+    custom_cycler = (cycler(color = [p[0] for p in marker_types])
+                    + cycler(marker = [p[1] for p in marker_types])
+                    + cycler(markersize = np.array([p[2] for p in marker_types])*marker_scale))
     ax.set_prop_cycle(custom_cycler)
 
     # Add data
