@@ -11,9 +11,6 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import FormatStrFormatter
 from cycler import cycler
 
-# from pulsar_spectra.models import simple_power_law, broken_power_law, log_parabolic_spectrum, \
-#                                   high_frequency_cut_off_power_law, low_frequency_turn_over_power_law, \
-#                                   double_broken_power_law
 from pulsar_spectra.models import model_settings
 from pulsar_spectra.catalogue import convert_cat_list_to_dict
 
@@ -21,6 +18,24 @@ import logging
 logger = logging.getLogger(__name__)
 
 def robust_cost_function(f_y, y, sigma_y, k=1.345):
+    """Robust cost function. The negative log-likelihood of a Gaussian likelihood with Huber loss.
+    
+    Parameters
+    ----------
+    f_y : `list`
+        A list of predicted values according to the model.
+    y : `list`
+        A list of measured values at the same frequency as the model values.
+    sigma_y : `list`
+        A list of uncertainties corresponding to the measured values y.
+    k : `float`, optional
+        A constant that defines at which distance the loss function starts to penalize outliers. |br| Default: 1.345.
+
+    Returns
+    -------
+    beta : `float`
+        The cost of the model fit.
+    """
     beta_array = []
     for fi, yi, sigma_i in zip(f_y, y, sigma_y):
         relative_error = (fi - yi)/sigma_i
