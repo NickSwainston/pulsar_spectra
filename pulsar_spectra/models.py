@@ -212,12 +212,12 @@ def model_settings(print_models=False):
             (100e6, -2.5, 1.e1, 1.),
             [(10e6, 2e9), (-5, -.5), (0, 1e4) , (.1, 2.1)],
         ],
-        "double_broken_power_law" : [
-            double_broken_power_law,
-            "double bpl",
-            (100e6, 1e9, -1.6, -1.6, -1.6, 0.1),
-            [(10e6, 100e9), (1e9, 100e9), (-5, 5), (-5, 5), (-5, 5), (0, None)],
-        ],
+        #"double_broken_power_law" : [
+        #    double_broken_power_law,
+        #    "double bpl",
+        #    (100e6, 1e9, -1.6, -1.6, -1.6, 0.1),
+        #    [(10e6, 100e9), (1e9, 100e9), (-5, 5), (-5, 5), (-5, 5), (0, None)],
+        #],
     }
 
     if print_models:
