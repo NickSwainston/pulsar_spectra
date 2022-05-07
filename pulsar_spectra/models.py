@@ -192,7 +192,7 @@ def model_settings(print_models=False):
             broken_power_law,
             "broken pl",
             (2e9, -1.6, -1.6, 0.1),
-            [(50e6, 100e9), (-5, 5), (-5, 5), (0, None)],
+            [(10e6, 20e9), (-5, 5), (-5, 5), (0, None)],
         ],
         "log_parabolic_spectrum" : [
             log_parabolic_spectrum,
