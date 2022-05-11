@@ -273,7 +273,7 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None):
 
     # Add the antf to the cataogues
     antf_dict = all_flux_from_atnf(query=query)
-    antf_incorrect_refs = ["Zhao_2019", "Mignani_2017", "Stovall_2015"]
+    antf_incorrect_refs = ["Zhao_2019", "Mignani_2017", "Stovall_2015", "Bell_2016", "Lorimer_1995"]
     for jname in jnames:
         for ref in antf_dict[jname].keys():
             # Remove "_antf" from the end of  the reference
