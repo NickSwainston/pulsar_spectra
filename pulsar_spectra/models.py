@@ -191,8 +191,8 @@ def model_settings(print_models=False):
         "broken_power_law" : [
             broken_power_law,
             "broken pl",
-            (2e9, -1.6, -1.6, 0.1),
-            [(10e6, 20e9), (-5, 5), (-5, 5), (0, None)],
+            (1e9, -1.6, -1.6, 0.1),
+            [(50e6, 5e9), (-5, 5), (-5, 5), (0, None)],
         ],
         "log_parabolic_spectrum" : [
             log_parabolic_spectrum,
@@ -202,7 +202,7 @@ def model_settings(print_models=False):
         ],
         "high_frequency_cut_off_power_law" : [
             high_frequency_cut_off_power_law,
-            "pl high cut-off",
+            "pl hard cut-off",
             (4e9, 1.),
             [(3e9, 1e12), (0, None)],
         ],
