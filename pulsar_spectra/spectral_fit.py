@@ -154,8 +154,17 @@ def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fi
             freqs_ref = np.array(data_dict[ref]['Frequency MHz'])
             fluxs_ref = np.array(data_dict[ref]['Flux Density mJy'])
             flux_errs_ref = np.array(data_dict[ref]['Flux Density error mJy'])
-            (_, caps, _) = ax.errorbar(freqs_ref, fluxs_ref, yerr=flux_errs_ref, linestyle='None', mec='k', markeredgewidth=marker_border_thickness, \
-                            elinewidth=errorbar_linewidth, capsize=capsize, label=ref.replace('_',' '))
+            (_, caps, _) = ax.errorbar(
+                freqs_ref,
+                fluxs_ref,
+                yerr=flux_errs_ref,
+                linestyle='None',
+                mec='k',
+                markeredgewidth=marker_border_thickness,
+                elinewidth=errorbar_linewidth,
+                capsize=capsize,
+                label=ref.replace('_',' ')
+            )
             for cap in caps:
                 cap.set_markeredgewidth(errorbar_linewidth)
 
