@@ -50,5 +50,5 @@ for row in lines[2:]:
         pulsar_dict[pulsar]["Flux Density error mJy"] += [round(flux*fact_err/query['P0'][pid], 3)]
 
 with open("Sieber_1973.yaml", "w") as cat_file:
-    cat_file.write(json.dumps(pulsar_dict, indent=4))
+    cat_file.write(json.dumps(pulsar_dict, indent=1))
 print(pulsar_dict)
