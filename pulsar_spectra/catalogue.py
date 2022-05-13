@@ -274,6 +274,7 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None):
     # Add the antf to the cataogues
     antf_dict = all_flux_from_atnf(query=query)
     antf_incorrect_refs = ["Zhao_2019", "Mignani_2017", "Stovall_2015", "Bell_2016", "Lorimer_1995"]
+    # The Lorimer_1995 ATNF data is correct but where scaled to by their spectral index for the ATNF frequencies
     for jname in jnames:
         for ref in antf_dict[jname].keys():
             # Remove "_antf" from the end of  the reference
