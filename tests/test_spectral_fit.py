@@ -24,15 +24,11 @@ def test_find_best_spectral_fit():
     pulsars = ['J0820-1350', 'J0835-4510', 'J0837+0610', 'J0953+0755', 'J1453-6413', 'J1456-6843', 'J1645-0317', 'J1731-4744', "J0332+5434"]
     for pulsar in pulsars:
         print(f"\nFitting {pulsar}")
-        #print(cat_dict[pulsar])
-        #print(cat_list[pulsar])
-        freq_all     = np.array(cat_list[pulsar][0])
-        flux_all     = np.array(cat_list[pulsar][1])
-        flux_err_all = np.array(cat_list[pulsar][2])
-        ref_all      = np.array(cat_list[pulsar][3])
-        #print(freq_all, flux_all, flux_err_all)
-        model, iminuit_result, fit_info = find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all, ref_all, plot_compare=True)
-        print(model)
+        freq_all, flux_all, flux_err_all, ref_all = cat_list[pulsar]
+        for freq, flux, flux_err, ref in zip(freq_all, flux_all, flux_err_all, ref_all):
+            print(f"{str(freq):8s}{float(flux):8.2f}{float(flux_err):8.2f} {str(ref):20s}")
+        model_name, iminuit_result, fit_info, p_best, p_category = find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all, ref_all, plot_best=True)
+        print(model_name)
 
 
 def test_plot_methods():
