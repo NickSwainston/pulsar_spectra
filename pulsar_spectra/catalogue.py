@@ -302,7 +302,7 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None):
                         jname_cat_list[jname][0] += [freq]
                         jname_cat_list[jname][1] += [flux]
                         jname_cat_list[jname][2] += [flux_err]
-                        jname_cat_list[jname][3] += [raw_ref]
+                        jname_cat_list[jname][3] += [ref]
             else:
                 # Update list
                 for freq, flux, flux_err in zip(antf_dict[jname][ref]['Frequency MHz'],
