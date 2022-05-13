@@ -36,4 +36,3 @@ for row in lines:
 with open("Bilous_2016.yaml", "w") as cat_file:
     cat_file.write(json.dumps(pulsar_dict, indent=1))
 print(pulsar_dict)
-print(len(pulsar_dict.keys()))
