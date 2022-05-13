@@ -27,13 +27,13 @@ for row in lines:
     else:
         pulsar = row[0].strip().replace("–", "-")
 
-    flux = float(row[1])
-    if row[2] == '':
-        flux_err = flux*0.5
-    else:
-        flux_err = float(row[2])
+    if row[1] == '<':
+        continue
+    flux = float(row[2])
+    flux_err = float(row[3])
     pulsar_dict[pulsar] = {"Frequency MHz":[149], "Flux Density mJy":[flux], "Flux Density error mJy":[flux_err]}
 
 with open("Bilous_2016.yaml", "w") as cat_file:
-    cat_file.write(json.dumps(pulsar_dict, indent=4))
+    cat_file.write(json.dumps(pulsar_dict, indent=1))
 print(pulsar_dict)
+print(len(pulsar_dict.keys()))
