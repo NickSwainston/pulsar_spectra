@@ -141,7 +141,8 @@ def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fi
                     ("y",       "s", 5.5),  # yellow square
                     ("#009292", "^", 7),    # turquoise triangle
                     ("k",       "d", 7),    # black thin diamond
-                    ("#b6dbff", "*", 9)]    # light blue star
+                    ("#b6dbff", "*", 9),    # light blue star
+                    ("y",       "P", 7.5)]  # yellow thick plus
     custom_cycler = (cycler(color = [p[0] for p in marker_types])
                     + cycler(marker = [p[1] for p in marker_types])
                     + cycler(markersize = np.array([p[2] for p in marker_types])*marker_scale))
