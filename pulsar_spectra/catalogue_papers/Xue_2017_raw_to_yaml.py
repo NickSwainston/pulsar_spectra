@@ -20,17 +20,12 @@ for row in lines[7:]:
         fluxs     = [float(row[7].split("±")[0])]
         flux_errs = [float(row[7].split("±")[1])]
 
-    if "±" in row[8]:
-        freqs.append(200.)
-        fluxs.append(float(row[8].split("±")[0]))
-        flux_errs.append(float(row[8].split("±")[1]))
     print(freqs)
     print(fluxs)
     print(flux_errs)
 
-
     pulsar_dict[pulsar] = {"Frequency MHz":freqs, "Flux Density mJy":fluxs, "Flux Density error mJy":flux_errs}
 
 with open("Xue_2017.yaml", "w") as cat_file:
-    cat_file.write(json.dumps(pulsar_dict))
+    cat_file.write(json.dumps(pulsar_dict, indent=1))
 print(pulsar_dict)
