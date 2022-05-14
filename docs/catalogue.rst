@@ -88,7 +88,7 @@ Papers included in our catalogue
     "Taylor et al. (1993)","639","400-1400","`ADS <https://ui.adsabs.harvard.edu/abs/1993ApJS...88..529T/abstract>`_"
     "Lorimer et al. (1995)","280","408-1606","`ADS <https://ui.adsabs.harvard.edu/abs/1995MNRAS.273..411L/abstract>`_"
     "van Ommen et al. (1997)","82","800-960","`ADS <https://ui.adsabs.harvard.edu/abs/1997MNRAS.287..307V/abstract>`_"
-    "Malofeev et al. (2000)","211","102-102","`ADS <https://ui.adsabs.harvard.edu/abs/2000ARep...44..436M/abstract>`_"
+    "Malofeev et al. (2000)","212","102-102","`ADS <https://ui.adsabs.harvard.edu/abs/2000ARep...44..436M/abstract>`_"
     "Hobbs et al. (2004)","275","400-1400","`ADS <https://ui.adsabs.harvard.edu/abs/2004MNRAS.352.1439H/abstract>`_"
     "Karastergiou et al. (2005)","48","1400-3100","`ADS <https://ui.adsabs.harvard.edu/abs/2005MNRAS.359..481K/abstract>`_"
     "Johnston et al. (2006)","31","8400-8400","`ADS <https://ui.adsabs.harvard.edu/abs/2006MNRAS.369.1916J/abstract>`_"
