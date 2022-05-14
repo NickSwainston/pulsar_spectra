@@ -105,7 +105,7 @@ Papers included in our catalogue
     "Han et al. (2016)","204","1274-1466","`ADS <https://ui.adsabs.harvard.edu/abs/2016RAA....16..159H/abstract>`_"
     "Murphy et al. (2017)","60","76-227","`ADS <https://ui.adsabs.harvard.edu/abs/2017PASA...34...20M/abstract>`_"
     "Kijak et al. (2017)","12","325-610","`ADS <https://ui.adsabs.harvard.edu/abs/2017ApJ...840..108K/abstract>`_"
-    "Xue et al. (2017)","50","185-200","`ADS <https://ui.adsabs.harvard.edu/abs/2017PASA...34...70X/abstract>`_"
+    "Xue et al. (2017)","50","185-185","`ADS <https://ui.adsabs.harvard.edu/abs/2017PASA...34...70X/abstract>`_"
     "Jankowski et al. (2018)","441","728-3100","`ADS <https://ui.adsabs.harvard.edu/abs/2018MNRAS.473.4436J/abstract>`_"
     "Johnston et al. (2018)","586","1400-1400","`ADS <https://ui.adsabs.harvard.edu/abs/2018MNRAS.474.4629J/abstract>`_"
     "Jankowski et al. (2019)","205","843-843","`ADS <https://ui.adsabs.harvard.edu/abs/2019MNRAS.484.3691J/abstract>`_"
