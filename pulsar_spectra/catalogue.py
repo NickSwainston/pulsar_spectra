@@ -273,8 +273,12 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None):
 
     # Add the antf to the cataogues
     antf_dict = all_flux_from_atnf(query=query)
-    antf_incorrect_refs = ["Zhao_2019", "Mignani_2017", "Stovall_2015", "Bell_2016", "Lorimer_1995", "Sanidas_2019", "Johnston_2018", "Dai_2015"]
-    # The Lorimer_1995 ATNF data is correct but where scaled to by their spectral index for the ATNF frequencies
+    # refs that have errors that we plan to inform ANTF about
+    antf_incorrect_refs = ["Zhao_2019", "Mignani_2017", "Bell_2016", "Sanidas_2019"]
+    # refs that are correct but where scaled to by their spectral index for the ATNF frequencies
+    antf_adjusted_refs = ["Lorimer_1995", "Stovall_2015"]
+    # refs that were rounded to different decimal places than the publications
+    antf_rounded_refs = ["Johnston_2018", "Dai_2015"]
     for jname in jnames:
         for ref in antf_dict[jname].keys():
             # Remove "_antf" from the end of  the reference
@@ -286,7 +290,7 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None):
                     continue
             if exclude is None:
                 exclude = []
-            if raw_ref in exclude + antf_incorrect_refs:
+            if raw_ref in exclude + antf_incorrect_refs + antf_adjusted_refs + antf_rounded_refs :
                 # exclude by skipping
                 continue
 
