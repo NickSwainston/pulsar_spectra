@@ -110,7 +110,7 @@ Papers included in our catalogue
     "Jankowski et al. (2018)","441","728-3100","`ADS <https://ui.adsabs.harvard.edu/abs/2018MNRAS.473.4436J/abstract>`_"
     "Johnston et al. (2018)","586","1400-1400","`ADS <https://ui.adsabs.harvard.edu/abs/2018MNRAS.474.4629J/abstract>`_"
     "Jankowski et al. (2019)","205","843-843","`ADS <https://ui.adsabs.harvard.edu/abs/2019MNRAS.484.3691J/abstract>`_"
-    "Sanidas et al. (2019)","210","150-400","`ADS <https://ui.adsabs.harvard.edu/abs/2019A%26A...626A.104S/abstract>`_"
+    "Sanidas et al. (2019)","290","135-135","`ADS <https://ui.adsabs.harvard.edu/abs/2019A%26A...626A.104S/abstract>`_"
     "Zhao et al. (2019)","71","4820-5124","`ADS <https://ui.adsabs.harvard.edu/abs/2019ApJ...874...64Z/abstract>`_"
     "Bilous et al. (2020)","43","53-63","`ADS <https://ui.adsabs.harvard.edu/abs/2020A%26A...635A..75B/abstract>`_"
     "Bondonneau et al. (2020)","64","53-65","`ADS <https://ui.adsabs.harvard.edu/abs/2020A%26A...635A..76B/abstract>`_"

@@ -31,14 +31,13 @@ for row in lines:
                             "Flux Density mJy":[],
                             "Flux Density error mJy":[]}
 
-    for row_id, freq in [(1, 400), (2, 150)]:
-        if row[row_id] != '':
-            pulsar_dict[pulsar]["Frequency MHz"] += [freq]
-            pulsar_dict[pulsar]["Flux Density mJy"] += [float(row[row_id])]
-            pulsar_dict[pulsar]["Flux Density error mJy"] += [float(row[row_id])*0.5]
+    if row[1] != '':
+        pulsar_dict[pulsar]["Frequency MHz"] += [135]
+        pulsar_dict[pulsar]["Flux Density mJy"] += [float(row[1])]
+        pulsar_dict[pulsar]["Flux Density error mJy"] += [float(row[1])*0.5]
     if len(pulsar_dict[pulsar]["Frequency MHz"]) == 0:
         del pulsar_dict[pulsar]
 
 with open("Sanidas_2019.yaml", "w") as cat_file:
-    cat_file.write(json.dumps(pulsar_dict))
+    cat_file.write(json.dumps(pulsar_dict, indent=1))
 print(pulsar_dict)
