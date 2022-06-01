@@ -129,7 +129,7 @@ You can use the pulsar's fit to estimate a pulsar's flux density at a certain fr
     pulsar = 'J0820-1350'
     freqs, fluxs, flux_errs, refs = cat_dict[pulsar]
     model, m, _, _, _ = find_best_spectral_fit(pulsar, freqs, fluxs, flux_errs, refs, plot_best=True)
-    fitted_flux, fitted_flux_err = estimate_flux_density(150., model[0], m)
+    fitted_flux, fitted_flux_err = estimate_flux_density(150., model, m)
     print(f"{pulsar} estimated flux: {fitted_flux:.1f} ± {fitted_flux_err:.1f} mJy")
 
 Which will output

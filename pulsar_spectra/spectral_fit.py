@@ -497,7 +497,7 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
 
 def estimate_flux_density(
     est_freq,
-    model,
+    model_name,
     iminuit_result,
 ):
     """Estimate a pulsar's flux density using a previous spectra fit.
@@ -506,8 +506,8 @@ def estimate_flux_density(
     ----------
     est_freq : `float` or `list`
         A single or list of frequencies to estimate flux at (in MHz).
-    model : `function`
-        The pulsar spectra model function from :py:meth:`pulsar_spectra.models`.
+    model_name : `function`
+        The pulsar spectra model name from :py:meth:`pulsar_spectra.models`.
     m : `iminuit.Minuit`
         The Minuit class after being fit in :py:meth:`pulsar_spectra.spectral_fit.iminuit_fit_spectral_model`.
 
@@ -525,6 +525,9 @@ def estimate_flux_density(
         single_value = True
     elif isinstance(est_freq, list):
         est_freq = np.array(est_freq)
+
+    model_dict = model_settings()
+    model = model_dict[model_name][0]
 
     if iminuit_result.valid:
         fitted_flux, fitted_flux_cov = propagate(lambda p: model(est_freq * 1e6, *p) * 1e3, iminuit_result.values, iminuit_result.covariance)
