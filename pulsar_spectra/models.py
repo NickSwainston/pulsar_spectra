@@ -233,7 +233,7 @@ def model_settings(print_models=False):
             high_frequency_cut_off_power_law,
             "pl hard cut-off",
             (4e9, 1.),
-            [(3e9, 1e12), (0, None)],
+            [None, (0, None)], # will set the cut off frequency based on the data set's frequency range
         ],
         "low_frequency_turn_over_power_law" : [
             low_frequency_turn_over_power_law,

@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 def robust_cost_function(f_y, y, sigma_y, k=1.345):
     """Robust cost function. The negative log-likelihood of a Gaussian likelihood with Huber loss.
-    
+
     Parameters
     ----------
     f_y : `list`
@@ -302,6 +302,10 @@ def iminuit_fit_spectral_model(
     # Add the reference frequency
     start_params += (v0_Hz,)
     mod_limits += [None]
+
+    if model_name == "high_frequency_cut_off_power_law" and mod_limits[0] is None:
+        # will set the cut off frequency based on the data set's frequency range
+        mod_limits[0] = (min(freqs_Hz), 100 * max(freqs_Hz))
 
     # Check if enough inputs
     k = len(start_params)-1 # number of free model parameters
