@@ -21,14 +21,20 @@ def test_find_best_spectral_fit():
     cat_list = collect_catalogue_fluxes()
     #print(cat_dict)
     #pulsars = ['J0034-0534','J0953+0755', 'J1645-0317']
+    #pulsars = ['J1751-4657']
     pulsars = ['J0820-1350', 'J0835-4510', 'J0837+0610', 'J0953+0755', 'J1453-6413', 'J1456-6843', 'J1645-0317', 'J1731-4744', "J0332+5434"]
     for pulsar in pulsars:
         print(f"\nFitting {pulsar}")
         freq_all, flux_all, flux_err_all, ref_all = cat_list[pulsar]
         for freq, flux, flux_err, ref in zip(freq_all, flux_all, flux_err_all, ref_all):
             print(f"{str(freq):8s}{float(flux):8.2f}{float(flux_err):8.2f} {str(ref):20s}")
-        model_name, iminuit_result, fit_info, p_best, p_category = find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all, ref_all, plot_best=True)
+        model_name, iminuit_result, fit_info, p_best, p_category = find_best_spectral_fit(pulsar, freq_all, flux_all, flux_err_all, ref_all, plot_compare=True)
         print(model_name)
+        for p, v, e in zip(iminuit_result.parameters, iminuit_result.values, iminuit_result.errors):
+            if p.startswith("v"):
+                print(f"{p} = {v/1e6:8.1f} +/- {e/1e6:8.1} MHz")
+            else:
+                print(f"{p} = {v:.5f} +/- {e:.5}")
 
 
 def test_plot_methods():
