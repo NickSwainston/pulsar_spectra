@@ -128,7 +128,7 @@ def calc_log_parabolic_spectrum_max_freq(a, b, v0, u_a, u_b, u_ab):
         The uncertainty of v_peak in Hz.
     """
     v_peak = v0 * 10**(-b/(2*a))
-    u_v_peak = v_peak * np.log(10) / (2*a) * np.sqrt( (b*u_b)**2 + (u_a)**2 - 2*b*u_ab/a )
+    u_v_peak = abs(v_peak * np.log(10) / (2*a) * np.sqrt( (u_b)**2 + (b*u_a/a)**2 - 2*b*u_ab/a ))
     return v_peak, u_v_peak
 
 def high_frequency_cut_off_power_law(v, vc, b, v0):
