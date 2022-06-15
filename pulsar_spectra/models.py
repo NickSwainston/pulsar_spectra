@@ -8,7 +8,7 @@ def simple_power_law(v, a, c, v0):
     """Simple power law:
 
     .. math::
-        S_v =  c \left( \frac{v}{v_0} \right)^a
+        S_v =  c \\left( \\frac{v}{v_0} \\right)^a
 
     Parameters
     ----------
@@ -32,10 +32,11 @@ def broken_power_law(v, vb, a1, a2, c, v0):
     """Broken power law:
 
     .. math::
-        S_v = \begin{cases}
-        c \left( \frac{v}{v0} \right)^{a1}   & \mathrm{if} v \leq vb \\[5pt]
-        c \left( \frac{v}{v0} \right)^{a2} \left( \frac{vb}{v0} \right)^{a1-a2} & \mathrm{otherwise} \\
-        \end{cases}
+
+        S_v = \\begin{cases}
+        c \\left( \\frac{v}{v0} \\right)^{a1}   & \\mathrm{if} v \\leq vb \\\\
+        c \\left( \\frac{v}{v0} \\right)^{a2} \\left( \\frac{vb}{v0} \\right)^{a1-a2} & \\mathrm{otherwise} \\\\
+        \\end{cases}
 
     Parameters
     ----------
@@ -76,8 +77,8 @@ def log_parabolic_spectrum(v, a, b, c, v0):
     """Log-parabolic spectrum:
 
     .. math::
-        \mathrm{log}_{10} S_v = a  \left [ \mathrm{log}_{10} \left ( \frac{v}{v0} \right ) \right]^2 +
-        b \, \mathrm{log}_{10} \left ( \frac{v}{v0} \right ) + c
+        \\mathrm{log}_{10} S_v = a  \\left [ \\mathrm{log}_{10} \\left ( \\frac{v}{v0} \\right ) \\right]^2 +
+        b \\, \\mathrm{log}_{10} \\left ( \\frac{v}{v0} \\right ) + c
 
     Parameters
     ----------
@@ -104,7 +105,7 @@ def high_frequency_cut_off_power_law(v, vc, c, v0):
     """Power law with high-frequency cut-off off:
 
     .. math::
-        S_v = c \left( \frac{v}{v0} \right)^{-2} \left ( 1 - \frac{v}{vc} \right ),\qquad v < v_c
+        S_v = c \\left( \\frac{v}{v0} \\right)^{-2} \\left ( 1 - \\frac{v}{vc} \\right ),\\qquad v < v_c
 
     Parameters
     ----------
@@ -132,7 +133,7 @@ def low_frequency_turn_over_power_law(v, vc, a, c, beta, v0):
     """power law with low-frequency turn-over:
 
     .. math::
-        S_v = c \left( \frac{v}{v0} \right)^{a} \exp\left [ \frac{a}{beta} \left( \frac{v}{vc} \right)^{-beta} \right ]
+        S_v = c \\left( \\frac{v}{v0} \\right)^{a} \\exp\\left [ \\frac{a}{beta} \\left( \\frac{v}{vc} \\right)^{-beta} \\right ]
 
     Parameters
     ----------
