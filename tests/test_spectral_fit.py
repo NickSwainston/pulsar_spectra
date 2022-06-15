@@ -21,8 +21,9 @@ def test_find_best_spectral_fit():
     cat_list = collect_catalogue_fluxes()
     #print(cat_dict)
     #pulsars = ['J0034-0534','J0953+0755', 'J1645-0317']
-    #pulsars = ['J1751-4657']
-    pulsars = ['J0820-1350', 'J0835-4510', 'J0837+0610', 'J0953+0755', 'J1453-6413', 'J1456-6843', 'J1645-0317', 'J1731-4744', "J0332+5434"]
+    #pulsars = ['J0820-1350', 'J0835-4510', 'J0837+0610', 'J0953+0755', 'J1453-6413', 'J1456-6843', 'J1645-0317', 'J1731-4744', "J0332+5434"]
+    #           spl           bpl           lps           hfto          lfto
+    pulsars = ['J0034-0534', 'J0835-4510', 'J1141-6545', 'J1751-4657', 'J0953+0755']
     for pulsar in pulsars:
         print(f"\nFitting {pulsar}")
         freq_all, flux_all, flux_err_all, ref_all = cat_list[pulsar]
