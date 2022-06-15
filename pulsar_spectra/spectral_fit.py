@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 def robust_cost_function(f_y, y, sigma_y, k=1.345):
     """Robust cost function. The negative log-likelihood of a Gaussian likelihood with Huber loss.
-    
+
     Parameters
     ----------
     f_y : `list`
@@ -303,6 +303,10 @@ def iminuit_fit_spectral_model(
     start_params += (v0_Hz,)
     mod_limits += [None]
 
+    if model_name == "high_frequency_cut_off_power_law" and mod_limits[0] is None:
+        # will set the cut off frequency based on the data set's frequency range
+        mod_limits[0] = (min(freqs_Hz), 100 * max(freqs_Hz))
+
     # Check if enough inputs
     k = len(start_params)-1 # number of free model parameters
     if len(freqs_MHz) <= k + 1:
@@ -497,7 +501,7 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
 
 def estimate_flux_density(
     est_freq,
-    model,
+    model_name,
     iminuit_result,
 ):
     """Estimate a pulsar's flux density using a previous spectra fit.
@@ -506,8 +510,8 @@ def estimate_flux_density(
     ----------
     est_freq : `float` or `list`
         A single or list of frequencies to estimate flux at (in MHz).
-    model : `function`
-        The pulsar spectra model function from :py:meth:`pulsar_spectra.models`.
+    model_name : `function`
+        The pulsar spectra model name from :py:meth:`pulsar_spectra.models`.
     m : `iminuit.Minuit`
         The Minuit class after being fit in :py:meth:`pulsar_spectra.spectral_fit.iminuit_fit_spectral_model`.
 
@@ -525,6 +529,9 @@ def estimate_flux_density(
         single_value = True
     elif isinstance(est_freq, list):
         est_freq = np.array(est_freq)
+
+    model_dict = model_settings()
+    model = model_dict[model_name][0]
 
     if iminuit_result.valid:
         fitted_flux, fitted_flux_cov = propagate(lambda p: model(est_freq * 1e6, *p) * 1e3, iminuit_result.values, iminuit_result.covariance)
