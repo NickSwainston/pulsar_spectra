@@ -78,7 +78,7 @@ used throughout the figures. These custom marker types are proved below:
         'Johnston_2018'         : ("#b6dbff",   "d", 7*msc),      # light blue thin diamond
         'Johnston_2021'         : ("y",         "s", 5.5*msc),    # yellow square
         'Keith_2011'            : ("#ff6db6",   "d", 7*msc),      # pink thin diamond
-        'Lorimer_1995'          : ("tab:orange","X", 7*msc),      # orange cross
+        'Lorimer_1995'          : ("tab:orange","X", 7*msc),      # orange thick cross
         'Malofeev_2000'         : ("r",         "P", 7.5*msc),    # red thick plus
         'Mignani_2017'          : ("g",         "D", 5*msc),      # green diamond
         'Murphy_2017'           : ("#ff6db6",   "*", 10*msc),     # pink star
@@ -88,7 +88,7 @@ used throughout the figures. These custom marker types are proved below:
         'van_Ommen_1997'        : ("#24ff24",   "^", 7*msc),      # green triangle
         'Xue_2017'              : ("r",         "D", 6*msc),      # red diamond
         'Zakharenko_2013'       : ("#b66dff",   "h", 7*msc),      # lavender hexagon
-        'Zhao_2019'             : ("#004949",   "<", 7*msc),      # dark green right-pointing triangle
+        'Zhao_2019'             : ("#004949",   "<", 7*msc),      # dark green left-pointing triangle
         'Manchester_1978_ATNF'  : ("tab:purple","s", 5*msc),      # purple small square
         'Toscano_1998_ATNF'     : ("tab:orange","d", 7*msc),      # orange thin diamond
         'Kramer_1999_ATNF'      : ("y",         "o", 5*msc),      # yellow small circle
