@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 def robust_cost_function(f_y, y, sigma_y, k=1.345):
     """Robust cost function. The negative log-likelihood of a Gaussian likelihood with Huber loss.
-    
+
     Parameters
     ----------
     f_y : `list`
@@ -80,7 +80,7 @@ def huber_loss_function(sq_resi, k=1.345):
 
 def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fit_info,
              plot_error=True, save_name="fit.png", alternate_style=False, axis=None,
-             secondary_fit=False, fit_range=None):
+             secondary_fit=False, fit_range=None, ref_markers=None):
     """Create a plot of the pulsar spectral fit.
 
     Parameters
@@ -111,14 +111,20 @@ def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fi
         Plot model with an alternate style and without markers. |br| Default: False.
     fit_range : `tuple`, (`float`, `float`) optional
         Frequency range to plot the second model over in MHz, eg. (100, 3000). |br| Default: None, will use input frequency range.
+    ref_markers : `dict` [`str`, `tuple`], optional
+        Used to overwrite the data marker defaults. The key is the reference name and the tuple contains (color, marker, markersize). |br| Default: None.
     """
+    if ref_markers is None:
+        ref_markers = {}
+
     # Set up plot
     plotsize = 3.2
-
     if axis is None:
         fig, ax = plt.subplots(figsize=(plotsize*4/3, plotsize))
     else:
         ax = axis
+
+    # Set up default mpl markers
     capsize = 1.5
     errorbar_linewidth = 0.7
     marker_border_thickness = 0.5
@@ -152,6 +158,14 @@ def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fi
     data_dict = convert_cat_list_to_dict({"dummy_pulsar":[freqs_MHz, fluxs_mJy, flux_errs_mJy, ref]})["dummy_pulsar"]
     if not secondary_fit:
         for ref in data_dict.keys():
+            if ref in ref_markers.keys():
+                # ref in user define marker so use theirs
+                color, marker, markersize = ref_markers[ref]
+            else:
+                # Use our defaults
+                color = None
+                marker = None
+                markersize = None
             freqs_ref = np.array(data_dict[ref]['Frequency MHz'])
             fluxs_ref = np.array(data_dict[ref]['Flux Density mJy'])
             flux_errs_ref = np.array(data_dict[ref]['Flux Density error mJy'])
@@ -164,7 +178,10 @@ def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fi
                 markeredgewidth=marker_border_thickness,
                 elinewidth=errorbar_linewidth,
                 capsize=capsize,
-                label=ref.replace('_',' ')
+                label=ref.replace('_',' '),
+                color=color,
+                marker=marker,
+                markersize=markersize,
             )
             for cap in caps:
                 cap.set_markeredgewidth(errorbar_linewidth)
@@ -237,7 +254,8 @@ def iminuit_fit_spectral_model(
         alternate_style=False,
         axis=None,
         secondary_fit=False,
-        fit_range=None
+        fit_range=None,
+        ref_markers=None,
     ):
     """Fit pulsar spectra with iminuit.
 
@@ -274,6 +292,8 @@ def iminuit_fit_spectral_model(
         Plot model with an alternate style and without markers. |br| Default: False.
     fit_range : `tuple`, optional
         Frequency range to plot the second model over. |br| Default: None.
+    ref_markers : `dict` [`str`, `tuple`], optional
+        Used to overwrite the data marker defaults. The key is the reference name and the tuple contains (color, marker, markersize). |br| Default: None.
 
     Returns
     -------
@@ -302,6 +322,10 @@ def iminuit_fit_spectral_model(
     # Add the reference frequency
     start_params += (v0_Hz,)
     mod_limits += [None]
+
+    if model_name == "high_frequency_cut_off_power_law" and mod_limits[0] is None:
+        # will set the cut off frequency based on the data set's frequency range
+        mod_limits[0] = (min(freqs_Hz), 100 * max(freqs_Hz))
 
     # Check if enough inputs
     k = len(start_params)-1 # number of free model parameters
@@ -363,7 +387,8 @@ def iminuit_fit_spectral_model(
         plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model_function, m, fit_info,
                 save_name=save_name, plot_error=plot_error,
                 alternate_style=alternate_style, axis=axis,
-                secondary_fit=secondary_fit, fit_range=fit_range)
+                secondary_fit=secondary_fit, fit_range=fit_range,
+                ref_markers=ref_markers)
 
     return aic, m, fit_info
 
@@ -371,7 +396,7 @@ def iminuit_fit_spectral_model(
 def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
                            plot_all=False, plot_best=False, plot_compare=False,
                            plot_error=True, alternate_style=False, axis=None,
-                           secondary_fit=False, fit_range=None):
+                           secondary_fit=False, fit_range=None, ref_markers=None):
     """Fit pulsar spectra with iminuit.
 
     Parameters
@@ -402,6 +427,8 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
         Plot model with an alternate style and without markers. Does not work for comparison plots. |br| Default: False.
     fit_range : `tuple`, optional
         Frequency range to plot the second model over. |br| Default: None.
+    ref_markers : `dict` [`str`, `tuple`], optional
+        Used to overwrite the data marker defaults. The key is the reference name and the tuple contains (color, marker, markersize). |br| Default: None.
 
     Returns
     -------
@@ -435,7 +462,7 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
         model_function, short_name, start_params, mod_limits = model_dict[model_name]
         aic, iminuit_result, fit_info = iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
                         model_name=model_name, plot=plot_all, plot_error=plot_error, save_name=f"{pulsar}_{model_name}_fit.png",
-                        alternate_style=alternate_style, axis=axis, secondary_fit=secondary_fit)
+                        alternate_style=alternate_style, axis=axis, secondary_fit=secondary_fit, ref_markers=ref_markers)
         logger.debug(f"{model_name} model fit gave AIC {aic}.")
         if iminuit_result is not None:
             aics.append(aic)
@@ -448,7 +475,7 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
                 # plot data
                 plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all, model_function, iminuit_result, fit_info,
                          plot_error=plot_error, alternate_style=alternate_style,
-                         axis=axs[i], secondary_fit=secondary_fit, fit_range=fit_range)
+                         axis=axs[i], secondary_fit=secondary_fit, fit_range=fit_range, ref_markers=ref_markers)
 
     # Return best result
     if len(aics) == 0:
@@ -491,13 +518,13 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
         if plot_best:
             plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all, model_dict[best_model_name][0], iminuit_results[aici], fit_infos[aici],
                     save_name=f"{pulsar}_{best_model_name}_fit.png", plot_error=plot_error, alternate_style=alternate_style,
-                    axis=axis, secondary_fit=secondary_fit, fit_range=fit_range)
+                    axis=axis, secondary_fit=secondary_fit, fit_range=fit_range, ref_markers=ref_markers)
         return best_model_name, iminuit_results[aici], fit_infos[aici], p_best, p_category
 
 
 def estimate_flux_density(
     est_freq,
-    model,
+    model_name,
     iminuit_result,
 ):
     """Estimate a pulsar's flux density using a previous spectra fit.
@@ -506,8 +533,8 @@ def estimate_flux_density(
     ----------
     est_freq : `float` or `list`
         A single or list of frequencies to estimate flux at (in MHz).
-    model : `function`
-        The pulsar spectra model function from :py:meth:`pulsar_spectra.models`.
+    model_name : `function`
+        The pulsar spectra model name from :py:meth:`pulsar_spectra.models`.
     m : `iminuit.Minuit`
         The Minuit class after being fit in :py:meth:`pulsar_spectra.spectral_fit.iminuit_fit_spectral_model`.
 
@@ -525,6 +552,9 @@ def estimate_flux_density(
         single_value = True
     elif isinstance(est_freq, list):
         est_freq = np.array(est_freq)
+
+    model_dict = model_settings()
+    model = model_dict[model_name][0]
 
     if iminuit_result.valid:
         fitted_flux, fitted_flux_cov = propagate(lambda p: model(est_freq * 1e6, *p) * 1e3, iminuit_result.values, iminuit_result.covariance)
