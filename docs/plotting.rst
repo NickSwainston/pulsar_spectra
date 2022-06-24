@@ -30,8 +30,9 @@ This will produce the following plot:
 Using custom marker types
 -------------------------
 
-By default, the marker types will cycle through a set list of marker types. If you would like to use custom marker
-types, you can specify them using the following code:
+By default, the code will cycle through a set list of marker types. When creating figures for multiple pulsars, the 
+default marker assignment can lead to inconsistency in the marker types. This can be solved by assigning a custom
+marker to each reference. You can specify custom marker types using the following code:
 
 .. code-block:: python
 

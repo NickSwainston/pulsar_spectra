@@ -15,5 +15,6 @@ Welcome to pulsar_spectra's documentation!
    examples
    catalogue
    spectral_fit
+   plotting
    modules
    faq
