@@ -130,11 +130,11 @@ def calc_log_parabolic_spectrum_max_freq(a, b, v0, u_a, u_b, u_ab):
     u_v_peak = abs(v_peak * np.log(10) / (2*a) * np.sqrt( (u_b)**2 + (b*u_a/a)**2 - 2*b*u_ab/a ))
     return v_peak, u_v_peak
 
-def high_frequency_cut_off_power_law(v, vc, c, v0):
+def high_frequency_cut_off_power_law(v, vc, a, c, v0):
     """Power law with high-frequency cut-off off:
 
     .. math::
-        S_v = c \\left( \\frac{v}{v0} \\right)^{-2} \\left ( 1 - \\frac{v}{vc} \\right ),\\qquad v < vc
+        S_v = c \\left( \\frac{v}{v0} \\right)^{a} \\left ( 1 - \\frac{v}{vc} \\right ),\\qquad v < vc
 
     Parameters
     ----------
@@ -142,6 +142,8 @@ def high_frequency_cut_off_power_law(v, vc, c, v0):
         Frequency in Hz.
     vc : `list`
         Cut off frequency in Hz.
+    a : `float`
+        Spectral Index.
     c : `float`
         Constant.
     v0 : `float`
@@ -154,8 +156,8 @@ def high_frequency_cut_off_power_law(v, vc, c, v0):
     """
     x = v / v0
     xc = vc / v0
-    y1 = c*x**(-2) * ( 1 - x / xc )
-    y2 = 0
+    y1 = c*x**a * ( 1 - x / xc )
+    y2 = 0.
     return np.where(x < xc, y1, y2)
 
 def low_frequency_turn_over_power_law(v, vc, a, c, beta, v0):
@@ -227,8 +229,8 @@ def model_settings(print_models=False):
         "high_frequency_cut_off_power_law" : [
             high_frequency_cut_off_power_law,
             "pl hard cut-off",
-            (4e9, 1.),
-            [None, (0, None)], # will set the cut off frequency based on the data set's frequency range
+            (4e9, -1.6, 1.),
+            [None, (-5, 5), (0, None)], # will set the cut off frequency based on the data set's frequency range
         ],
         "low_frequency_turn_over_power_law" : [
             low_frequency_turn_over_power_law,
