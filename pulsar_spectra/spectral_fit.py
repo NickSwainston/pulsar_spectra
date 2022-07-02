@@ -356,7 +356,8 @@ def iminuit_fit_spectral_model(
 
     if model_name == "high_frequency_cut_off_power_law" and mod_limits[0] is None:
         # will set the cut off frequency based on the data set's frequency range
-        mod_limits[0] = (min(freqs_Hz), 100 * max(freqs_Hz))
+        mod_limits[0] = (max(freqs_Hz), 100 * max(freqs_Hz))
+        logger.debug(f"HFCO cut off frequency limits (Hz): {mod_limits[0]}")
 
     # Check if enough inputs
     k = len(start_params)-1 # number of free model parameters
