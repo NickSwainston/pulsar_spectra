@@ -354,7 +354,7 @@ def iminuit_fit_spectral_model(
     start_params += (v0_Hz,)
     mod_limits += [None]
 
-    if model_name == "high_frequency_cut_off_power_law" and mod_limits[0] is None:
+    if (model_name == "high_frequency_cut_off_power_law" or model_name == "double_turn_over_spectrum") and mod_limits[0] is None:
         # will set the cut off frequency based on the data set's frequency range
         mod_limits[0] = (max(freqs_Hz), 100 * max(freqs_Hz))
         logger.debug(f"HFCO cut off frequency limits (Hz): {mod_limits[0]}")
@@ -475,16 +475,17 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
     p_category : `str`
         Category based on the quality of spectral fit, as defined in Jankowski et al. (2018).
     """
+    # Load model settings
+    model_dict = model_settings()
+
     # Prepare plots and fitting frequencies
     if plot_compare:
         # Set up plots
-        nrows = 5
+        nrows = len(model_dict)
         plot_size = 4
         fitted_freqs_MHz = np.logspace(np.log10(min(freqs_MHz)), np.log10(max(freqs_MHz)), 100)
         fig, axs = plt.subplots(nrows, 1, figsize=(plot_size, plot_size * nrows))
 
-    # Load model settings
-    model_dict = model_settings()
     aics = []
     iminuit_results = []
     fit_infos = []
