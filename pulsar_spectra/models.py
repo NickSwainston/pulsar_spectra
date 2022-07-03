@@ -160,7 +160,7 @@ def high_frequency_cut_off_power_law(v, vc, a, c, v0):
     y2 = 0.
     return np.where(x < xc, y1, y2)
 
-def low_frequency_turn_over_power_law(v, vc, a, c, beta, v0):
+def low_frequency_turn_over_power_law(v, vpeak, a, c, beta, v0):
     """power law with low-frequency turn-over:
 
     .. math::
@@ -170,8 +170,8 @@ def low_frequency_turn_over_power_law(v, vc, a, c, beta, v0):
     ----------
     v : `list`
         Frequency in Hz.
-    vc : `list`
-        Trun-over frequency in Hz.
+    vpeak : `list`
+        Peak/Turn-over frequency in Hz.
     a : `float`
         The spectral index.
     c : `float`
@@ -187,9 +187,43 @@ def low_frequency_turn_over_power_law(v, vc, a, c, beta, v0):
         The flux density predicted by the model.
     """
     x = v / v0
-    xc = v / vc
-    return c * x**a * np.exp( a / beta * xc**(-beta) )
+    xpeak = v / vpeak
+    return c * x**a * np.exp( a / beta * xpeak**(-beta) )
 
+def double_turn_over_spectrum(v, vc, vpeak, a, beta, c, v0):
+    """Double turn over spectrum, has a low frequency turn over and a high frequency cut off:
+
+    .. math::
+        S_v = c \\left( \\frac{v}{v0} \\right)^{a} \\left ( 1 - \\frac{v}{vc} \\right ) \\exp\\left [ \\frac{a}{\\beta} \\left( \\frac{v}{vc} \\right)^{-\\beta} \\right ],\\qquad v < vc
+
+    Parameters
+    ----------
+    v : `list`
+        Frequency in Hz.
+    vc : `list`
+        Cut off frequency in Hz.
+    vpeak : `list`
+        Peak/turn-over frequency in Hz.
+    a : `float`
+        Spectral Index.
+    beta : `float`
+        The smoothness of the turn-over.
+    c : `float`
+        Constant.
+    v0 : `float`
+        Reference frequency.
+
+    Returns
+    -------
+    S_v : `list`
+        The flux density predicted by the model.
+    """
+    x = v / v0
+    xc = vc / v0
+    xpeak = v / vpeak
+    y1 = c*x**a * ( 1 - x / xc ) * np.exp( a / beta * xpeak**(-beta) )
+    y2 = 0.
+    return np.where(x < xc, y1, y2)
 
 def model_settings(print_models=False):
     """Holds metadata about spectral models such as common names and default fit parameters.
