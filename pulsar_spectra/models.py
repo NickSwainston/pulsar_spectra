@@ -240,37 +240,71 @@ def model_settings(print_models=False):
 
         {model_name: [model_function, short_name, start_params, mod_limits]}
     """
+    # fit starting value, min and max
+    # constant
+    c_s = 1.
+    c_min = 0.
+    c_max = None
+    # spectral index
+    a_s = 1.6
+    a_min = -5.
+    a_max = 1.
+    # Beta, he smoothness of the turn-over
+    beta_s = 1.
+    beta_min = 0.1
+    beta_max = 5.
+    # High frequency cut off frequency
+    vc_s = 4e9
+    vc_both = None # will set the cut off frequency based on the data set's frequency range
+    # Lof frequency turn over frequency peak
+    vpeak_s = 100e6
+    vpeak_min = 10e6
+    vpeak_max = 2e9
+
+
     model_dict = {
         # Name: [model_function, short_name, start_params, mod_limits]
         "simple_power_law" : [
             simple_power_law,
             "simple pl",
-            (-1.6, 0.003),
-            [(None, 0), (0, None)],
+            # (a, c)
+            (a_s, c_s),
+            [(a_min, a_max), (c_min, c_max)],
         ],
         "broken_power_law" : [
             broken_power_law,
             "broken pl",
-            (1e9, -1.6, -1.6, 0.1),
-            [(50e6, 5e9), (-5, 5), (-5, 5), (0, None)],
+            #(vb, a1, a2, c)
+            (1e9, a_s, a_s, c_s),
+            [(50e6, 5e9), (a_min, a_max), (a_min, a_max), (c_min, c_max)],
         ],
         "log_parabolic_spectrum" : [
             log_parabolic_spectrum,
             "lps",
-            (-1, -1., 1.),
-            [(-5, 2), (-5, 2), (None, None)],
+            #(a, b, c)
+            (-1, -1., c_s),
+            [(-5, 2), (-5, 2), (c_min, c_max)],
         ],
         "high_frequency_cut_off_power_law" : [
             high_frequency_cut_off_power_law,
             "pl hard cut-off",
-            (4e9, -1.6, 1.),
-            [None, (-5, 5), (0, None)], # will set the cut off frequency based on the data set's frequency range
+            #(vc, a, c)
+            (vc_s, a_s, c_s),
+            [vc_both, (a_min, a_max), (c_min, c_max)],
         ],
         "low_frequency_turn_over_power_law" : [
             low_frequency_turn_over_power_law,
             "pl low turn-over",
-            (100e6, -2.5, 1.e1, 1.),
-            [(10e6, 2e9), (-5, -.5), (0, 1e4) , (.1, 2.1)],
+            #(vpeak, a, c, beta)
+            (vpeak_s, a_s, c_s, beta_s),
+            [(vpeak_min, vpeak_max), (a_min, a_max), (c_min, c_max) , (beta_min, beta_max)],
+        ],
+        "double_turn_over_spectrum" : [
+            double_turn_over_spectrum,
+            "double turn over spectrum",
+            #(vc, vpeak, a, beta, c)
+            (vc_s, vpeak_s, a_s, beta_s, c_s),
+            [(vc_both), (vpeak_min, vpeak_max), (a_min, a_max), (beta_min, beta_max), (c_min, c_max)],
         ],
         #"double_broken_power_law" : [
         #    double_broken_power_law,
