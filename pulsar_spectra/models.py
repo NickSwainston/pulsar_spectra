@@ -247,8 +247,8 @@ def model_settings(print_models=False):
     c_max = None
     # spectral index
     a_s = 1.6
-    a_min = -5.
-    a_max = 1.
+    a_min = -8.
+    a_max = 3.
     # Beta, he smoothness of the turn-over
     beta_s = 1.
     beta_min = 0.1
@@ -283,28 +283,28 @@ def model_settings(print_models=False):
             "lps",
             #(a, b, c)
             (-1, -1., c_s),
-            [(-5, 2), (-5, 2), (c_min, c_max)],
+            [(-5, 2), (-5, 2), (None, c_max)],
         ],
         "high_frequency_cut_off_power_law" : [
             high_frequency_cut_off_power_law,
             "pl hard cut-off",
             #(vc, a, c)
             (vc_s, a_s, c_s),
-            [vc_both, (a_min, a_max), (c_min, c_max)],
+            [vc_both, (a_min, 0.), (c_min, c_max)],
         ],
         "low_frequency_turn_over_power_law" : [
             low_frequency_turn_over_power_law,
             "pl low turn-over",
             #(vpeak, a, c, beta)
             (vpeak_s, a_s, c_s, beta_s),
-            [(vpeak_min, vpeak_max), (a_min, a_max), (c_min, c_max) , (beta_min, beta_max)],
+            [(vpeak_min, vpeak_max), (a_min, 0.), (c_min, c_max) , (beta_min, beta_max)],
         ],
         "double_turn_over_spectrum" : [
             double_turn_over_spectrum,
             "double turn over spectrum",
             #(vc, vpeak, a, beta, c)
             (vc_s, vpeak_s, a_s, beta_s, c_s),
-            [(vc_both), (vpeak_min, vpeak_max), (a_min, a_max), (beta_min, beta_max), (c_min, c_max)],
+            [(vc_both), (vpeak_min, vpeak_max), (a_min, 0.), (beta_min, beta_max), (c_min, c_max)],
         ],
         #"double_broken_power_law" : [
         #    double_broken_power_law,
