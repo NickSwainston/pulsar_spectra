@@ -130,11 +130,11 @@ def calc_log_parabolic_spectrum_max_freq(a, b, v0, u_a, u_b, u_ab):
     u_v_peak = abs(v_peak * np.log(10) / (2*a) * np.sqrt( (u_b)**2 + (b*u_a/a)**2 - 2*b*u_ab/a ))
     return v_peak, u_v_peak
 
-def high_frequency_cut_off_power_law(v, vc, c, v0):
+def high_frequency_cut_off_power_law(v, vc, a, c, v0):
     """Power law with high-frequency cut-off off:
 
     .. math::
-        S_v = c \\left( \\frac{v}{v0} \\right)^{-2} \\left ( 1 - \\frac{v}{vc} \\right ),\\qquad v < vc
+        S_v = c \\left( \\frac{v}{v0} \\right)^{a} \\left ( 1 - \\frac{v}{vc} \\right ),\\qquad v < vc
 
     Parameters
     ----------
@@ -142,6 +142,8 @@ def high_frequency_cut_off_power_law(v, vc, c, v0):
         Frequency in Hz.
     vc : `list`
         Cut off frequency in Hz.
+    a : `float`
+        Spectral Index.
     c : `float`
         Constant.
     v0 : `float`
@@ -154,11 +156,11 @@ def high_frequency_cut_off_power_law(v, vc, c, v0):
     """
     x = v / v0
     xc = vc / v0
-    y1 = c*x**(-2) * ( 1 - x / xc )
-    y2 = 0
+    y1 = c*x**a * ( 1 - x / xc )
+    y2 = 0.
     return np.where(x < xc, y1, y2)
 
-def low_frequency_turn_over_power_law(v, vc, a, c, beta, v0):
+def low_frequency_turn_over_power_law(v, vpeak, a, c, beta, v0):
     """power law with low-frequency turn-over:
 
     .. math::
@@ -168,8 +170,8 @@ def low_frequency_turn_over_power_law(v, vc, a, c, beta, v0):
     ----------
     v : `list`
         Frequency in Hz.
-    vc : `list`
-        Trun-over frequency in Hz.
+    vpeak : `list`
+        Peak/Turn-over frequency in Hz.
     a : `float`
         The spectral index.
     c : `float`
@@ -185,9 +187,43 @@ def low_frequency_turn_over_power_law(v, vc, a, c, beta, v0):
         The flux density predicted by the model.
     """
     x = v / v0
-    xc = v / vc
-    return c * x**a * np.exp( a / beta * xc**(-beta) )
+    xpeak = v / vpeak
+    return c * x**a * np.exp( a / beta * xpeak**(-beta) )
 
+def double_turn_over_spectrum(v, vc, vpeak, a, beta, c, v0):
+    """Double turn over spectrum, has a low frequency turn over and a high frequency cut off:
+
+    .. math::
+        S_v = c \\left( \\frac{v}{v0} \\right)^{a} \\left ( 1 - \\frac{v}{vc} \\right ) \\exp\\left [ \\frac{a}{\\beta} \\left( \\frac{v}{vc} \\right)^{-\\beta} \\right ],\\qquad v < vc
+
+    Parameters
+    ----------
+    v : `list`
+        Frequency in Hz.
+    vc : `list`
+        Cut off frequency in Hz.
+    vpeak : `list`
+        Peak/turn-over frequency in Hz.
+    a : `float`
+        Spectral Index.
+    beta : `float`
+        The smoothness of the turn-over.
+    c : `float`
+        Constant.
+    v0 : `float`
+        Reference frequency.
+
+    Returns
+    -------
+    S_v : `list`
+        The flux density predicted by the model.
+    """
+    x = v / v0
+    xc = vc / v0
+    xpeak = v / vpeak
+    y1 = c*x**a * ( 1 - x / xc ) * np.exp( a / beta * xpeak**(-beta) )
+    y2 = 0.
+    return np.where(x < xc, y1, y2)
 
 def model_settings(print_models=False):
     """Holds metadata about spectral models such as common names and default fit parameters.
@@ -204,37 +240,71 @@ def model_settings(print_models=False):
 
         {model_name: [model_function, short_name, start_params, mod_limits]}
     """
+    # fit starting value, min and max
+    # constant
+    c_s = 1.
+    c_min = 0.
+    c_max = None
+    # spectral index
+    a_s = 1.6
+    a_min = -8.
+    a_max = 3.
+    # Beta, he smoothness of the turn-over
+    beta_s = 1.
+    beta_min = 0.1
+    beta_max = 5.
+    # High frequency cut off frequency
+    vc_s = 4e9
+    vc_both = None # will set the cut off frequency based on the data set's frequency range
+    # Lof frequency turn over frequency peak
+    vpeak_s = 100e6
+    vpeak_min = 10e6
+    vpeak_max = 2e9
+
+
     model_dict = {
         # Name: [model_function, short_name, start_params, mod_limits]
         "simple_power_law" : [
             simple_power_law,
             "simple pl",
-            (-1.6, 0.003),
-            [(None, 0), (0, None)],
+            # (a, c)
+            (a_s, c_s),
+            [(a_min, a_max), (c_min, c_max)],
         ],
         "broken_power_law" : [
             broken_power_law,
             "broken pl",
-            (1e9, -1.6, -1.6, 0.1),
-            [(50e6, 5e9), (-5, 5), (-5, 5), (0, None)],
+            #(vb, a1, a2, c)
+            (1e9, a_s, a_s, c_s),
+            [(50e6, 5e9), (a_min, a_max), (a_min, a_max), (c_min, c_max)],
         ],
         "log_parabolic_spectrum" : [
             log_parabolic_spectrum,
             "lps",
-            (-1, -1., 1.),
-            [(-5, 2), (-5, 2), (None, None)],
+            #(a, b, c)
+            (-1, -1., c_s),
+            [(-5, 2), (-5, 2), (None, c_max)],
         ],
         "high_frequency_cut_off_power_law" : [
             high_frequency_cut_off_power_law,
             "pl hard cut-off",
-            (4e9, 1.),
-            [None, (0, None)], # will set the cut off frequency based on the data set's frequency range
+            #(vc, a, c)
+            (vc_s, a_s, c_s),
+            [vc_both, (a_min, 0.), (c_min, c_max)],
         ],
         "low_frequency_turn_over_power_law" : [
             low_frequency_turn_over_power_law,
             "pl low turn-over",
-            (100e6, -2.5, 1.e1, 1.),
-            [(10e6, 2e9), (-5, -.5), (0, 1e4) , (.1, 2.1)],
+            #(vpeak, a, c, beta)
+            (vpeak_s, a_s, c_s, beta_s),
+            [(vpeak_min, vpeak_max), (a_min, 0.), (c_min, c_max) , (beta_min, beta_max)],
+        ],
+        "double_turn_over_spectrum" : [
+            double_turn_over_spectrum,
+            "double turn over spectrum",
+            #(vc, vpeak, a, beta, c)
+            (vc_s, vpeak_s, a_s, beta_s, c_s),
+            [(vc_both), (vpeak_min, vpeak_max), (a_min, 0.), (beta_min, beta_max), (c_min, c_max)],
         ],
         #"double_broken_power_law" : [
         #    double_broken_power_law,

@@ -2,17 +2,34 @@
 """
 Tests the spectral_fit.py script
 """
+
 import os
 import numpy as np
 from numpy.testing import assert_almost_equal
 import csv
+import sys
 
-from pulsar_spectra import catalogue
 from pulsar_spectra.spectral_fit import find_best_spectral_fit
-from pulsar_spectra.catalogue import collect_catalogue_fluxes, convert_cat_list_to_dict
+from pulsar_spectra.catalogue import collect_catalogue_fluxes
 
 import logging
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
+# formatter = logging.Formatter('%(asctime)s  %(name)s  %(lineno)-4d  %(levelname)-9s :: %(message)s')
+# ch = logging.StreamHandler()
+# ch.setFormatter(formatter)
+# # Set up local logger
+# logger.setLevel(logging.DEBUG)
+# logger.addHandler(ch)
+# logger.propagate = False
+# # Loop over imported vcstools modules and set up their loggers
+# for imported_module in sys.modules.keys():
+#     if imported_module.startswith('pulsar_spectra'):
+#         logging.getLogger(imported_module).setLevel(logging.DEBUG)
+#         logging.getLogger(imported_module).addHandler(ch)
+#         logging.getLogger(imported_module).propagate = False
+
 
 
 def test_find_best_spectral_fit():
@@ -22,6 +39,8 @@ def test_find_best_spectral_fit():
     #print(cat_dict)
     #pulsars = ['J0034-0534','J0953+0755', 'J1645-0317']
     #pulsars = ['J0820-1350', 'J0835-4510', 'J0837+0610', 'J0953+0755', 'J1453-6413', 'J1456-6843', 'J1645-0317', 'J1731-4744', "J0332+5434"]
+    # three of jankowski's hard cut off frequencies
+    pulsars = ['J1707-4053', 'J1751-4657', 'J1903-0632']
     #           spl           bpl           lps           hfto          lfto
     pulsars = ['J0034-0534', 'J0835-4510', 'J1141-6545', 'J1751-4657', 'J0953+0755']
     ref_markers = {

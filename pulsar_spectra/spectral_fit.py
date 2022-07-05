@@ -1,5 +1,5 @@
 """
-Function used to fit different spectral models to the fluxs_mJy densities of pulsars
+Functions used to fit different spectral models to the fluxs_mJy densities of pulsars
 """
 
 import numpy as np
@@ -77,6 +77,41 @@ def huber_loss_function(sq_resi, k=1.345):
         return rho[0]
     else:
         return rho
+
+
+def propagate_flux_n_err(freqs, model, iminuit_result):
+    """Propagate the flux based on an input model and use the iminuit to calculate errors if possible.
+
+    Parameters
+    ----------
+    freqs : `list`
+        List of frequencies in MHz.
+    model : `function`
+        The spectral model function from :py:meth:`pulsar_spectra.models`.
+    iminuit_result : `iminuit.Minuit`
+        The Minuit class after being fit in :py:meth:`pulsar_spectra.spectral_fit.iminuit_fit_spectral_model`.
+
+    Returns
+    -------
+    fitted_flux : `list`
+        A list of the fluxes based on the input model and fit results.
+    fitted_flux_err : `list`
+        A list of flux errors if possible or Nones if not possible.
+    """
+    if iminuit_result.valid:
+        try:
+            fitted_flux, fitted_flux_cov = propagate(lambda p: model(freqs * 1e6, *p) * 1e3, iminuit_result.values, iminuit_result.covariance)
+        except ValueError:
+            fitted_flux = model(freqs * 1e6, *iminuit_result.values) * 1e3
+            fitted_flux_err = [None]*len(fitted_flux)
+        else:
+            fitted_flux_err = np.diag(fitted_flux_cov) ** 0.5
+    else:
+        # No convariance values so use old method
+        fitted_flux = model(freqs * 1e6, *iminuit_result.values) * 1e3
+        fitted_flux_err = [None]*len(fitted_flux)
+    return fitted_flux, fitted_flux_err
+
 
 def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fit_info,
              plot_error=True, save_name="fit.png", alternate_style=False, axis=None,
@@ -194,11 +229,8 @@ def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fi
         # Use input fit range
         min_freq, max_freq = fit_range
         fitted_freq = np.logspace(np.log10(min_freq), np.log10(max_freq), 100)
-    if iminuit_result.valid:
-        fitted_flux, fitted_flux_cov = propagate(lambda p: model(fitted_freq * 1e6, *p) * 1e3, iminuit_result.values, iminuit_result.covariance)
-    else:
-        # No convariance values so use old method
-        fitted_flux = model(fitted_freq * 1e6, *iminuit_result.values) * 1e3
+
+    fitted_flux, fitted_flux_prop = propagate_flux_n_err(fitted_freq, model, iminuit_result)
 
     # Plot fit line
     if alternate_style:
@@ -210,9 +242,8 @@ def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fi
     else:
         ax.plot(fitted_freq, fitted_flux, 'k--', label=fit_info)
 
-    if plot_error and iminuit_result.valid:
+    if plot_error and iminuit_result.valid and fitted_flux_prop[0] is not None:
         # draw 1 sigma error band
-        fitted_flux_prop = np.diag(fitted_flux_cov) ** 0.5
         if secondary_fit:
             facecolor = "r"
             alpha = 0
@@ -323,9 +354,10 @@ def iminuit_fit_spectral_model(
     start_params += (v0_Hz,)
     mod_limits += [None]
 
-    if model_name == "high_frequency_cut_off_power_law" and mod_limits[0] is None:
+    if (model_name == "high_frequency_cut_off_power_law" or model_name == "double_turn_over_spectrum") and mod_limits[0] is None:
         # will set the cut off frequency based on the data set's frequency range
-        mod_limits[0] = (min(freqs_Hz), 100 * max(freqs_Hz))
+        mod_limits[0] = (max(freqs_Hz), 100 * max(freqs_Hz))
+        logger.debug(f"HFCO cut off frequency limits (Hz): {mod_limits[0]}")
 
     # Check if enough inputs
     k = len(start_params)-1 # number of free model parameters
@@ -347,7 +379,7 @@ def iminuit_fit_spectral_model(
     """
     m.tol=0.000005 # low tolerace improves likelihood of a sensible fit
     m.limits = mod_limits # limits are primarily to assist the scan minimiser
-    migrad_calls = 20000 # more calls, better fit
+    migrad_calls = 50000 # more calls, better fit
     ncall = 20000 # for simplex and scan
     m.migrad(ncall=migrad_calls)
     if m.valid:
@@ -443,16 +475,17 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
     p_category : `str`
         Category based on the quality of spectral fit, as defined in Jankowski et al. (2018).
     """
+    # Load model settings
+    model_dict = model_settings()
+
     # Prepare plots and fitting frequencies
     if plot_compare:
         # Set up plots
-        nrows = 5
+        nrows = len(model_dict)
         plot_size = 4
         fitted_freqs_MHz = np.logspace(np.log10(min(freqs_MHz)), np.log10(max(freqs_MHz)), 100)
         fig, axs = plt.subplots(nrows, 1, figsize=(plot_size, plot_size * nrows))
 
-    # Load model settings
-    model_dict = model_settings()
     aics = []
     iminuit_results = []
     fit_infos = []
@@ -556,13 +589,7 @@ def estimate_flux_density(
     model_dict = model_settings()
     model = model_dict[model_name][0]
 
-    if iminuit_result.valid:
-        fitted_flux, fitted_flux_cov = propagate(lambda p: model(est_freq * 1e6, *p) * 1e3, iminuit_result.values, iminuit_result.covariance)
-        fitted_flux_err = np.diag(fitted_flux_cov) ** 0.5
-    else:
-        # No convariance values so use old method
-        fitted_flux = model(est_freq * 1e6, *iminuit_result.values) * 1e3
-        fitted_flux_err = [None]*len(fitted_flux)
+    fitted_flux, fitted_flux_err = propagate_flux_n_err(est_freq, model, iminuit_result)
 
     if single_value:
         return fitted_flux[0], fitted_flux_err[0]
