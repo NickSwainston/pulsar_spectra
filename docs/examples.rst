@@ -143,7 +143,7 @@ Calculate the peak frequency for a log parabolic spectrum fit
 
 You can use the pulsar's fit to calculate the peak frequency like so:
 
-.. script location: example_scripts/estimate_flux.py
+.. script location: example_scripts/peak_frequency_lps.py
 .. code-block:: python
 
     from pulsar_spectra.spectral_fit import find_best_spectral_fit
@@ -172,3 +172,32 @@ Which will output
 .. code-block::
 
     v_peak (MHz):  99.77 +/-   6.51
+
+Estimate emission height from a high-frequency cut-off power-law fit
+--------------------------------------------------------------------
+
+As demonstrated in Jankowski et al. (2018), we can use the high-frequency cut-off power-law model
+from Kontorovich & Flanchick (2013) to estimate the location of the centre of the magnetic polar cap,
+assuming a canonical neutron star (radius of 10 km) and a dipole magnetic field. To perform this
+calculation, use the in-built function as follows:
+
+.. script location: example_scripts/estimate_emission_height.py
+.. code-block:: python
+
+    from pulsar_spectra.models import calc_high_frequency_cutoff_emission_height
+
+    B_pc, u_B_pc, z_e, u_z_e, r_LC, u_r_LC, z_percent, u_z_percent = calc_high_frequency_cutoff_emission_height("J0452-1759", 1.5e9, 25e6)
+
+    print(f"B_pc:   ({B_pc/1e11:.2f} +/- {u_B_pc/1e11:.2f})x10^11 G")
+    print(f"z_e:    {z_e:.1f} +/- {u_z_e:.1f} km")
+    print(f"R_LC:   {r_LC:.7f} +/- {u_r_LC:.7f} km")
+    print(f"z/R_LC: {z_percent:.3f} +/- {u_z_percent:.3f} %")
+
+Which will output
+
+.. code-block::
+
+    B_pc:   (0.22 +/- 0.01)x10^11 G
+    z_e:    43.2 +/- 0.5 km
+    R_LC:   26184.4009511 +/- 0.0000001 km
+    z/R_LC: 0.165 +/- 0.002 %

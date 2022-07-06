@@ -3,6 +3,8 @@ Spectral models from Jankowski et al. 2018 and references within
 """
 
 import numpy as np
+from math import pi
+from psrqpy import QueryATNF
 
 def simple_power_law(v, a, c, v0):
     """Simple power law:
@@ -159,6 +161,66 @@ def high_frequency_cut_off_power_law(v, vc, a, c, v0):
     y1 = c*x**a * ( 1 - x / xc )
     y2 = 0.
     return np.where(x < xc, y1, y2)
+
+def calc_high_frequency_cutoff_emission_height(psrname, v_c, u_v_c):
+    """Calculate emission height using high-frequency cut-off model (:py:meth:`pulsar_spectra.models.high_frequency_cut_off_power_law`).
+    Details on the calculation procedure can be found in Jankowski et al. (2018) and Lee et al. (2022).
+
+    Parameters
+    ----------
+    psrname : `string`
+        Pulsar name.
+    v_c : `float`
+        Cut-off frequency in units of Hz.
+    u_v_c : `float`
+        Uncertainty in cut-off frequency in units of Hz.
+    
+    Returns
+    -------
+    B_pc : `float`
+        Magnetic field strength at the centre of the polar cap in units of Gauss.
+    u_B_pc : `float`
+        Uncertainty of B_pc in Gauss.
+    z_e : `float`
+        Estimated emission height (i.e. the altitude of the centre of the polar cap) in km.
+    u_z_e : `float`
+        Uncertainty of z_e in km.
+    r_LC : `float`
+        Light cylinder radius in km.
+    u_r_LC : `float`
+        Uncertainty of r_LC in km.
+    z_percent : `float`
+        Estimated emission height as a percentage of light-cylinder radius.
+    u_z_percent : `float`
+        Uncertainty of z_percent as a percentage of light-cylinder radius.
+    """
+    m_e = 9.1094e-28 # electron mass (g)
+    c0 = 2.99792458e10 # speed of light (cm s^{-1})
+    e = 4.8032e-10 # electron charge (cm^{3/2} g^{1/2} s^{-1})
+    z_surf = 10 # canonical neutron star radius (km)
+    c_LC = 4.77e4 # light cylinder calculation constant (km s^{-1})
+    c_B = m_e*c0/(pi*e) # magnetic field calculation constant
+
+    query = QueryATNF(params=["P0", "P0_ERR", "BSurf"], psrs=[psrname])
+    psrs = query.get_pulsars()
+
+    P = psrs[psrname].P0 # pulsar period (s)
+    u_P = psrs[psrname].P0_ERR
+    B_surf = psrs[psrname].BSurf # magnetic flux at neutron star surface (G)
+
+    B_pc = c_B*P*v_c**2
+    u_B_pc = c_B*v_c*np.sqrt((u_P*v_c)**2 + (2*u_v_c*P)**2)
+
+    z_e = z_surf*(B_pc/B_surf)**(-1/3)
+    u_z_e = u_B_pc*z_surf/3*(B_pc**4/B_surf)**(-1/3)
+
+    r_LC = c_LC*P
+    u_r_LC = c_LC*u_P
+
+    z_percent = z_e/r_LC*100
+    u_z_percent = np.sqrt(u_z_e**2 + (u_r_LC*z_e/r_LC)**2)*100/r_LC
+
+    return B_pc, u_B_pc, z_e, u_z_e, r_LC, u_r_LC, z_percent, u_z_percent
 
 def low_frequency_turn_over_power_law(v, vpeak, a, c, beta, v0):
     """power law with low-frequency turn-over:
