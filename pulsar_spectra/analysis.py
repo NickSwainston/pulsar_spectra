@@ -44,9 +44,9 @@ def calc_high_frequency_cutoff_emission_height(psrname, v_c, u_v_c, z_surf=12, u
         Cut-off frequency in units of Hz.
     u_v_c : `float`
         Uncertainty in cut-off frequency in units of Hz.
-    z_surf : `float`
+    z_surf : `float`, optional
         Radius of the neutron star in km. |br| Default: 12.
-    u_z_surf : `float`
+    u_z_surf : `float`, optional
         Uncertainty on the radius of the neutron star in km. |br| Default: 2.
 
     Returns
