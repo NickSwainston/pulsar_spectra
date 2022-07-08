@@ -29,3 +29,9 @@ spectral_fit
 
 .. automodule:: pulsar_spectra.spectral_fit
     :members:
+
+analysis
+========
+
+.. automodule:: pulsar_spectra.analysis
+    :members:
