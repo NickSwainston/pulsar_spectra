@@ -1,6 +1,6 @@
 from pulsar_spectra.spectral_fit import find_best_spectral_fit
 from pulsar_spectra.catalogue import collect_catalogue_fluxes
-from pulsar_spectra.models import calc_high_frequency_cutoff_emission_height
+from pulsar_spectra.analysis import calc_high_frequency_cutoff_emission_height
 
 cat_dict = collect_catalogue_fluxes()
 pulsar = 'J0452-1759'
