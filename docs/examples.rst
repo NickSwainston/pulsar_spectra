@@ -196,7 +196,7 @@ To perform this calculation, use the in-built function as follows:
         B_pc, u_B_pc, B_surf, B_lc, r_lc, z_e, u_z_e, z_percent, u_z_percent = calc_high_frequency_cutoff_emission_height(
             pulsar, 
             m.values[0],
-            m.values[0],
+            m.errors[0],
         )
         print(f"B_pc:    ({B_pc/1e11:.2f} +/- {u_B_pc/1e11:.2f})x10^11 G")
         print(f"B_surf:  {B_surf/1e12:.2f}x10^12 G")
@@ -211,9 +211,9 @@ Which will output
 
 .. code-block::
 
-    B_pc:    (0.22 +/- 0.44)x10^11 G
+    B_pc:    (0.22 +/- 0.01)x10^11 G
     B_surf:  1.80x10^12 G
     B_LC:    101.92 G
     R_LC:    26184 km
-    z_e:     52.0 +/- 35.8 km
-    z/R_LC:  0.20 +/- 0.14 %
+    z_e:     52.0 +/- 8.7 km
+    z/R_LC:  0.20 +/- 0.03 %
