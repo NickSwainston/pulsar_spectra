@@ -1,6 +1,6 @@
 from pulsar_spectra.spectral_fit import find_best_spectral_fit
 from pulsar_spectra.catalogue import collect_catalogue_fluxes
-from pulsar_spectra.models import calc_log_parabolic_spectrum_max_freq
+from pulsar_spectra.analysis import calc_log_parabolic_spectrum_max_freq
 
 cat_dict = collect_catalogue_fluxes()
 pulsar = 'J1136+1551'
