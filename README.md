@@ -1,6 +1,12 @@
 pulsar_spectra
 ======
-
+<div class="bg-gray-dark" align="center" style="background-color:#24292e">
+<img src="docs/logos/logo_white.svg" height="150px" alt="pulsar_spetra logo">
+<br/>
+<a href='https://all-pulsar-spectra.readthedocs.io/en/latest/?badge=latest'>
+    <img src='https://readthedocs.org/projects/all-pulsar-spectra/badge/?version=latest' alt='Documentation Status' />
+</a>
+</div>
 A simple interface to record pulsar's flux density measurements for a large number of papers and perform fitting of spectral models.
 
 
