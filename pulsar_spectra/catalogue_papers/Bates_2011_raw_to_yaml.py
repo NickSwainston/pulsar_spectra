@@ -46,7 +46,7 @@ for row in lines[17:]:
                 pulsar_dict[pulsar]["Flux Density error mJy"]
             )
 
-json = json.dumps(pulsar_dict, indent=4)
+json = json.dumps(pulsar_dict, indent=1)
 with open("Bates_2011.yaml", "w") as cat_file:
     cat_file.write(json)
 print(pulsar_dict)
