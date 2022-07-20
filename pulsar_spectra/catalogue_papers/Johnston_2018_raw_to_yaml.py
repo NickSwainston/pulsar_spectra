@@ -1,7 +1,7 @@
 import json
 import csv
 
-with open("Jankowski_2018b_raw.tsv") as file:
+with open("Johnston_2018_raw.tsv") as file:
     tsv_file = csv.reader(file, delimiter="\t")
     lines = []
     for line in tsv_file:
@@ -23,6 +23,6 @@ for row in lines:
                             "Flux Density mJy":[round(float(row[1]),1)],
                             "Flux Density error mJy":[round(float(row[1])*.2,1)]}
 
-with open("Jankowski_2018b.yaml", "w") as cat_file:
-    cat_file.write(json.dumps(pulsar_dict))
+with open("Johnston_2018.yaml", "w") as cat_file:
+    cat_file.write(json.dumps(pulsar_dict, indent=1))
 print(pulsar_dict)

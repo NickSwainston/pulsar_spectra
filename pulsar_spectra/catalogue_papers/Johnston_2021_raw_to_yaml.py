@@ -14,5 +14,5 @@ for row in lines[1:]:
     pulsar_dict[pulsar] = {"Frequency MHz":[1400.], "Flux Density mJy":[flux], "Flux Density error mJy":[flux_err]}
 
 with open("Johnston_2021.yaml", "w") as cat_file:
-    cat_file.write(json.dumps(pulsar_dict))
+    cat_file.write(json.dumps(pulsar_dict, indent=1))
 print(pulsar_dict)

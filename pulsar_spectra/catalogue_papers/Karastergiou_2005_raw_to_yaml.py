@@ -20,5 +20,5 @@ for row in lines:
         pulsar_dict[pulsar]["Flux Density error mJy"] += [float(row[2])*0.5]
 
 with open("Karastergiou_2005.yaml", "w") as cat_file:
-    cat_file.write(json.dumps(pulsar_dict))
+    cat_file.write(json.dumps(pulsar_dict, indent=1))
 print(pulsar_dict)

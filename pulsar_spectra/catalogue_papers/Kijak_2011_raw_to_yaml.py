@@ -28,7 +28,7 @@ for row in lines:
             pulsar_dict[pulsar]["Flux Density mJy"] += [float(flux)]
             pulsar_dict[pulsar]["Flux Density error mJy"] += [float(flux_err)]
 
-json = json.dumps(pulsar_dict)
+json = json.dumps(pulsar_dict, indent=1)
 with open("Kijak_2011.yaml", "w") as cat_file:
     cat_file.write(json)
 print(pulsar_dict)

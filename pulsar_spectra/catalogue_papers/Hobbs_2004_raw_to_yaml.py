@@ -46,5 +46,5 @@ for row in lines[369:]:
         pulsar_dict[pulsar]["Flux Density error mJy"] += [round(float(row[4]) * 0.1, 4)]
 
 with open("Hobbs_2004.yaml", "w") as cat_file:
-    cat_file.write(json.dumps(pulsar_dict))
+    cat_file.write(json.dumps(pulsar_dict, indent=1))
 print(pulsar_dict)
