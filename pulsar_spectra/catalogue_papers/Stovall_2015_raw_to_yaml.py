@@ -25,5 +25,5 @@ for row in lines:
         pulsar_dict[pulsar] = {"Frequency MHz":[float(row[1])], "Flux Density mJy":[float(flux)], "Flux Density error mJy":[float(flux_err[:-1])]}
 
 with open("Stovall_2015.yaml", "w") as cat_file:
-    cat_file.write(json.dumps(pulsar_dict))
+    cat_file.write(json.dumps(pulsar_dict, indent=1))
 print(pulsar_dict)

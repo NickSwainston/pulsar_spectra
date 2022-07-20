@@ -16,7 +16,7 @@ for row in raw[1:]:
         flux_errs.append(float(flux_err))
 
     pulsar_dict[pulsar] = {"Frequency MHz":freqs, "Flux Density mJy":fluxs, "Flux Density error mJy":flux_errs}
-json = json.dumps(pulsar_dict)
+json = json.dumps(pulsar_dict, indent=1)
 with open("Han_2016.yaml", "w") as cat_file:
     cat_file.write(json)
 print(pulsar_dict)

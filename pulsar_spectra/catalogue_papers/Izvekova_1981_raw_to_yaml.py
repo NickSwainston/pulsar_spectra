@@ -64,5 +64,5 @@ for row in lines[2:]:
         pulsar_dict[pulsar]["Flux Density error mJy"] += [float(flux_err)*1e3/query['P0'][pid]]
 
 with open("Izvekova_1981.yaml", "w") as cat_file:
-    cat_file.write(json.dumps(pulsar_dict))
+    cat_file.write(json.dumps(pulsar_dict, indent=1))
 print(pulsar_dict)
