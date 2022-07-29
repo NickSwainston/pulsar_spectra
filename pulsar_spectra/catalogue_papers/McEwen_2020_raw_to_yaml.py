@@ -19,10 +19,10 @@ for row in lines:
 
     pulsar = row[0].strip().replace("–", "-")
 
-    flux = float(row[1])
-    flux_err = float(row[2])
+    flux = round(float(row[1]), 1)
+    flux_err = round(float(row[2]), 1)
     pulsar_dict[pulsar] = {"Frequency MHz":[350.], "Flux Density mJy":[flux], "Flux Density error mJy":[flux_err]}
 
-with open("McEwen_2022.yaml", "w") as cat_file:
+with open("McEwen_2020.yaml", "w") as cat_file:
     cat_file.write(json.dumps(pulsar_dict, indent=1))
 print(pulsar_dict)
