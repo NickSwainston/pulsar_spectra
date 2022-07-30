@@ -85,6 +85,7 @@ ads_dict = {
     "Lorimer_2006": "https://ui.adsabs.harvard.edu/abs/2006MNRAS.372..777L/abstract",
     "Kramer_2003": "https://ui.adsabs.harvard.edu/abs/2003MNRAS.342.1299K/abstract",
     "Han_2021" : "https://ui.adsabs.harvard.edu/abs/2021RAA....21..107H/abstract",
+    "Dembska_2014": "https://ui.adsabs.harvard.edu/abs/2014MNRAS.445.3105D/abstract",
 }
 # Loop over catalogues and put them into a dictionary
 for cat_file in CAT_YAMLS:
