@@ -32,7 +32,7 @@ def convert_csv_to_yaml(csv_location, ref_label):
 
     # Dump the dict to the jsonfile in the catalogue directory
     with open(f"{os.path.dirname(os.path.realpath(__file__))}/../pulsar_spectra/catalogue_papers/{ref_label}.yaml", "w") as cat_file:
-        cat_file.write(json.dumps(pulsar_dict))
+        cat_file.write(json.dumps(pulsar_dict, indent=1))
 
     print("\nCatalogue data written:")
     print(json.dumps(pulsar_dict, indent=4))
