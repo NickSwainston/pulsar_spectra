@@ -278,7 +278,7 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None):
     # refs that are correct but where scaled to by their spectral index for the ATNF frequencies
     antf_adjusted_refs = ["Lorimer_1995", "Stovall_2015", "Sanidas_2019"]
     # refs that were rounded to different decimal places than the publications
-    antf_rounded_refs = ["Johnston_2018", "Dai_2015"]
+    antf_rounded_refs = ["Johnston_2018", "Dai_2015", "McEwen_2020"]
     for jname in jnames:
         for ref in antf_dict[jname].keys():
             # Remove "_antf" from the end of  the reference
