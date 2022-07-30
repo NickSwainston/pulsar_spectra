@@ -4,7 +4,9 @@ import argparse
 import json
 import csv
 import os
+import psrqpy
 
+query = psrqpy.QueryATNF(params=['PSRJ', 'NAME', 'PSRB']).pandas
 
 def convert_csv_to_yaml(csv_location, ref_label):
     pulsar_dict = {}
@@ -27,6 +29,11 @@ def convert_csv_to_yaml(csv_location, ref_label):
                 print(f"Error on row: {row}")
             # Make sure there are no weird dash characters in the pulsar name
             pulsar = pulsar.replace("–", "-").replace("−", "-")
+            if pulsar.startswith("B"):
+                # convert from Bname to Jname
+                pid = list(query['PSRB']).index(pulsar)
+                pulsar = query['PSRJ'][pid]
+
             if pulsar in pulsar_dict.keys():
                 # Append the new data
                 pulsar_dict[pulsar]["Frequency MHz"].append(float(freq))
