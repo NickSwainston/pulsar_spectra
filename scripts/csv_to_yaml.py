@@ -18,7 +18,13 @@ def convert_csv_to_yaml(csv_location, ref_label):
         for row in spamreader:
             #logger.debug(row)
             print(row)
-            pulsar, freq, flux, flux_err = row
+            if len(row) == 4:
+                pulsar, freq, flux, flux_err = row
+            elif len(row) == 3:
+                pulsar, freq, flux = row
+                flux_err = float(flux) * 0.5
+            else:
+                print(f"Error on row: {row}")
             # Make sure there are no weird dash characters in the pulsar name
             pulsar = pulsar.replace("–", "-").replace("−", "-")
             if pulsar in pulsar_dict.keys():
