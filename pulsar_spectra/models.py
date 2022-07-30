@@ -249,13 +249,13 @@ def model_settings(print_models=False):
             (1e9, a_s, a_s, c_s),
             [(50e6, 5e9), (a_min, a_max), (a_min, a_max), (c_min, c_max)],
         ],
-        "log_parabolic_spectrum" : [
-            log_parabolic_spectrum,
-            "lps",
-            #(a, b, c)
-            (-1, -1., c_s),
-            [(-5, 2), (-5, 2), (None, c_max)],
-        ],
+        # "log_parabolic_spectrum" : [
+        #     log_parabolic_spectrum,
+        #     "lps",
+        #     #(a, b, c)
+        #     (-1, -1., c_s),
+        #     [(-5, 2), (-5, 2), (None, c_max)],
+        # ],
         "high_frequency_cut_off_power_law" : [
             high_frequency_cut_off_power_law,
             "pl hard cut-off",
