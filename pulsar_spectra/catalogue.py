@@ -61,7 +61,7 @@ def convert_antf_ref(ref_code, ref_dict=None):
         if ref_part.endswith('.') and len(ref_part) == 5 and ref_part[:-1].isnumeric():
             year = ref_part[:-1]
         elif ref_part.endswith('.') and len(ref_part) == 6 and ref_part[:-2].isnumeric():
-            year = ref_part[:-2]
+            year = ref_part[:-1]
     return f"{author}_{year}"
 
 
