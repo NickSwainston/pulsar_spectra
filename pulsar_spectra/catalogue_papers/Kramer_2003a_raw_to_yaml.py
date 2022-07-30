@@ -1,7 +1,7 @@
 import json
 import csv
 
-with open("Kramer_2003_raw.tsv", "r") as raw_file:
+with open("Kramer_2003a_raw.tsv", "r") as raw_file:
     tsv_file = csv.reader(raw_file, delimiter="\t")
     lines = []
     for line in tsv_file:
@@ -23,6 +23,6 @@ for row in lines:
     flux_err = float(row[2])
     pulsar_dict[pulsar] = {"Frequency MHz":[1400.], "Flux Density mJy":[flux], "Flux Density error mJy":[flux_err]}
 
-with open("Kramer_2003.yaml", "w") as cat_file:
+with open("Kramer_2003a.yaml", "w") as cat_file:
     cat_file.write(json.dumps(pulsar_dict, indent=1))
 print(pulsar_dict)
