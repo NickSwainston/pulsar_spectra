@@ -66,7 +66,7 @@ ads_dict = {
     "Han_2016": "https://ui.adsabs.harvard.edu/abs/2016RAA....16..159H/abstract",
     "Murphy_2017": "https://ui.adsabs.harvard.edu/abs/2017PASA...34...20M/abstract",
     "Kijak_2017": "https://ui.adsabs.harvard.edu/abs/2017ApJ...840..108K/abstract",
-    "Hobbs_2004": "https://ui.adsabs.harvard.edu/abs/2004MNRAS.352.1439H/abstract",
+    "Hobbs_2004a": "https://ui.adsabs.harvard.edu/abs/2004MNRAS.352.1439H/abstract",
     "Johnston_1993": "https://ui.adsabs.harvard.edu/abs/1993Natur.361..613J/abstract",
     "Stovall_2015": "https://ui.adsabs.harvard.edu/abs/2015ApJ...808..156S/abstract",
     "Xue_2017": "https://ui.adsabs.harvard.edu/abs/2017PASA...34...70X/abstract",
