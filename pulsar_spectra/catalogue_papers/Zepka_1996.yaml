@@ -1,0 +1,16 @@
+{
+ "J0631+1036": {
+  "Frequency MHz": [
+   430,
+   1400,
+  ],
+  "Flux Density mJy": [
+   1.5,
+   0.8,
+  ],
+  "Flux Density error mJy": [
+   0.75,
+   0.4,
+  ]
+ },
+}
