@@ -270,13 +270,13 @@ def model_settings(print_models=False):
             (vpeak_s, a_s, c_s, beta_s),
             [(vpeak_min, vpeak_max), (a_min, 0.), (c_min, c_max) , (beta_min, beta_max)],
         ],
-        "double_turn_over_spectrum" : [
-            double_turn_over_spectrum,
-            "double turn over spectrum",
-            #(vc, vpeak, a, beta, c)
-            (vc_s, vpeak_s, a_s, beta_s, c_s),
-            [(vc_both), (vpeak_min, vpeak_max), (a_min, 0.), (beta_min, beta_max), (c_min, c_max)],
-        ],
+        # "double_turn_over_spectrum" : [
+        #     double_turn_over_spectrum,
+        #     "double turn over spectrum",
+        #     #(vc, vpeak, a, beta, c)
+        #     (vc_s, vpeak_s, a_s, beta_s, c_s),
+        #     [(vc_both), (vpeak_min, vpeak_max), (a_min, 0.), (beta_min, beta_max), (c_min, c_max)],
+        # ],
         #"double_broken_power_law" : [
         #    double_broken_power_law,
         #    "double bpl",
