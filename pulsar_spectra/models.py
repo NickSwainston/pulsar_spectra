@@ -223,7 +223,7 @@ def model_settings(print_models=False):
     # Beta, he smoothness of the turn-over
     beta_s = 1.
     beta_min = 0.1
-    beta_max = 5.
+    beta_max = 2.1
     # High frequency cut off frequency
     vc_s = 4e9
     vc_both = None # will set the cut off frequency based on the data set's frequency range
