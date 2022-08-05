@@ -1,6 +1,8 @@
 #! /usr/bin/env python
 
-from pulsar_spectra.catalogue import collect_catalogue_fluxes
+import os
+
+from pulsar_spectra.catalogue import collect_catalogue_fluxes, CAT_YAMLS, ADS_REF
 
 import logging
 logger = logging.getLogger(__name__)
@@ -35,6 +37,16 @@ def test_ref_duplicates_removed():
                 ref_ps.append(ref)
         for ref in ref_atnf:
             assert ref not in ref_ps
+
+
+def test_missing_ads_refs():
+    """Check there are ADS references for all included publications.
+    """
+    for cat_file in CAT_YAMLS:
+        cat_ref = os.path.basename(cat_file).split(".")[0]
+        print(cat_ref)
+        assert cat_ref in ADS_REF
+
 
 # TODO finish below
 def todo_test_for_duplicate_data():

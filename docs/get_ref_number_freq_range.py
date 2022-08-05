@@ -2,7 +2,7 @@ import psrqpy
 import yaml
 
 from pulsar_spectra.catalogue import all_flux_from_atnf
-from pulsar_spectra.catalogue import CAT_YAMLS
+from pulsar_spectra.catalogue import CAT_YAMLS, ADS_REF
 
 paper_format = False
 
@@ -43,64 +43,7 @@ if paper_format:
 else:
     print(f'"ATNF pulsar catalogue","{pulsar_count}","{int(min(all_freq))}-{int(max(all_freq))}","`Catalogue website <https://www.atnf.csiro.au/research/pulsar/psrcat/>`_"')
 
-# dictionary of ADS links
-ads_dict = {
-    "Sieber_1973": "https://ui.adsabs.harvard.edu/abs/1973A%26A....28..237S/abstract",
-    "Bartel_1978": "https://ui.adsabs.harvard.edu/abs/1978A%26A....68..361B/abstract",
-    "Izvekova_1981": "https://ui.adsabs.harvard.edu/abs/1981Ap%26SS..78...45I/abstract",
-    "Lorimer_1995": "https://ui.adsabs.harvard.edu/abs/1995MNRAS.273..411L/abstract",
-    "van_Ommen_1997": "https://ui.adsabs.harvard.edu/abs/1997MNRAS.287..307V/abstract",
-    "Maron_2000": "https://ui.adsabs.harvard.edu/abs/2000A%26AS..147..195M/abstract",
-    "Malofeev_2000": "https://ui.adsabs.harvard.edu/abs/2000ARep...44..436M/abstract",
-    "Karastergiou_2005": "https://ui.adsabs.harvard.edu/abs/2005MNRAS.359..481K/abstract",
-    "Johnston_2006": "https://ui.adsabs.harvard.edu/abs/2006MNRAS.369.1916J/abstract",
-    "Kijak_2007": "https://ui.adsabs.harvard.edu/abs/2007A%26A...462..699K/abstract",
-    "Keith_2011": "https://ui.adsabs.harvard.edu/abs/2011MNRAS.416..346K/abstract",
-    "Bates_2011": "https://ui.adsabs.harvard.edu/abs/2011MNRAS.411.1575B/abstract",
-    "Kijak_2011": "https://ui.adsabs.harvard.edu/abs/2011A%26A...531A..16K/abstract",
-    "Zakharenko_2013": "https://ui.adsabs.harvard.edu/abs/2013MNRAS.431.3624Z/abstract",
-    "Dai_2015": "https://ui.adsabs.harvard.edu/abs/2015MNRAS.449.3223D/abstract",
-    "Basu_2016": "https://ui.adsabs.harvard.edu/abs/2016MNRAS.458.2509B/abstract",
-    "Bell_2016": "https://ui.adsabs.harvard.edu/abs/2016MNRAS.461..908B/abstract",
-    "Bilous_2016": "https://ui.adsabs.harvard.edu/abs/2016A%26A...591A.134B/abstract",
-    "Han_2016": "https://ui.adsabs.harvard.edu/abs/2016RAA....16..159H/abstract",
-    "Murphy_2017": "https://ui.adsabs.harvard.edu/abs/2017PASA...34...20M/abstract",
-    "Kijak_2017": "https://ui.adsabs.harvard.edu/abs/2017ApJ...840..108K/abstract",
-    "Hobbs_2004a": "https://ui.adsabs.harvard.edu/abs/2004MNRAS.352.1439H/abstract",
-    "Johnston_1993": "https://ui.adsabs.harvard.edu/abs/1993Natur.361..613J/abstract",
-    "Stovall_2015": "https://ui.adsabs.harvard.edu/abs/2015ApJ...808..156S/abstract",
-    "Xue_2017": "https://ui.adsabs.harvard.edu/abs/2017PASA...34...70X/abstract",
-    "Jankowski_2018": "https://ui.adsabs.harvard.edu/abs/2018MNRAS.473.4436J/abstract",
-    "Bondonneau_2020": "https://ui.adsabs.harvard.edu/abs/2020A%26A...635A..76B/abstract",
-    "Johnston_2021": "https://ui.adsabs.harvard.edu/abs/2021MNRAS.502.1253J/abstract",
-    "Taylor_1993": "https://ui.adsabs.harvard.edu/abs/1993ApJS...88..529T/abstract",
-    "Mignani_2017": "https://ui.adsabs.harvard.edu/abs/2017ApJ...851L..10M/abstract",
-    "Johnston_2018": "https://ui.adsabs.harvard.edu/abs/2018MNRAS.474.4629J/abstract",
-    "Jankowski_2019": "https://ui.adsabs.harvard.edu/abs/2019MNRAS.484.3691J/abstract",
-    "Sanidas_2019": "https://ui.adsabs.harvard.edu/abs/2019A%26A...626A.104S/abstract",
-    "Zhao_2019": "https://ui.adsabs.harvard.edu/abs/2019ApJ...874...64Z/abstract",
-    "Bilous_2020": "https://ui.adsabs.harvard.edu/abs/2020A%26A...635A..75B/abstract",
-    "Stappers_2008" :"https://ui.adsabs.harvard.edu/abs/2008AIPC..983..593S/abstract",
-    "McEwen_2020": "https://ui.adsabs.harvard.edu/abs/2020ApJ...892...76M/abstract",
-    "Lorimer_2006": "https://ui.adsabs.harvard.edu/abs/2006MNRAS.372..777L/abstract",
-    "Kramer_2003": "https://ui.adsabs.harvard.edu/abs/2003MNRAS.342.1299K/abstract",
-    "Han_2021" : "https://ui.adsabs.harvard.edu/abs/2021RAA....21..107H/abstract",
-    "Dembska_2014": "https://ui.adsabs.harvard.edu/abs/2014MNRAS.445.3105D/abstract",
-    "Camilo_1995": "https://ui.adsabs.harvard.edu/abs/1995ApJ...445..756C/abstract",
-    "Robinson_1995": "https://ui.adsabs.harvard.edu/abs/1995MNRAS.274..547R/abstract",
-    "McConnell_1991": "https://ui.adsabs.harvard.edu/abs/1991MNRAS.249..654M/abstract",
-    "Manchester_1996": "https://ui.adsabs.harvard.edu/abs/1996MNRAS.279.1235M/abstract",
-    "Qiao_1995": "https://ui.adsabs.harvard.edu/abs/1995MNRAS.274..572Q/abstract",
-    "Manchester_1993": "https://ui.adsabs.harvard.edu/abs/1993ApJ...403L..29M/abstract",
-    "Zepka_1996": "https://ui.adsabs.harvard.edu/abs/1996ApJ...456..305Z/abstract",
-    "Manchester_1978a": "https://ui.adsabs.harvard.edu/abs/1978MNRAS.185..409M/abstract",
-    "Lundgren_1995": "https://ui.adsabs.harvard.edu/abs/1995ApJ...453..419L/abstract",
-    "Dewey_1985": "https://ui.adsabs.harvard.edu/abs/1985ApJ...294L..25D/abstract",
-    "Nicastro_1995": "https://ui.adsabs.harvard.edu/abs/1995MNRAS.273L..68N/abstract",
-    "Johnston_1992": "https://ui.adsabs.harvard.edu/abs/1992MNRAS.255..401J/abstract",
-    "Wolszczan_1992": "https://ui.adsabs.harvard.edu/abs/1992Natur.355..145W/abstract",
-    "Xie_2019": "https://ui.adsabs.harvard.edu/abs/2019RAA....19..103X/abstract",
-}
+
 # Loop over catalogues and put them into a dictionary
 for cat_file in CAT_YAMLS:
     cat_label = cat_file.split("/")[-1].split(".")[0]
@@ -124,7 +67,7 @@ for cat_file in CAT_YAMLS:
         cat_label = cat_label.replace("_", "")
         print(f"\cite{{{cat_label}}} & {pulsar_count} & {int(min(all_freq))}-{int(max(all_freq))} \\\\")
     else:
-        ads_link = ads_dict[cat_label]
+        ads_link = ADS_REF[cat_label]
         if cat_label == "Sieber_1973":
             cat_label = "Sieber (1973)"
         else:
