@@ -72,6 +72,7 @@ For example, you can create a cat_dict that only includes data from Murphy et al
 
 
 .. _cat_papers:
+
 Papers included in our catalogue
 --------------------------------
 ..
@@ -117,7 +118,30 @@ Papers included in our catalogue
     "Johnston et al. (2021)","44","1400-1400","`ADS <https://ui.adsabs.harvard.edu/abs/2021MNRAS.502.1253J/abstract>`_"
 
 
+.. _finding_papers:
+
+Finding more papers to add to the catalogue
+-------------------------------------------
+The pulsar\_spectra catalogue is not a complete catalogue of flux density measurements, so researchers should do
+their own literature review to find any publications that have not yet been included in the catalogue.
+The following sections are suggestions of some ways to find new publications.
+
+
+.. _look_up_ATNF:
+
+Look up ANTF references
+^^^^^^^^^^^^^^^^^^^^^^^
+If you see a reference label ending in \_ATNF, those flux density measurements were imported from the ATNF catalogue.
+The ATNF catalogue values often record flux density measurements at the nearest standard
+frequency, which can be inaccurate and should be replaced with the actual value.
+
+The first author and the year in the reference label will help you find the full
+reference on the `ATNF references page <https://www.atnf.csiro.au/research/pulsar/psrcat/psrcat_ref.html>`_.
+The publication can be :ref:`added to the catalogue <adding_papers>`.
+
+
 .. _adding_papers:
+
 Adding to the catalogue
 -----------------------
 If you would like to add a new paper to the catalogue, you should first format the data into CSV with the following format:
@@ -129,6 +153,26 @@ If you would like to add a new paper to the catalogue, you should first format t
     J0030+0451,180,32.4,3.2
     J0034-0534,150,202.8,7.9
     J0034-0721,150,367.9,10.5
+
+If the paper does not provide a flux density, then the script will assume a 50\% uncertainty if you do not have to include it in your CSV like so:
+
+.. code-block:: bash
+
+    Pulsar Jname,Frequency (MHz),Flux Density (mJy)
+    J0030+0451,150,37.6
+    J0030+0451,180,32.4
+    J0034-0534,150,202.8
+    J0034-0721,150,367.9
+
+If the paper only provides the B name then the script will convert to a J name using `psrqpy` as long as the PSR name starts with a B:
+
+.. code-block:: bash
+
+    Pulsar Jname,Frequency (MHz),Flux Density (mJy)
+    B0037+56,390,3.5
+    B0045+33,390,4.5
+    B0052+51,390,3.6
+    B0053+47,390,5.8
 
 Then move to the scripts subdirectory of the repository and run the command:
 
