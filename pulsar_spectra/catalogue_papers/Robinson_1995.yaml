@@ -1,0 +1,30 @@
+{
+ "J0024-7204C": {
+  "Frequency MHz": [
+   436,
+   640,
+  ],
+  "Flux Density mJy": [
+   1.53,
+   1.54,
+  ],
+  "Flux Density error mJy": [
+   0.10,
+   0.17,
+  ]
+ },
+ "J0024-7204D": {
+  "Frequency MHz": [
+   436,
+   640,
+  ],
+  "Flux Density mJy": [
+   0.95,
+   0.55,
+  ],
+  "Flux Density error mJy": [
+   0.09,
+   0.07,
+  ]
+ },
+}

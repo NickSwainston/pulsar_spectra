@@ -1,12 +1,12 @@
 #
 #   VizieR Astronomical Server vizier.cds.unistra.fr
-#    Date: 2022-01-03T05:05:06 [V1.99+ (14-Oct-2013)]
+#    Date: 2022-07-30T05:31:51 [V1.99+ (14-Oct-2013)]
 #   In case of problem, please report to:	cds-question@unistra.fr
 #
 #
 #Coosys	J2000:	eq_FK5 J2000
 #INFO	votable-version=1.99+ (14-Oct-2013)	
-#INFO	-ref=VIZ61d282482308f6	
+#INFO	-ref=VIZ62e4bca03385ca	
 #INFO	-out.max=unlimited	
 #INFO	queryParameters=13	
 #-oc.form=dec
@@ -319,88 +319,3 @@ J1930+1316	 0.18	 0.03
 J1932+1059	36.00	 4.00
 J1933+1304	 0.42	 0.05
 
-#
-#   VizieR Astronomical Server vizier.cds.unistra.fr
-#    Date: 2022-01-03T05:04:28 [V1.99+ (14-Oct-2013)]
-#   In case of problem, please report to:	cds-question@unistra.fr
-#
-#
-#Coosys	J2000:	eq_FK5 J2000
-#INFO	votable-version=1.99+ (14-Oct-2013)	
-#INFO	-ref=VIZ61d282482308fc	
-#INFO	-out.max=unlimited	
-#INFO	queryParameters=17	
-#-oc.form=dec
-#-out.max=unlimited
-#-nav=cat:J/MNRAS/352/1439&tab:{J/MNRAS/352/1439/table8}&key:source=J/MNRAS/352/1439/table8&HTTPPRM:&
-#-c.eq=J2000
-#-c.r=  2
-#-c.u=arcmin
-#-c.geom=r
-#-source=J/MNRAS/352/1439/table8
-#-order=I
-#-out=PSRJ
-#-out=S1400MHz
-#-out=e_S1400MHz
-#-out=S400MHz
-#-out=S600MHz
-#-out=r_S400MHz
-#-out=r_S600MHz
-#Simbad=Simbad
-#
-
-#RESOURCE=yCat_73521439
-#Name: J/MNRAS/352/1439
-#Title: Parkes Multi-Beam Pulsar Survey. IV. (Hobbs+, 2004)
-#Coosys	J2000_2000.000:	eq_FK5 J2000
-#Table	J_MNRAS_352_1439_table8:
-#Name: J/MNRAS/352/1439/table8
-#Title: Flux density measurements at 1400MHz for those pulsars with no previously catalogued value at this observing frequency, but do have an earlier flux measurement at 400MHz.
-#Column	PSRJ	(A10)	PSRJ designation	[ucd=meta.id;meta.main]
-#Column	S1400MHz	(F5.2)	Flux density at 1400MHz	[ucd=phot.flux.density;em.radio.750-1500MHz]
-#Column	e_S1400MHz	(F5.2)	rms uncertainty on 1400MHz	[ucd=stat.error]
-#Column	S400MHz	(F4.1)	? Flux density at 400MHz	[ucd=phot.flux.density;em.radio.200-400MHz]
-#Column	S600MHz	(F4.1)	? Flux density at 600MHz	[ucd=phot.flux.density;em.radio.400-750MHz]
-#Column	r_S400MHz	(I1)	? Reference of S400MHz [NULL integer written as an empty string]	[ucd=meta.ref;pos.frame]
-#Column	r_S600MHz	(I2)	? Reference of S600MHz [NULL integer written as an empty string]	[ucd=meta.ref;pos.frame]
-PSRJ	S1400MHz	e_S1400MHz	S400MHz	S600MHz	r_S400MHz	r_S600MHz
- 	mJy	mJy	mJy	mJy	 	
-----------	-----	-----	----	----	-	--
-J0828-3417	 0.25	 0.04	16.0	    	1	
-J0842-4851	 0.62	 0.07	 6.2	    	1	
-J0904-4246	 0.60	 0.07	 8.0	 4.0	1	 2
-J0905-4536	 0.83	 0.09	13.0	    	3	
-J0924-5814	 4.30	 0.40	22.0	    	1	
-J1042-5521	 0.62	 0.07	14.0	    	1	
-J1112-6613	 2.60	 0.30	19.0	11.0	1	10
-J1121-5444	 1.30	 0.14	24.0	    	1	
-J1123-6259	 0.56	 0.07	11.0	    	4	
-J1239-6832	 0.96	 0.11	 6.5	    	1	
-J1259-6741	 1.30	 0.14	 4.5	    	1	
-J1326-6700	11.00	 1.10	28.0	    	1	
-J1603-5657	 0.53	 0.06	 8.0	    	4	
-J1622-4332	 0.53	 0.06	16.0	    	4	
-J1700-3312	 1.20	 0.13	21.0	    	3	
-J1703-4851	 1.10	 0.12	22.0	    	3	
-J1705-3423	 4.10	 0.40	31.0	    	3	
-J1732-4128	 0.63	 0.07	 9.0	    	1	
-J1806-1154	 2.60	 0.30	 4.0	    	5	
-J1816-2650	 1.10	 0.12	18.0	10.5	6	 6
-J1834-0010	 0.29	 0.04	 5.1	 2.8	6	 6
-J1848+0826	 0.11	 0.02	 2.8	    	7	
-J1854+1050	 1.03	 0.14	11.0	    	5	
-J1901+0156	 0.38	 0.05	13.7	 4.2	6	 6
-J1902+0723	 0.17	 0.03	 0.6	    	7	
-J1904+1011	 0.58	 0.07	 4.4	    	8	
-J1908+0500	 0.79	 0.09	 6.1	    	7	
-J1908+0734	 0.54	 0.06	 3.5	    	7	
-J1908+0916	 0.23	 0.03	 5.0	    	9	
-J1910+0358	 1.50	 0.16	21.0	16.0	6	 6
-J1910+0714	 0.36	 0.05	 5.4	    	7	
-J1910+1231	 0.28	 0.04	 5.0	    	9	
-J1912+1036	 0.22	 0.03	 1.6	    	8	
-J1913+0936	 0.14	 0.02	 0.8	    	8	
-J1914+1122	 0.55	 0.07	 1.1	 0.9	6	 6
-J1915+0738	 0.34	 0.04	 1.9	    	7	
-J1930+1316	 0.18	 0.03	 5.0	    	9	
-J1933+1304	 0.42	 0.05	 2.0	    	8	

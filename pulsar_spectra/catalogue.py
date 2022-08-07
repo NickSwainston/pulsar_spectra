@@ -21,6 +21,67 @@ CAT_YAMLS = glob.glob("{}/*yaml".format(CAT_DIR))
 # Hard code the path of the ATNF psrcat database file
 ATNF_LOC = os.path.join(CAT_DIR, 'psrcat.db')
 
+# dictionary of ADS links
+ADS_REF = {
+    "Sieber_1973": "https://ui.adsabs.harvard.edu/abs/1973A%26A....28..237S/abstract",
+    "Bartel_1978": "https://ui.adsabs.harvard.edu/abs/1978A%26A....68..361B/abstract",
+    "Izvekova_1981": "https://ui.adsabs.harvard.edu/abs/1981Ap%26SS..78...45I/abstract",
+    "Lorimer_1995": "https://ui.adsabs.harvard.edu/abs/1995MNRAS.273..411L/abstract",
+    "van_Ommen_1997": "https://ui.adsabs.harvard.edu/abs/1997MNRAS.287..307V/abstract",
+    "Maron_2000": "https://ui.adsabs.harvard.edu/abs/2000A%26AS..147..195M/abstract",
+    "Malofeev_2000": "https://ui.adsabs.harvard.edu/abs/2000ARep...44..436M/abstract",
+    "Karastergiou_2005": "https://ui.adsabs.harvard.edu/abs/2005MNRAS.359..481K/abstract",
+    "Johnston_2006": "https://ui.adsabs.harvard.edu/abs/2006MNRAS.369.1916J/abstract",
+    "Kijak_2007": "https://ui.adsabs.harvard.edu/abs/2007A%26A...462..699K/abstract",
+    "Keith_2011": "https://ui.adsabs.harvard.edu/abs/2011MNRAS.416..346K/abstract",
+    "Bates_2011": "https://ui.adsabs.harvard.edu/abs/2011MNRAS.411.1575B/abstract",
+    "Kijak_2011": "https://ui.adsabs.harvard.edu/abs/2011A%26A...531A..16K/abstract",
+    "Zakharenko_2013": "https://ui.adsabs.harvard.edu/abs/2013MNRAS.431.3624Z/abstract",
+    "Dai_2015": "https://ui.adsabs.harvard.edu/abs/2015MNRAS.449.3223D/abstract",
+    "Basu_2016": "https://ui.adsabs.harvard.edu/abs/2016MNRAS.458.2509B/abstract",
+    "Bell_2016": "https://ui.adsabs.harvard.edu/abs/2016MNRAS.461..908B/abstract",
+    "Bilous_2016": "https://ui.adsabs.harvard.edu/abs/2016A%26A...591A.134B/abstract",
+    "Han_2016": "https://ui.adsabs.harvard.edu/abs/2016RAA....16..159H/abstract",
+    "Murphy_2017": "https://ui.adsabs.harvard.edu/abs/2017PASA...34...20M/abstract",
+    "Kijak_2017": "https://ui.adsabs.harvard.edu/abs/2017ApJ...840..108K/abstract",
+    "Hobbs_2004a": "https://ui.adsabs.harvard.edu/abs/2004MNRAS.352.1439H/abstract",
+    "Johnston_1993": "https://ui.adsabs.harvard.edu/abs/1993Natur.361..613J/abstract",
+    "Stovall_2015": "https://ui.adsabs.harvard.edu/abs/2015ApJ...808..156S/abstract",
+    "Xue_2017": "https://ui.adsabs.harvard.edu/abs/2017PASA...34...70X/abstract",
+    "Jankowski_2018": "https://ui.adsabs.harvard.edu/abs/2018MNRAS.473.4436J/abstract",
+    "Bondonneau_2020": "https://ui.adsabs.harvard.edu/abs/2020A%26A...635A..76B/abstract",
+    "Johnston_2021": "https://ui.adsabs.harvard.edu/abs/2021MNRAS.502.1253J/abstract",
+    "Taylor_1993": "https://ui.adsabs.harvard.edu/abs/1993ApJS...88..529T/abstract",
+    "Mignani_2017": "https://ui.adsabs.harvard.edu/abs/2017ApJ...851L..10M/abstract",
+    "Johnston_2018": "https://ui.adsabs.harvard.edu/abs/2018MNRAS.474.4629J/abstract",
+    "Jankowski_2019": "https://ui.adsabs.harvard.edu/abs/2019MNRAS.484.3691J/abstract",
+    "Sanidas_2019": "https://ui.adsabs.harvard.edu/abs/2019A%26A...626A.104S/abstract",
+    "Zhao_2019": "https://ui.adsabs.harvard.edu/abs/2019ApJ...874...64Z/abstract",
+    "Bilous_2020": "https://ui.adsabs.harvard.edu/abs/2020A%26A...635A..75B/abstract",
+    "Stappers_2008" :"https://ui.adsabs.harvard.edu/abs/2008AIPC..983..593S/abstract",
+    "McEwen_2020": "https://ui.adsabs.harvard.edu/abs/2020ApJ...892...76M/abstract",
+    "Lorimer_2006": "https://ui.adsabs.harvard.edu/abs/2006MNRAS.372..777L/abstract",
+    "Kramer_2003a": "https://ui.adsabs.harvard.edu/abs/2003MNRAS.342.1299K/abstract",
+    "Han_2021" : "https://ui.adsabs.harvard.edu/abs/2021RAA....21..107H/abstract",
+    "Dembska_2014": "https://ui.adsabs.harvard.edu/abs/2014MNRAS.445.3105D/abstract",
+    "Camilo_1995": "https://ui.adsabs.harvard.edu/abs/1995ApJ...445..756C/abstract",
+    "Robinson_1995": "https://ui.adsabs.harvard.edu/abs/1995MNRAS.274..547R/abstract",
+    "McConnell_1991": "https://ui.adsabs.harvard.edu/abs/1991MNRAS.249..654M/abstract",
+    "Manchester_1996": "https://ui.adsabs.harvard.edu/abs/1996MNRAS.279.1235M/abstract",
+    "Qiao_1995": "https://ui.adsabs.harvard.edu/abs/1995MNRAS.274..572Q/abstract",
+    "Manchester_1993": "https://ui.adsabs.harvard.edu/abs/1993ApJ...403L..29M/abstract",
+    "Zepka_1996": "https://ui.adsabs.harvard.edu/abs/1996ApJ...456..305Z/abstract",
+    "Manchester_1978a": "https://ui.adsabs.harvard.edu/abs/1978MNRAS.185..409M/abstract",
+    "Lundgren_1995": "https://ui.adsabs.harvard.edu/abs/1995ApJ...453..419L/abstract",
+    "Dewey_1985": "https://ui.adsabs.harvard.edu/abs/1985ApJ...294L..25D/abstract",
+    "Nicastro_1995": "https://ui.adsabs.harvard.edu/abs/1995MNRAS.273L..68N/abstract",
+    "Johnston_1992": "https://ui.adsabs.harvard.edu/abs/1992MNRAS.255..401J/abstract",
+    "Wolszczan_1992": "https://ui.adsabs.harvard.edu/abs/1992Natur.355..145W/abstract",
+    "Xie_2019": "https://ui.adsabs.harvard.edu/abs/2019RAA....19..103X/abstract",
+    "Lorimer_1995b": "https://ui.adsabs.harvard.edu/abs/1995MNRAS.273..411L/abstract",
+}
+
+
 def get_antf_references():
     """Wrapper for psrqpy.get_references() that ensures the cache is only Updated once."""
     ref_dict  = psrqpy.get_references()
@@ -61,7 +122,7 @@ def convert_antf_ref(ref_code, ref_dict=None):
         if ref_part.endswith('.') and len(ref_part) == 5 and ref_part[:-1].isnumeric():
             year = ref_part[:-1]
         elif ref_part.endswith('.') and len(ref_part) == 6 and ref_part[:-2].isnumeric():
-            year = ref_part[:-2]
+            year = ref_part[:-1]
     return f"{author}_{year}"
 
 
@@ -274,11 +335,11 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None):
     # Add the antf to the cataogues
     antf_dict = all_flux_from_atnf(query=query)
     # refs that have errors that we plan to inform ANTF about
-    antf_incorrect_refs = ["Zhao_2019", "Mignani_2017", "Bell_2016"]
+    antf_incorrect_refs = ["Zhao_2019", "Mignani_2017", "Bell_2016", "Robinson_1995", "Johnston_1994"]
     # refs that are correct but where scaled to by their spectral index for the ATNF frequencies
-    antf_adjusted_refs = ["Lorimer_1995", "Stovall_2015", "Sanidas_2019"]
+    antf_adjusted_refs = ["Lorimer_1995b", "Stovall_2015", "Sanidas_2019", "Wolszczan_1992"]
     # refs that were rounded to different decimal places than the publications
-    antf_rounded_refs = ["Johnston_2018", "Dai_2015"]
+    antf_rounded_refs = ["Johnston_2018", "Dai_2015", "McEwen_2020", "McConnell_1991"]
     for jname in jnames:
         for ref in antf_dict[jname].keys():
             # Remove "_antf" from the end of  the reference
