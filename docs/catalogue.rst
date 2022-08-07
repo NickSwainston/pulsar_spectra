@@ -131,7 +131,11 @@ The following sections are suggestions of some ways to find new publications.
 
 Look up ANTF references
 ^^^^^^^^^^^^^^^^^^^^^^^
-If you see a reference label ending in \_ATNF, those flux density measurements were imported from the ATNF catalogue.
+If you see a reference label ending in \_ATNF (see below for an example), those flux density measurements were imported from the ATNF catalogue.
+
+.. image:: figures/atnf_label_example.png
+  :width: 800
+
 The ATNF catalogue values often record flux density measurements at the nearest standard
 frequency, which can be inaccurate and should be replaced with the actual value.
 
