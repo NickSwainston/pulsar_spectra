@@ -192,7 +192,7 @@ Here are the values for the simple power law:
             [(a_min, a_max), (c_min, c_max)],
         ],
 
-Because some of the models have comment parameters (such as spectral index), some of the fit values have been predefined to be consistent between models.
+Because some of the models have common parameters (such as spectral index), some of the fit values have been predefined to be consistent between models.
 
 Make sure you reinstall pulsar_spectra to apply any changes you have made to :py:meth:`pulsar_spectra.models.model_settings`, then you will be ready to fit with your new model.
 
