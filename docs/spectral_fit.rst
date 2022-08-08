@@ -40,10 +40,161 @@ This is all done within the :py:meth:`pulsar_spectra.spectral_fit.iminuit_fit_sp
 Models
 ------
 This fit is done for all functions in :ref:`the models module<modelsmodule>` that are included in :py:meth:`pulsar_spectra.models.model_settings`.
+For example, at the time of writing this documentation, the list of models within model settings includes:
+
+.. code-block:: python
+
+    model_dict = {
+        # Name: [model_function, short_name, start_params, mod_limits]
+        "simple_power_law" : [
+            simple_power_law,
+            "simple pl",
+            # (a, c)
+            (a_s, c_s),
+            [(a_min, a_max), (c_min, c_max)],
+        ],
+        "broken_power_law" : [
+            broken_power_law,
+            "broken pl",
+            #(vb, a1, a2, c)
+            (1e9, a_s, a_s, c_s),
+            [(50e6, 5e9), (a_min, a_max), (a_min, a_max), (c_min, c_max)],
+        ],
+        "log_parabolic_spectrum" : [
+            log_parabolic_spectrum,
+            "lps",
+            #(a, b, c)
+            (-1, -1., c_s),
+            [(-5, 2), (-5, 2), (None, c_max)],
+        ],
+        "high_frequency_cut_off_power_law" : [
+            high_frequency_cut_off_power_law,
+            "pl hard cut-off",
+            #(vc, a, c)
+            (vc_s, a_s, c_s),
+            [vc_both, (a_min, 0.), (c_min, c_max)],
+        ],
+        "low_frequency_turn_over_power_law" : [
+            low_frequency_turn_over_power_law,
+            "pl low turn-over",
+            #(vpeak, a, c, beta)
+            (vpeak_s, a_s, c_s, beta_s),
+            [(vpeak_min, vpeak_max), (a_min, 0.), (c_min, c_max) , (beta_min, beta_max)],
+        ],
+    }
+
+Each item in the dictionary is one of the models that the fitting code will use to fit the pulsar's spectra.
+Each item includes a list of the model function, a short name (for plotting), the starting value for each parameter, and the fit limits for each parameter.
+You can change some of the starting parameters of fit limits if you think it will improve the fit or even comment out a model you do not want to use, like so:
+
+.. code-block:: python
+
+    model_dict = {
+        # Name: [model_function, short_name, start_params, mod_limits]
+        "simple_power_law" : [
+            simple_power_law,
+            "simple pl",
+            # (a, c)
+            (a_s, c_s),
+            [(a_min, a_max), (c_min, c_max)],
+        ],
+        "broken_power_law" : [
+            broken_power_law,
+            "broken pl",
+            #(vb, a1, a2, c)
+            (1e9, a_s, a_s, c_s),
+            [(50e6, 5e9), (a_min, a_max), (a_min, a_max), (c_min, c_max)],
+        ],
+        # "log_parabolic_spectrum" : [
+        #     log_parabolic_spectrum,
+        #     "lps",
+        #     #(a, b, c)
+        #     (-1, -1., c_s),
+        #     [(-5, 2), (-5, 2), (None, c_max)],
+        # ],
+        "high_frequency_cut_off_power_law" : [
+            high_frequency_cut_off_power_law,
+            "pl hard cut-off",
+            #(vc, a, c)
+            (vc_s, a_s, c_s),
+            [vc_both, (a_min, 0.), (c_min, c_max)],
+        ],
+        "low_frequency_turn_over_power_law" : [
+            low_frequency_turn_over_power_law,
+            "pl low turn-over",
+            #(vpeak, a, c, beta)
+            (vpeak_s, a_s, c_s, beta_s),
+            [(vpeak_min, vpeak_max), (a_min, 0.), (c_min, c_max) , (beta_min, beta_max)],
+        ],
+    }
+
+So now, once you reinstall the software, the code will not fit a log parabolic model.
+
+
+Adding a new model
+^^^^^^^^^^^^^^^^^^
 If you would like to use a new model, you can add a function to the models' module and set up the defaults for its
 initial fit parameters and limits in :py:meth:`pulsar_spectra.models.model_settings`.
-You can also change the defaults for other models to attempt to improve the fit.
-Make sure you reinstall pulsar_spectra to apply any changes you have made to :py:meth:`pulsar_spectra.models.model_settings`
+
+For example, here is the function for the simple power law in :ref:`the models module<modelsmodule>`:
+
+.. code-block:: python
+
+    def simple_power_law(v, a, c, v0):
+        """Simple power law:
+
+        .. math::
+            S_v =  c \\left( \\frac{v}{v_0} \\right)^a
+
+        Parameters
+        ----------
+        v : `list`
+            Frequency in Hz.
+        a : `float`
+            Spectral Index.
+        c : `float`
+            Constant.
+        v0 : `float`
+            Reference frequency.
+
+        Returns
+        -------
+        S_v : `list`
+            The flux density predicted by the model.
+        """
+        return c*(v/v0)**a
+
+This is the format you must follow to add your model.
+Frequency must be the first argument, reference frequency must be the last, and we recommend you make a docstring as shown in the above example.
+
+As explained in the previous section, you must add your new model to :py:meth:`pulsar_spectra.models.model_settings`.
+Here are the values for the simple power law:
+
+.. code-block:: python
+
+    # fit starting value, min and max
+    # constant
+    c_s = 1.
+    c_min = 0.
+    c_max = None
+    # spectral index
+    a_s = -1.6
+    a_min = -8.
+    a_max = 3.
+
+    model_dict = {
+        # Name: [model_function, short_name, start_params, mod_limits]
+        "simple_power_law" : [
+            simple_power_law,
+            "simple pl",
+            # (a, c)
+            (a_s, c_s),
+            [(a_min, a_max), (c_min, c_max)],
+        ],
+
+Because some of the models have common parameters (such as spectral index), some of the fit values have been predefined to be consistent between models.
+
+Make sure you reinstall pulsar_spectra to apply any changes you have made to :py:meth:`pulsar_spectra.models.model_settings`, then you will be ready to fit with your new model.
 
 
 Best fit
