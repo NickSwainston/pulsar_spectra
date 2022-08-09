@@ -72,6 +72,7 @@ For example, you can create a cat_dict that only includes data from Murphy et al
 
 
 .. _cat_papers:
+
 Papers included in our catalogue
 --------------------------------
 ..
@@ -83,20 +84,37 @@ Papers included in our catalogue
     "ATNF pulsar catalogue","2827","40-150000","`Catalogue website <https://www.atnf.csiro.au/research/pulsar/psrcat/>`_"
     "Sieber (1973)","27","38-10690","`ADS <https://ui.adsabs.harvard.edu/abs/1973A%26A....28..237S/abstract>`_"
     "Bartel et al. (1978)","18","14800-22700","`ADS <https://ui.adsabs.harvard.edu/abs/1978A%26A....68..361B/abstract>`_"
+    "Manchester et al. (1978a)","224","408-408","`ADS <https://ui.adsabs.harvard.edu/abs/1978MNRAS.185..409M/abstract>`_"
     "Izvekova et al. (1981)","86","39-102","`ADS <https://ui.adsabs.harvard.edu/abs/1981Ap%26SS..78...45I/abstract>`_"
+    "Dewey et al. (1985)","34","390-390","`ADS <https://ui.adsabs.harvard.edu/abs/1985ApJ...294L..25D/abstract>`_"
+    "McConnell et al. (1991)","4","610-610","`ADS <https://ui.adsabs.harvard.edu/abs/1991MNRAS.249..654M/abstract>`_"
+    "Johnston et al. (1992)","100","640-1500","`ADS <https://ui.adsabs.harvard.edu/abs/1992MNRAS.255..401J/abstract>`_"
+    "Wolszczan et al. (1992)","1","430-1400","`ADS <https://ui.adsabs.harvard.edu/abs/1992Natur.355..145W/abstract>`_"
     "Johnston et al. (1993)","1","430-2360","`ADS <https://ui.adsabs.harvard.edu/abs/1993Natur.361..613J/abstract>`_"
+    "Manchester et al. (1993)","1","640-640","`ADS <https://ui.adsabs.harvard.edu/abs/1993ApJ...403L..29M/abstract>`_"
     "Taylor et al. (1993)","639","400-1400","`ADS <https://ui.adsabs.harvard.edu/abs/1993ApJS...88..529T/abstract>`_"
-    "Lorimer et al. (1995)","280","408-1606","`ADS <https://ui.adsabs.harvard.edu/abs/1995MNRAS.273..411L/abstract>`_"
+    "Camilo et al. (1995)","29","430-430","`ADS <https://ui.adsabs.harvard.edu/abs/1995ApJ...445..756C/abstract>`_"
+    "Lundgren et al. (1995)","1","430-1400","`ADS <https://ui.adsabs.harvard.edu/abs/1995ApJ...453..419L/abstract>`_"
+    "Nicastro et al. (1995)","1","400-1400","`ADS <https://ui.adsabs.harvard.edu/abs/1995MNRAS.273L..68N/abstract>`_"
+    "Qiao et al. (1995)","61","600-1500","`ADS <https://ui.adsabs.harvard.edu/abs/1995MNRAS.274..572Q/abstract>`_"
+    "Robinson et al. (1995)","2","436-640","`ADS <https://ui.adsabs.harvard.edu/abs/1995MNRAS.274..547R/abstract>`_"
+    "Lorimer et al. (1995b)","280","408-1606","`ADS <https://ui.adsabs.harvard.edu/abs/1995MNRAS.273..411L/abstract>`_"
+    "Manchester et al. (1996)","55","436-436","`ADS <https://ui.adsabs.harvard.edu/abs/1996MNRAS.279.1235M/abstract>`_"
+    "Zepka et al. (1996)","1","430-1400","`ADS <https://ui.adsabs.harvard.edu/abs/1996ApJ...456..305Z/abstract>`_"
     "van Ommen et al. (1997)","82","800-960","`ADS <https://ui.adsabs.harvard.edu/abs/1997MNRAS.287..307V/abstract>`_"
     "Malofeev et al. (2000)","212","102-102","`ADS <https://ui.adsabs.harvard.edu/abs/2000ARep...44..436M/abstract>`_"
-    "Hobbs et al. (2004)","275","400-1400","`ADS <https://ui.adsabs.harvard.edu/abs/2004MNRAS.352.1439H/abstract>`_"
+    "Kramer et al. (2003a)","200","1400-1400","`ADS <https://ui.adsabs.harvard.edu/abs/2003MNRAS.342.1299K/abstract>`_"
+    "Hobbs et al. (2004a)","453","1400-1400","`ADS <https://ui.adsabs.harvard.edu/abs/2004MNRAS.352.1439H/abstract>`_"
     "Karastergiou et al. (2005)","48","1400-3100","`ADS <https://ui.adsabs.harvard.edu/abs/2005MNRAS.359..481K/abstract>`_"
     "Johnston et al. (2006)","31","8400-8400","`ADS <https://ui.adsabs.harvard.edu/abs/2006MNRAS.369.1916J/abstract>`_"
+    "Lorimer et al. (2006)","142","1400-1400","`ADS <https://ui.adsabs.harvard.edu/abs/2006MNRAS.372..777L/abstract>`_"
     "Kijak et al. (2007)","11","325-1060","`ADS <https://ui.adsabs.harvard.edu/abs/2007A%26A...462..699K/abstract>`_"
+    "Stappers et al. (2008)","13","147-147","`ADS <https://ui.adsabs.harvard.edu/abs/2008AIPC..983..593S/abstract>`_"
     "Bates et al. (2011)","34","1400-6500","`ADS <https://ui.adsabs.harvard.edu/abs/2011MNRAS.411.1575B/abstract>`_"
     "Keith et al. (2011)","9","17000-24000","`ADS <https://ui.adsabs.harvard.edu/abs/2011MNRAS.416..346K/abstract>`_"
     "Kijak et al. (2011)","15","610-4850","`ADS <https://ui.adsabs.harvard.edu/abs/2011A%26A...531A..16K/abstract>`_"
     "Zakharenko et al. (2013)","40","20-25","`ADS <https://ui.adsabs.harvard.edu/abs/2013MNRAS.431.3624Z/abstract>`_"
+    "Dembska et al. (2014)","19","610-8450","`ADS <https://ui.adsabs.harvard.edu/abs/2014MNRAS.445.3105D/abstract>`_"
     "Dai et al. (2015)","24","730-3100","`ADS <https://ui.adsabs.harvard.edu/abs/2015MNRAS.449.3223D/abstract>`_"
     "Stovall et al. (2015)","36","35-79","`ADS <https://ui.adsabs.harvard.edu/abs/2015ApJ...808..156S/abstract>`_"
     "Basu et al. (2016)","1","325-1280","`ADS <https://ui.adsabs.harvard.edu/abs/2016MNRAS.458.2509B/abstract>`_"
@@ -111,13 +129,43 @@ Papers included in our catalogue
     "Johnston et al. (2018)","586","1400-1400","`ADS <https://ui.adsabs.harvard.edu/abs/2018MNRAS.474.4629J/abstract>`_"
     "Jankowski et al. (2019)","205","843-843","`ADS <https://ui.adsabs.harvard.edu/abs/2019MNRAS.484.3691J/abstract>`_"
     "Sanidas et al. (2019)","290","135-135","`ADS <https://ui.adsabs.harvard.edu/abs/2019A%26A...626A.104S/abstract>`_"
+    "Xie et al. (2019)","32","300-3000","`ADS <https://ui.adsabs.harvard.edu/abs/2019RAA....19..103X/abstract>`_"
     "Zhao et al. (2019)","71","4820-5124","`ADS <https://ui.adsabs.harvard.edu/abs/2019ApJ...874...64Z/abstract>`_"
     "Bilous et al. (2020)","43","53-63","`ADS <https://ui.adsabs.harvard.edu/abs/2020A%26A...635A..75B/abstract>`_"
     "Bondonneau et al. (2020)","64","53-65","`ADS <https://ui.adsabs.harvard.edu/abs/2020A%26A...635A..76B/abstract>`_"
+    "McEwen et al. (2020)","670","350-350","`ADS <https://ui.adsabs.harvard.edu/abs/2020ApJ...892...76M/abstract>`_"
+    "Han et al. (2021)","201","1250-1250","`ADS <https://ui.adsabs.harvard.edu/abs/2021RAA....21..107H/abstract>`_"
     "Johnston et al. (2021)","44","1400-1400","`ADS <https://ui.adsabs.harvard.edu/abs/2021MNRAS.502.1253J/abstract>`_"
 
 
+.. _finding_papers:
+
+Finding more papers to add to the catalogue
+-------------------------------------------
+The pulsar\_spectra catalogue is not a complete catalogue of flux density measurements, so researchers should do
+their own literature review to find any publications that have not yet been included in the catalogue.
+The following sections are suggestions of some ways to find new publications.
+
+
+.. _look_up_ATNF:
+
+Look up ANTF references
+^^^^^^^^^^^^^^^^^^^^^^^
+If you see a reference label ending in \_ATNF (see below for an example), those flux density measurements were imported from the ATNF catalogue.
+
+.. image:: figures/atnf_label_example.png
+  :width: 800
+
+The ATNF catalogue values often record flux density measurements at the nearest standard
+frequency, which can be inaccurate and should be replaced with the actual value.
+
+The first author and the year in the reference label will help you find the full
+reference on the `ATNF references page <https://www.atnf.csiro.au/research/pulsar/psrcat/psrcat_ref.html>`_.
+The publication can be :ref:`added to the catalogue <adding_papers>`.
+
+
 .. _adding_papers:
+
 Adding to the catalogue
 -----------------------
 If you would like to add a new paper to the catalogue, you should first format the data into CSV with the following format:
@@ -129,6 +177,26 @@ If you would like to add a new paper to the catalogue, you should first format t
     J0030+0451,180,32.4,3.2
     J0034-0534,150,202.8,7.9
     J0034-0721,150,367.9,10.5
+
+If the paper does not provide a flux density, then the script will assume a 50\% uncertainty if you do not have to include it in your CSV like so:
+
+.. code-block:: bash
+
+    Pulsar Jname,Frequency (MHz),Flux Density (mJy)
+    J0030+0451,150,37.6
+    J0030+0451,180,32.4
+    J0034-0534,150,202.8
+    J0034-0721,150,367.9
+
+If the paper only provides the B name then the script will convert to a J name using `psrqpy` as long as the PSR name starts with a B:
+
+.. code-block:: bash
+
+    Pulsar Jname,Frequency (MHz),Flux Density (mJy)
+    B0037+56,390,3.5
+    B0045+33,390,4.5
+    B0052+51,390,3.6
+    B0053+47,390,5.8
 
 Then move to the scripts subdirectory of the repository and run the command:
 

@@ -223,7 +223,7 @@ def model_settings(print_models=False):
     # Beta, he smoothness of the turn-over
     beta_s = 1.
     beta_min = 0.1
-    beta_max = 5.
+    beta_max = 2.1
     # High frequency cut off frequency
     vc_s = 4e9
     vc_both = None # will set the cut off frequency based on the data set's frequency range
@@ -249,13 +249,13 @@ def model_settings(print_models=False):
             (1e9, a_s, a_s, c_s),
             [(50e6, 5e9), (a_min, a_max), (a_min, a_max), (c_min, c_max)],
         ],
-        "log_parabolic_spectrum" : [
-            log_parabolic_spectrum,
-            "lps",
-            #(a, b, c)
-            (-1, -1., c_s),
-            [(-5, 2), (-5, 2), (None, c_max)],
-        ],
+        # "log_parabolic_spectrum" : [
+        #     log_parabolic_spectrum,
+        #     "lps",
+        #     #(a, b, c)
+        #     (-1, -1., c_s),
+        #     [(-5, 2), (-5, 2), (None, c_max)],
+        # ],
         "high_frequency_cut_off_power_law" : [
             high_frequency_cut_off_power_law,
             "pl hard cut-off",
@@ -270,13 +270,13 @@ def model_settings(print_models=False):
             (vpeak_s, a_s, c_s, beta_s),
             [(vpeak_min, vpeak_max), (a_min, 0.), (c_min, c_max) , (beta_min, beta_max)],
         ],
-        "double_turn_over_spectrum" : [
-            double_turn_over_spectrum,
-            "double turn over spectrum",
-            #(vc, vpeak, a, beta, c)
-            (vc_s, vpeak_s, a_s, beta_s, c_s),
-            [(vc_both), (vpeak_min, vpeak_max), (a_min, 0.), (beta_min, beta_max), (c_min, c_max)],
-        ],
+        # "double_turn_over_spectrum" : [
+        #     double_turn_over_spectrum,
+        #     "double turn over spectrum",
+        #     #(vc, vpeak, a, beta, c)
+        #     (vc_s, vpeak_s, a_s, beta_s, c_s),
+        #     [(vc_both), (vpeak_min, vpeak_max), (a_min, 0.), (beta_min, beta_max), (c_min, c_max)],
+        # ],
         #"double_broken_power_law" : [
         #    double_broken_power_law,
         #    "double bpl",

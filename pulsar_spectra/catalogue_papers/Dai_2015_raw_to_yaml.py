@@ -33,7 +33,7 @@ for row in lines:
                             "Flux Density mJy":fluxs,
                             "Flux Density error mJy":flux_errs}
 
-json = json.dumps(pulsar_dict)
+json = json.dumps(pulsar_dict, indent=1)
 with open("Dai_2015.yaml", "w") as cat_file:
     cat_file.write(json)
 print(pulsar_dict)

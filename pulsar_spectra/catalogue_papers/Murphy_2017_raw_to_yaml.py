@@ -41,7 +41,7 @@ for row in lines[16:]:
     #print(row)
     pulsar = row[0].replace("−", "-")
 
-    for freq, pair in zip([151, 158, 166, 174, 181, 189, 197, 151, 212, 220, 227], row[2:]):
+    for freq, pair in zip([151, 158, 166, 174, 181, 189, 197, 204.5, 212, 220, 227], row[2:]):
         if "<" not in pair:
             #print(pair)
             flux, flux_err = pair.split("±")
@@ -50,5 +50,5 @@ for row in lines[16:]:
             pulsar_dict[pulsar]["Flux Density error mJy"] += [float(flux_err)]
 
 with open("Murphy_2017.yaml", "w") as cat_file:
-    cat_file.write(json.dumps(pulsar_dict))
+    cat_file.write(json.dumps(pulsar_dict, indent=1))
 print(pulsar_dict)

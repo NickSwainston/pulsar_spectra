@@ -18,5 +18,5 @@ for row in lines:
                            "Flux Density error mJy":[flux*0.5]}
 
 with open("Johnston_2006.yaml", "w") as cat_file:
-    cat_file.write(json.dumps(pulsar_dict))
+    cat_file.write(json.dumps(pulsar_dict, indent=1))
 print(pulsar_dict)

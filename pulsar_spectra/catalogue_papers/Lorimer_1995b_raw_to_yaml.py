@@ -2,7 +2,7 @@ import json
 import psrqpy
 import csv
 
-with open("Lorimer_1995_raw.tsv") as file:
+with open("Lorimer_1995b_raw.tsv") as file:
     tsv_file = csv.reader(file, delimiter="\t")
     lines = []
     for line in tsv_file:
@@ -58,6 +58,6 @@ for row in lines[48:]:
         pulsar_dict[pulsar]["Flux Density mJy"] += [float(row[9])]
         pulsar_dict[pulsar]["Flux Density error mJy"] += [float(row[10])]
 
-with open("Lorimer_1995.yaml", "w") as cat_file:
-    cat_file.write(json.dumps(pulsar_dict))
+with open("Lorimer_1995b.yaml", "w") as cat_file:
+    cat_file.write(json.dumps(pulsar_dict, indent=1))
 print(pulsar_dict)

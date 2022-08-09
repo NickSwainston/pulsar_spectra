@@ -33,3 +33,17 @@ The KeyError is likely due to a change in the in ``psrcat.db`` file that ``psrqp
     psrqpy.QueryATNF(checkupdate=True)
 
 Then try your script again.
+
+
+ATNF label on plot
+------------------
+
+If you see a reference label ending in \_ATNF (see below for an example), those flux density measurements were imported from the ATNF catalogue.
+
+.. image:: figures/atnf_label_example.png
+  :width: 800
+
+The ATNF catalogue values often record flux density measurements at the nearest standard frequency
+which can be inaccurate and should be replaced with the actual value.
+If you see the \_ATNF label, you should :ref:`look up the ATNF reference <look_up_ATNF>` and
+ :ref:`incorporate the true values into the pulsar_spectra catalouge<adding_papers>`.
