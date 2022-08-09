@@ -318,17 +318,6 @@
    9.379881502449804
   ]
  },
- "J0702-4956": {
-  "Frequency MHz": [
-   154.24
-  ],
-  "Flux Density mJy": [
-   15.502
-  ],
-  "Flux Density error mJy": [
-   4.943
-  ]
- },
  "J0729-1448": {
   "Frequency MHz": [
    154.24
@@ -371,17 +360,6 @@
   ],
   "Flux Density error mJy": [
    50.210879179715626
-  ]
- },
- "J0749-4247": {
-  "Frequency MHz": [
-   154.24
-  ],
-  "Flux Density mJy": [
-   19.041
-  ],
-  "Flux Density error mJy": [
-   8.742
   ]
  },
  "J0758-1528": {
@@ -481,17 +459,6 @@
   ],
   "Flux Density error mJy": [
    21.129572925168176
-  ]
- },
- "J0838-3947": {
-  "Frequency MHz": [
-   154.24
-  ],
-  "Flux Density mJy": [
-   22.038
-  ],
-  "Flux Density error mJy": [
-   9.04
   ]
  },
  "J0842-4851": {
@@ -1176,17 +1143,6 @@
    23.12572630210779
   ]
  },
- "J1536-4948": {
-  "Frequency MHz": [
-   154.24
-  ],
-  "Flux Density mJy": [
-   13.263
-  ],
-  "Flux Density error mJy": [
-   12.202
-  ]
- },
  "J1543+0929": {
   "Frequency MHz": [
    154.24
@@ -1284,17 +1240,6 @@
   ],
   "Flux Density error mJy": [
    44.85829674653285
-  ]
- },
- "J2248-0101": {
-  "Frequency MHz": [
-   154.24
-  ],
-  "Flux Density mJy": [
-   23.054
-  ],
-  "Flux Density error mJy": [
-   11.177
   ]
  },
  "J2317+2149": {
