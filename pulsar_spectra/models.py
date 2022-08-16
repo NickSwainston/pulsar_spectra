@@ -28,6 +28,33 @@ def simple_power_law(v, a, c, v0):
     """
     return c*(v/v0)**a
 
+
+def simple_power_law_intergrate(vmin_vmax, a, c, v0):
+    """Simple power law:
+
+    .. math::
+        S_v =  c \\left( \\frac{v}{v_0} \\right)^a
+
+    Parameters
+    ----------
+    v : `list`
+        Frequency in Hz.
+    a : `float`
+        Spectral Index.
+    c : `float`
+        Constant.
+    v0 : `float`
+        Reference frequency.
+
+    Returns
+    -------
+    S_v : `list`
+        The flux density predicted by the model.
+    """
+    vmin, vmax = vmin_vmax
+    return c * (vmax**(a+1) - vmin**(a+1)) / ( (vmax - vmin) * v0**a * (a+1) )
+
+
 def broken_power_law(v, vb, a1, a2, c, v0):
     """Broken power law:
 
@@ -241,14 +268,15 @@ def model_settings(print_models=False):
             # (a, c)
             (a_s, c_s),
             [(a_min, a_max), (c_min, c_max)],
+            simple_power_law_intergrate,
         ],
-        "broken_power_law" : [
-            broken_power_law,
-            "broken pl",
-            #(vb, a1, a2, c)
-            (1e9, a_s, a_s, c_s),
-            [(50e6, 5e9), (a_min, a_max), (a_min, a_max), (c_min, c_max)],
-        ],
+        # "broken_power_law" : [
+        #     broken_power_law,
+        #     "broken pl",
+        #     #(vb, a1, a2, c)
+        #     (1e9, a_s, a_s, c_s),
+        #     [(50e6, 5e9), (a_min, a_max), (a_min, a_max), (c_min, c_max)],
+        # ],
         # "log_parabolic_spectrum" : [
         #     log_parabolic_spectrum,
         #     "lps",
@@ -256,20 +284,20 @@ def model_settings(print_models=False):
         #     (-1, -1., c_s),
         #     [(-5, 2), (-5, 2), (None, c_max)],
         # ],
-        "high_frequency_cut_off_power_law" : [
-            high_frequency_cut_off_power_law,
-            "pl hard cut-off",
-            #(vc, a, c)
-            (vc_s, a_s, c_s),
-            [vc_both, (a_min, 0.), (c_min, c_max)],
-        ],
-        "low_frequency_turn_over_power_law" : [
-            low_frequency_turn_over_power_law,
-            "pl low turn-over",
-            #(vpeak, a, c, beta)
-            (vpeak_s, a_s, c_s, beta_s),
-            [(vpeak_min, vpeak_max), (a_min, 0.), (c_min, c_max) , (beta_min, beta_max)],
-        ],
+        # "high_frequency_cut_off_power_law" : [
+        #     high_frequency_cut_off_power_law,
+        #     "pl hard cut-off",
+        #     #(vc, a, c)
+        #     (vc_s, a_s, c_s),
+        #     [vc_both, (a_min, 0.), (c_min, c_max)],
+        # ],
+        # "low_frequency_turn_over_power_law" : [
+        #     low_frequency_turn_over_power_law,
+        #     "pl low turn-over",
+        #     #(vpeak, a, c, beta)
+        #     (vpeak_s, a_s, c_s, beta_s),
+        #     [(vpeak_min, vpeak_max), (a_min, 0.), (c_min, c_max) , (beta_min, beta_max)],
+        # ],
         # "double_turn_over_spectrum" : [
         #     double_turn_over_spectrum,
         #     "double turn over spectrum",

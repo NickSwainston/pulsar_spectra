@@ -289,7 +289,7 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None):
     for jname in jnames:
         jname_cat_dict[jname] = {}
         # freq, flux, flux_err, references
-        jname_cat_list[jname] = [[],[],[],[]]
+        jname_cat_list[jname] = [[],[],[],[],[]]
 
     # Work out which yamls/catalogues to use
     if only_use is None:
@@ -328,9 +328,11 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None):
                 jname_cat_dict[jname][cat_label] = cat_dict[jname]
                 # Update list
                 jname_cat_list[jname][0] += cat_dict[jname]['Frequency MHz']
-                jname_cat_list[jname][1] += cat_dict[jname]['Flux Density mJy']
-                jname_cat_list[jname][2] += cat_dict[jname]['Flux Density error mJy']
-                jname_cat_list[jname][3] += [cat_label] * len(cat_dict[jname]['Frequency MHz'])
+                if "Bandwidth MHz" in cat_dict[jname].keys():
+                    jname_cat_list[jname][1] += cat_dict[jname]['Bandwidth MHz']
+                jname_cat_list[jname][2] += cat_dict[jname]['Flux Density mJy']
+                jname_cat_list[jname][3] += cat_dict[jname]['Flux Density error mJy']
+                jname_cat_list[jname][4] += [cat_label] * len(cat_dict[jname]['Frequency MHz'])
 
     # Add the antf to the cataogues
     antf_dict = all_flux_from_atnf(query=query)
@@ -366,18 +368,18 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None):
                     else:
                         # Update list
                         jname_cat_list[jname][0] += [freq]
-                        jname_cat_list[jname][1] += [flux]
-                        jname_cat_list[jname][2] += [flux_err]
-                        jname_cat_list[jname][3] += [ref]
+                        jname_cat_list[jname][2] += [flux]
+                        jname_cat_list[jname][3] += [flux_err]
+                        jname_cat_list[jname][4] += [ref]
             else:
                 # Update list
                 for freq, flux, flux_err in zip(antf_dict[jname][ref]['Frequency MHz'],
                                                 antf_dict[jname][ref]['Flux Density mJy'],
                                                 antf_dict[jname][ref]['Flux Density error mJy']):
                     jname_cat_list[jname][0] += [freq]
-                    jname_cat_list[jname][1] += [flux]
-                    jname_cat_list[jname][2] += [flux_err]
-                    jname_cat_list[jname][3] += [ref]
+                    jname_cat_list[jname][2] += [flux]
+                    jname_cat_list[jname][3] += [flux_err]
+                    jname_cat_list[jname][4] += [ref]
 
 
     return jname_cat_list
@@ -402,20 +404,22 @@ def convert_cat_list_to_dict(jname_cat_list):
     """
     jname_cat_dict = {}
     for jname in jname_cat_list.keys():
-        freqs, fluxs, flux_errs, refs = jname_cat_list[jname]
+        freqs, bands, fluxs, flux_errs, refs = jname_cat_list[jname]
         jname_cat_dict[jname] = {}
 
         # Loop over and put references into the same dict
-        for freq, flux, flux_err, ref in zip(freqs, fluxs, flux_errs, refs):
+        for freq, band, flux, flux_err, ref in zip(freqs, bands, fluxs, flux_errs, refs):
             if ref in jname_cat_dict[jname].keys():
                 # Update
                 jname_cat_dict[jname][ref]['Frequency MHz'] += [freq]
+                jname_cat_dict[jname][ref]['Bandwidth MHz'] += [band]
                 jname_cat_dict[jname][ref]['Flux Density mJy'] += [flux]
                 jname_cat_dict[jname][ref]['Flux Density error mJy'] += [flux_err]
             else:
                 # Make new
                 jname_cat_dict[jname][ref] = {}
                 jname_cat_dict[jname][ref]['Frequency MHz'] = [freq]
+                jname_cat_dict[jname][ref]['Bandwidth MHz'] = [band]
                 jname_cat_dict[jname][ref]['Flux Density mJy'] = [flux]
                 jname_cat_dict[jname][ref]['Flux Density error mJy'] = [flux_err]
     return jname_cat_dict

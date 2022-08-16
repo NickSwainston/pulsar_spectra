@@ -113,7 +113,7 @@ def propagate_flux_n_err(freqs, model, iminuit_result):
     return fitted_flux, fitted_flux_err
 
 
-def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fit_info,
+def plot_fit(freqs_MHz, bands_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fit_info,
              plot_error=True, save_name="fit.png", alternate_style=False, axis=None,
              secondary_fit=False, fit_range=None, ref_markers=None):
     """Create a plot of the pulsar spectral fit.
@@ -190,7 +190,7 @@ def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fi
     ax.set_prop_cycle(custom_cycler)
 
     # Add data
-    data_dict = convert_cat_list_to_dict({"dummy_pulsar":[freqs_MHz, fluxs_mJy, flux_errs_mJy, ref]})["dummy_pulsar"]
+    data_dict = convert_cat_list_to_dict({"dummy_pulsar":[freqs_MHz, bands_MHz, fluxs_mJy, flux_errs_mJy, ref]})["dummy_pulsar"]
     if not secondary_fit:
         for ref in data_dict.keys():
             if ref in ref_markers.keys():
@@ -202,11 +202,13 @@ def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fi
                 marker = None
                 markersize = None
             freqs_ref = np.array(data_dict[ref]['Frequency MHz'])
+            bands_ref = np.array(data_dict[ref]['Bandwidth MHz'])
             fluxs_ref = np.array(data_dict[ref]['Flux Density mJy'])
             flux_errs_ref = np.array(data_dict[ref]['Flux Density error mJy'])
             (_, caps, _) = ax.errorbar(
                 freqs_ref,
                 fluxs_ref,
+                xerr=bands_ref,
                 yerr=flux_errs_ref,
                 linestyle='None',
                 mec='k',
@@ -224,7 +226,9 @@ def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fi
     # Create fit line
     if fit_range is None:
         # No fit range given so use full range
-        fitted_freq = np.logspace(np.log10(min(freqs_MHz)), np.log10(max(freqs_MHz)), 100)
+        min_freqs_MHz = np.array(freqs_MHz) - np.array(bands_MHz) / 2
+        max_freqs_MHz = np.array(freqs_MHz) + np.array(bands_MHz) / 2
+        fitted_freq = np.logspace(np.log10(min(min_freqs_MHz)), np.log10(max(max_freqs_MHz)), 100)
     else:
         # Use input fit range
         min_freq, max_freq = fit_range
@@ -273,6 +277,7 @@ def plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fi
 
 def iminuit_fit_spectral_model(
         freqs_MHz,
+        bands_MHz,
         fluxs_mJy,
         flux_errs_mJy,
         ref,
@@ -338,12 +343,16 @@ def iminuit_fit_spectral_model(
     # Covert to SI (Hz and Jy)
     v0_Hz        = 10**((np.log10(min(freqs_MHz))+np.log10(max(freqs_MHz)))/2) * 1e6 # reference frequency is the logarithmic centre frequency
     freqs_Hz     = np.array(freqs_MHz,     dtype=np.float128) * 1e6
+    bands_Hz = np.array(bands_MHz,     dtype=np.float128) * 1e6
+    min_freqs_Hz = freqs_Hz - bands_Hz / 2
+    max_freqs_Hz = freqs_Hz + bands_Hz / 2
     fluxs_Jy     = np.array(fluxs_mJy,     dtype=np.float128) / 1e3
     flux_errs_Jy = np.array(flux_errs_mJy, dtype=np.float128) / 1e3
 
     # Load model settings
     model_dict = model_settings()
     model_function = model_dict[model_name][0]
+    model_function_intergrate = model_dict[model_name][4]
 
     # Check for model dependent defaults
     if start_params is None:
@@ -366,8 +375,9 @@ def iminuit_fit_spectral_model(
         return 1e9, None, None
 
     # Fit model
-    least_squares = LeastSquares(freqs_Hz, fluxs_Jy, flux_errs_Jy, model_function)
-    least_squares.loss = huber_loss_function
+    least_squares = LeastSquares((min_freqs_Hz, max_freqs_Hz), fluxs_Jy, flux_errs_Jy, model_function_intergrate)
+    #least_squares.loss = huber_loss_function
+    print(start_params)
     m = Minuit(least_squares, *start_params)
     m.fixed["v0"] = True # fix the reference frequency
 
@@ -416,7 +426,7 @@ def iminuit_fit_spectral_model(
     fit_info = "\n".join(fit_info)
 
     if plot:
-        plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref, model_function, m, fit_info,
+        plot_fit(freqs_MHz, bands_MHz, fluxs_mJy, flux_errs_mJy, ref, model_function, m, fit_info,
                 save_name=save_name, plot_error=plot_error,
                 alternate_style=alternate_style, axis=axis,
                 secondary_fit=secondary_fit, fit_range=fit_range,
@@ -425,7 +435,7 @@ def iminuit_fit_spectral_model(
     return aic, m, fit_info
 
 
-def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
+def find_best_spectral_fit(pulsar, freqs_MHz, bands_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
                            plot_all=False, plot_best=False, plot_compare=False,
                            plot_error=True, alternate_style=False, axis=None,
                            secondary_fit=False, fit_range=None, ref_markers=None):
@@ -492,8 +502,9 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
     model_i = []
     # loop over models and fit
     for i, model_name in enumerate(model_dict.keys()):
-        model_function, short_name, start_params, mod_limits = model_dict[model_name]
-        aic, iminuit_result, fit_info = iminuit_fit_spectral_model(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
+        #model_function = model_dict[model_name][0]
+        model_function = model_dict[model_name][-1]
+        aic, iminuit_result, fit_info = iminuit_fit_spectral_model(freqs_MHz, bands_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
                         model_name=model_name, plot=plot_all, plot_error=plot_error, save_name=f"{pulsar}_{model_name}_fit.png",
                         alternate_style=alternate_style, axis=axis, secondary_fit=secondary_fit, ref_markers=ref_markers)
         logger.debug(f"{model_name} model fit gave AIC {aic}.")
@@ -506,7 +517,7 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
             # Add to comparison plot
             if plot_compare:
                 # plot data
-                plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all, model_function, iminuit_result, fit_info,
+                plot_fit(freqs_MHz, bands_MHz, fluxs_mJy, flux_errs_mJy, ref_all, model_function, iminuit_result, fit_info,
                          plot_error=plot_error, alternate_style=alternate_style,
                          axis=axs[i], secondary_fit=secondary_fit, fit_range=fit_range, ref_markers=ref_markers)
 
@@ -549,7 +560,7 @@ def find_best_spectral_fit(pulsar, freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
             plt.savefig(f"{pulsar}_comparison_fit.png", bbox_inches='tight', dpi=300)
             plt.clf()
         if plot_best:
-            plot_fit(freqs_MHz, fluxs_mJy, flux_errs_mJy, ref_all, model_dict[best_model_name][0], iminuit_results[aici], fit_infos[aici],
+            plot_fit(freqs_MHz, bands_MHz, fluxs_mJy, flux_errs_mJy, ref_all, model_dict[best_model_name][0], iminuit_results[aici], fit_infos[aici],
                     save_name=f"{pulsar}_{best_model_name}_fit.png", plot_error=plot_error, alternate_style=alternate_style,
                     axis=axis, secondary_fit=secondary_fit, fit_range=fit_range, ref_markers=ref_markers)
         return best_model_name, iminuit_results[aici], fit_infos[aici], p_best, p_category
