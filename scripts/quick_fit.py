@@ -10,14 +10,14 @@ def quick_fit(pulsars):
     cat_list = collect_catalogue_fluxes()
     for pulsar in pulsars:
         print(f"\nFitting {pulsar}")
-        freq_all, flux_all, flux_err_all, ref_all = cat_list[pulsar]
+        freq_all, band_all, flux_all, flux_err_all, ref_all = cat_list[pulsar]
 
-        for freq, flux, flux_err, ref in zip(freq_all, flux_all, flux_err_all, ref_all):
-            print(f"{float(freq):8.1f}{float(flux):12.4f}{float(flux_err):12.4f} {str(ref):20s}")
+        for freq, band, flux, flux_err, ref in zip(freq_all, band_all, flux_all, flux_err_all, ref_all):
+            print(f"{float(freq):8.1f}{float(band):8.1f}{float(flux):12.4f}{float(flux_err):12.4f} {str(ref):20s}")
 
         model_name, iminuit_result, fit_info, p_best, p_category = find_best_spectral_fit(
-            pulsar, freq_all, flux_all, flux_err_all, ref_all,
-            plot_compare=True,
+            pulsar, freq_all, band_all, flux_all, flux_err_all, ref_all,
+            plot_best=True,
         )
         print(f"\n{pulsar} fit: {model_name}")
         for p, v, e in zip(iminuit_result.parameters, iminuit_result.values, iminuit_result.errors):
