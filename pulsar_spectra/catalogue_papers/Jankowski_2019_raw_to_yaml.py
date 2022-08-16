@@ -19,9 +19,11 @@ for row in lines:
 
     pulsar = row[0].strip().replace("–", "-")
 
-    pulsar_dict[pulsar] = {"Frequency MHz":[843],
-                            "Flux Density mJy":[float(row[1])],
-                            "Flux Density error mJy":[float(row[2])]}
+    pulsar_dict[pulsar] = {
+        "Frequency MHz":[843],
+        "Bandwidth MHz":[31.25],
+        "Flux Density mJy":[float(row[1])],
+        "Flux Density error mJy":[float(row[2])]}
 
 with open("Jankowski_2019.yaml", "w") as cat_file:
     cat_file.write(json.dumps(pulsar_dict, indent=1))

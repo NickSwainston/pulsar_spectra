@@ -11,20 +11,22 @@ for row in lines[7:]:
     print(len(row))
     pulsar = row[0].replace("–", "-").replace("+", "+")
     print(row[7])
-    if '†' in row[7]:
-        freqs = []
-        fluxs = []
-        flux_errs = []
-    else:
+    if '†' not in row[7]:
         freqs     = [185.]
+        bands     = [30.72]
         fluxs     = [float(row[7].split("±")[0])]
         flux_errs = [float(row[7].split("±")[1])]
 
-    print(freqs)
-    print(fluxs)
-    print(flux_errs)
+        print(freqs)
+        print(fluxs)
+        print(flux_errs)
 
-    pulsar_dict[pulsar] = {"Frequency MHz":freqs, "Flux Density mJy":fluxs, "Flux Density error mJy":flux_errs}
+        pulsar_dict[pulsar] = {
+            "Frequency MHz":freqs,
+            "Bandwidth MHz":bands,
+            "Flux Density mJy":fluxs,
+            "Flux Density error mJy":flux_errs
+        }
 
 with open("Xue_2017.yaml", "w") as cat_file:
     cat_file.write(json.dumps(pulsar_dict, indent=1))
