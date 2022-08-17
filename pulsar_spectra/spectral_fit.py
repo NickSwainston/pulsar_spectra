@@ -419,7 +419,7 @@ def iminuit_fit_spectral_model(
             fit_info.append(f"{p} = ${v:.5f} \\pm {e:.5}$")
 
     # Calculate AIC
-    beta = robust_cost_function(model_function(freqs_Hz, *m.values), fluxs_Jy, flux_errs_Jy)
+    beta = robust_cost_function(model_function_intergrate((min_freqs_Hz, max_freqs_Hz), *m.values), fluxs_Jy, flux_errs_Jy)
     aic = 2*beta + 2*k + (2*k*(k+1)) / (len(freqs_Hz) - k -1)
     fit_info.append(f"AIC: {aic:.1f}")
 
@@ -502,8 +502,8 @@ def find_best_spectral_fit(pulsar, freqs_MHz, bands_MHz, fluxs_mJy, flux_errs_mJ
     model_i = []
     # loop over models and fit
     for i, model_name in enumerate(model_dict.keys()):
-        #model_function = model_dict[model_name][0]
-        model_function = model_dict[model_name][-1]
+        model_function = model_dict[model_name][0]
+        model_function_intergral = model_dict[model_name][-1]
         aic, iminuit_result, fit_info = iminuit_fit_spectral_model(freqs_MHz, bands_MHz, fluxs_mJy, flux_errs_mJy, ref_all,
                         model_name=model_name, plot=plot_all, plot_error=plot_error, save_name=f"{pulsar}_{model_name}_fit.png",
                         alternate_style=alternate_style, axis=axis, secondary_fit=secondary_fit, ref_markers=ref_markers)
