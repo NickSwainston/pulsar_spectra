@@ -7,6 +7,7 @@ import os
 import psrqpy
 
 query = psrqpy.QueryATNF(params=['PSRJ', 'NAME', 'PSRB']).pandas
+all_jnames = list(query['PSRJ'])
 
 def convert_csv_to_yaml(csv_location, ref_label):
     pulsar_dict = {}
@@ -19,11 +20,11 @@ def convert_csv_to_yaml(csv_location, ref_label):
         print("Input data:")
         for row in spamreader:
             #logger.debug(row)
-            print(row)
-            if len(row) == 4:
-                pulsar, freq, flux, flux_err = row
-            elif len(row) == 3:
-                pulsar, freq, flux = row
+            #print(row)
+            if len(row) == 5:
+                pulsar, freq, band, flux, flux_err = row
+            elif len(row) == 4:
+                pulsar, freq, band, flux = row
                 flux_err = float(flux) * 0.5
             else:
                 print(f"Error on row: {row}")
@@ -33,15 +34,23 @@ def convert_csv_to_yaml(csv_location, ref_label):
                 # convert from Bname to Jname
                 pid = list(query['PSRB']).index(pulsar)
                 pulsar = query['PSRJ'][pid]
+            if pulsar not in all_jnames:
+                print(f"{pulsar} not in the ANTF")
 
             if pulsar in pulsar_dict.keys():
                 # Append the new data
                 pulsar_dict[pulsar]["Frequency MHz"].append(float(freq))
+                pulsar_dict[pulsar]["Bandwidth MHz"].append(float(band))
                 pulsar_dict[pulsar]["Flux Density mJy"].append(float(flux))
                 pulsar_dict[pulsar]["Flux Density error mJy"].append(float(flux_err))
             else:
                 # Make dict for this pulsar
-                pulsar_dict[pulsar] = {"Frequency MHz":[float(freq)], "Flux Density mJy":[float(flux)], "Flux Density error mJy":[float(flux_err)]}
+                pulsar_dict[pulsar] = {
+                    "Frequency MHz":[float(freq)],
+                    "Bandwidth MHz":[float(band)],
+                    "Flux Density mJy":[float(flux)],
+                    "Flux Density error mJy":[float(flux_err)]
+                }
 
     # Dump the dict to the jsonfile in the catalogue directory
     with open(f"{os.path.dirname(os.path.realpath(__file__))}/../pulsar_spectra/catalogue_papers/{ref_label}.yaml", "w") as cat_file:
