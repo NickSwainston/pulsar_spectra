@@ -1,8 +1,10 @@
 #! /usr/bin/env python
 
 import os
+import yaml
+import psrqpy
 
-from pulsar_spectra.catalogue import collect_catalogue_fluxes, CAT_YAMLS, ADS_REF
+from pulsar_spectra.catalogue import collect_catalogue_fluxes, CAT_YAMLS, ADS_REF, ATNF_LOC
 
 import logging
 logger = logging.getLogger(__name__)
@@ -46,6 +48,25 @@ def test_missing_ads_refs():
         cat_ref = os.path.basename(cat_file).split(".")[0]
         print(cat_ref)
         assert cat_ref in ADS_REF
+
+
+def test_catalogue_format():
+    """Check the pulsar names are correct and that all the keys are correct.
+    """
+    query = psrqpy.QueryATNF().pandas
+    jnames = list(query['PSRJ'])
+    for cat_file in CAT_YAMLS:
+        print(cat_file)
+        with open(cat_file, "r") as stream:
+            cat_dict = yaml.safe_load(stream)
+        for pulsar in cat_dict.keys():
+            print(pulsar)
+            assert pulsar in jnames
+            assert 'Frequency MHz' in cat_dict[pulsar].keys()
+            assert 'Bandwidth MHz' in cat_dict[pulsar].keys()
+            assert 'Flux Density mJy' in cat_dict[pulsar].keys()
+            assert 'Flux Density error mJy' in cat_dict[pulsar].keys()
+
 
 
 # TODO finish below
