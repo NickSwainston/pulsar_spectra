@@ -304,6 +304,53 @@ def double_turn_over_spectrum(v, vc, vpeak, a, beta, c, v0):
     y2 = 0.
     return np.where(x < xc, y1, y2)
 
+
+def double_turn_over_spectrum_intergral(vmin_vmax, vc, vpeak, a, beta, c, v0):
+    """Double turn over spectrum, has a low frequency turn over and a high frequency cut off:
+
+    .. math::
+        S_v = c \\left( \\frac{v}{v0} \\right)^{a} \\left ( 1 - \\frac{v}{vc} \\right ) \\exp\\left [ \\frac{a}{\\beta} \\left( \\frac{v}{vc} \\right)^{-\\beta} \\right ],\\qquad v < vc
+
+    Parameters
+    ----------
+    v : `list`
+        Frequency in Hz.
+    vc : `list`
+        Cut off frequency in Hz.
+    vpeak : `list`
+        Peak/turn-over frequency in Hz.
+    a : `float`
+        Spectral Index.
+    beta : `float`
+        The smoothness of the turn-over.
+    c : `float`
+        Constant.
+    v0 : `float`
+        Reference frequency.
+
+    Returns
+    -------
+    S_v : `list`
+        The flux density predicted by the model.
+    """
+    vmin, vmax = vmin_vmax
+    BW = vmax - vmin
+    v = vmin + BW / 2
+    Xmin = ( vmin / v0 )**a
+    Xmax = ( vmax / v0 )**a
+    dXmin = ( vmin / v0 )**(a + 1)
+    dXmax = ( vmax / v0 )**(a + 1)
+    Ymin = - ( a / beta ) * ( vmin / vpeak )**( -beta )
+    Ymax = - ( a / beta ) * ( vmax / vpeak )**( -beta )
+    Z = - ( a + 1 ) / beta
+    dZ = - ( a + 2 ) / beta
+    part1 = vmax * Xmax * Ymax**(-Z) * gammainc_up(Z, Ymax) - vmin * Xmin * Ymin**(-Z) * gammainc_up(Z, Ymin)
+    part2 = ( v0 / vc ) * ( vmax * dXmax * Ymax**(-dZ) * gammainc_up(dZ, Ymax) - vmin * dXmin * Ymin**(-dZ) * gammainc_up(dZ, Ymin) )
+    y1 = ( c / ( BW * beta ) ) * (part1 - part2)
+    y2 = 0
+    return np.where(v < vc, y1, y2)
+
+
 def model_settings(print_models=False):
     """Holds metadata about spectral models such as common names and default fit parameters.
 
@@ -381,13 +428,14 @@ def model_settings(print_models=False):
             [(vpeak_min, vpeak_max), (a_min, 0.), (c_min, c_max) , (beta_min, beta_max)],
             low_frequency_turn_over_power_law_intergral,
         ],
-        # "double_turn_over_spectrum" : [
-        #     double_turn_over_spectrum,
-        #     "double turn over spectrum",
-        #     #(vc, vpeak, a, beta, c)
-        #     (vc_s, vpeak_s, a_s, beta_s, c_s),
-        #     [(vc_both), (vpeak_min, vpeak_max), (a_min, 0.), (beta_min, beta_max), (c_min, c_max)],
-        # ],
+        "double_turn_over_spectrum" : [
+            double_turn_over_spectrum,
+            "double turn over spectrum",
+            #(vc, vpeak, a, beta, c)
+            (vc_s, vpeak_s, a_s, beta_s, c_s),
+            [(vc_both), (vpeak_min, vpeak_max), (a_min, 0.), (beta_min, beta_max), (c_min, c_max)],
+            double_turn_over_spectrum_intergral,
+        ],
         #"double_broken_power_law" : [
         #    double_broken_power_law,
         #    "double bpl",
