@@ -3,6 +3,9 @@
   "Frequency MHz": [
    17000.0
   ],
+  "Bandwidth MHz": [
+   1024
+  ],
   "Flux Density mJy": [
    0.58
   ],
@@ -13,6 +16,9 @@
  "J0738-4042": {
   "Frequency MHz": [
    17000.0
+  ],
+  "Bandwidth MHz": [
+   1024
   ],
   "Flux Density mJy": [
    0.23
@@ -25,6 +31,10 @@
   "Frequency MHz": [
    17000.0,
    24000.0
+  ],
+  "Bandwidth MHz": [
+   1024,
+   1024
   ],
   "Flux Density mJy": [
    5.0,
@@ -39,6 +49,9 @@
   "Frequency MHz": [
    17000.0
   ],
+  "Bandwidth MHz": [
+   1024
+  ],
   "Flux Density mJy": [
    0.26
   ],
@@ -49,6 +62,9 @@
  "J1048-5832": {
   "Frequency MHz": [
    17000.0
+  ],
+  "Bandwidth MHz": [
+   1024
   ],
   "Flux Density mJy": [
    0.36
@@ -61,6 +77,10 @@
   "Frequency MHz": [
    17000.0,
    24000.0
+  ],
+  "Bandwidth MHz": [
+   1024,
+   1024
   ],
   "Flux Density mJy": [
    8.0,
@@ -75,6 +95,9 @@
   "Frequency MHz": [
    17000.0
   ],
+  "Bandwidth MHz": [
+   1024
+  ],
   "Flux Density mJy": [
    0.16
   ],
@@ -86,6 +109,9 @@
   "Frequency MHz": [
    17000.0
   ],
+  "Bandwidth MHz": [
+   1024
+  ],
   "Flux Density mJy": [
    1.1
   ],
@@ -96,6 +122,9 @@
  "J1740-3015": {
   "Frequency MHz": [
    17000.0
+  ],
+  "Bandwidth MHz": [
+   1024
   ],
   "Flux Density mJy": [
    0.34

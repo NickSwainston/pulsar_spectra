@@ -1,4 +1,8 @@
 import json
+import psrqpy
+
+query = psrqpy.QueryATNF(params=['PSRJ', 'NAME', 'PSRB']).pandas
+all_jnames = list(query['PSRJ'])
 
 with open("Karastergiou_2005_raw.csv", "r") as raw_file:
     lines = raw_file.readlines()
@@ -6,19 +10,22 @@ with open("Karastergiou_2005_raw.csv", "r") as raw_file:
 pulsar_dict = {}
 for row in lines:
     row = row.split(",")
-    print(row)
-    pulsar = row[0].replace("–", "-")
+    pulsar = row[0].replace("–", "-").replace("—", "-").replace("-", "-").strip()
+    # Wrong names I found
+    if "J1012—5857" in pulsar:
+        pulsar = "J1012-5857"
+    if pulsar not in all_jnames:
+        print(pulsar)
+        print(len(pulsar))
 
-    pulsar_dict[pulsar] = {"Frequency MHz":[3100],
-                           "Flux Density mJy":[float(row[3])],
-                           # Text doesn't mention uncertainty so assuming 50%
-                           "Flux Density error mJy":[float(row[3])*0.5]}
-
-    if row[2] != "":
-        pulsar_dict[pulsar]["Frequency MHz"] += [1400]
-        pulsar_dict[pulsar]["Flux Density mJy"] += [float(row[2])]
-        pulsar_dict[pulsar]["Flux Density error mJy"] += [float(row[2])*0.5]
+    pulsar_dict[pulsar] = {
+        "Frequency MHz":[3100],
+        "Bandwidth MHz":[1024],
+        "Flux Density mJy":[float(row[3])],
+        # Text doesn't mention uncertainty so assuming 50%
+        "Flux Density error mJy":[float(row[3])*0.5]
+    }
 
 with open("Karastergiou_2005.yaml", "w") as cat_file:
     cat_file.write(json.dumps(pulsar_dict, indent=1))
-print(pulsar_dict)
+#print(pulsar_dict)

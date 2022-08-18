@@ -4,6 +4,10 @@
    436,
    640,
   ],
+  "Bandwidth MHz": [
+   32,
+   32,
+  ],
   "Flux Density mJy": [
    1.53,
    1.54,
@@ -17,6 +21,10 @@
   "Frequency MHz": [
    436,
    640,
+  ],
+  "Bandwidth MHz": [
+   32,
+   32,
   ],
   "Flux Density mJy": [
    0.95,

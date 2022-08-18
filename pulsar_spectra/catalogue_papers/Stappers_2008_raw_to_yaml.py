@@ -17,7 +17,8 @@ for row in lines:
         pulsar = row[0]
 
     pulsar_dict[pulsar] = {
-        "Frequency MHz":[147.5], # assumed from the bandwidth
+        "Frequency MHz":[147.5],
+        "Bandwidth MHz":[60],
         "Flux Density mJy":[float(row[3])],
         "Flux Density error mJy":[float(row[4])],
     }

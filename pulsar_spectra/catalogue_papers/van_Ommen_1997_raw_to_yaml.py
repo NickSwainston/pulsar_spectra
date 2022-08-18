@@ -22,9 +22,12 @@ for row in lines:
         elif obs_period == "1991":
             pe = .3
         flux = float(row[-8].replace("'", ""))
-        pulsar_dict[pulsar] = {"Frequency MHz":[float(row[-11])],
-                               "Flux Density mJy":[flux],
-                               "Flux Density error mJy":[round(flux*pe, 4)]}
+        pulsar_dict[pulsar] = {
+            "Frequency MHz":[float(row[-11])],
+            "Bandwidth MHz":[float(row[-10])],
+            "Flux Density mJy":[flux],
+            "Flux Density error mJy":[round(flux*pe, 4)]
+        }
     else:
         obs_period = row[0]
         if obs_period == "1979":
@@ -35,6 +38,7 @@ for row in lines:
             pe = .3
         flux = float(row[4].replace("'", ""))
         pulsar_dict[pulsar]["Frequency MHz"] += [float(row[1])]
+        pulsar_dict[pulsar]["Bandwidth MHz"] += [float(row[2])]
         pulsar_dict[pulsar]["Flux Density mJy"] += [flux]
         pulsar_dict[pulsar]["Flux Density error mJy"] += [round(flux*pe, 4)]
 

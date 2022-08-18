@@ -13,13 +13,17 @@ for row in lines:
         bname = row[0].replace("−", "-")
         pid = list(query['PSRB']).index(bname)
         pulsar = query['PSRJ'][pid]
-        pulsar_dict[pulsar] = {"Frequency MHz":[],
-                               "Flux Density mJy":[],
-                               "Flux Density error mJy":[]}
+        pulsar_dict[pulsar] = {
+            "Frequency MHz":[],
+            "Bandwidth MHz":[],
+            "Flux Density mJy":[],
+            "Flux Density error mJy":[]
+        }
     freq = float(row[-4])
     if ">" not in row[-2]:
         flux, flux_err = row[-2].split("±")
         pulsar_dict[pulsar]["Frequency MHz"] += [freq]
+        pulsar_dict[pulsar]["Bandwidth MHz"] += [16]
         pulsar_dict[pulsar]["Flux Density mJy"] += [float(flux)]
         pulsar_dict[pulsar]["Flux Density error mJy"] += [float(flux_err)]
 

@@ -24,12 +24,16 @@ for row in lines[2:]:
         pulsar = query['PSRJ'][pid]
 
         if pulsar not in pulsar_dict.keys():
-            pulsar_dict[pulsar] = {"Frequency MHz":[],
-                                   "Flux Density mJy":[],
-                                   "Flux Density error mJy":[]}
+            pulsar_dict[pulsar] = {
+                "Frequency MHz":[],
+                "Bandwidth MHz":[],
+                "Flux Density mJy":[],
+                "Flux Density error mJy":[]
+            }
 
     if not "<" in row[2]:
         pulsar_dict[pulsar]["Frequency MHz"] += [14800]
+        pulsar_dict[pulsar]["Bandwidth MHz"] += [500]
         # 10^-29Jm^-2Hz^-1 = mJy
 
         if "mode" in row[2]:
@@ -48,6 +52,7 @@ for row in lines[2:]:
 
     if not "<" in row[6]:
         pulsar_dict[pulsar]["Frequency MHz"] += [22700]
+        pulsar_dict[pulsar]["Bandwidth MHz"] += [300]
         # 10^-29Jm^-2Hz^-1 = mJy
 
         if "±" in row[6]:

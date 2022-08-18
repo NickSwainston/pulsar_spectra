@@ -17,14 +17,19 @@ for row in lines:
         pulsar = row[0].replace("−", "-")
 
     freqs = [610, 1170, 2640, 4850]
-    pulsar_dict[pulsar] = {"Frequency MHz":[],
-                           "Flux Density mJy":[],
-                           "Flux Density error mJy":[]}
-    for freq, pair in zip(freqs, row[1:]):
+    bands = [16, 16, 100, 500]
+    pulsar_dict[pulsar] = {
+        "Frequency MHz":[],
+        "Bandwidth MHz":[],
+        "Flux Density mJy":[],
+        "Flux Density error mJy":[]
+    }
+    for freq, band, pair in zip(freqs, bands, row[1:]):
         if "±" in pair:
             flux, flux_err_pair = pair.split("±")
             flux_err, count = flux_err_pair.split("(")
             pulsar_dict[pulsar]["Frequency MHz"] += [float(freq)]
+            pulsar_dict[pulsar]["Bandwidth MHz"] += [float(band)]
             pulsar_dict[pulsar]["Flux Density mJy"] += [float(flux)]
             pulsar_dict[pulsar]["Flux Density error mJy"] += [float(flux_err)]
 

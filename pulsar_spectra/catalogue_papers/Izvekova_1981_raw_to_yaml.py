@@ -52,12 +52,29 @@ for row in lines[2:]:
         pulsar = query['PSRJ'][pid]
 
         if pulsar not in pulsar_dict.keys():
-            pulsar_dict[pulsar] = {"Frequency MHz":[],
-                                   "Flux Density mJy":[],
-                                   "Flux Density error mJy":[]}
+            pulsar_dict[pulsar] = {
+                "Frequency MHz":[],
+                "Bandwidth MHz":[],
+                "Flux Density mJy":[],
+                "Flux Density error mJy":[]
+            }
 
     if not ("^" in row[3] or "<" in row[3]):
-        pulsar_dict[pulsar]["Frequency MHz"] += [float(row[2])]
+        freq = float(row[2])
+        # Assuming largest bandwidth from table 1
+        if freq == 39. or freq == 40.:
+            band = 0.64
+        elif freq == 61.:
+            band = 0.84
+        elif freq == 86. or freq == 85. or freq == 88.:
+            band = 0.42
+        elif freq == 102.5:
+            band = 1.92
+        else:
+            print(freq)
+            exit()
+        pulsar_dict[pulsar]["Frequency MHz"] += [freq]
+        pulsar_dict[pulsar]["Bandwidth MHz"] += [band]
         flux, flux_err = row[3].replace("*", "").replace(" ", "").replace("+", "±").split("±")
         # 10^-29Jm^-2Hz^-1 = mJys
         pulsar_dict[pulsar]["Flux Density mJy"] += [float(flux)*1e3/query['P0'][pid]]

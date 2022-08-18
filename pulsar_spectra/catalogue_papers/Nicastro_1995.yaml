@@ -1,8 +1,12 @@
 {
  "J1012+5307": {
   "Frequency MHz": [
-   400,
+   411,
    1400,
+  ],
+  "Bandwidth MHz": [
+   8,
+   8,
   ],
   "Flux Density mJy": [
    30,
