@@ -117,7 +117,7 @@ def convert_antf_ref(ref_code, ref_dict=None):
 
     # Find the parts we need
     author = ref_string_list[0][:-1]
-    logger.debug(ref_string_list)
+    #logger.debug(ref_string_list)
     for ref_part in ref_string_list:
         if ref_part.endswith('.') and len(ref_part) == 5 and ref_part[:-1].isnumeric():
             year = ref_part[:-1]
@@ -166,6 +166,7 @@ def flux_from_atnf(pulsar, query=None, ref_dict=None, assumed_error=0.5):
             flux_queries.append(table_param)
 
     freq_all     = []
+    band_all     = []
     flux_all     = []
     flux_err_all = []
     references   = []
@@ -200,13 +201,14 @@ def flux_from_atnf(pulsar, query=None, ref_dict=None, assumed_error=0.5):
             else:
                 freq = int(flux_query[1:])
             freq_all.append(freq)
+            band_all.append(None)
 
             # Grab reference code and convert to "Author Year" format
             ref_code = query[flux_query+"_REF"][query_id]
             ref = convert_antf_ref(ref_code, ref_dict=ref_dict)
             references.append(f"{ref}_ATNF")
 
-    return freq_all, flux_all, flux_err_all, references
+    return freq_all, band_all, flux_all, flux_err_all, references
 
 def all_flux_from_atnf(query=None):
     """Queries the ATNF database for flux info for all pulsar at all frequencies.
@@ -239,11 +241,18 @@ def all_flux_from_atnf(query=None):
     jname_cat = {}
     for jname in jnames:
         jname_cat[jname] = {}
-        freq_all, flux_all, flux_err_all, references = flux_from_atnf(jname, query=query, ref_dict=ref_dict)
-        for freq, flux, flux_err, ref in zip(freq_all, flux_all, flux_err_all, references):
+        freq_all, band_all, flux_all, flux_err_all, references = flux_from_atnf(jname, query=query, ref_dict=ref_dict)
+        for freq, band, flux, flux_err, ref in zip(freq_all, band_all, flux_all, flux_err_all, references):
             if ref not in jname_cat[jname].keys():
-                jname_cat[jname][ref] = {"Frequency MHz":[], "Flux Density mJy":[], "Flux Density error mJy":[]}
+                jname_cat[jname][ref] = {
+                    "Frequency MHz":[],
+                    "Bandwidth MHz":[],
+                    "Flux Density mJy":[],
+                    "Flux Density error mJy":[],
+                }
             jname_cat[jname][ref]['Frequency MHz'] += [freq]
+            # Add Nones so the software can easily tell there are missing bandwidths
+            jname_cat[jname][ref]['Bandwidth MHz'] += [band]
             jname_cat[jname][ref]['Flux Density mJy'] += [flux]
             jname_cat[jname][ref]['Flux Density error mJy'] += [flux_err]
     return jname_cat
@@ -328,8 +337,7 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None):
                 jname_cat_dict[jname][cat_label] = cat_dict[jname]
                 # Update list
                 jname_cat_list[jname][0] += cat_dict[jname]['Frequency MHz']
-                if "Bandwidth MHz" in cat_dict[jname].keys():
-                    jname_cat_list[jname][1] += cat_dict[jname]['Bandwidth MHz']
+                jname_cat_list[jname][1] += cat_dict[jname]['Bandwidth MHz']
                 jname_cat_list[jname][2] += cat_dict[jname]['Flux Density mJy']
                 jname_cat_list[jname][3] += cat_dict[jname]['Flux Density error mJy']
                 jname_cat_list[jname][4] += [cat_label] * len(cat_dict[jname]['Frequency MHz'])
@@ -359,24 +367,28 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None):
 
             if raw_ref in jname_cat_dict[jname].keys():
                 # Check for redundant data
-                for freq, flux, flux_err in zip(antf_dict[jname][ref]['Frequency MHz'],
-                                                antf_dict[jname][ref]['Flux Density mJy'],
-                                                antf_dict[jname][ref]['Flux Density error mJy']):
+                for freq, band, flux, flux_err in zip(antf_dict[jname][ref]['Frequency MHz'],
+                                                      antf_dict[jname][ref]['Bandwidth MHz'],
+                                                      antf_dict[jname][ref]['Flux Density mJy'],
+                                                      antf_dict[jname][ref]['Flux Density error mJy']):
                     if flux     in jname_cat_dict[jname][raw_ref]['Flux Density mJy'] and \
                        flux_err in jname_cat_dict[jname][raw_ref]['Flux Density error mJy']:
                         logger.debug(f"Redundant data  pulsar:{jname}  ref:{raw_ref}  freq:{freq}  flux:{flux}  flux_err:{flux_err}")
                     else:
                         # Update list
                         jname_cat_list[jname][0] += [freq]
+                        jname_cat_list[jname][1] += [band]
                         jname_cat_list[jname][2] += [flux]
                         jname_cat_list[jname][3] += [flux_err]
                         jname_cat_list[jname][4] += [ref]
             else:
                 # Update list
-                for freq, flux, flux_err in zip(antf_dict[jname][ref]['Frequency MHz'],
-                                                antf_dict[jname][ref]['Flux Density mJy'],
-                                                antf_dict[jname][ref]['Flux Density error mJy']):
+                for freq, band, flux, flux_err in zip(antf_dict[jname][ref]['Frequency MHz'],
+                                                      antf_dict[jname][ref]['Bandwidth MHz'],
+                                                      antf_dict[jname][ref]['Flux Density mJy'],
+                                                      antf_dict[jname][ref]['Flux Density error mJy']):
                     jname_cat_list[jname][0] += [freq]
+                    jname_cat_list[jname][1] += [band]
                     jname_cat_list[jname][2] += [flux]
                     jname_cat_list[jname][3] += [flux_err]
                     jname_cat_list[jname][4] += [ref]
