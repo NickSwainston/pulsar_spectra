@@ -101,6 +101,51 @@ def broken_power_law(v, vb, a1, a2, c, v0):
     return np.where(x <= xb, y1, y2)
 
 
+def broken_power_law_intergral(vmin_vmax, vb, a1, a2, c, v0):
+    """Broken power law:
+
+    .. math::
+
+        S_v = \\begin{cases}
+        c \\left( \\frac{v}{v0} \\right)^{a1}   & \\mathrm{if}\\: v \\leq vb \\\\
+        c \\left( \\frac{v}{v0} \\right)^{a2} \\left( \\frac{vb}{v0} \\right)^{a1-a2} & \\mathrm{otherwise} \\\\
+        \\end{cases}
+
+    Parameters
+    ----------
+    v : `list`
+        Frequency in Hz.
+    vb : `float`
+        The frequency of the break in Hz.
+    a1 : `float`
+        The spectral index before the break.
+    a2 : `float`
+        The spectral index after the break.
+    c : `float`
+        Constant.
+    v0 : `float`
+        Reference frequency.
+
+    Returns
+    -------
+    S_v : `list`
+        The flux density predicted by the model.
+    """
+    vmin, vmax = vmin_vmax
+    return np.select(
+        [
+            (vmin < vmax) & (vmax <= vb),
+            (vb <= vmin) & (vmin < vmax),
+            (vmin < vb) & (vb < vmax)
+        ],
+        [
+            c * ( vmax**(a1+1) - vmin**(a1+1) ) / ( (vmax - vmin) * v0**a1 * (a1+1) ),
+            c * ( vmax**(a2+1) - vmin**(a2+1) ) / ( (vmax - vmin) * v0**a2 * (a2+1) ) * ( vb / v0 )**(a1-a2),
+            c * ( vmax**(a1+1) - vmin**(a1+1) ) / ( (vb - vmin) * v0**a1 * (a1+1) ) + c * ( vmax**(a2+1) - vmin**(a2+1) ) / ( (vmax - vb) * v0**a2 * (a2+1) ) * ( vb / v0 )**(a1-a2),
+        ]
+    )
+
+
 def double_broken_power_law(v, vb1, vb2, a1, a2, a3, c, v0):
     x = v / v0
     xb1 = vb1 / v0
@@ -109,6 +154,7 @@ def double_broken_power_law(v, vb1, vb2, a1, a2, a3, c, v0):
     [lambda x: c*x**a1, \
      lambda x: c*x**a2*(xb1)**(a1-a2), \
      lambda x: c*x**a3*(xb1)**(a1-a2)*(xb2)**(a2-a3)])
+
 
 def log_parabolic_spectrum(v, a, b, c, v0):
     """Log-parabolic spectrum:
@@ -398,13 +444,14 @@ def model_settings(print_models=False):
             [(a_min, a_max), (c_min, c_max)],
             simple_power_law_intergrate,
         ],
-        # "broken_power_law" : [
-        #     broken_power_law,
-        #     "broken pl",
-        #     #(vb, a1, a2, c)
-        #     (1e9, a_s, a_s, c_s),
-        #     [(50e6, 5e9), (a_min, a_max), (a_min, a_max), (c_min, c_max)],
-        # ],
+        "broken_power_law" : [
+            broken_power_law,
+            "broken pl",
+            #(vb, a1, a2, c)
+            (1e9, a_s, a_s, c_s),
+            [(50e6, 5e9), (a_min, a_max), (a_min, a_max), (c_min, c_max)],
+            broken_power_law_intergral,
+        ],
         # "log_parabolic_spectrum" : [
         #     log_parabolic_spectrum,
         #     "lps",
