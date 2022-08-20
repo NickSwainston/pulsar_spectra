@@ -588,16 +588,6 @@ def find_best_spectral_fit(pulsar, freqs_MHz, bands_MHz, fluxs_mJy, flux_errs_mJ
         for i, _ in enumerate(aics):
             li.append(np.exp(-1/2 * np.abs(aics[i] - aics[aici])))
         p_best = 1 / np.sum(li)
-        # Work out the catagory
-        #TODO work out what the curvature paramter is and implimented it
-        if p_best > 0.8:
-            p_category = 'clear'
-        elif p_best > 0.7:
-            p_category = 'strong'
-        elif p_best > 0.5:
-            p_category = 'candidate'
-        else:
-            p_category = 'weak'
 
         # Perform plots
         if plot_compare:
@@ -614,7 +604,7 @@ def find_best_spectral_fit(pulsar, freqs_MHz, bands_MHz, fluxs_mJy, flux_errs_mJ
             plot_fit(freqs_MHz, bands_MHz, fluxs_mJy, flux_errs_mJy, ref_all, model_dict[best_model_name][0], iminuit_results[aici], fit_infos[aici],
                     save_name=f"{pulsar}_{best_model_name}_fit.png", plot_error=plot_error, alternate_style=alternate_style,
                     axis=axis, secondary_fit=secondary_fit, fit_range=fit_range, ref_markers=ref_markers, plot_bands=band_bools[aici])
-        return best_model_name, iminuit_results[aici], fit_infos[aici], p_best, p_category
+        return best_model_name, iminuit_results[aici], fit_infos[aici], p_best, band_bools[aici]
 
 
 def estimate_flux_density(
