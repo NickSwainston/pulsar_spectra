@@ -55,7 +55,8 @@ reqs = [
         'numpy>=1.13.3',
         'matplotlib>=3.4.0',
         'psrqpy>=1.0.5',
-        'iminuit',
+        'iminuit>=2.11.1',
+        'jacobi',
         'PyYAML',
         'panda<=1.3.5',
        ]

@@ -5,7 +5,7 @@ Functions used to fit different spectral models to the fluxs_mJy densities of pu
 import numpy as np
 from iminuit import Minuit
 from iminuit.cost import LeastSquares
-from iminuit.util import propagate
+from jacobi import propagate
 
 import matplotlib.pyplot as plt
 from matplotlib.ticker import FormatStrFormatter
@@ -424,7 +424,7 @@ def iminuit_fit_spectral_model(
             print(save_name)
             for freq, band, flux, flux_err, ref in zip(freqs_MHz, bands_MHz, fluxs_mJy, fluxs_mJy, ref):
                 print(f"{float(freq):8.1f}{float(band):8.1f}{float(flux):12.4f}{float(flux_err):12.4f} {str(ref):20s}")
-            exit()
+            return 1e9, None, None, False
         max_freqs_Hz = freqs_Hz + bands_Hz / 2
         least_squares = LeastSquares((min_freqs_Hz, max_freqs_Hz), fluxs_Jy, flux_errs_Jy, model_function_intergrate)
         least_squares.loss = huber_loss_function
