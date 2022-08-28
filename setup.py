@@ -59,6 +59,7 @@ reqs = [
         'jacobi',
         'PyYAML',
         'panda<=1.3.5',
+        'sympy',
        ]
 
 # Download the ANTF_pulsar_database_file file if it doesn't exist
