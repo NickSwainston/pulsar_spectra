@@ -79,6 +79,7 @@ ADS_REF = {
     "Wolszczan_1992": "https://ui.adsabs.harvard.edu/abs/1992Natur.355..145W/abstract",
     "Xie_2019": "https://ui.adsabs.harvard.edu/abs/2019RAA....19..103X/abstract",
     "Lorimer_1995b": "https://ui.adsabs.harvard.edu/abs/1995MNRAS.273..411L/abstract",
+    "Kaur_2019": "https://ui.adsabs.harvard.edu/abs/2019ApJ...882..133K/abstract",
 }
 
 
