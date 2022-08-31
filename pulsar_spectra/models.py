@@ -440,6 +440,65 @@ def double_turn_over_spectrum_intergral(vmin_vmax, vc, vpeak, a, beta, c, v0):
     return np.where(v < vc, y1, y2)
 
 
+def double_turn_over_spectrum_taylor(vmin_vmax, vc, vpeak, a, beta, c, v0):
+    """Double turn over spectrum, has a low frequency turn over and a high frequency cut off:
+
+    .. math::
+        S_v = c \\left( \\frac{v}{v0} \\right)^{a} \\left ( 1 - \\frac{v}{vc} \\right ) \\exp\\left [ \\frac{a}{\\beta} \\left( \\frac{v}{vc} \\right)^{-\\beta} \\right ],\\qquad v < vc
+
+    Parameters
+    ----------
+    v : `list`
+        Frequency in Hz.
+    vc : `list`
+        Cut off frequency in Hz.
+    vpeak : `list`
+        Peak/turn-over frequency in Hz.
+    a : `float`
+        Spectral Index.
+    beta : `float`
+        The smoothness of the turn-over.
+    c : `float`
+        Constant.
+    v0 : `float`
+        Reference frequency.
+
+    Returns
+    -------
+    S_v : `list`
+        The flux density predicted by the model.
+    """
+    vmin, vmax = vmin_vmax
+    BW = vmax - vmin
+    v = (vmax + vmin) / 2
+    X = (v / vpeak)**beta
+    Y = (v - vc)
+    Z = c*(v/v0)**a * np.exp( a / beta * (v/vpeak)**(-beta) )
+    s0 = double_turn_over_spectrum(v, vc, vpeak, a, beta, c, v0)
+    s2 = (Z * a) / (v**2 * vc * X**2) * (-a*Y - 2*v*X**2 + 2*v*X + X**2*Y*(1-a) + X*Y*(2*a - beta - 1))
+    s4 = (Z * a) / (v**4 * vc * X**4) * ( \
+        X**4 * (\
+            v  * (-a**3 + 2*a**2 + a - 2) + \
+            vc * (a**3 - 6*a**2 + 11*a - 6) \
+        ) + \
+        X**3 * (\
+            v  * (4*a**3 - 6*a**2*beta - 6*a**2 + 4*a*beta**2 + 6*a*beta - 2*a - beta**3 - 2*beta**2 + beta + 2) + \
+            vc * (-4*a**3 + 6*a**2*beta + 18*a**2 - 4*a*beta**2 - 18*a*beta - 22*a + beta**3 + 6*beta**2 + 11*beta + 6) \
+        ) + \
+        X**2*a*(\
+            v  * (-6*a**2 + 12*a*beta + 6*a - 7*beta**2 - 6*beta + 1) + \
+            vc * (6*a**2 - 12*a*beta - 18*a + 7*beta**2 + 18*beta + 11) \
+        ) + \
+        X*a**2*(\
+            v  * (4*a - 6*beta - 2) + \
+            vc * (-4*a + 6*beta + 6) \
+        ) + \
+        a**3*vc - a**3*v\
+    )
+    sv = s0 + (s2*BW**2) / 12 + (s4*BW**4) / 80
+    return np.where(v < vc, sv, 0)
+
+
 def model_settings(print_models=False):
     """Holds metadata about spectral models such as common names and default fit parameters.
 
@@ -524,7 +583,7 @@ def model_settings(print_models=False):
             #(vc, vpeak, a, beta, c)
             (vc_s, vpeak_s, a_s, beta_s, c_s),
             [(vc_both), (vpeak_min, vpeak_max), (a_min, 0.), (beta_min, beta_max), (c_min, c_max)],
-            double_turn_over_spectrum_intergral,
+            double_turn_over_spectrum_taylor,
         ],
         #"double_broken_power_law" : [
         #    double_broken_power_law,
