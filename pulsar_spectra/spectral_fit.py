@@ -97,9 +97,9 @@ def propagate_flux_n_err(freqs, model, iminuit_result):
     Returns
     -------
     fitted_flux : `list`
-        A list of the fluxes based on the input model and fit results.
+        A list of the fluxes (in mJy) based on the input model and fit results.
     fitted_flux_err : `list`
-        A list of flux errors if possible or Nones if not possible.
+        A list of flux errors (in mJy)  if possible or Nones if not possible.
     """
     if iminuit_result.valid:
         try:
@@ -308,7 +308,7 @@ def migrad_simplex_scan(m, mod_limits, model_name):
             if m.valid:
                 logger.debug(f"Found for fit with {model_name} using scan and {m.nfcn} calls.")
     if not m.valid:
-        logger.warning(f"No valid minimum found for model {model_name}.")
+        logger.warning(f"No valid minimum found for model {model_name} after {m.nfcn} calls.")
     return m
 
 
@@ -626,9 +626,9 @@ def estimate_flux_density(
     Returns
     -------
     fitted_flux : `float` or `list`
-        The estimated flux density of the pulsar at the input frequencies.
+        The estimated flux density  (in mJy) of the pulsar at the input frequencies.
     fitted_flux_err : `float` or `list`
-        The estimated flux density errors of the pulsar at the input frequencies.
+        The estimated flux density (in mJy)  errors of the pulsar at the input frequencies.
     """
     # make sure est_freq is a numpy array
     single_value = False
