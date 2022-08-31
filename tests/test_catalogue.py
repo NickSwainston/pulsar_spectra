@@ -66,6 +66,8 @@ def test_catalogue_format():
             assert 'Bandwidth MHz' in cat_dict[pulsar].keys()
             assert 'Flux Density mJy' in cat_dict[pulsar].keys()
             assert 'Flux Density error mJy' in cat_dict[pulsar].keys()
+            assert len(cat_dict[pulsar]['Frequency MHz']) == len(cat_dict[pulsar]['Bandwidth MHz']) ==\
+                   len(cat_dict[pulsar]['Flux Density mJy' ]) == len(cat_dict[pulsar]['Flux Density error mJy'])
 
 
 
