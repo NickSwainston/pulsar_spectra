@@ -259,7 +259,7 @@ def all_flux_from_atnf(query=None):
     return jname_cat
 
 
-def collect_catalogue_fluxes(only_use=None, exclude=None, query=None):
+def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=True):
     """Collect the fluxes from all of the catalogues recorded in this repo.
 
     Parameters
@@ -270,6 +270,8 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None):
         A list of reference labels (in the format 'Author_year') of all the papers you want to exclude.
     query : psrqpy object, optional
         A previous psrqpy.QueryATNF query. Can be supplied to prevent performing a new query.
+    use_atnf: `bool`, optional
+        Whether the ATNF values should be included. Default: True.
 
     Returns
     -------
@@ -343,6 +345,10 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None):
                 jname_cat_list[jname][3] += cat_dict[jname]['Flux Density error mJy']
                 jname_cat_list[jname][4] += [cat_label] * len(cat_dict[jname]['Frequency MHz'])
 
+    if not use_atnf:
+        # return before including atnf
+        return jname_cat_list
+
     # Add the antf to the cataogues
     antf_dict = all_flux_from_atnf(query=query)
     # refs that have errors that we plan to inform ANTF about
@@ -393,7 +399,6 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None):
                     jname_cat_list[jname][2] += [flux]
                     jname_cat_list[jname][3] += [flux_err]
                     jname_cat_list[jname][4] += [ref]
-
 
     return jname_cat_list
 
