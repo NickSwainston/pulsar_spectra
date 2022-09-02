@@ -242,8 +242,8 @@ def high_frequency_cut_off_power_law_intergral(vmin_vmax, vc, a, c, v0):
     """
     vmin, vmax = vmin_vmax
     BW = vmax - vmin
-    v = vmin + BW / 2
-    y1 = c / ( BW * v0**a ) * ( (vmax**(a+1) - vmin**(a+1)) / (a+1) + (vmax**(a+2) - vmin**(a+2)) / (v0 * vc * (a+2)))
+    v = (vmin + vmax) / 2
+    y1 = c / ( BW * v0**a ) * ( (vmax**(a+1) - vmin**(a+1)) / (a+1) + (vmax**(a+2) - vmin**(a+2)) / (vc * (a+2)))
     y2 = 0.
     return np.where(v < vc, y1, y2)
 
@@ -348,10 +348,10 @@ def low_frequency_turn_over_power_law_taylor(vmin_vmax, vpeak, a, c, beta, v0):
     s0 = low_frequency_turn_over_power_law(v, vpeak, a, c, beta, v0)
     s2 = (s0 * a) / (v**2 * X**2) * (X**2* (a - 1) + X*(-2*a + beta + 1) + a)
     s4 = (s0 * a) / (v**4 * X**4) * ( \
-        X**4 * (a**3 - 4*a**3 + 6*a**2 + 11*a - 6) + \
-        X**3 * (6*a**2*beta - 4*a*beta**2 + 18*a*beta + 18*a**2 - 22*a + beta**3 + 6*beta**2 + 11*beta - 6) + \
-        X**2*a*(6*a**2 - 12*a*beta + 18*a + 7*beta**2 - 18*beta + 11) + \
-        X*a**2*(4*a + 6*beta - 6) + \
+        X**4 * (a**3 - 6*a**2 + 11*a - 6) + \
+        X**3 * (-4*a**3 + 6*a**2*beta + 18*a**2 - 4*a*beta**2 - 18*a*beta - 22*a + beta**3 + 6*beta**2 + 11*beta + 6) + \
+        X**2*a*(6*a**2 - 12*a*beta - 18*a + 7*beta**2 + 18*beta + 11) + \
+        X*a**2*(-4*a + 6*beta + 6) + \
         a**3\
     )
     return s0 + (s2*BW**2) / 12 + (s4*BW**4) / 80
