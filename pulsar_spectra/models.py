@@ -4,7 +4,6 @@ Spectral models from Jankowski et al. 2018 and references within
 
 import numpy as np
 from mpmath import gammainc
-from sympy import N, symbols, exp
 
 def gammainc_up(a,z):
     """Vectorised upper incomplete gamma function.
@@ -12,26 +11,6 @@ def gammainc_up(a,z):
     """
     return np.asarray([gammainc(a, zi, regularized=False)
                        for zi in z]).astype(float)
-
-
-def create_bandwidth_taylor_series(f, nterms, s_v, s_BW):
-    # savg = np.zeros(len(v), dtype=float)
-    # last_function = f
-    # for k in range(2,nterms*2+1, 2):
-    #     f = last_function.diff(s_v).diff(s_v).simplify()
-    #     simp_func = N(f.subs(input_vals))
-    #     # vectorise
-    #     vec_fun = np.vectorize(lambda x, y: simp_func.subs(s_v, x) / (2*k+1) * (y/2)**(2*k))
-    #     savg += np.array(vec_fun(v, BW), dtype=float)
-    #     last_function = f
-    # return savg
-    savg = f
-    last_function = f
-    for k in range(2,nterms*2+1, 2):
-        f = last_function.diff(s_v).diff(s_v).simplify()
-        savg += f / (2*k+1) * (s_BW/2)**(2*k)
-        last_function = f
-    return savg
 
 
 def simple_power_law(v, a, c, v0):
@@ -264,23 +243,9 @@ def high_frequency_cut_off_power_law_intergral(vmin_vmax, vc, a, c, v0):
     vmin, vmax = vmin_vmax
     BW = vmax - vmin
     v = (vmin + vmax) / 2
-    # y1 = c / ( BW * v0**a ) * ( (vmax**(a+1) - vmin**(a+1)) / (a+1) + (vmax**(a+2) - vmin**(a+2)) / (vc * (a+2)))
-    ymax = vmax * (-a*vmax + a*vc - vmax + 2*vc)
-    ymin = vmin * (-a*vmin + a*vc - vmin + 2*vc)
-    yavg = c / (BW * vc * (a + 1) * (a + 2)) * (v/v0)**a * (ymax - ymin)
-    sv = np.piecewise(
-        a,
-        [
-            a == -2,
-            a == -1
-        ],
-        [
-            -c*v0**2/vc*( (vmax*np.log(vmax) + vc)/vmax - (vmin*np.log(vmin) + vc)/vmin),
-            c*v0/vc*    ((-vmax + vc*np.log(vmax))      - (-vmin + vc*np.log(vmin))),
-            yavg
-        ]
-    )
-    return np.where(v < vc, sv, 0)
+    y1 = c / ( BW * v0**a ) * ( (vmax**(a+1) - vmin**(a+1)) / (a+1) + (vmax**(a+2) - vmin**(a+2)) / (vc * (a+2)))
+    y2 = 0.
+    return np.where(v < vc, y1, y2)
 
 
 def low_frequency_turn_over_power_law(v, vpeak, a, c, beta, v0):
@@ -350,48 +315,7 @@ def low_frequency_turn_over_power_law_intergral(vmin_vmax, vpeak, a, c, beta, v0
     return ( c / (BW * beta) ) * ( (vmax * Xmax * Ymax**(-Z) * gammainc_up(Z,Ymax)) - (vmin * Xmin * Ymin**(-Z) * gammainc_up(Z,Ymin)) )
 
 
-def low_frequency_turn_over_power_law_create_taylor(nterms):
-    """power law with low-frequency turn-over:
-
-    .. math::
-        S_v = c \\left( \\frac{v}{v0} \\right)^{a} \\exp\\left [ \\frac{a}{\\beta} \\left( \\frac{v}{vc} \\right)^{-\\beta} \\right ]
-
-    Parameters
-    ----------
-    v : `list`
-        Frequency in Hz.
-    vpeak : `list`
-        Peak/Turn-over frequency in Hz.
-    a : `float`
-        The spectral index.
-    c : `float`
-        Constant.
-    beta : `float`
-        The smoothness of the turn-over.
-    v0 : `float`
-        Reference frequency.
-
-    Returns
-    -------
-    S_v : `list`
-        The flux density predicted by the model.
-    """
-    # X = (v / vpeak)**beta
-    # s0 = low_frequency_turn_over_power_law(v, vpeak, a, c, beta, v0)
-    # s2 = (s0 * a) / (v**2 * X**2) * (X**2* (a - 1) + X*(-2*a + beta + 1) + a)
-    # s4 = (s0 * a) / (v**4 * X**4) * ( \
-    #     X**4 * (a**3 - 6*a**2 + 11*a - 6) + \
-    #     X**3 * (-4*a**3 + 6*a**2*beta + 18*a**2 - 4*a*beta**2 - 18*a*beta - 22*a + beta**3 + 6*beta**2 + 11*beta + 6) + \
-    #     X**2*a*(6*a**2 - 12*a*beta - 18*a + 7*beta**2 + 18*beta + 11) + \
-    #     X*a**2*(-4*a + 6*beta + 6) + \
-    #     a**3\
-    # )
-    # return s0 + (s2*BW**2) / 12 + (s4*BW**4) / 80
-    s_v, s_vpeak, s_a, s_c, s_beta, s_v0, s_BW = symbols("s_v s_vpeak s_a s_c s_beta s_v0 s_BW")
-    f = s_c * (s_v / s_v0)**s_a * exp( s_a / s_beta * (s_v / s_vpeak)**(-s_beta) )
-    return create_bandwidth_taylor_series(f, nterms, s_v, s_BW), low_frequency_turn_over_power_law_taylor
-
-def low_frequency_turn_over_power_law_taylor(vmin_vmax, vpeak, a, c, beta, v0, f):
+def low_frequency_turn_over_power_law_taylor(vmin_vmax, vpeak, a, c, beta, v0):
     """power law with low-frequency turn-over:
 
     .. math::
@@ -420,18 +344,17 @@ def low_frequency_turn_over_power_law_taylor(vmin_vmax, vpeak, a, c, beta, v0, f
     vmin, vmax = vmin_vmax
     BW = vmax - vmin
     v = (vmax + vmin) / 2
-    s_v, s_vpeak, s_a, s_c, s_beta, s_v0, s_BW = symbols("s_v s_vpeak s_a s_c s_beta s_v0 s_BW")
-    # sub in constants
-    simp_func = N(f.subs([
-        (s_vpeak ,vpeak),
-        (s_a ,a),
-        (s_c, c),
-        (s_beta ,beta),
-        (s_v0 ,v0),
-    ]))
-    # vectorise
-    vec_fun = np.vectorize(lambda x, y: simp_func.subs(s_v, x).subs(s_BW, y))
-    return vec_fun(v, BW)
+    X = (v / vpeak)**beta
+    s0 = low_frequency_turn_over_power_law(v, vpeak, a, c, beta, v0)
+    s2 = (s0 * a) / (v**2 * X**2) * (X**2* (a - 1) + X*(-2*a + beta + 1) + a)
+    s4 = (s0 * a) / (v**4 * X**4) * ( \
+        X**4 * (a**3 - 6*a**2 + 11*a - 6) + \
+        X**3 * (-4*a**3 + 6*a**2*beta + 18*a**2 - 4*a*beta**2 - 18*a*beta - 22*a + beta**3 + 6*beta**2 + 11*beta + 6) + \
+        X**2*a*(6*a**2 - 12*a*beta - 18*a + 7*beta**2 + 18*beta + 11) + \
+        X*a**2*(-4*a + 6*beta + 6) + \
+        a**3\
+    )
+    return s0 + (s2*BW**2) / 12 + (s4*BW**4) / 80
 
 
 
@@ -652,7 +575,7 @@ def model_settings(print_models=False):
             #(vpeak, a, c, beta)
             (vpeak_s, a_s, c_s, beta_s),
             [(vpeak_min, vpeak_max), (a_min, 0.), (c_min, c_max) , (beta_min, beta_max)],
-            low_frequency_turn_over_power_law_create_taylor,
+            low_frequency_turn_over_power_law_taylor,
         ],
         "double_turn_over_spectrum" : [
             double_turn_over_spectrum,
