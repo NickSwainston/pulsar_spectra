@@ -1,5 +1,6 @@
 import json
 import csv
+from math import log10, floor
 
 with open("Johnston_2018_raw.tsv") as file:
     tsv_file = csv.reader(file, delimiter="\t")
@@ -30,11 +31,15 @@ for row in lines:
     elif pulsar == "J1705-52":
         pulsar = "J1704-5236"
 
+    flux = float(row[1])
+    round_to = -int(floor(log10(abs(flux*.2))))
+    flux = round(flux, round_to)
+    flux_err = round(flux*.2, round_to)
     pulsar_dict[pulsar] = {
         "Frequency MHz":[1360],
         "Bandwidth MHz":[256],
-        "Flux Density mJy":[round(float(row[1]),1)],
-        "Flux Density error mJy":[round(float(row[1])*.2,1)]
+        "Flux Density mJy":[flux],
+        "Flux Density error mJy":[flux_err]
     }
 
 with open("Johnston_2018.yaml", "w") as cat_file:

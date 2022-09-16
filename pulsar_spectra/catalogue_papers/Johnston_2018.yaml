@@ -7,10 +7,10 @@
    256
   ],
   "Flux Density mJy": [
-   11.1
+   11.0
   ],
   "Flux Density error mJy": [
-   2.2
+   2.0
   ]
  },
  "J0051+0423": {
@@ -21,7 +21,7 @@
    256
   ],
   "Flux Density mJy": [
-   0.5
+   0.49
   ],
   "Flux Density error mJy": [
    0.1
@@ -105,10 +105,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.33
   ],
   "Flux Density error mJy": [
-   0.1
+   0.07
   ]
  },
  "J0255-5304": {
@@ -133,7 +133,7 @@
    256
   ],
   "Flux Density mJy": [
-   15.1
+   15.0
   ],
   "Flux Density error mJy": [
    3.0
@@ -203,10 +203,10 @@
    256
   ],
   "Flux Density mJy": [
-   16.8
+   17.0
   ],
   "Flux Density error mJy": [
-   3.4
+   3.0
   ]
  },
  "J0459-0210": {
@@ -259,10 +259,10 @@
    256
   ],
   "Flux Density mJy": [
-   8.9
+   9.0
   ],
   "Flux Density error mJy": [
-   1.8
+   2.0
   ]
  },
  "J0533+0402": {
@@ -287,10 +287,10 @@
    256
   ],
   "Flux Density mJy": [
-   8.4
+   8.0
   ],
   "Flux Density error mJy": [
-   1.7
+   2.0
   ]
  },
  "J0540-7125": {
@@ -301,10 +301,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.35
   ],
   "Flux Density error mJy": [
-   0.1
+   0.07
   ]
  },
  "J0543+2329": {
@@ -315,10 +315,10 @@
    256
   ],
   "Flux Density mJy": [
-   12.9
+   13.0
   ],
   "Flux Density error mJy": [
-   2.6
+   3.0
   ]
  },
  "J0601-0527": {
@@ -385,10 +385,10 @@
    256
   ],
   "Flux Density mJy": [
-   31.9
+   32.0
   ],
   "Flux Density error mJy": [
-   6.4
+   6.0
   ]
  },
  "J0631+1036": {
@@ -413,10 +413,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.1
+   0.11
   ],
   "Flux Density error mJy": [
-   0.0
+   0.02
   ]
  },
  "J0656-2228": {
@@ -441,10 +441,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.4
+   0.42
   ],
   "Flux Density error mJy": [
-   0.1
+   0.08
   ]
  },
  "J0659+1414": {
@@ -469,10 +469,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.28
   ],
   "Flux Density error mJy": [
-   0.1
+   0.06
   ]
  },
  "J0719-2545": {
@@ -497,10 +497,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.2
+   0.22
   ],
   "Flux Density error mJy": [
-   0.0
+   0.04
   ]
  },
  "J0729-1448": {
@@ -539,7 +539,7 @@
    256
   ],
   "Flux Density mJy": [
-   100.1
+   100.0
   ],
   "Flux Density error mJy": [
    20.0
@@ -553,10 +553,10 @@
    256
   ],
   "Flux Density mJy": [
-   25.3
+   25.0
   ],
   "Flux Density error mJy": [
-   5.1
+   5.0
   ]
  },
  "J0745-5353": {
@@ -581,10 +581,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.2
+   0.18
   ],
   "Flux Density error mJy": [
-   0.0
+   0.04
   ]
  },
  "J0749-4247": {
@@ -623,10 +623,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.4
+   0.39
   ],
   "Flux Density error mJy": [
-   0.1
+   0.08
   ]
  },
  "J0809-4753": {
@@ -665,10 +665,10 @@
    256
   ],
   "Flux Density mJy": [
-   8.1
+   8.0
   ],
   "Flux Density error mJy": [
-   1.6
+   2.0
   ]
  },
  "J0820-3826": {
@@ -696,7 +696,7 @@
    0.4
   ],
   "Flux Density error mJy": [
-   0.1
+   0.08
   ]
  },
  "J0820-4114": {
@@ -707,10 +707,10 @@
    256
   ],
   "Flux Density mJy": [
-   6.8
+   7.0
   ],
   "Flux Density error mJy": [
-   1.4
+   1.0
   ]
  },
  "J0821-4221": {
@@ -749,10 +749,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.33
   ],
   "Flux Density error mJy": [
-   0.1
+   0.07
   ]
  },
  "J0835-4510": {
@@ -763,10 +763,10 @@
    256
   ],
   "Flux Density mJy": [
-   1085.9
+   1100.0
   ],
   "Flux Density error mJy": [
-   217.2
+   200.0
   ]
  },
  "J0837+0610": {
@@ -791,10 +791,10 @@
    256
   ],
   "Flux Density mJy": [
-   36.5
+   37.0
   ],
   "Flux Density error mJy": [
-   7.3
+   7.0
   ]
  },
  "J0838-2621": {
@@ -889,10 +889,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.31
   ],
   "Flux Density error mJy": [
-   0.1
+   0.06
   ]
  },
  "J0856-6137": {
@@ -1004,7 +1004,7 @@
    0.3
   ],
   "Flux Density error mJy": [
-   0.1
+   0.06
   ]
  },
  "J0907-5157": {
@@ -1015,10 +1015,10 @@
    256
   ],
   "Flux Density mJy": [
-   16.5
+   16.0
   ],
   "Flux Density error mJy": [
-   3.3
+   3.0
   ]
  },
  "J0908-1739": {
@@ -1029,10 +1029,10 @@
    256
   ],
   "Flux Density mJy": [
-   7.3
+   7.0
   ],
   "Flux Density error mJy": [
-   1.5
+   1.0
   ]
  },
  "J0908-4913": {
@@ -1043,10 +1043,10 @@
    256
   ],
   "Flux Density mJy": [
-   22.5
+   23.0
   ],
   "Flux Density error mJy": [
-   4.5
+   5.0
   ]
  },
  "J0909-7212": {
@@ -1071,10 +1071,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.1
+   0.14
   ],
   "Flux Density error mJy": [
-   0.0
+   0.03
   ]
  },
  "J0919-6040": {
@@ -1085,10 +1085,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.2
+   0.23
   ],
   "Flux Density error mJy": [
-   0.0
+   0.05
   ]
  },
  "J0922+0638": {
@@ -1099,10 +1099,10 @@
    256
   ],
   "Flux Density mJy": [
-   9.3
+   9.0
   ],
   "Flux Density error mJy": [
-   1.9
+   2.0
   ]
  },
  "J0924-5302": {
@@ -1127,10 +1127,10 @@
    256
   ],
   "Flux Density mJy": [
-   5.5
+   5.0
   ],
   "Flux Density error mJy": [
-   1.1
+   1.0
   ]
  },
  "J0932-3217": {
@@ -1141,10 +1141,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.35
   ],
   "Flux Density error mJy": [
-   0.1
+   0.07
   ]
  },
  "J0934-4154": {
@@ -1155,10 +1155,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.32
   ],
   "Flux Density error mJy": [
-   0.1
+   0.06
   ]
  },
  "J0934-5249": {
@@ -1197,7 +1197,7 @@
    256
   ],
   "Flux Density mJy": [
-   0.5
+   0.49
   ],
   "Flux Density error mJy": [
    0.1
@@ -1211,10 +1211,10 @@
    256
   ],
   "Flux Density mJy": [
-   8.3
+   8.0
   ],
   "Flux Density error mJy": [
-   1.7
+   2.0
   ]
  },
  "J0942-5657": {
@@ -1253,10 +1253,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.26
   ],
   "Flux Density error mJy": [
-   0.1
+   0.05
   ]
  },
  "J0953+0755": {
@@ -1267,10 +1267,10 @@
    256
   ],
   "Flux Density mJy": [
-   120.2
+   120.0
   ],
   "Flux Density error mJy": [
-   24.0
+   20.0
   ]
  },
  "J0954-5430": {
@@ -1281,7 +1281,7 @@
    256
   ],
   "Flux Density mJy": [
-   0.5
+   0.49
   ],
   "Flux Density error mJy": [
    0.1
@@ -1309,10 +1309,10 @@
    256
   ],
   "Flux Density mJy": [
-   8.9
+   9.0
   ],
   "Flux Density error mJy": [
-   1.8
+   2.0
   ]
  },
  "J1001-5559": {
@@ -1393,10 +1393,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.4
+   0.41
   ],
   "Flux Density error mJy": [
-   0.1
+   0.08
   ]
  },
  "J1016-5819": {
@@ -1407,10 +1407,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.4
+   0.37
   ],
   "Flux Density error mJy": [
-   0.1
+   0.07
   ]
  },
  "J1016-5857": {
@@ -1449,10 +1449,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.33
   ],
   "Flux Density error mJy": [
-   0.1
+   0.07
   ]
  },
  "J1019-5749": {
@@ -1480,7 +1480,7 @@
    0.2
   ],
   "Flux Density error mJy": [
-   0.0
+   0.04
   ]
  },
  "J1028-5819": {
@@ -1491,10 +1491,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.2
+   0.19
   ],
   "Flux Density error mJy": [
-   0.0
+   0.04
   ]
  },
  "J1032-5911": {
@@ -1519,10 +1519,10 @@
    256
   ],
   "Flux Density mJy": [
-   5.7
+   6.0
   ],
   "Flux Density error mJy": [
-   1.1
+   1.0
   ]
  },
  "J1036-4926": {
@@ -1547,10 +1547,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.28
   ],
   "Flux Density error mJy": [
-   0.1
+   0.06
   ]
  },
  "J1038-5831": {
@@ -1645,10 +1645,10 @@
    256
   ],
   "Flux Density mJy": [
-   9.7
+   10.0
   ],
   "Flux Density error mJy": [
-   1.9
+   2.0
   ]
  },
  "J1049-5833": {
@@ -1676,7 +1676,7 @@
    0.2
   ],
   "Flux Density error mJy": [
-   0.0
+   0.04
   ]
  },
  "J1054-5946": {
@@ -1687,10 +1687,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.2
+   0.18
   ],
   "Flux Density error mJy": [
-   0.0
+   0.04
   ]
  },
  "J1055-6022": {
@@ -1701,10 +1701,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.2
+   0.24
   ],
   "Flux Density error mJy": [
-   0.0
+   0.05
   ]
  },
  "J1055-6028": {
@@ -1732,7 +1732,7 @@
    0.3
   ],
   "Flux Density error mJy": [
-   0.1
+   0.06
   ]
  },
  "J1056-6258": {
@@ -1743,10 +1743,10 @@
    256
   ],
   "Flux Density mJy": [
-   28.1
+   28.0
   ],
   "Flux Density error mJy": [
-   5.6
+   6.0
   ]
  },
  "J1057-5226": {
@@ -1757,10 +1757,10 @@
    256
   ],
   "Flux Density mJy": [
-   8.6
+   9.0
   ],
   "Flux Density error mJy": [
-   1.7
+   2.0
   ]
  },
  "J1057-7914": {
@@ -1813,10 +1813,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.1
+   0.06
   ],
   "Flux Density error mJy": [
-   0.0
+   0.01
   ]
  },
  "J1105-6107": {
@@ -1841,10 +1841,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.35
   ],
   "Flux Density error mJy": [
-   0.1
+   0.07
   ]
  },
  "J1110-5637": {
@@ -1925,10 +1925,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.4
+   0.42
   ],
   "Flux Density error mJy": [
-   0.1
+   0.08
   ]
  },
  "J1116-4122": {
@@ -2037,10 +2037,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.5
+   0.46
   ],
   "Flux Density error mJy": [
-   0.1
+   0.09
   ]
  },
  "J1123-6651": {
@@ -2079,10 +2079,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.32
   ],
   "Flux Density error mJy": [
-   0.1
+   0.06
   ]
  },
  "J1133-6250": {
@@ -2093,10 +2093,10 @@
    256
   ],
   "Flux Density mJy": [
-   7.4
+   7.0
   ],
   "Flux Density error mJy": [
-   1.5
+   1.0
   ]
  },
  "J1136+1551": {
@@ -2107,10 +2107,10 @@
    256
   ],
   "Flux Density mJy": [
-   88.0
+   90.0
   ],
   "Flux Density error mJy": [
-   17.6
+   20.0
   ]
  },
  "J1136-5525": {
@@ -2121,10 +2121,10 @@
    256
   ],
   "Flux Density mJy": [
-   5.3
+   5.0
   ],
   "Flux Density error mJy": [
-   1.1
+   1.0
   ]
  },
  "J1137-6700": {
@@ -2194,7 +2194,7 @@
    0.3
   ],
   "Flux Density error mJy": [
-   0.1
+   0.06
   ]
  },
  "J1143-5536": {
@@ -2205,10 +2205,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.2
+   0.23
   ],
   "Flux Density error mJy": [
-   0.0
+   0.05
   ]
  },
  "J1146-6030": {
@@ -2233,10 +2233,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.2
+   0.23
   ],
   "Flux Density error mJy": [
-   0.0
+   0.05
   ]
  },
  "J1157-6224": {
@@ -2247,10 +2247,10 @@
    256
   ],
   "Flux Density mJy": [
-   14.3
+   14.0
   ],
   "Flux Density error mJy": [
-   2.9
+   3.0
   ]
  },
  "J1159-7910": {
@@ -2289,7 +2289,7 @@
    256
   ],
   "Flux Density mJy": [
-   0.5
+   0.49
   ],
   "Flux Density error mJy": [
    0.1
@@ -2317,10 +2317,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.5
+   0.47
   ],
   "Flux Density error mJy": [
-   0.1
+   0.09
   ]
  },
  "J1216-6223": {
@@ -2331,10 +2331,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.2
+   0.23
   ],
   "Flux Density error mJy": [
-   0.0
+   0.05
   ]
  },
  "J1224-6407": {
@@ -2345,10 +2345,10 @@
    256
   ],
   "Flux Density mJy": [
-   9.5
+   10.0
   ],
   "Flux Density error mJy": [
-   1.9
+   2.0
   ]
  },
  "J1225-5556": {
@@ -2359,10 +2359,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.28
   ],
   "Flux Density error mJy": [
-   0.1
+   0.06
   ]
  },
  "J1225-6408": {
@@ -2415,10 +2415,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.4
+   0.39
   ],
   "Flux Density error mJy": [
-   0.1
+   0.08
   ]
  },
  "J1239+2453": {
@@ -2429,10 +2429,10 @@
    256
   ],
   "Flux Density mJy": [
-   23.2
+   23.0
   ],
   "Flux Density error mJy": [
-   4.7
+   5.0
   ]
  },
  "J1240-4124": {
@@ -2457,10 +2457,10 @@
    256
   ],
   "Flux Density mJy": [
-   34.2
+   34.0
   ],
   "Flux Density error mJy": [
-   6.9
+   7.0
   ]
  },
  "J1244-5053": {
@@ -2474,7 +2474,7 @@
    0.2
   ],
   "Flux Density error mJy": [
-   0.0
+   0.04
   ]
  },
  "J1251-7407": {
@@ -2488,7 +2488,7 @@
    0.2
   ],
   "Flux Density error mJy": [
-   0.0
+   0.04
   ]
  },
  "J1253-5820": {
@@ -2642,7 +2642,7 @@
    18.0
   ],
   "Flux Density error mJy": [
-   3.6
+   4.0
   ]
  },
  "J1326-6408": {
@@ -2667,10 +2667,10 @@
    256
   ],
   "Flux Density mJy": [
-   13.6
+   14.0
   ],
   "Flux Density error mJy": [
-   2.7
+   3.0
   ]
  },
  "J1327-6222": {
@@ -2684,7 +2684,7 @@
    21.0
   ],
   "Flux Density error mJy": [
-   4.2
+   4.0
   ]
  },
  "J1327-6301": {
@@ -2709,10 +2709,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.2
+   0.21
   ],
   "Flux Density error mJy": [
-   0.0
+   0.04
   ]
  },
  "J1328-4357": {
@@ -2740,7 +2740,7 @@
    0.3
   ],
   "Flux Density error mJy": [
-   0.1
+   0.06
   ]
  },
  "J1333-4449": {
@@ -2751,10 +2751,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.26
   ],
   "Flux Density error mJy": [
-   0.1
+   0.05
   ]
  },
  "J1338-6204": {
@@ -2765,10 +2765,10 @@
    256
   ],
   "Flux Density mJy": [
-   5.9
+   6.0
   ],
   "Flux Density error mJy": [
-   1.2
+   1.0
   ]
  },
  "J1339-4712": {
@@ -2877,10 +2877,10 @@
    256
   ],
   "Flux Density mJy": [
-   13.2
+   13.0
   ],
   "Flux Density error mJy": [
-   2.7
+   3.0
   ]
  },
  "J1357-6429": {
@@ -2905,10 +2905,10 @@
    256
   ],
   "Flux Density mJy": [
-   12.9
+   13.0
   ],
   "Flux Density error mJy": [
-   2.6
+   3.0
   ]
  },
  "J1401-6357": {
@@ -2919,10 +2919,10 @@
    256
   ],
   "Flux Density mJy": [
-   7.1
+   7.0
   ],
   "Flux Density error mJy": [
-   1.4
+   1.0
   ]
  },
  "J1403-7646": {
@@ -2947,7 +2947,7 @@
    256
   ],
   "Flux Density mJy": [
-   0.5
+   0.48
   ],
   "Flux Density error mJy": [
    0.1
@@ -2961,10 +2961,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.4
+   0.36
   ],
   "Flux Density error mJy": [
-   0.1
+   0.07
   ]
  },
  "J1410-6132": {
@@ -3045,10 +3045,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.5
+   0.46
   ],
   "Flux Density error mJy": [
-   0.1
+   0.09
   ]
  },
  "J1416-5033": {
@@ -3059,10 +3059,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.1
+   0.12
   ],
   "Flux Density error mJy": [
-   0.0
+   0.02
   ]
  },
  "J1418-3921": {
@@ -3115,10 +3115,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.33
   ],
   "Flux Density error mJy": [
-   0.1
+   0.07
   ]
  },
  "J1428-5530": {
@@ -3129,10 +3129,10 @@
    256
   ],
   "Flux Density mJy": [
-   6.5
+   6.0
   ],
   "Flux Density error mJy": [
-   1.3
+   1.0
   ]
  },
  "J1430-6623": {
@@ -3143,10 +3143,10 @@
    256
   ],
   "Flux Density mJy": [
-   16.3
+   16.0
   ],
   "Flux Density error mJy": [
-   3.3
+   3.0
   ]
  },
  "J1432-5032": {
@@ -3160,7 +3160,7 @@
    0.3
   ],
   "Flux Density error mJy": [
-   0.1
+   0.06
   ]
  },
  "J1435-5954": {
@@ -3202,7 +3202,7 @@
    0.3
   ],
   "Flux Density error mJy": [
-   0.1
+   0.06
   ]
  },
  "J1452-6036": {
@@ -3227,10 +3227,10 @@
    256
   ],
   "Flux Density mJy": [
-   19.6
+   20.0
   ],
   "Flux Density error mJy": [
-   3.9
+   4.0
   ]
  },
  "J1456-6843": {
@@ -3241,10 +3241,10 @@
    256
   ],
   "Flux Density mJy": [
-   64.2
+   60.0
   ],
   "Flux Density error mJy": [
-   12.8
+   10.0
   ]
  },
  "J1507-4352": {
@@ -3283,10 +3283,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.2
+   0.23
   ],
   "Flux Density error mJy": [
-   0.0
+   0.05
   ]
  },
  "J1512-5759": {
@@ -3300,7 +3300,7 @@
    8.0
   ],
   "Flux Density error mJy": [
-   1.6
+   2.0
   ]
  },
  "J1513-5908": {
@@ -3342,7 +3342,7 @@
    0.3
   ],
   "Flux Density error mJy": [
-   0.1
+   0.06
   ]
  },
  "J1515-5720": {
@@ -3353,10 +3353,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.2
+   0.23
   ],
   "Flux Density error mJy": [
-   0.0
+   0.05
   ]
  },
  "J1517-4356": {
@@ -3381,10 +3381,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.27
   ],
   "Flux Density error mJy": [
-   0.1
+   0.05
   ]
  },
  "J1522-5829": {
@@ -3398,7 +3398,7 @@
    6.0
   ],
   "Flux Density error mJy": [
-   1.2
+   1.0
   ]
  },
  "J1524-5625": {
@@ -3423,10 +3423,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.4
+   0.43
   ],
   "Flux Density error mJy": [
-   0.1
+   0.09
   ]
  },
  "J1528-3146": {
@@ -3437,10 +3437,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.4
+   0.44
   ],
   "Flux Density error mJy": [
-   0.1
+   0.09
   ]
  },
  "J1528-4109": {
@@ -3479,10 +3479,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.5
+   0.45
   ],
   "Flux Density error mJy": [
-   0.1
+   0.09
   ]
  },
  "J1531-4012": {
@@ -3493,10 +3493,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.4
+   0.43
   ],
   "Flux Density error mJy": [
-   0.1
+   0.09
   ]
  },
  "J1531-5610": {
@@ -3535,10 +3535,10 @@
    256
   ],
   "Flux Density mJy": [
-   6.8
+   7.0
   ],
   "Flux Density error mJy": [
-   1.4
+   1.0
   ]
  },
  "J1534-5405": {
@@ -3605,10 +3605,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.4
+   0.39
   ],
   "Flux Density error mJy": [
-   0.1
+   0.08
   ]
  },
  "J1539-4828": {
@@ -3619,10 +3619,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.2
+   0.18
   ],
   "Flux Density error mJy": [
-   0.0
+   0.04
   ]
  },
  "J1539-5626": {
@@ -3633,7 +3633,7 @@
    256
   ],
   "Flux Density mJy": [
-   5.1
+   5.0
   ],
   "Flux Density error mJy": [
    1.0
@@ -3647,10 +3647,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.28
   ],
   "Flux Density error mJy": [
-   0.1
+   0.06
   ]
  },
  "J1542-5034": {
@@ -3661,10 +3661,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.33
   ],
   "Flux Density error mJy": [
-   0.1
+   0.07
   ]
  },
  "J1543-5459": {
@@ -3759,10 +3759,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.35
   ],
   "Flux Density error mJy": [
-   0.1
+   0.07
   ]
  },
  "J1553-5456": {
@@ -3815,10 +3815,10 @@
    256
   ],
   "Flux Density mJy": [
-   37.1
+   37.0
   ],
   "Flux Density error mJy": [
-   7.4
+   7.0
   ]
  },
  "J1600-5044": {
@@ -3829,10 +3829,10 @@
    256
   ],
   "Flux Density mJy": [
-   21.4
+   21.0
   ],
   "Flux Density error mJy": [
-   4.3
+   4.0
   ]
  },
  "J1600-5751": {
@@ -3857,10 +3857,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.2
+   0.21
   ],
   "Flux Density error mJy": [
-   0.0
+   0.04
   ]
  },
  "J1602-5100": {
@@ -3874,7 +3874,7 @@
    7.0
   ],
   "Flux Density error mJy": [
-   1.4
+   1.0
   ]
  },
  "J1603-3539": {
@@ -3913,10 +3913,10 @@
    256
   ],
   "Flux Density mJy": [
-   6.1
+   6.0
   ],
   "Flux Density error mJy": [
-   1.2
+   1.0
   ]
  },
  "J1605-5257": {
@@ -3930,7 +3930,7 @@
    21.0
   ],
   "Flux Density error mJy": [
-   4.2
+   4.0
   ]
  },
  "J1607-0032": {
@@ -3958,7 +3958,7 @@
    0.3
   ],
   "Flux Density error mJy": [
-   0.1
+   0.06
   ]
  },
  "J1611-5209": {
@@ -3997,10 +3997,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.34
   ],
   "Flux Density error mJy": [
-   0.1
+   0.07
   ]
  },
  "J1613-4714": {
@@ -4025,10 +4025,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.2
+   0.23
   ],
   "Flux Density error mJy": [
-   0.0
+   0.05
   ]
  },
  "J1614-3937": {
@@ -4084,7 +4084,7 @@
    0.4
   ],
   "Flux Density error mJy": [
-   0.1
+   0.08
   ]
  },
  "J1618-4723": {
@@ -4109,10 +4109,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.2
+   0.23
   ],
   "Flux Density error mJy": [
-   0.0
+   0.05
   ]
  },
  "J1623-4256": {
@@ -4137,10 +4137,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.2
+   0.25
   ],
   "Flux Density error mJy": [
-   0.1
+   0.05
   ]
  },
  "J1626-4537": {
@@ -4179,10 +4179,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.2
+   0.19
   ],
   "Flux Density error mJy": [
-   0.0
+   0.04
   ]
  },
  "J1627-4706": {
@@ -4193,10 +4193,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.2
+   0.19
   ],
   "Flux Density error mJy": [
-   0.0
+   0.04
   ]
  },
  "J1627-5936": {
@@ -4235,10 +4235,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.2
+   0.17
   ],
   "Flux Density error mJy": [
-   0.0
+   0.03
   ]
  },
  "J1630-4733": {
@@ -4249,7 +4249,7 @@
    256
   ],
   "Flux Density mJy": [
-   9.9
+   10.0
   ],
   "Flux Density error mJy": [
    2.0
@@ -4291,7 +4291,7 @@
    256
   ],
   "Flux Density mJy": [
-   0.5
+   0.49
   ],
   "Flux Density error mJy": [
    0.1
@@ -4319,10 +4319,10 @@
    256
   ],
   "Flux Density mJy": [
-   7.6
+   8.0
   ],
   "Flux Density error mJy": [
-   1.5
+   2.0
   ]
  },
  "J1634-5640": {
@@ -4333,10 +4333,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.31
   ],
   "Flux Density error mJy": [
-   0.1
+   0.06
   ]
  },
  "J1635-1511": {
@@ -4375,10 +4375,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.33
   ],
   "Flux Density error mJy": [
-   0.1
+   0.07
   ]
  },
  "J1637-4553": {
@@ -4417,10 +4417,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.29
   ],
   "Flux Density error mJy": [
-   0.1
+   0.06
   ]
  },
  "J1638-4608": {
@@ -4431,10 +4431,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.4
+   0.44
   ],
   "Flux Density error mJy": [
-   0.1
+   0.09
   ]
  },
  "J1639-4604": {
@@ -4487,10 +4487,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.4
+   0.41
   ],
   "Flux Density error mJy": [
-   0.1
+   0.08
   ]
  },
  "J1644-4559": {
@@ -4501,10 +4501,10 @@
    256
   ],
   "Flux Density mJy": [
-   326.3
+   330.0
   ],
   "Flux Density error mJy": [
-   65.3
+   70.0
   ]
  },
  "J1645-0317": {
@@ -4515,10 +4515,10 @@
    256
   ],
   "Flux Density mJy": [
-   11.4
+   11.0
   ],
   "Flux Density error mJy": [
-   2.3
+   2.0
   ]
  },
  "J1646-4346": {
@@ -4557,10 +4557,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.2
+   0.16
   ],
   "Flux Density error mJy": [
-   0.0
+   0.03
   ]
  },
  "J1648-3256": {
@@ -4627,10 +4627,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.33
   ],
   "Flux Density error mJy": [
-   0.1
+   0.07
   ]
  },
  "J1649-5553": {
@@ -4683,10 +4683,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.27
   ],
   "Flux Density error mJy": [
-   0.1
+   0.05
   ]
  },
  "J1651-4246": {
@@ -4697,10 +4697,10 @@
    256
   ],
   "Flux Density mJy": [
-   21.4
+   21.0
   ],
   "Flux Density error mJy": [
-   4.3
+   4.0
   ]
  },
  "J1651-5222": {
@@ -4753,10 +4753,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.4
+   0.42
   ],
   "Flux Density error mJy": [
-   0.1
+   0.08
   ]
  },
  "J1652-2404": {
@@ -4809,10 +4809,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.28
   ],
   "Flux Density error mJy": [
-   0.1
+   0.06
   ]
  },
  "J1655-3048": {
@@ -4879,10 +4879,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.26
   ],
   "Flux Density error mJy": [
-   0.1
+   0.05
   ]
  },
  "J1701-3726": {
@@ -4935,10 +4935,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.4
+   0.42
   ],
   "Flux Density error mJy": [
-   0.1
+   0.08
   ]
  },
  "J1702-4310": {
@@ -4963,10 +4963,10 @@
    256
   ],
   "Flux Density mJy": [
-   8.6
+   9.0
   ],
   "Flux Density error mJy": [
-   1.7
+   2.0
   ]
  },
  "J1703-4851": {
@@ -4991,10 +4991,10 @@
    256
   ],
   "Flux Density mJy": [
-   9.1
+   9.0
   ],
   "Flux Density error mJy": [
-   1.8
+   2.0
   ]
  },
  "J1705-3423": {
@@ -5005,10 +5005,10 @@
    256
   ],
   "Flux Density mJy": [
-   5.3
+   5.0
   ],
   "Flux Density error mJy": [
-   1.1
+   1.0
   ]
  },
  "J1705-3950": {
@@ -5033,10 +5033,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.4
+   0.43
   ],
   "Flux Density error mJy": [
-   0.1
+   0.09
   ]
  },
  "J1704-5236": {
@@ -5061,10 +5061,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.4
+   0.43
   ],
   "Flux Density error mJy": [
-   0.1
+   0.09
   ]
  },
  "J1707-4053": {
@@ -5075,7 +5075,7 @@
    256
   ],
   "Flux Density mJy": [
-   10.2
+   10.0
   ],
   "Flux Density error mJy": [
    2.0
@@ -5117,10 +5117,10 @@
    256
   ],
   "Flux Density mJy": [
-   11.6
+   12.0
   ],
   "Flux Density error mJy": [
-   2.3
+   2.0
   ]
  },
  "J1709-4401": {
@@ -5145,10 +5145,10 @@
    256
   ],
   "Flux Density mJy": [
-   11.7
+   12.0
   ],
   "Flux Density error mJy": [
-   2.3
+   2.0
   ]
  },
  "J1710-2616": {
@@ -5173,10 +5173,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.5
+   0.45
   ],
   "Flux Density error mJy": [
-   0.1
+   0.09
   ]
  },
  "J1715-3903": {
@@ -5232,7 +5232,7 @@
    0.3
   ],
   "Flux Density error mJy": [
-   0.1
+   0.06
   ]
  },
  "J1717-3425": {
@@ -5355,10 +5355,10 @@
    256
   ],
   "Flux Density mJy": [
-   17.5
+   18.0
   ],
   "Flux Density error mJy": [
-   3.5
+   4.0
   ]
  },
  "J1722-3207": {
@@ -5369,10 +5369,10 @@
    256
   ],
   "Flux Density mJy": [
-   5.4
+   5.0
   ],
   "Flux Density error mJy": [
-   1.1
+   1.0
   ]
  },
  "J1722-3632": {
@@ -5425,7 +5425,7 @@
    256
   ],
   "Flux Density mJy": [
-   0.5
+   0.49
   ],
   "Flux Density error mJy": [
    0.1
@@ -5481,10 +5481,10 @@
    256
   ],
   "Flux Density mJy": [
-   29.2
+   29.0
   ],
   "Flux Density error mJy": [
-   5.8
+   6.0
   ]
  },
  "J1732-4128": {
@@ -5537,10 +5537,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.33
   ],
   "Flux Density error mJy": [
-   0.1
+   0.07
   ]
  },
  "J1734-3333": {
@@ -5624,7 +5624,7 @@
    0.2
   ],
   "Flux Density error mJy": [
-   0.0
+   0.04
   ]
  },
  "J1738-3211": {
@@ -5705,10 +5705,10 @@
    256
   ],
   "Flux Density mJy": [
-   6.2
+   6.0
   ],
   "Flux Density error mJy": [
-   1.2
+   1.0
   ]
  },
  "J1739-3159": {
@@ -5761,10 +5761,10 @@
    256
   ],
   "Flux Density mJy": [
-   7.9
+   8.0
   ],
   "Flux Density error mJy": [
-   1.6
+   2.0
   ]
  },
  "J1741-2733": {
@@ -5803,10 +5803,10 @@
    256
   ],
   "Flux Density mJy": [
-   5.5
+   5.0
   ],
   "Flux Density error mJy": [
-   1.1
+   1.0
   ]
  },
  "J1742-4616": {
@@ -5873,10 +5873,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.4
+   0.38
   ],
   "Flux Density error mJy": [
-   0.1
+   0.08
   ]
  },
  "J1745-3040": {
@@ -5887,7 +5887,7 @@
    256
   ],
   "Flux Density mJy": [
-   19.9
+   20.0
   ],
   "Flux Density error mJy": [
    4.0
@@ -5901,10 +5901,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.26
   ],
   "Flux Density error mJy": [
-   0.1
+   0.05
   ]
  },
  "J1749-3002": {
@@ -5929,10 +5929,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.1
+   0.11
   ],
   "Flux Density error mJy": [
-   0.0
+   0.02
   ]
  },
  "J1750-3157": {
@@ -5971,10 +5971,10 @@
    256
   ],
   "Flux Density mJy": [
-   6.6
+   7.0
   ],
   "Flux Density error mJy": [
-   1.3
+   1.0
   ]
  },
  "J1752-2806": {
@@ -5985,10 +5985,10 @@
    256
   ],
   "Flux Density mJy": [
-   47.8
+   48.0
   ],
   "Flux Density error mJy": [
-   9.6
+   10.0
   ]
  },
  "J1757-2223": {
@@ -6013,10 +6013,10 @@
    256
   ],
   "Flux Density mJy": [
-   6.8
+   7.0
   ],
   "Flux Density error mJy": [
-   1.4
+   1.0
   ]
  },
  "J1759-2302": {
@@ -6041,10 +6041,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.2
+   0.22
   ],
   "Flux Density error mJy": [
-   0.0
+   0.04
   ]
  },
  "J1801-2304": {
@@ -6055,10 +6055,10 @@
    256
   ],
   "Flux Density mJy": [
-   7.7
+   8.0
   ],
   "Flux Density error mJy": [
-   1.5
+   2.0
   ]
  },
  "J1801-2451": {
@@ -6097,10 +6097,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.2
+   0.24
   ],
   "Flux Density error mJy": [
-   0.0
+   0.05
   ]
  },
  "J1803-2137": {
@@ -6111,10 +6111,10 @@
    256
   ],
   "Flux Density mJy": [
-   15.7
+   16.0
   ],
   "Flux Density error mJy": [
-   3.1
+   3.0
   ]
  },
  "J1803-2712": {
@@ -6167,10 +6167,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.2
+   0.16
   ],
   "Flux Density error mJy": [
-   0.0
+   0.03
   ]
  },
  "J1806-1154": {
@@ -6223,10 +6223,10 @@
    256
   ],
   "Flux Density mJy": [
-   18.2
+   18.0
   ],
   "Flux Density error mJy": [
-   3.7
+   4.0
   ]
  },
  "J1808-0813": {
@@ -6265,10 +6265,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.29
   ],
   "Flux Density error mJy": [
-   0.1
+   0.06
   ]
  },
  "J1809-1917": {
@@ -6310,7 +6310,7 @@
    0.4
   ],
   "Flux Density error mJy": [
-   0.1
+   0.08
   ]
  },
  "J1812-1718": {
@@ -6377,10 +6377,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.4
+   0.44
   ],
   "Flux Density error mJy": [
-   0.1
+   0.09
   ]
  },
  "J1816-1729": {
@@ -6447,10 +6447,10 @@
    256
   ],
   "Flux Density mJy": [
-   9.6
+   10.0
   ],
   "Flux Density error mJy": [
-   1.9
+   2.0
   ]
  },
  "J1819+1305": {
@@ -6475,10 +6475,10 @@
    256
   ],
   "Flux Density mJy": [
-   9.3
+   9.0
   ],
   "Flux Density error mJy": [
-   1.9
+   2.0
   ]
  },
  "J1820-1529": {
@@ -6545,10 +6545,10 @@
    256
   ],
   "Flux Density mJy": [
-   5.6
+   6.0
   ],
   "Flux Density error mJy": [
-   1.1
+   1.0
   ]
  },
  "J1824-1945": {
@@ -6559,10 +6559,10 @@
    256
   ],
   "Flux Density mJy": [
-   7.4
+   7.0
   ],
   "Flux Density error mJy": [
-   1.5
+   1.0
   ]
  },
  "J1825-0935": {
@@ -6573,7 +6573,7 @@
    256
   ],
   "Flux Density mJy": [
-   10.2
+   10.0
   ],
   "Flux Density error mJy": [
    2.0
@@ -6657,10 +6657,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.35
   ],
   "Flux Density error mJy": [
-   0.1
+   0.07
   ]
  },
  "J1828-1101": {
@@ -6688,7 +6688,7 @@
    11.0
   ],
   "Flux Density error mJy": [
-   2.2
+   2.0
   ]
  },
  "J1830-1059": {
@@ -6783,10 +6783,10 @@
    256
   ],
   "Flux Density mJy": [
-   6.7
+   7.0
   ],
   "Flux Density error mJy": [
-   1.3
+   1.0
   ]
  },
  "J1834-0731": {
@@ -6895,10 +6895,10 @@
    256
   ],
   "Flux Density mJy": [
-   5.3
+   5.0
   ],
   "Flux Density error mJy": [
-   1.1
+   1.0
   ]
  },
  "J1837-0045": {
@@ -6965,10 +6965,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.5
+   0.47
   ],
   "Flux Density error mJy": [
-   0.1
+   0.09
   ]
  },
  "J1837-1837": {
@@ -6979,10 +6979,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.4
+   0.44
   ],
   "Flux Density error mJy": [
-   0.1
+   0.09
   ]
  },
  "J1838-0453": {
@@ -6993,10 +6993,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.4
+   0.41
   ],
   "Flux Density error mJy": [
-   0.1
+   0.08
   ]
  },
  "J1838-0549": {
@@ -7007,10 +7007,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.33
   ],
   "Flux Density error mJy": [
-   0.1
+   0.07
   ]
  },
  "J1839-0321": {
@@ -7021,10 +7021,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.2
+   0.22
   ],
   "Flux Density error mJy": [
-   0.0
+   0.04
   ]
  },
  "J1839-0643": {
@@ -7052,7 +7052,7 @@
    0.2
   ],
   "Flux Density error mJy": [
-   0.0
+   0.04
   ]
  },
  "J1840-0809": {
@@ -7119,10 +7119,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.2
+   0.22
   ],
   "Flux Density error mJy": [
-   0.0
+   0.04
   ]
  },
  "J1841-7845": {
@@ -7133,10 +7133,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.4
+   0.39
   ],
   "Flux Density error mJy": [
-   0.1
+   0.08
   ]
  },
  "J1842-0359": {
@@ -7147,10 +7147,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.0
+   0.01
   ],
   "Flux Density error mJy": [
-   0.0
+   0.002
   ]
  },
  "J1842-0905": {
@@ -7231,10 +7231,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.29
   ],
   "Flux Density error mJy": [
-   0.1
+   0.06
   ]
  },
  "J1844-0244": {
@@ -7329,10 +7329,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.2
+   0.24
   ],
   "Flux Density error mJy": [
-   0.0
+   0.05
   ]
  },
  "J1846-7403": {
@@ -7371,7 +7371,7 @@
    256
   ],
   "Flux Density mJy": [
-   15.2
+   15.0
   ],
   "Flux Density error mJy": [
    3.0
@@ -7441,7 +7441,7 @@
    256
   ],
   "Flux Density mJy": [
-   5.1
+   5.0
   ],
   "Flux Density error mJy": [
    1.0
@@ -7455,10 +7455,10 @@
    256
   ],
   "Flux Density mJy": [
-   9.5
+   10.0
   ],
   "Flux Density error mJy": [
-   1.9
+   2.0
   ]
  },
  "J1852-2610": {
@@ -7497,10 +7497,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.2
+   0.19
   ],
   "Flux Density error mJy": [
-   0.0
+   0.04
   ]
  },
  "J1853+0545": {
@@ -7581,10 +7581,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.35
   ],
   "Flux Density error mJy": [
-   0.1
+   0.07
   ]
  },
  "J1902+0615": {
@@ -7623,10 +7623,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.35
   ],
   "Flux Density error mJy": [
-   0.1
+   0.07
   ]
  },
  "J1905-0056": {
@@ -7679,10 +7679,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.2
+   0.21
   ],
   "Flux Density error mJy": [
-   0.0
+   0.04
   ]
  },
  "J1909+0912": {
@@ -7693,10 +7693,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.4
+   0.44
   ],
   "Flux Density error mJy": [
-   0.1
+   0.09
   ]
  },
  "J1909+1102": {
@@ -7721,10 +7721,10 @@
    256
   ],
   "Flux Density mJy": [
-   6.7
+   7.0
   ],
   "Flux Density error mJy": [
-   1.3
+   1.0
   ]
  },
  "J1913+0832": {
@@ -7752,7 +7752,7 @@
    0.4
   ],
   "Flux Density error mJy": [
-   0.1
+   0.08
   ]
  },
  "J1913+1011": {
@@ -7819,10 +7819,10 @@
    256
   ],
   "Flux Density mJy": [
-   6.8
+   7.0
   ],
   "Flux Density error mJy": [
-   1.4
+   1.0
   ]
  },
  "J1919+0134": {
@@ -7847,10 +7847,10 @@
    256
   ],
   "Flux Density mJy": [
-   18.8
+   19.0
   ],
   "Flux Density error mJy": [
-   3.8
+   4.0
   ]
  },
  "J1932+1059": {
@@ -7861,10 +7861,10 @@
    256
   ],
   "Flux Density mJy": [
-   28.7
+   29.0
   ],
   "Flux Density error mJy": [
-   5.7
+   6.0
   ]
  },
  "J1932-3655": {
@@ -7889,10 +7889,10 @@
    256
   ],
   "Flux Density mJy": [
-   57.8
+   60.0
   ],
   "Flux Density error mJy": [
-   11.6
+   10.0
   ]
  },
  "J1935+2025": {
@@ -7973,10 +7973,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.34
   ],
   "Flux Density error mJy": [
-   0.1
+   0.07
   ]
  },
  "J1946-1312": {
@@ -7987,10 +7987,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.33
   ],
   "Flux Density error mJy": [
-   0.1
+   0.07
   ]
  },
  "J1946-2913": {
@@ -8015,10 +8015,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.2
+   0.24
   ],
   "Flux Density error mJy": [
-   0.0
+   0.05
   ]
  },
  "J1956+0838": {
@@ -8071,10 +8071,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.3
+   0.32
   ],
   "Flux Density error mJy": [
-   0.1
+   0.06
   ]
  },
  "J2048-1616": {
@@ -8088,7 +8088,7 @@
    22.0
   ],
   "Flux Density error mJy": [
-   4.4
+   4.0
   ]
  },
  "J2108-3429": {
@@ -8099,10 +8099,10 @@
    256
   ],
   "Flux Density mJy": [
-   0.5
+   0.46
   ],
   "Flux Density error mJy": [
-   0.1
+   0.09
   ]
  },
  "J2116+1414": {
