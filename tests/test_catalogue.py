@@ -68,6 +68,15 @@ def test_catalogue_format():
             assert 'Flux Density error mJy' in cat_dict[pulsar].keys()
             assert len(cat_dict[pulsar]['Frequency MHz']) == len(cat_dict[pulsar]['Bandwidth MHz']) ==\
                    len(cat_dict[pulsar]['Flux Density mJy' ]) == len(cat_dict[pulsar]['Flux Density error mJy'])
+            # Check no zeros in cat
+            for freq, band, flux, flux_err in zip(cat_dict[pulsar]['Frequency MHz'],
+                                                  cat_dict[pulsar]['Bandwidth MHz'],
+                                                  cat_dict[pulsar]['Flux Density mJy'],
+                                                  cat_dict[pulsar]['Flux Density error mJy']):
+                assert freq != 0.
+                assert band != 0.
+                assert flux != 0.
+                assert flux_err != 0.
 
 
 
