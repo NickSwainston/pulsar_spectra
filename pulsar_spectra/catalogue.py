@@ -86,6 +86,7 @@ ADS_REF = {
     "Kravtsov_2022": "https://ui.adsabs.harvard.edu/abs/2022MNRAS.512.4324K/abstract",
     "Toscano_1998": "https://ui.adsabs.harvard.edu/abs/1998ApJ...506..863T/abstract",
     "Kuzmin_2001": "https://ui.adsabs.harvard.edu/abs/2001A%26A...368..230K/abstract",
+    "Stairs_1999": "https://ui.adsabs.harvard.edu/abs/1999ApJS..123..627S/abstract",
 }
 
 
