@@ -1,6 +1,6 @@
 #Pulsar Jname,Frequency (MHz),Flux Density (mJy),Flux Density Uncertainty (mJy)
 J0034-0534,436,32,16
-J0108-1431,436,32,99
+J0108-1431,436,32,9
 J0134-2937,436,32,9
 J0421-0345,436,32,4
 J0437-4715,436,32,600
