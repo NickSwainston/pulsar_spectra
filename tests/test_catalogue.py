@@ -30,15 +30,16 @@ def test_ref_duplicates_removed():
     """
     cat_dict = collect_catalogue_fluxes()
     for pulsar in cat_dict.keys():
+        print(pulsar)
         ref_ps = []
         ref_atnf = []
-        for ref in cat_dict[pulsar][3]:
+        for ref in cat_dict[pulsar][4]:
             if 'ATNF' in ref:
-                ref_atnf.append(ref)
+                ref_atnf.append(ref[:-5])
             else:
                 ref_ps.append(ref)
         for ref in ref_atnf:
-            assert ref not in ref_ps
+            assert ref not in tuple(ref_ps)
 
 
 def test_missing_ads_refs():
