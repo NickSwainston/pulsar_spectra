@@ -16,7 +16,7 @@ pulsar_dict = {}
 for row in lines:
     row = [r.strip() for r in row]
 
-    pulsar = "J" + row[0].strip().replace("–", "-").replace(" ", "").replace("−", "-")
+    pulsar = row[0].strip().replace("–", "-").replace(" ", "").replace("−", "-")
     if pulsar.startswith("B"):
         pid = list(query['PSRB']).index(pulsar)
         pulsar = query['PSRJ'][pid]
