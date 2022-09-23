@@ -42,7 +42,7 @@ for i, row in enumerate(lines):
     else:
         band = 10.
     flux = round(float(row[-1]), 1)
-    flux_err = round(flux * 0.1, 1)
+    flux_err = round(flux * 0.1, 2)
     pulsar_dict[pulsar]["Frequency MHz"].append(freq)
     pulsar_dict[pulsar]["Bandwidth MHz"].append(band)
     pulsar_dict[pulsar]["Flux Density mJy"].append(flux)
