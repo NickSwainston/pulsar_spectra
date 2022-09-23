@@ -62,7 +62,9 @@ def test_catalogue_format():
             cat_dict = yaml.safe_load(stream)
         for pulsar in cat_dict.keys():
             print(pulsar)
-            assert pulsar in jnames
+            # Below is a typo in ATNF v1.68
+            if pulsar not in ("J1643-10"):
+                assert pulsar in jnames
             assert 'Frequency MHz' in cat_dict[pulsar].keys()
             assert 'Bandwidth MHz' in cat_dict[pulsar].keys()
             assert 'Flux Density mJy' in cat_dict[pulsar].keys()
