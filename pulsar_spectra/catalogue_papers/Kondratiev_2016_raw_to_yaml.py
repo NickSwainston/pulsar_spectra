@@ -21,6 +21,12 @@ for row in lines:
         pid = list(query['PSRB']).index(pulsar)
         pulsar = query['PSRJ'][pid]
 
+    # Wrong names
+    if pulsar == "J0636+5129":
+        pulsar = "J0636+5128"
+    if pulsar not in all_jnames:
+        print(pulsar)
+
     flux, flux_err = row[4].split("(")
     if "." in flux:
         sig_fig = len(flux.split(".")[-1])

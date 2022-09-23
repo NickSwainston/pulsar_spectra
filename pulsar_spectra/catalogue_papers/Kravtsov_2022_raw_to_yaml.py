@@ -27,6 +27,8 @@ for row in lines:
         pulsar = "J0454+4529"
     if pulsar == "J2122+24":
         pulsar = "J2122+2426"
+    if pulsar == "J2227+30":
+        pulsar = "J2227+3038"
     if pulsar not in all_jnames:
         print(pulsar)
 

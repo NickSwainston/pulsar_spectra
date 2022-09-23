@@ -101,20 +101,24 @@ for row in lines:
         pulsar = "J2137+6428"
     elif pulsar == "J2207+40":
         pulsar = "J2208+4056"
-    elif pulsar == "J2228+40":
-        # CAN'T FIND THIS IN ATNF
-        continue
     elif pulsar == "J2243+69":
         pulsar = "J2241+6941"
-    elif pulsar == "J2301+48":
-        # CAN'T FIND THIS IN ATNF
-        continue
     elif pulsar == "J2316+69":
         pulsar = "J2312+6931"
     elif pulsar == "J2353+85":
         pulsar = "J2351+8533"
     elif pulsar == "J2356+22":
         pulsar = "J2355+2246"
+    elif pulsar == "J2227+30":
+        pulsar = "J2227+3038"
+    elif pulsar == "J0220+36":
+        pulsar = "J0220+3626"
+
+    # CAN'T FIND THIS IN ATNF
+    if pulsar == "J2301+48":
+        continue
+    elif pulsar == "J2228+40":
+        continue
 
     if pulsar not in all_jnames:
         print(pulsar)
