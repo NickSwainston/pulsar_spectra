@@ -6,9 +6,9 @@ raw = np.loadtxt("Han_2016_raw.txt", dtype=str)
 pulsar_dict = {}
 for row in raw[1:]:
     pulsar = row[0]
-    freqs = [float(row[2]), float(row[5]), float(row[8])]
-    bands = [256, 256, 256]
-    pairs = [row[4], row[7], row[10]]
+    freqs = [float(row[2]), float(row[5]), float(row[8]), float(row[11])]
+    bands = [256, 256, 256, 256]
+    pairs = [row[4], row[7], row[10], row[13]]
     fluxs = []
     flux_errs = []
     for p in pairs:
