@@ -4,7 +4,7 @@ import os
 import yaml
 import psrqpy
 
-from pulsar_spectra.catalogue import collect_catalogue_fluxes, CAT_YAMLS, ADS_REF
+from pulsar_spectra.catalogue import collect_catalogue_fluxes, CAT_YAMLS, ADS_REF, ATNF_VER
 
 import logging
 logger = logging.getLogger(__name__)
@@ -54,7 +54,7 @@ def test_missing_ads_refs():
 def test_catalogue_format():
     """Check the pulsar names are correct and that all the keys are correct.
     """
-    query = psrqpy.QueryATNF().pandas
+    query = psrqpy.QueryATNF(version=ATNF_VER).pandas
     jnames = list(query['PSRJ'])
     for cat_file in CAT_YAMLS:
         print(cat_file)

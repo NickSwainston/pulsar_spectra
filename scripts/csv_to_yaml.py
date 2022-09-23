@@ -6,7 +6,9 @@ import csv
 import os
 import psrqpy
 
-query = psrqpy.QueryATNF(params=['PSRJ', 'NAME', 'PSRB']).pandas
+from pulsar_spectra.catalogue import ATNF_VER
+
+query = psrqpy.QueryATNF(version=ATNF_VER, params=['PSRJ', 'NAME', 'PSRB']).pandas
 all_jnames = list(query['PSRJ'])
 
 def convert_csv_to_yaml(csv_location, ref_label):

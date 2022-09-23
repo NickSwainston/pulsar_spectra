@@ -2,6 +2,8 @@ import numpy as np
 from math import pi
 from psrqpy import QueryATNF
 
+from pulsar_spectra.catalogue import ATNF_VER
+
 def calc_log_parabolic_spectrum_max_freq(a, b, v0, u_a, u_b, u_ab):
     """Calculate the frequency where the flux is at its maximum for the log parabolic model (:py:meth:`pulsar_spectra.models.log_parabolic_spectrum`).
 
@@ -76,7 +78,7 @@ def calc_high_frequency_cutoff_emission_height(psrname, v_c, u_v_c, z_surf=12, u
     c_lc = 4.77e4 # light cylinder calculation constant (km s^{-1})
     c_B = m_e*c0/(pi*e) # magnetic field calculation constant
 
-    query = QueryATNF(params=["P0", "BSurf", "B_LC"], psrs=[psrname])
+    query = QueryATNF(params=["P0", "BSurf", "B_LC"], psrs=[psrname], version=ATNF_VER)
     psrs = query.get_pulsars()
 
     P = psrs[psrname].P0

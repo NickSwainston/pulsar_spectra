@@ -2,7 +2,7 @@ import psrqpy
 import yaml
 
 from pulsar_spectra.catalogue import all_flux_from_atnf
-from pulsar_spectra.catalogue import CAT_YAMLS, ADS_REF
+from pulsar_spectra.catalogue import CAT_YAMLS, ADS_REF, ATNF_VER
 
 paper_format = False
 
@@ -16,7 +16,7 @@ CAT_YAMLS = [ x[-1] for x in name_year ]
 print(CAT_YAMLS)
 
 # go through all the papers and count the pulsars and frequency range
-query = psrqpy.QueryATNF().pandas
+query = psrqpy.QueryATNF(version=ATNF_VER).pandas
 # Make a dictionary for each pulsar
 jnames = list(query['PSRJ'])
 jname_cat_dict = {}
