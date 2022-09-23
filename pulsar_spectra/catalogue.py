@@ -18,9 +18,6 @@ CAT_DIR = os.path.join(os.path.dirname(__file__), 'catalogue_papers')
 # Grab all the catalogue yamls
 CAT_YAMLS = glob.glob("{}/*yaml".format(CAT_DIR))
 
-# Hard code the path of the ATNF psrcat database file
-ATNF_LOC = os.path.join(CAT_DIR, 'psrcat.db')
-
 # dictionary of ADS links
 ADS_REF = {
     "Sieber_1973": "https://ui.adsabs.harvard.edu/abs/1973A%26A....28..237S/abstract",
@@ -87,6 +84,7 @@ ADS_REF = {
     "Toscano_1998": "https://ui.adsabs.harvard.edu/abs/1998ApJ...506..863T/abstract",
     "Kuzmin_2001": "https://ui.adsabs.harvard.edu/abs/2001A%26A...368..230K/abstract",
     "Stairs_1999": "https://ui.adsabs.harvard.edu/abs/1999ApJS..123..627S/abstract",
+    "Spiewak_2022": "https://ui.adsabs.harvard.edu/abs/2022PASA...39...27S/abstract",
 }
 
 
@@ -162,7 +160,7 @@ def flux_from_atnf(pulsar, query=None, ref_dict=None, assumed_error=0.5):
     """
     # Handle psrqpy queries if None were given
     if query is None:
-        query = psrqpy.QueryATNF(psrs=[pulsar], loadfromdb=ATNF_LOC).pandas
+        query = psrqpy.QueryATNF(psrs=[pulsar]).pandas
     if ref_dict is None:
         ref_dict = get_antf_references()
     query_id = list(query['PSRJ']).index(pulsar)
@@ -243,7 +241,7 @@ def all_flux_from_atnf(query=None):
             The error of the flux density in mJy.
     """
     if query is None:
-        query = psrqpy.QueryATNF(loadfromdb=ATNF_LOC).pandas
+        query = psrqpy.QueryATNF().pandas
     ref_dict = get_antf_references()
     jnames = list(query['PSRJ'])
     jname_cat = {}
@@ -300,7 +298,7 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
                 The reference label (in the format 'Author_year').
     """
     if query is None:
-        query = psrqpy.QueryATNF(loadfromdb=ATNF_LOC).pandas
+        query = psrqpy.QueryATNF().pandas
     # Make a dictionary for each pulsar
     jnames = list(query['PSRJ'])
     jname_cat_dict = {}

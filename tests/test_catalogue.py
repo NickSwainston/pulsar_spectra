@@ -4,7 +4,7 @@ import os
 import yaml
 import psrqpy
 
-from pulsar_spectra.catalogue import collect_catalogue_fluxes, CAT_YAMLS, ADS_REF, ATNF_LOC
+from pulsar_spectra.catalogue import collect_catalogue_fluxes, CAT_YAMLS, ADS_REF
 
 import logging
 logger = logging.getLogger(__name__)
