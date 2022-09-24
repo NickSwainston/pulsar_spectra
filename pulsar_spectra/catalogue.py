@@ -88,6 +88,7 @@ ADS_REF = {
     "Kuzmin_2001": "https://ui.adsabs.harvard.edu/abs/2001A%26A...368..230K/abstract",
     "Stairs_1999": "https://ui.adsabs.harvard.edu/abs/1999ApJS..123..627S/abstract",
     "Spiewak_2022": "https://ui.adsabs.harvard.edu/abs/2022PASA...39...27S/abstract",
+    "Zhang_2019": "https://ui.adsabs.harvard.edu/abs/2019ApJ...885L..37Z/abstract",
 }
 
 
