@@ -89,6 +89,7 @@ ADS_REF = {
     "Stairs_1999": "https://ui.adsabs.harvard.edu/abs/1999ApJS..123..627S/abstract",
     "Spiewak_2022": "https://ui.adsabs.harvard.edu/abs/2022PASA...39...27S/abstract",
     "Zhang_2019": "https://ui.adsabs.harvard.edu/abs/2019ApJ...885L..37Z/abstract",
+    "Lommen_2000": "https://ui.adsabs.harvard.edu/abs/2000ApJ...545.1007L/abstract",
 }
 
 
