@@ -293,7 +293,7 @@ def migrad_simplex_scan(m, mod_limits, model_name):
     """
     m.tol=0.000005 # low tolerace improves likelihood of a sensible fit
     m.limits = mod_limits # limits are primarily to assist the scan minimiser
-    ncall = 500  # Calls until we abandon the fit
+    ncall = 5000  # Calls until we abandon the fit
     m.migrad(ncall=ncall)
     if m.valid:
         logger.debug(f"Found for fit with {model_name} using migrad and {m.nfcn} calls.")
@@ -309,6 +309,10 @@ def migrad_simplex_scan(m, mod_limits, model_name):
                 logger.debug(f"Found for fit with {model_name} using scan and {m.nfcn} calls.")
     if not m.valid:
         logger.warning(f"No valid minimum found for model {model_name} after {m.nfcn} calls.")
+
+    m.hesse() # accurately computes uncertainties
+    logger.debug(model_name)
+    logger.debug(m)
     return m
 
 
@@ -402,6 +406,10 @@ def iminuit_fit_spectral_model(
         # will set the cut off frequency based on the data set's frequency range
         mod_limits[0] = (max(freqs_Hz), 20 * max(freqs_Hz))
         logger.debug(f"HFCO cut off frequency limits (Hz): {mod_limits[0]}")
+        # Replace vc start param with max frequency
+        temp_params = list(start_params)
+        temp_params[0] = max(freqs_Hz)
+        start_params = tuple(temp_params)
 
     # Check if enough inputs
     k = len(start_params)-1 # number of free model parameters
@@ -437,8 +445,9 @@ def iminuit_fit_spectral_model(
         m_band = Minuit(least_squares, *past_params)
         m_band.fixed["v0"] = True # fix the reference frequency
         try:
-            m_band = migrad_simplex_scan(m_band, mod_limits, model_name)
-        except ValueError:
+            m_band = migrad_simplex_scan(m_band, mod_limits, model_name + "_log")
+        except ValueError as verr:
+            logger.warning(f"{model_name}_log Value Error: {verr}")
             m_band = m
             band_bool = False
         else:
@@ -447,9 +456,6 @@ def iminuit_fit_spectral_model(
     else:
         band_bool = False
     logger.debug(f"Band bool: {band_bool}")
-
-    m.hesse() # accurately computes uncertainties
-    logger.debug(m)
 
     # display legend with some fit info
     fit_info = [model_name]
