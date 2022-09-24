@@ -92,6 +92,7 @@ ADS_REF = {
     "Lommen_2000": "https://ui.adsabs.harvard.edu/abs/2000ApJ...545.1007L/abstract",
     "Alam_2021": "https://ui.adsabs.harvard.edu/abs/2021ApJS..252....4A/abstract",
     "Bondonneau_2021": "https://ui.adsabs.harvard.edu/abs/2021A%26A...652A..34B/abstract",
+    "Kramer_1998": "https://ui.adsabs.harvard.edu/abs/1998ApJ...501..270K/abstract",
 }
 
 
