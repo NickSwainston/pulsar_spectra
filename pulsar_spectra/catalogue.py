@@ -368,7 +368,7 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
     # refs that were rounded to different decimal places than the publications
     antf_rounded_refs = ["Johnston_2018", "Dai_2015", "McEwen_2020", "McConnell_1991", "Bondonneau_2020", "Johnston_2021", "Bates_2011", "Han_2021"]
     # refs that have different uncertainties than published
-    antf_uncert_refs = ["Stairs_1999", "Kuzmin_2001", "Jankowski_2019", "Jankowski_2018", "Kramer_2003a", "Manchester_2001", "Morris_2002"]
+    antf_uncert_refs = ["Stairs_1999", "Kuzmin_2001", "Jankowski_2019", "Jankowski_2018", "Kramer_2003a", "Manchester_2001", "Morris_2002", "Zhang_2019"]
     for jname in jnames:
         for ref in antf_dict[jname].keys():
             # Remove "_antf" from the end of  the reference
