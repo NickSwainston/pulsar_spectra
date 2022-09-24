@@ -206,11 +206,11 @@ def plot_fit(freqs_MHz, bands_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit
                 markersize = None
             freqs_ref = np.array(data_dict[ref]['Frequency MHz'])
             if plot_bands:
-                bands_ref = np.array(data_dict[ref]['Bandwidth MHz'])
+                bands_ref = np.array(data_dict[ref]['Bandwidth MHz']) / 2.
             else:
                 bands_ref = None
             fluxs_ref = np.array(data_dict[ref]['Flux Density mJy'])
-            flux_errs_ref = np.array(data_dict[ref]['Flux Density error mJy'])
+            flux_errs_ref = np.array(data_dict[ref]['Flux Density error mJy']) / 2.
             (_, caps, _) = ax.errorbar(
                 freqs_ref,
                 fluxs_ref,
