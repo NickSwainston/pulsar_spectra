@@ -398,7 +398,17 @@ def low_frequency_turn_over_power_law_taylor(vmin_vmax, vpeak, a, c, beta, v0):
         X*a**2*(-4*a + 6*beta + 6) + \
         a**3\
     )
-    return s0 + (s2*BW**2) / 12 + (s4*BW**4) / 80
+    s6 = (s0 * a) / (v**6 * X**6)  * ( \
+        X**6 * (a**5 - 15*a**4 + 85*a**3 - 225*a**2 + 274*a - 120) + \
+        X**5 * (-6*a**5 + 15*a**4*beta + 75*a**4 - 20*a**3*beta**2 - 150*a**3*beta - 340*a**3 + 15*a**2*beta**3 + 150*a**2*beta**2 + 510*a**2*beta + 675*a**2 -\
+                6*a*beta**4 - 75*a*beta**3 - 340*a*beta**2 - 675*a*beta - 548*a + beta**5 + 15*beta**4 + 85*beta**3 + 225*beta**2 + 274*beta + 12) + \
+        X**4 * a * (15*a**4 - 60*a**3*beta - 150*a**3 + 105*a**2*beta**2 + 450*a**2*beta + 510*a**2 - \
+                    90*a*beta**3 - 525*a*beta**2 - 1020*a *beta - 675*a + 31*beta**4 + 225*beta**3 + 595*beta**2 + 675*beta + 274) + \
+        X**3 * a**2 * (-20*a**3 + 90*a**2*beta + 150*a**2 - 150*a*beta**2 - 450*a*beta - 340*a + 90*beta**3 + 375*beta**2 + 510*beta + 225) + \
+        X**2 * a**3 * (15*a**2 - 60*a*beta - 75*a + 65*beta**2 + 150*beta + 85) + \
+        X * a**4 * (-6*a + 15*beta + 15) + a**5 \
+    )
+    return s0 + (s2*BW**2) / 12 + (s4*BW**4) / 80 + (s6*BW**6) /448
 
 
 
