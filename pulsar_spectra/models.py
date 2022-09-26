@@ -150,10 +150,19 @@ def double_broken_power_law(v, vb1, vb2, a1, a2, a3, c, v0):
     x = v / v0
     xb1 = vb1 / v0
     xb2 = vb2 / v0
-    return np.piecewise(x, [x <= xb1, (x > xb1) & (x <= xb2), x > xb2], \
-    [lambda x: c*x**a1, \
-     lambda x: c*x**a2*(xb1)**(a1-a2), \
-     lambda x: c*x**a3*(xb1)**(a1-a2)*(xb2)**(a2-a3)])
+    return np.piecewise(
+        x,
+        [
+            x <= xb1,
+            (x > xb1) & (x <= xb2),
+            x > xb2
+        ],
+        [
+            lambda x: c*x**a1,
+            lambda x: c*x**a2*(xb1)**(a1-a2),
+            lambda x: c*x**a3*(xb1)**(a1-a2)*(xb2)**(a2-a3)
+        ]
+    )
 
 
 def log_parabolic_spectrum(v, a, b, c, v0):
@@ -246,6 +255,41 @@ def high_frequency_cut_off_power_law_intergral(vmin_vmax, vc, a, c, v0):
     y1 = c / ( BW * v0**a ) * ( (vmax**(a+1) - vmin**(a+1)) / (a+1) + (vmax**(a+2) - vmin**(a+2)) / (vc * (a+2)))
     y2 = 0.
     return np.where(v < vc, y1, y2)
+
+
+def high_frequency_cut_off_power_law_taylor(vmin_vmax, vc, a, c, v0):
+    """Power law with high-frequency cut-off off:
+
+    .. math::
+        S_v = c \\left( \\frac{v}{v0} \\right)^{a} \\left ( 1 - \\frac{v}{vc} \\right ),\\qquad v < vc
+
+    Parameters
+    ----------
+    v : `list`
+        Frequency in Hz.
+    vc : `list`
+        Cut off frequency in Hz.
+    a : `float`
+        Spectral Index.
+    c : `float`
+        Constant.
+    v0 : `float`
+        Reference frequency.
+
+    Returns
+    -------
+    S_v : `list`
+        The flux density predicted by the model.
+    """
+    vmin, vmax = vmin_vmax
+    BW = vmax - vmin
+    v = (vmin + vmax) / 2
+    s0 = high_frequency_cut_off_power_law(v, vc, a, c, v0)
+    s2 = ( (c*a) / v0**a ) * ( (a - 1)*v**(a-2) - ((a + 1)*v**(a-1))/vc )
+    s4 = ( (c*a*(a - 1)*(a - 2)) / v0**a ) * ( (a - 3)*v**(a-4) - ((a + 1)*v**(a-3))/vc )
+    s6 = ( (c*a*(a - 1)*(a - 2)*(a - 3)*(a - 4)) / v0**a ) * ( (a - 5)*v**(a-6) - ((a + 1)*v**(a-5))/vc )
+    sv = s0 + (s2*BW**2) / 12 + (s4*BW**4) / 80 + (s6*BW**6) /448
+    return np.where(v < vc, sv, 0)
 
 
 def low_frequency_turn_over_power_law(v, vpeak, a, c, beta, v0):
@@ -567,7 +611,7 @@ def model_settings(print_models=False):
             #(vc, a, c)
             (vc_s, a_s, c_s),
             [vc_both, (a_min, 0.), (c_min, c_max)],
-            high_frequency_cut_off_power_law_intergral,
+            high_frequency_cut_off_power_law_taylor,
         ],
         "low_frequency_turn_over_power_law" : [
             low_frequency_turn_over_power_law,
