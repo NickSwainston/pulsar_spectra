@@ -16,5 +16,6 @@ Welcome to pulsar_spectra's documentation!
    catalogue
    spectral_fit
    plotting
+   bandwidth_intergration
    modules
    faq
