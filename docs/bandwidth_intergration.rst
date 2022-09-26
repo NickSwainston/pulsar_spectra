@@ -43,41 +43,41 @@ Simple power law
 
 .. math::
 
-    \Sv &= c \left( \frac{\nu}{\nu_0} \right)^\alpha, \\
-    \Savg &= \frac{1}{\BW} \int_\vmin^\vmax c \left( \frac{\nu}{\nu_0} \right)^\alpha \,\text{d}\nu, \\
-    &= \frac{\nu_0}{\BW} \left[\frac{c}{\alpha+1} \left(\frac{\nu}{\nu_0}\right)^{\alpha + 1}  \right]_\vmin^\vmax \\
-    &= \frac{\nu_0}{\BW} \frac{c}{\alpha+1} \left( \left(\frac{\vmax}{\nu_0}\right)^{\alpha + 1} - \left(\frac{\vmin}{\nu_0}\right)^{\alpha + 1} \right) \\
-    &= \frac{c(\vmax^{\alpha+1} - \vmin^{\alpha+1})}{\BW\,\nu_0^\alpha(\alpha+1)}.
+    S_\nu &= c \left( \frac{\nu}{\nu_0} \right)^\alpha, \\
+    S_\text{avg} &= \frac{1}{\rm{BW}} \int_{\nu_\text{min}}^{\nu_\text{max}} c \left( \frac{\nu}{\nu_0} \right)^\alpha \,\text{d}\nu, \\
+    &= \frac{\nu_0}{\rm{BW}} \left[\frac{c}{\alpha+1} \left(\frac{\nu}{\nu_0}\right)^{\alpha + 1}  \right]_{\nu_\text{min}}^{\nu_\text{max}} \\
+    &= \frac{\nu_0}{\rm{BW}} \frac{c}{\alpha+1} \left( \left(\frac{{\nu_\text{max}}}{\nu_0}\right)^{\alpha + 1} - \left(\frac{{\nu_\text{min}}}{\nu_0}\right)^{\alpha + 1} \right) \\
+    &= \frac{c({\nu_\text{max}}^{\alpha+1} - {\nu_\text{min}}^{\alpha+1})}{\rm{BW}\,\nu_0^\alpha(\alpha+1)}.
 
 Broken power law
 ~~~~~~~~~~~~~~~~
 
 .. math::
 
-    \Sv &= c\begin{cases}
-            \left( \frac{\nu}{\nu_0} \right)^{\alpha_1}   & \mathrm{if}\: \nu \leq \vb \\[5pt]
-            \left( \frac{\nu}{\nu_0} \right)^{\alpha_2} \left( \frac{\vb}{\nu_0} \right)^{\alpha_1-\alpha_2} & \mathrm{otherwise} \\
+    S_\nu &= c\begin{cases}
+            \left( \frac{\nu}{\nu_0} \right)^{\alpha_1}   & \mathrm{if}\: \nu \leq {\nu_b} \\[5pt]
+            \left( \frac{\nu}{\nu_0} \right)^{\alpha_2} \left( \frac{{\nu_b}}{\nu_0} \right)^{\alpha_1-\alpha_2} & \mathrm{otherwise} \\
         \end{cases}.
 
 
-If :math:`\vmin < \vmax \le\vb`, then :math:`\Savg` is identical to the simple power law with the substitution :math:`\alpha \leftarrow \alpha_1`:
+If :math:`{\nu_\text{min}} < {\nu_\text{max}} \le{\nu_b}`, then :math:`S_\text{avg}` is identical to the simple power law with the substitution :math:`\alpha \leftarrow \alpha_1`:
 
 .. math::
 
-    \Savg = \frac{c(\vmax^{\alpha_1+1} - \vmin^{\alpha_1+1})}{\BW\,\nu_0^{\alpha_1}(\alpha_1+1)}.
+    S_\text{avg} = \frac{c({\nu_\text{max}}^{\alpha_1+1} - {\nu_\text{min}}^{\alpha_1+1})}{\rm{BW}\,\nu_0^{\alpha_1}(\alpha_1+1)}.
 
-If both :math:`\vb \le \vmin < \vmax`, then
-
-.. math::
-
-    \Savg = \frac{c(\vmax^{\alpha_2+1} - \vmin^{\alpha_2+1})}{\BW\,\nu_0^{\alpha_2}(\alpha_2+1)} \left( \frac{\vb}{\nu_0} \right)^{\alpha_1-\alpha_2}.
-
-
-In the final case, when :math:`\vmin < \vb < \vmax`,
+If both :math:`{\nu_b} \le {\nu_\text{min}} < {\nu_\text{max}}`, then
 
 .. math::
 
-    \Savg = \frac{c(\vb^{\alpha_1+1} - \vmin^{\alpha_1+1})}{(\vb - \vmin)\,\nu_0^{\alpha_1}(\alpha_1+1)} + \frac{c(\vmax^{\alpha_2+1} - \vb^{\alpha_2+1})}{(\vmax - \vb)\,\nu_0^{\alpha_2}(\alpha_2+1)} \left( \frac{\vb}{\nu_0} \right)^{\alpha_1-\alpha_2}.
+    S_\text{avg} = \frac{c({\nu_\text{max}}^{\alpha_2+1} - {\nu_\text{min}}^{\alpha_2+1})}{\rm{BW}\,\nu_0^{\alpha_2}(\alpha_2+1)} \left( \frac{{\nu_b}}{\nu_0} \right)^{\alpha_1-\alpha_2}.
+
+
+In the final case, when :math:`{\nu_\text{min}} < {\nu_b} < {\nu_\text{max}}`,
+
+.. math::
+
+    S_\text{avg} = \frac{c({\nu_b}^{\alpha_1+1} - {\nu_\text{min}}^{\alpha_1+1})}{({\nu_b} - {\nu_\text{min}})\,\nu_0^{\alpha_1}(\alpha_1+1)} + \frac{c({\nu_\text{max}}^{\alpha_2+1} - {\nu_b}^{\alpha_2+1})}{({\nu_\text{max}} - {\nu_b})\,\nu_0^{\alpha_2}(\alpha_2+1)} \left( \frac{{\nu_b}}{\nu_0} \right)^{\alpha_1-\alpha_2}.
 
 
 Log-parabolic spectrum
@@ -85,10 +85,10 @@ Log-parabolic spectrum
 
 .. math::
 
-    \log_{10} \Sv
+    \log_{10} S_\nu
         &= \alpha  \left [ \log_{10} \left ( \frac{\nu}{\nu_0} \right ) \right]^2 +
             b \, \log_{10} \left ( \frac{\nu}{\nu_0} \right ) + c \\
-    \Sv &= 10^{a  \left [ \log_{10} \left ( \frac{\nu}{\nu_0} \right ) \right]^2 + b \, \log_{10} \left ( \frac{\nu}{\nu_0} \right ) + c} \\
+    S_\nu &= 10^{a  \left [ \log_{10} \left ( \frac{\nu}{\nu_0} \right ) \right]^2 + b \, \log_{10} \left ( \frac{\nu}{\nu_0} \right ) + c} \\
     &= e^{\ln 10 \left(a  \left [ \log_{10} \left ( \frac{\nu}{\nu_0} \right ) \right]^2 + b \, \log_{10} \left ( \frac{\nu}{\nu_0} \right ) + c\right)} \\
     &= Ce^{\ln 10 \left(a  \left [ \log_{10} \left ( \frac{\nu}{\nu_0} \right ) \right]^2 + b \, \log_{10} \left ( \frac{\nu}{\nu_0} \right )\right)},
 
@@ -97,7 +97,7 @@ where :math:`C = e^{c\ln 10} = 10^c`.
 
 .. math::
 
-    \Sv &= Ce^{\ln 10 \left(a  \left [ \frac{\ln\left ( \frac{\nu}{\nu_0} \right )}{\ln 10} \right]^2 + b \, \frac{\ln \left ( \frac{\nu}{\nu_0} \right )}{\ln 10}\right)} \\
+    S_\nu &= Ce^{\ln 10 \left(a  \left [ \frac{\ln\left ( \frac{\nu}{\nu_0} \right )}{\ln 10} \right]^2 + b \, \frac{\ln \left ( \frac{\nu}{\nu_0} \right )}{\ln 10}\right)} \\
     &= Ce^{\left(\frac{a}{\ln 10}  \left [ \ln\left ( \frac{\nu}{\nu_0} \right )\right]^2 + b \, \ln \left ( \frac{\nu}{\nu_0} \right )\right)}.
 
 
@@ -113,9 +113,9 @@ In our case, this works out to
 
 .. math::
 
-    \Savg &=
-        \frac{1}{\BW}\int_\vmin^\vmax Ce^{\left(\frac{a}{\ln 10}  \left [ \ln\left ( \frac{\nu}{\nu_0} \right )\right]^2 + b \, \ln \left ( \frac{\nu}{\nu_0} \right )\right)}\,\text{d}\nu \\
-        &= \frac{C\nu_0}{2\BW} \sqrt{\frac{\pi \ln 10}{a}} \, 10^{-\frac{(b+1)^2}{4a}} \left[\text{erfi} \left(\frac{2a\ln \left(\frac{\nu}{\nu_0}\right) + b + 1}{2\sqrt{a\ln 10}}\right)\right]_\vmin^\vmax.
+    S_\text{avg} &=
+        \frac{1}{\rm{BW}}\int_{\nu_\text{min}}^{\nu_\text{max}} Ce^{\left(\frac{a}{\ln 10}  \left [ \ln\left ( \frac{\nu}{\nu_0} \right )\right]^2 + b \, \ln \left ( \frac{\nu}{\nu_0} \right )\right)}\,\text{d}\nu \\
+        &= \frac{C\nu_0}{2\rm{BW}} \sqrt{\frac{\pi \ln 10}{a}} \, 10^{-\frac{(b+1)^2}{4a}} \left[\text{erfi} \left(\frac{2a\ln \left(\frac{\nu}{\nu_0}\right) + b + 1}{2\sqrt{a\ln 10}}\right)\right]_{\nu_\text{min}}^{\nu_\text{max}}.
 
 
 Power law with high-frequency cut-off
@@ -123,10 +123,10 @@ Power law with high-frequency cut-off
 
 .. math::
 
-    \Sv &= c\left( \frac{\nu}{\nu_0} \right)^{\alpha} \left ( 1 - \frac{\nu}{\nu_c} \right ),\qquad \nu < \nu_c, \\
-    \Savg &= \frac{1}{\BW} \int_\vmin^\vmax c\left( \frac{\nu}{\nu_0} \right)^{\alpha} \left ( 1 - \frac{\nu}{\nu_c} \right ) \,\text{d}\nu \\
-    &= -\frac{c}{\BW \nu_0^\alpha} \left[ \frac{\nu^{\alpha + 1}}{\alpha + 1} + \frac{\nu^{\alpha + 2}}{\nu_c (\alpha + 2)}\right]_\vmin^\vmax \\
-    &= -\frac{c}{\BW \nu_0^\alpha} \left( \frac{\vmax^{\alpha + 1} - \vmin^{\alpha + 1}}{\alpha + 1} + \frac{\vmax^{\alpha + 2} - \vmin^{\alpha + 2}}{\nu_c (\alpha + 2)}\right ) \\
+    S_\nu &= c\left( \frac{\nu}{\nu_0} \right)^{\alpha} \left ( 1 - \frac{\nu}{\nu_c} \right ),\qquad \nu < \nu_c, \\
+    S_\text{avg} &= \frac{1}{\rm{BW}} \int_{\nu_\text{min}}^{\nu_\text{max}} c\left( \frac{\nu}{\nu_0} \right)^{\alpha} \left ( 1 - \frac{\nu}{\nu_c} \right ) \,\text{d}\nu \\
+    &= -\frac{c}{\rm{BW} \nu_0^\alpha} \left[ \frac{\nu^{\alpha + 1}}{\alpha + 1} + \frac{\nu^{\alpha + 2}}{\nu_c (\alpha + 2)}\right]_{\nu_\text{min}}^{\nu_\text{max}} \\
+    &= -\frac{c}{\rm{BW} \nu_0^\alpha} \left( \frac{{\nu_\text{max}}^{\alpha + 1} - {\nu_\text{min}}^{\alpha + 1}}{\alpha + 1} + \frac{{\nu_\text{max}}^{\alpha + 2} - {\nu_\text{min}}^{\alpha + 2}}{\nu_c (\alpha + 2)}\right ) \\
 
 
 sympy solution:
@@ -137,7 +137,7 @@ sympy solution:
 
 .. math::
 
-    \Savg &=  \left( \frac{c \nu}{\BW\nu_c} \right) \left ( \frac{\nu}{\nu_0} \right)^ \alpha \left ( \frac{- \alpha  \nu +  \alpha  \nu_c -  \nu + 2  \nu_c}{ (\alpha + 1)(\alpha + 2)} \right)\\
+    S_\text{avg} &=  \left( \frac{c \nu}{\rm{BW}\nu_c} \right) \left ( \frac{\nu}{\nu_0} \right)^ \alpha \left ( \frac{- \alpha  \nu +  \alpha  \nu_c -  \nu + 2  \nu_c}{ (\alpha + 1)(\alpha + 2)} \right)\\
 
 
 Power law with low-frequency turn-over
@@ -145,7 +145,7 @@ Power law with low-frequency turn-over
 
 .. math::
 
-    \Sv = c\left( \frac{\nu}{\nu_0} \right)^{\alpha} \exp\left [ \frac{\alpha}{\beta} \left( \frac{\nu}{\nu_c} \right)^{-\beta} \right ].
+    S_\nu = c\left( \frac{\nu}{\nu_0} \right)^{\alpha} \exp\left [ \frac{\alpha}{\beta} \left( \frac{\nu}{\nu_c} \right)^{-\beta} \right ].
 
 
 Again with \alpha little help from WolframAlpha, defining
@@ -160,8 +160,8 @@ we have
 
 .. math::
 
-    \Savg &= \frac{1}{\BW} \int_\vmin^\vmax cX e^{-Y} \,\text{d}\nu \\
-        &= \frac{c}{\BW}\left[\frac{\nu X Y^{-Z}}{\beta} \Gamma(Z, Y) \right]_\vmin^\vmax,
+    S_\text{avg} &= \frac{1}{\rm{BW}} \int_{\nu_\text{min}}^{\nu_\text{max}} cX e^{-Y} \,\text{d}\nu \\
+        &= \frac{c}{\rm{BW}}\left[\frac{\nu X Y^{-Z}}{\beta} \Gamma(Z, Y) \right]_{\nu_\text{min}}^{\nu_\text{max}},
 
 where :math:`\Gamma(a,x)`` is the incomplete gamma function.
 
@@ -171,22 +171,22 @@ Double turn-over spectrum
 
 .. math::
 
-    \Sv = c\left( \frac{\nu}{\nu_0} \right)^{\alpha} \exp\left [ \frac{\alpha}{\beta} \left( \frac{\nu}{\nu_{peak}} \right)^{-\beta} \right ] \left ( 1 - \frac{\nu}{\nu_c} \right ) ,\qquad \nu < \nu_c,
+    S_\nu = c\left( \frac{\nu}{\nu_0} \right)^{\alpha} \exp\left [ \frac{\alpha}{\beta} \left( \frac{\nu}{\nu_{peak}} \right)^{-\beta} \right ] \left ( 1 - \frac{\nu}{\nu_c} \right ) ,\qquad \nu < \nu_c,
 
 
 .. math::
 
-    \Savg
-    &= \frac{c}{\BW}\int_\vmin^\vmax \left( \frac{\nu}{\nu_0} \right)^{\alpha} \exp\left [ \frac{\alpha}{\beta} \left( \frac{\nu}{\nu_{peak}} \right)^{-\beta} \right ] \left ( 1 - \frac{\nu}{\nu_c} \right )\,\text{d}\nu \\
+    S_\text{avg}
+    &= \frac{c}{\rm{BW}}\int_{\nu_\text{min}}^{\nu_\text{max}} \left( \frac{\nu}{\nu_0} \right)^{\alpha} \exp\left [ \frac{\alpha}{\beta} \left( \frac{\nu}{\nu_{peak}} \right)^{-\beta} \right ] \left ( 1 - \frac{\nu}{\nu_c} \right )\,\text{d}\nu \\
     &=
-        \frac{c}{\BW} \int_\vmin^\vmax \left( \frac{\nu}{\nu_0} \right)^{\alpha} \exp\left [ \frac{\alpha}{\beta} \,\text{d}\nu \left( \frac{\nu}{\nu_{peak}} \right)^{-\beta} \right ] \,\text{d}\nu -
-        \frac{c}{\BW} \int_\vmin^\vmax \left( \frac{\nu}{\nu_0} \right)^{\alpha} \exp\left [ \frac{\alpha}{\beta} \,\text{d}\nu \left( \frac{\nu}{\nu_{peak}} \right)^{-\beta} \right ] \frac{\nu}{\nu_c} \,\text{d}\nu \\
+        \frac{c}{\rm{BW}} \int_{\nu_\text{min}}^{\nu_\text{max}} \left( \frac{\nu}{\nu_0} \right)^{\alpha} \exp\left [ \frac{\alpha}{\beta} \,\text{d}\nu \left( \frac{\nu}{\nu_{peak}} \right)^{-\beta} \right ] \,\text{d}\nu -
+        \frac{c}{\rm{BW}} \int_{\nu_\text{min}}^{\nu_\text{max}} \left( \frac{\nu}{\nu_0} \right)^{\alpha} \exp\left [ \frac{\alpha}{\beta} \,\text{d}\nu \left( \frac{\nu}{\nu_{peak}} \right)^{-\beta} \right ] \frac{\nu}{\nu_c} \,\text{d}\nu \\
     &=
-        \frac{c}{\BW} \int_\vmin^\vmax Xe^{-Y} \,\text{d}\nu -
-        \frac{c\nu_0}{\BW\,\nu_c} \int_\vmin^\vmax X^\prime e^{-Y} \,\text{d}\nu \\
+        \frac{c}{\rm{BW}} \int_{\nu_\text{min}}^{\nu_\text{max}} Xe^{-Y} \,\text{d}\nu -
+        \frac{c\nu_0}{\rm{BW}\,\nu_c} \int_{\nu_\text{min}}^{\nu_\text{max}} X^\prime e^{-Y} \,\text{d}\nu \\
     &=
-        \frac{c}{\BW}\left[\frac{\nu X Y^{-Z}}{\beta} \Gamma(Z, Y) \right]_\vmin^\vmax -
-        \frac{c\nu_0}{\BW\,\nu_c}\left[\frac{\nu X^\prime Y^{-Z^\prime}}{\beta} \Gamma(Z^\prime, Y) \right]_\vmin^\vmax,
+        \frac{c}{\rm{BW}}\left[\frac{\nu X Y^{-Z}}{\beta} \Gamma(Z, Y) \right]_{\nu_\text{min}}^{\nu_\text{max}} -
+        \frac{c\nu_0}{\rm{BW}\,\nu_c}\left[\frac{\nu X^\prime Y^{-Z^\prime}}{\beta} \Gamma(Z^\prime, Y) \right]_{\nu_\text{min}}^{\nu_\text{max}},
 
 where
 
@@ -205,30 +205,30 @@ Taylor Expansion Derivations
 
 Some of the above integrals involve functions that may be tricky to implement in practice.
 The following Taylor expansions allow for easier implementation, at the cost of accuracy for wideband measurements.
-Here, we derive Taylor expansions about an arbitrary "centre" frequency, :math:`\vctr` :
+Here, we derive Taylor expansions about an arbitrary "centre" frequency, :math:`{\nu_\text{ctr}}` :
 
-    \Sv \approx \Svctr + \Svctr^\prime(\nu - \vctr) + \frac{1}{2} \Svctr^{\prime\prime}(\nu - \vctr)^2 + \frac{1}{6} \Svctr^{\prime\prime\prime}(\nu - \vctr)^3 + \cdots
+    S_\nu \approx S_{\nu_{ctr}} + S_{\nu_{ctr}}^\prime(\nu - {\nu_\text{ctr}}) + \frac{1}{2} S_{\nu_{ctr}}^{\prime\prime}(\nu - {\nu_\text{ctr}})^2 + \frac{1}{6} S_{\nu_{ctr}}^{\prime\prime\prime}(\nu - {\nu_\text{ctr}})^3 + \cdots
 
 
-where :math:`\Svctr^{(n)} = S^{(n)}(\vctr)` is shorthand for the :math:`n` th derivative of :math:`\Sv` with respect to frequency, evaluated at :math:`\vctr` .
+where :math:`S_{\nu_{ctr}}^{(n)} = S^{(n)}({\nu_\text{ctr}})` is shorthand for the :math:`n` th derivative of :math:`S_\nu` with respect to frequency, evaluated at :math:`{\nu_\text{ctr}}` .
 
 In general, the bandwidth integral will then be
 
 .. math::
 
-    \Savg
-        &\approx \frac{1}{\BW} \int_\vmin^\vmax \Sv\,\text{d}\nu \\
-        &\approx \frac{1}{\BW} \int_\vmin^\vmax \left(
-            \Svctr + \Svctr^\prime(\nu - \vctr) + \frac{1}{2} \Svctr^{\prime\prime}(\nu - \vctr)^2 + \frac{1}{6} \Svctr^{\prime\prime\prime}(\nu - \vctr)^3 + \cdots
+    S_\text{avg}
+        &\approx \frac{1}{\rm{BW}} \int_{\nu_\text{min}}^{\nu_\text{max}} S_\nu\,\text{d}\nu \\
+        &\approx \frac{1}{\rm{BW}} \int_{\nu_\text{min}}^{\nu_\text{max}} \left(
+            S_{\nu_{ctr}} + S_{\nu_{ctr}}^\prime(\nu - {\nu_\text{ctr}}) + \frac{1}{2} S_{\nu_{ctr}}^{\prime\prime}(\nu - {\nu_\text{ctr}})^2 + \frac{1}{6} S_{\nu_{ctr}}^{\prime\prime\prime}(\nu - {\nu_\text{ctr}})^3 + \cdots
             \right)\,\text{d}\nu \\
-        &\approx \frac{1}{\BW} \left[
-            \Svctr\nu + \frac{\Svctr^\prime}{2}(\nu - \vctr)^2 + \frac{\Svctr^{\prime\prime}}{3}(\nu - \vctr)^3 +
-            \frac{\Svctr^{\prime\prime\prime}}{4}(\nu - \vctr)^4 + \cdots
-            \right]_\vmin^\vmax \\
-        &\approx \frac{1}{\BW} \left(
-            2\Svctr\left(\frac{\BW}{2}\right) + \frac{2\Svctr^{\prime\prime}}{3}\left(\frac{\BW}{2}\right)^3 + \cdots
+        &\approx \frac{1}{\rm{BW}} \left[
+            S_{\nu_{ctr}}\nu + \frac{S_{\nu_{ctr}}^\prime}{2}(\nu - {\nu_\text{ctr}})^2 + \frac{S_{\nu_{ctr}}^{\prime\prime}}{3}(\nu - {\nu_\text{ctr}})^3 +
+            \frac{S_{\nu_{ctr}}^{\prime\prime\prime}}{4}(\nu - {\nu_\text{ctr}})^4 + \cdots
+            \right]_{\nu_\text{min}}^{\nu_\text{max}} \\
+        &\approx \frac{1}{\rm{BW}} \left(
+            2S_{\nu_{ctr}}\left(\frac{\rm{BW}}{2}\right) + \frac{2S_{\nu_{ctr}}^{\prime\prime}}{3}\left(\frac{\rm{BW}}{2}\right)^3 + \cdots
             \right) \\
-        &= \Svctr + \frac{\Svctr^{\prime\prime}}{3}\left(\frac{\BW}{2}\right)^2 +
+        &= S_{\nu_{ctr}} + \frac{S_{\nu_{ctr}}^{\prime\prime}}{3}\left(\frac{\rm{BW}}{2}\right)^2 +
             \cdots
 
 
@@ -236,7 +236,7 @@ We see that every other term cancels (due to the symmetry of the integrand), and
 
 .. math::
 
-    \Savg = \sum_{k=0}^\infty \frac{\Svctr^{(2k)}}{2k+1}\left(\frac{\BW}{2}\right)^{2k}.
+    S_\text{avg} = \sum_{k=0}^\infty \frac{S_{\nu_{ctr}}^{(2k)}}{2k+1}\left(\frac{\rm{BW}}{2}\right)^{2k}.
 
 
 This formula can then be simply implemented for each model by computing its ``even'' derivatives.
@@ -249,16 +249,16 @@ Simple power law
 
 .. math::
 
-    \Sv &= c \left( \frac{\nu}{\nu_0} \right)^\alpha \\
-    \Sv^\prime
+    S_\nu &= c \left( \frac{\nu}{\nu_0} \right)^\alpha \\
+    S_\nu^\prime
         &= \alpha c \frac{\nu^{\alpha - 1}}{\nu_0^\alpha}
-         = \frac{\alpha\Sv}{\nu} \\
-    \Sv^{\prime\prime}
+         = \frac{\alpha S_\nu}{\nu} \\
+    S_\nu^{\prime\prime}
         &= \alpha(\alpha - 1) c \frac{\nu^{\alpha - 2}}{\nu_0^\alpha}
-         = \frac{\alpha(\alpha - 1)\Sv}{\nu^2} \\
+         = \frac{\alpha(\alpha - 1)S_\nu}{\nu^2} \\
     &\vdots \notag \\
-    \Sv^{(k)}
-        &= \frac{\alpha!}{(\alpha - k)!}\frac{\Sv}{\nu^k}
+    S_\nu^{(k)}
+        &= \frac{\alpha!}{(\alpha - k)!}\frac{S_\nu}{\nu^k}
 
 
 
@@ -291,31 +291,31 @@ The first four derivatives are:
 
 .. math::
 
-    \log_{10} \Sv
+    \log_{10} S_\nu
         &= \alpha  \left [ \log_{10} \left ( \frac{\nu}{\nu_0} \right ) \right]^2 +
             b \, \log_{10} \left ( \frac{\nu}{\nu_0} \right ) + c \\
-    \frac{\Sv^\prime}{\Sv\ln10}
+    \frac{S_\nu^\prime}{S_\nu\ln10}
         &= \left(2a\log_{10} \left ( \frac{\nu}{\nu_0} \right ) + b\right)
             \left( \frac{1}{\nu\ln 10}\right)
          = \frac{X}{\nu\ln 10} \\
-    \Sv^\prime
-        &= \frac{\Sv X}{\nu} \\
-    \Sv^{\prime\prime}
+    S_\nu^\prime
+        &= \frac{S_\nu X}{\nu} \\
+    S_\nu^{\prime\prime}
         &=
-            \frac{\Sv^\prime X}{\nu} -
-            \frac{\Sv X}{\nu^2} +
-            \frac{\Sv X^\prime}{\nu} \\
-        &= \frac{\Sv}{\nu^2}\left( X^2 - X + Y \right) \\
-    \Sv^{\prime\prime\prime}
-        &= \frac{\Sv^\prime}{\nu^2}\left( X^2 - X + Y \right) -
-            \frac{2\Sv}{\nu^3}\left( X^2 - X + Y \right) +
-            \frac{\Sv}{\nu^2}\left( 2XX^\prime - X^\prime \right) \\
-        &= \frac{\Sv}{\nu^3}\left( X^3 - 3X^2 + 3XY + 2X - 3Y \right) \\
-    \Sv^{\prime\prime\prime\prime}
-        &= \frac{\Sv^\prime}{\nu^3}\left( X^3 - 3X^2 + 3XY + 2X - 3Y \right) -{} \\
-            &\qquad\frac{3\Sv}{\nu^4}\left( X^3 - 3X^2 + 3XY + 2X - 3Y \right) +{} \\
-            &\qquad\frac{\Sv}{\nu^3}\left( 3X^2X^\prime - 6XX^\prime + 3X^\prime Y + 2X^\prime \right) \\
-        &= \frac{\Sv}{\nu^4}\left( X^4 - 6X^3 + 6X^2 Y + 11X^2 - 18XY - 6X + 11Y + 3Y^2 \right)
+            \frac{S_\nu^\prime X}{\nu} -
+            \frac{S_\nu X}{\nu^2} +
+            \frac{S_\nu X^\prime}{\nu} \\
+        &= \frac{S_\nu}{\nu^2}\left( X^2 - X + Y \right) \\
+    S_\nu^{\prime\prime\prime}
+        &= \frac{S_\nu^\prime}{\nu^2}\left( X^2 - X + Y \right) -
+            \frac{2S_\nu}{\nu^3}\left( X^2 - X + Y \right) +
+            \frac{S_\nu}{\nu^2}\left( 2XX^\prime - X^\prime \right) \\
+        &= \frac{S_\nu}{\nu^3}\left( X^3 - 3X^2 + 3XY + 2X - 3Y \right) \\
+    S_\nu^{\prime\prime\prime\prime}
+        &= \frac{S_\nu^\prime}{\nu^3}\left( X^3 - 3X^2 + 3XY + 2X - 3Y \right) -{} \\
+            &\qquad\frac{3S_\nu}{\nu^4}\left( X^3 - 3X^2 + 3XY + 2X - 3Y \right) +{} \\
+            &\qquad\frac{S_\nu}{\nu^3}\left( 3X^2X^\prime - 6XX^\prime + 3X^\prime Y + 2X^\prime \right) \\
+        &= \frac{S_\nu}{\nu^4}\left( X^4 - 6X^3 + 6X^2 Y + 11X^2 - 18XY - 6X + 11Y + 3Y^2 \right)
 
 
 
@@ -326,7 +326,7 @@ This one is really just the sum of two simple power laws:
 
 .. math::
 
-    \Sv
+    S_\nu
         &= c\left( \frac{\nu}{\nu_0} \right)^{\alpha} \left ( 1 - \frac{\nu}{\nu_c} \right ), \\
         &= c\left( \frac{\nu}{\nu_0} \right)^{\alpha} - \frac{c\nu_0}{\nu_c}\left( \frac{\nu}{\nu_0} \right)^{\alpha + 1}.
 
@@ -335,7 +335,7 @@ The derivatives are:
 
 .. math::
 
-    \Sv^{(k)}
+    S_\nu^{(k)}
         = \frac{c}{\nu_0^k} \frac{\alpha!}{(\alpha - k)!}
             \left(\frac{\nu}{\nu_0}\right)^{\alpha - k}\left(1 - \frac{\nu}{\nu_c}\right) -
             \frac{kc}{\nu_0^{k-1}\nu_c} \frac{\alpha!}{(\alpha - k + 1)!}
@@ -346,7 +346,7 @@ A new attempt
 
 .. math::
 
-    \Sv
+    S_\nu
         &= c\left( \frac{\nu}{\nu_0} \right)^{\alpha} \left ( 1 - \frac{\nu}{\nu_c} \right ), \\
         &= \left( \frac{c}{\nu_0^{\alpha}} \right ) \left (\nu^{\alpha} - \frac{\nu^{\alpha + 1}}{\nu_c} \right).
 
@@ -354,19 +354,19 @@ Deratives we need are:
 
 .. math::
 
-    \Sv^{\prime\prime}
+    S_\nu^{\prime\prime}
        &= \left( \frac{c \alpha }{\nu_0^{\alpha}} \right )
           \left(
             (\alpha - 1) \nu^{\alpha -2} -
             \frac{(\alpha+1) \nu^{\alpha -1}}{\nu_c}
           \right)\\
-    \Sv^{\prime\prime\prime\prime}
+    S_\nu^{\prime\prime\prime\prime}
        &= \left( \frac{c \alpha (\alpha - 1) (\alpha - 2) }{\nu_0^{\alpha}} \right )
           \left(
             (\alpha - 3) \nu^{\alpha - 4} -
             \frac{(\alpha+1) \nu^{\alpha -3}}{\nu_c}
           \right) \\
-     \Sv^{\prime\prime\prime\prime\prime\prime}
+     S_\nu^{\prime\prime\prime\prime\prime\prime}
        &= \left( \frac{c
                  \alpha (\alpha - 1) (\alpha - 2) (\alpha - 3) (\alpha - 4) }
                  {\nu_0^{\alpha}} \right )
@@ -398,40 +398,40 @@ Derivatives:
 
 .. math::
 
-    \Sv^\prime
+    S_\nu^\prime
         &= \frac{c\alpha}{\nu_0} \left( \frac{\nu}{\nu_0} \right)^{\alpha - 1} \exp\left [ \frac{\alpha}{\beta} \left( \frac{\nu}{\nu_c} \right)^{-\beta} \right ] +
             c\left( \frac{\nu}{\nu_0} \right)^{\alpha} \exp\left [ \frac{\alpha}{\beta} \left( \frac{\nu}{\nu_c} \right)^{-\beta} \right ] \left(-\frac{\alpha}{\nu_c} \left( \frac{\nu}{\nu_c} \right)^{-\beta - 1} \right) \\
-        &= \frac{\alpha \Sv}{\nu} - \frac{\alpha \Sv}{\nu_c} \left( \frac{\nu}{\nu_c} \right)^{-\beta - 1} \\
-        &= \frac{\alpha \Sv}{\nu}\left( 1 - \left( \frac{\nu}{\nu_c} \right)^{-\beta} \right)
-         = \frac{\alpha \Sv}{\nu}\left( 1 - X \right)
-         = \frac{\alpha \Sv Y}{\nu}
+        &= \frac{\alpha S_\nu}{\nu} - \frac{\alpha S_\nu}{\nu_c} \left( \frac{\nu}{\nu_c} \right)^{-\beta - 1} \\
+        &= \frac{\alpha S_\nu}{\nu}\left( 1 - \left( \frac{\nu}{\nu_c} \right)^{-\beta} \right)
+         = \frac{\alpha S_\nu}{\nu}\left( 1 - X \right)
+         = \frac{\alpha S_\nu Y}{\nu}
 
 
 
 .. math::
 
-    \Sv^{\prime\prime}
-        &= \frac{\alpha \Sv^\prime Y}{\nu} -
-            \frac{\alpha \Sv Y}{\nu^2} +
-            \frac{\alpha \Sv Y^\prime}{\nu} \\
-        &= \frac{\alpha^2 \Sv Y^2}{\nu^2} -
-            \frac{\alpha \Sv Y}{\nu^2} +
-            \frac{\alpha \beta \Sv X}{\nu^2} \\
-        &= \frac{\alpha \Sv}{\nu^2} \left [ \alpha Y^2 - Y + \beta X \right ]
+    S_\nu^{\prime\prime}
+        &= \frac{\alpha S_\nu^\prime Y}{\nu} -
+            \frac{\alpha S_\nu Y}{\nu^2} +
+            \frac{\alpha S_\nu Y^\prime}{\nu} \\
+        &= \frac{\alpha^2 S_\nu Y^2}{\nu^2} -
+            \frac{\alpha S_\nu Y}{\nu^2} +
+            \frac{\alpha \beta S_\nu X}{\nu^2} \\
+        &= \frac{\alpha S_\nu}{\nu^2} \left [ \alpha Y^2 - Y + \beta X \right ]
 
 
 
 .. math::
 
-    \Sv^{\prime\prime\prime}
+    S_\nu^{\prime\prime\prime}
         &=
-            \frac{\alpha\Sv^\prime}{\nu^2}\left [ \alpha Y^2 - Y + \beta X \right ] -
-            \frac{2\alpha\Sv}{\nu^3}\left [ \alpha Y^2 - Y + \beta X \right ] + \frac{\alpha\Sv}{\nu^2}\left [ 2\alpha Y Y^\prime - Y^\prime + \beta X^\prime \right ] \\
+            \frac{\alpha S_\nu^\prime}{\nu^2}\left [ \alpha Y^2 - Y + \beta X \right ] -
+            \frac{2\alpha S_\nu}{\nu^3}\left [ \alpha Y^2 - Y + \beta X \right ] + \frac{\alpha S_\nu}{\nu^2}\left [ 2\alpha Y Y^\prime - Y^\prime + \beta X^\prime \right ] \\
         &=
-            \frac{\alpha\Sv}{\nu^3}\alpha Y \left [ \alpha Y^2 - Y + \beta X \right ] -
-            \frac{\alpha\Sv}{\nu^3}2\left [ \alpha Y^2 - Y + \beta X \right ] + \frac{\alpha\Sv}{\nu^3}\left [ 2\alpha Y - 1 - \beta \right ] \beta X \\
+            \frac{\alpha S_\nu}{\nu^3}\alpha Y \left [ \alpha Y^2 - Y + \beta X \right ] -
+            \frac{\alpha S_\nu}{\nu^3}2\left [ \alpha Y^2 - Y + \beta X \right ] + \frac{\alpha S_\nu}{\nu^3}\left [ 2\alpha Y - 1 - \beta \right ] \beta X \\
         &=
-            \frac{\alpha\Sv}{\nu^3}\bigg( \alpha^2 Y^3 - 3\alpha Y^2 + (3\alpha\beta X + 2)Y - \beta X(3 + \beta)
+            \frac{\alpha S_\nu}{\nu^3}\bigg( \alpha^2 Y^3 - 3\alpha Y^2 + (3\alpha\beta X + 2)Y - \beta X(3 + \beta)
             \bigg)
 
 
@@ -444,9 +444,9 @@ Shorthands:
 
 .. math::
 
-    \Sv &=
+    S_\nu &=
         c\left( \frac{\nu}{\nu_0} \right)^{\alpha} \exp\left [ \frac{\alpha}{\beta} \left( \frac{\nu}{\nu_c} \right)^{-\beta} \right ].\\
-    \Sv^{\prime\prime}
+    S_\nu^{\prime\prime}
         &= \left(\frac{\alpha c}{\nu^2}\right)
            \left (\frac{\nu}{v0} \right)^\alpha
            \left(\frac{\nu}{\nu_{peak}} \right)^{-2 \beta}
@@ -455,10 +455,10 @@ Shorthands:
                 \left(\frac{\nu}{\nu_{peak}} \right)^{\beta} (-2\alpha + \beta +
                 1)\right]
             \exp\left[\left(\frac{\alpha}{\beta} \right) \left(\frac{\nu}{\nu_{peak}} \right)^{-\beta}\right]\\
-        &= \Sv \left(\frac{\alpha}{\nu^2}\right) X^{-2} \left[\alpha + X^{2} (\alpha - 1) + X (-2\alpha + \beta + 1)\right]\\
-    \Sv^{\prime\prime\prime\prime}
+        &= S_\nu \left(\frac{\alpha}{\nu^2}\right) X^{-2} \left[\alpha + X^{2} (\alpha - 1) + X (-2\alpha + \beta + 1)\right]\\
+    S_\nu^{\prime\prime\prime\prime}
         &=
-        \Sv \left(\frac{\alpha}{\nu^4}\right)
+        S_\nu \left(\frac{\alpha}{\nu^4}\right)
            X^{-4}
            \bigg [
             X^4 (
@@ -497,9 +497,9 @@ Shorthands:
             )
             + \alpha^3
             \bigg ]\\
-    \Sv^{\prime\prime\prime\prime\prime\prime}
+    S_\nu^{\prime\prime\prime\prime\prime\prime}
         &=
-        \Sv \left(\frac{\alpha}{\nu^6}\right) X^{-6}
+        S_\nu \left(\frac{\alpha}{\nu^6}\right) X^{-6}
         \bigg [
             X^6 (
                 + \alpha^5
@@ -600,11 +600,11 @@ Shorthands:
 
 .. math::
 
-    \Sv &=
+    S_\nu &=
         c\left( \frac{\nu}{\nu_0} \right)^{\alpha} \exp\left [ \frac{\alpha}{\beta} \left( \frac{\nu}{\nu_{peak}} \right)^{-\beta} \right ] \left ( 1 - \frac{\nu}{\nu_c} \right )\\
-    \Sv^{\prime\prime}
+    S_\nu^{\prime\prime}
         &=  Z \frac{\alpha}{\nu^2\nu_c X^2} (-\alpha Y - 2\nu X^2 + 2\nu X + X^2(1 - \alpha) Y + X Y(2\alpha - \beta - 1))\\
-    \Sv^{\prime\prime\prime\prime} &=
+    S_\nu^{\prime\prime\prime\prime} &=
         Z
         \frac{\alpha}{X^4\nu^4\nu_c}
         \bigg  [
