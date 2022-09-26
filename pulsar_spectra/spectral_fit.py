@@ -37,9 +37,9 @@ def robust_cost_function(f_y, y, sigma_y, k=1.345):
         The cost of the model fit.
     """
     beta_array = []
-    logger.debug(f"f_y: {f_y}")
-    logger.debug(f"y: {y}")
-    logger.debug(f"sigma_y: {sigma_y}")
+    # logger.debug(f"f_y: {f_y}")
+    # logger.debug(f"y: {y}")
+    # logger.debug(f"sigma_y: {sigma_y}")
     for fi, yi, sigma_i in zip(f_y, y, sigma_y):
         relative_error = (fi - yi)/sigma_i
         if abs(relative_error) < k:
@@ -291,9 +291,9 @@ def migrad_simplex_scan(m, mod_limits, model_name):
     space before migrad. Systematically increase the number of calls until
     a valid minimum is found.
     """
-    m.tol=0.000005 # low tolerace improves likelihood of a sensible fit
+    m.tol=0.00001 # low tolerace improves likelihood of a sensible fit
     m.limits = mod_limits # limits are primarily to assist the scan minimiser
-    ncall = 5000  # Calls until we abandon the fit
+    ncall = 10000  # Calls until we abandon the fit
     m.migrad(ncall=ncall)
     if m.valid:
         logger.debug(f"Found for fit with {model_name} using migrad and {m.nfcn} calls.")
