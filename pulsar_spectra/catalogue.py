@@ -366,7 +366,7 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
     # Add the antf to the cataogues
     antf_dict = all_flux_from_atnf(query=query)
     # refs that have errors that we plan to inform ANTF about
-    antf_incorrect_refs = ["Zhao_2019", "Mignani_2017", "Bell_2016", "Robinson_1995", "Johnston_1994", "Manchester_1996", "Xie_2019", "Han_2016"]
+    antf_incorrect_refs = ["Zhao_2019", "Mignani_2017", "Bell_2016", "Robinson_1995", "Johnston_1994", "Manchester_1996", "Xie_2019", "Han_2016", "Kramer_1999", "Kondratiev_2015"]
     # refs that are correct but where scaled to by their spectral index for the ATNF frequencies
     antf_adjusted_refs = ["Lorimer_1995b", "Stovall_2015", "Sanidas_2019", "Wolszczan_1992", "Dembska_2014", "Kaur_2019", "Alam_2021"]
     # refs that were rounded to different decimal places than the publications
