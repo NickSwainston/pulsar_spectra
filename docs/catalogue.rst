@@ -149,6 +149,7 @@ Papers included in our catalogue
     "Han et al. (2021)","201","1250-1250","`ADS <https://ui.adsabs.harvard.edu/abs/2021RAA....21..107H/abstract>`_"
     "Johnston et al. (2021)","44","1369-1369","`ADS <https://ui.adsabs.harvard.edu/abs/2021MNRAS.502.1253J/abstract>`_"
     "Kravtsov et al. (2022)","20","24-24","`ADS <https://ui.adsabs.harvard.edu/abs/2022MNRAS.512.4324K/abstract>`_"
+    "Lee et al. (2022)","22","70-352","`ADS <https://ui.adsabs.harvard.edu/abs/2022PASA...39...42L/abstract>`_"
     "Spiewak et al. (2022)","189","1284-1284","`ADS <https://ui.adsabs.harvard.edu/abs/2022PASA...39...27S/abstract>`_"
 
 
