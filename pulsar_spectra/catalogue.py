@@ -127,9 +127,12 @@ def convert_antf_ref(ref_code, ref_dict=None):
         ref_dict = get_antf_references()
     try:
         ref_string_list = ref_dict[ref_code].split()
-    except KeyError:
+    except KeyError or TypeError:
         # If the psrcat database file is changed this will update the ref_code
+        logger.debug(ref_dict)
         psrqpy.QueryATNF(version=ATNF_VER, checkupdate=True)
+        ref_dict = get_antf_references()
+        logger.debug(ref_dict)
         ref_string_list = ref_dict[ref_code].split()
 
     # Find the parts we need
@@ -252,7 +255,7 @@ def all_flux_from_atnf(query=None):
             The error of the flux density in mJy.
     """
     if query is None:
-        query = psrqpy.QueryATNF(version=ATNF_VER, ).pandas
+        query = psrqpy.QueryATNF(version=ATNF_VER).pandas
     ref_dict = get_antf_references()
     jnames = list(query['PSRJ'])
     jname_cat = {}
@@ -309,7 +312,7 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
                 The reference label (in the format 'Author_year').
     """
     if query is None:
-        query = psrqpy.QueryATNF(version=ATNF_VER, ).pandas
+        query = psrqpy.QueryATNF(version=ATNF_VER).pandas
     # Make a dictionary for each pulsar
     jnames = list(query['PSRJ'])
     jname_cat_dict = {}
