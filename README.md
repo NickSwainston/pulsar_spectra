@@ -21,10 +21,15 @@ You can install via pip using
 Or you can clone or download the repository and then use `python setup.py install` or `pip install .`
 
 
-Documentation
+Help
 =====
-Some basic documentation can be found [here](https://pulsar-spectra.readthedocs.io/en/latest/)
+The documentation can be found [here](https://pulsar-spectra.readthedocs.io/en/latest/)
 
+Credit
+=====
+If you use pulsar_spectra for your research please give credit by citing [Swainston et al 2012, PASA, 39, e056](https://ui.adsabs.harvard.edu/abs/2022arXiv220913324S/abstract) and the [publications of the data](https://pulsar-spectra.readthedocs.io/en/latest/catalogue.html#papers-included-in-our-catalogue) used in your spectral fits.
+
+Until there is a more appropriate method for crediting software development and maintainance, please also consider including me as a co-author on publications which rely on pulsar_spectra.
 
 Catalogue data
 =====
@@ -34,8 +39,3 @@ Instead, you should search through the literature to find all papers that contai
 the pulsar and confirm all of those papers are in the catalogue. You can find a list of the papers in the catalogue [here](https://pulsar-spectra.readthedocs.io/en/latest/catalogue.html#papers-included-in-our-catalgoue)
 
 If you would like to add a new paper to the catalogue read [the guide](https://pulsar-spectra.readthedocs.io/en/latest/catalogue.html#adding-papers)
-
-
-Status
-=====
-[![Documentation Status](https://readthedocs.org/projects/pulsar-spectra/badge/?version=latest)](https://pulsar-spectra.readthedocs.io/en/latest/?badge=latest)
