@@ -76,7 +76,7 @@ The simple power law model is
 
 .. math::
 
-    S_\nu &= c \left( \frac{\nu}{\nu_0} \right)^\alpha,
+    S_\nu = c \left( \frac{\nu}{\nu_0} \right)^\alpha,
 
 where :math:`\nu_0` is the reference frequency, :math:`\alpha` is the spectral index, and :math:`c` is a constant.
 The bandwidth integration for this model is relatively simple, as shown below:
@@ -131,7 +131,7 @@ The log-parabolic spectrum is a parabola in log-space, with the form:
 .. math::
 
     \log_{10} S_\nu
-        &= a \left [ \log_{10} \left ( \frac{\nu}{\nu_0} \right ) \right]^2 + b \, \log_{10} \left ( \frac{\nu}{\nu_0} \right ) + c,
+        = a \left [ \log_{10} \left ( \frac{\nu}{\nu_0} \right ) \right]^2 + b \, \log_{10} \left ( \frac{\nu}{\nu_0} \right ) + c,
 
 where :math:`a` is the curvature parameter, :math:`b` is the spectral index for :math:`a=0`, and :math:`c` is a constant.
 This model can be re-expressed to be linear in :math:`S_\nu` as
@@ -172,7 +172,7 @@ This model is a power law spectrum with a high-frequency cut-off occurring at th
 
 .. math::
 
-    S_\nu &= c\left( \frac{\nu}{\nu_0} \right)^{\alpha} \left ( 1 - \frac{\nu}{\nu_c} \right ),\qquad \nu < \nu_c.
+    S_\nu = c\left( \frac{\nu}{\nu_0} \right)^{\alpha} \left ( 1 - \frac{\nu}{\nu_c} \right ),\qquad \nu < \nu_c.
 
 The bandwidth integration is performed as follows:
 
@@ -190,7 +190,7 @@ sympy provides the solution:
 
 .. math::
 
-    S_\text{avg} &=  \left( \frac{c \nu}{\rm{BW}\nu_c} \right) \left ( \frac{\nu}{\nu_0} \right)^ \alpha \left ( \frac{- \alpha  \nu +  \alpha  \nu_c -  \nu + 2  \nu_c}{ (\alpha + 1)(\alpha + 2)} \right).
+    S_\text{avg} =  \left( \frac{c \nu}{\rm{BW}\nu_c} \right) \left ( \frac{\nu}{\nu_0} \right)^ \alpha \left ( \frac{- \alpha  \nu +  \alpha  \nu_c -  \nu + 2  \nu_c}{ (\alpha + 1)(\alpha + 2)} \right).
 
 .. _low_frequency_turn_over_power_law_intergral:
 
@@ -239,7 +239,7 @@ We first re-arrange as follows:
     &=
         \frac{c}{\rm{BW}} \int_{\nu_\text{min}}^{\nu_\text{max}} \left( \frac{\nu}{\nu_0} \right)^{\alpha} \exp\left [ \frac{\alpha}{\beta} \left( \frac{\nu}{\nu_\rm{peak}} \right)^{-\beta} \right ] \,\text{d}\nu -{} \\
     &\qquad \frac{c}{\rm{BW}} \int_{\nu_\text{min}}^{\nu_\text{max}} \left( \frac{\nu}{\nu_0} \right)^{\alpha} \exp\left [ \frac{\alpha}{\beta} \left( \frac{\nu}{\nu_\rm{peak}} \right)^{-\beta} \right ] \frac{\nu}{\nu_c} \,\text{d}\nu \\
-    
+
 This integral can then be written in terms of the paramters
 
 .. math::
@@ -309,8 +309,8 @@ Simple power law
 The derivatives of the simple power-law model,
 
 .. math::
-    
-    S_\nu &= c \left( \frac{\nu}{\nu_0} \right)^\alpha,
+
+    S_\nu = c \left( \frac{\nu}{\nu_0} \right)^\alpha,
 
 take the following form:
 
@@ -591,7 +591,7 @@ The double turn-over spectrum model is
 
 .. math::
     S_\nu =
-        c\left( \frac{\nu}{\nu_0} \right)^{\alpha} \exp\left [ \frac{\alpha}{\beta} \left( \frac{\nu}{\nu_\rm{peak}} \right)^{-\beta} \right ] 
+        c\left( \frac{\nu}{\nu_0} \right)^{\alpha} \exp\left [ \frac{\alpha}{\beta} \left( \frac{\nu}{\nu_\rm{peak}} \right)^{-\beta} \right ]
         \left ( 1 - \frac{\nu}{\nu_c} \right ).
 
 For this derivation, the shorthands are:
