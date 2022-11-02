@@ -13,38 +13,22 @@ with open("Bates_2011_raw.txt", "r") as raw_file:
     lines = raw_file.readlines()
 
 pulsar_dict = {}
-for row in lines[:16]:
-    row = row.split()
-    print(row)
-    pulsar = row[0].replace("−", "-")
-
-    flux, flux_err = row[4].split("(")
-    sig_fig = len(flux.split(".")[-1])
-    pulsar_dict[pulsar] = {"Frequency MHz":[1400],
-                           "Flux Density mJy":[float(flux)],
-                           "Flux Density error mJy":[round(float(flux_err[:-1]) * 10**(-sig_fig), 4)]}
 
 for row in lines[17:]:
     row = row.split()
     print(row)
     pulsar = row[0].replace("−", "-")
-
-    freqs = [1400, 4850, 6500]
-    pulsar_dict[pulsar] = {"Frequency MHz":[],
-                           "Flux Density mJy":[],
-                           "Flux Density error mJy":[]}
-    for freq, pair in zip(freqs, row[6:-1]):
-        print(freq,pair)
+    # grab last row with an uncertainty
+    for pair in row[6:-2]:
         if "(" in pair:
             flux, flux_err = pair.split("(")
             sig_fig = len(flux.split(".")[-1])
-            pulsar_dict[pulsar]["Frequency MHz"] += [float(freq)]
-            pulsar_dict[pulsar]["Flux Density mJy"] += [float(flux)]
-            pulsar_dict[pulsar]["Flux Density error mJy"] += [round(float(flux_err[:-1]) * 10**(-sig_fig), 4)]
-            pulsar_dict[pulsar]["Flux Density error mJy"] = replace_zero_err(
-                pulsar_dict[pulsar]["Flux Density mJy"], 
-                pulsar_dict[pulsar]["Flux Density error mJy"]
-            )
+            pulsar_dict[pulsar] = {
+                "Frequency MHz":[6591],
+                "Bandwidth MHz":[576],
+                "Flux Density mJy":[float(flux)],
+                "Flux Density error mJy":[round(float(flux_err[:-1]) * 10**(-sig_fig), 4)]
+            }
 
 json = json.dumps(pulsar_dict, indent=1)
 with open("Bates_2011.yaml", "w") as cat_file:

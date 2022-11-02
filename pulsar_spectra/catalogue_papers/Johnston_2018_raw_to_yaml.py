@@ -1,5 +1,6 @@
 import json
 import csv
+from math import log10, floor
 
 with open("Johnston_2018_raw.tsv") as file:
     tsv_file = csv.reader(file, delimiter="\t")
@@ -18,10 +19,28 @@ for row in lines:
     print(row)
 
     pulsar = row[0].strip().replace("–", "-")
+    # Wrong names I found
+    if pulsar == "J1105-43":
+        pulsar = "J1105-4353"
+    elif pulsar == "J1530-63":
+        pulsar = "J1530-6343"
+    elif pulsar == "J1552-62":
+        pulsar = "J1551-6214"
+    elif pulsar == "J1614-38":
+        pulsar = "J1614-3846"
+    elif pulsar == "J1705-52":
+        pulsar = "J1704-5236"
 
-    pulsar_dict[pulsar] = {"Frequency MHz":[1400],
-                            "Flux Density mJy":[round(float(row[1]),1)],
-                            "Flux Density error mJy":[round(float(row[1])*.2,1)]}
+    flux = float(row[1])
+    round_to = -int(floor(log10(abs(flux*.2))))
+    flux = round(flux, round_to)
+    flux_err = round(flux*.2, round_to)
+    pulsar_dict[pulsar] = {
+        "Frequency MHz":[1360],
+        "Bandwidth MHz":[256],
+        "Flux Density mJy":[flux],
+        "Flux Density error mJy":[flux_err]
+    }
 
 with open("Johnston_2018.yaml", "w") as cat_file:
     cat_file.write(json.dumps(pulsar_dict, indent=1))

@@ -26,12 +26,28 @@ for row in lines:
         pulsar = query['PSRJ'][pid]
     else:
         pulsar = row[0].strip().replace("–", "-")
+    # Wrong names I found
+    if pulsar == "J0435+27":
+        pulsar = "J0435+2749"
+    elif pulsar == "J0943+22":
+        pulsar = "J0943+2253"
+    elif pulsar == "J0947+27":
+        pulsar = "J0947+2740"
+    elif pulsar == "J1238+21":
+        pulsar = "J1238+2152"
+    elif pulsar == "J1246+22":
+        pulsar = "J1246+2253"
 
     if row[1] == '<':
         continue
     flux = float(row[2])
     flux_err = float(row[3])
-    pulsar_dict[pulsar] = {"Frequency MHz":[149], "Flux Density mJy":[flux], "Flux Density error mJy":[flux_err]}
+    pulsar_dict[pulsar] = {
+        "Frequency MHz":[149],
+        "Bandwidth MHz":[78],
+        "Flux Density mJy":[flux],
+        "Flux Density error mJy":[flux_err]
+    }
 
 with open("Bilous_2016.yaml", "w") as cat_file:
     cat_file.write(json.dumps(pulsar_dict, indent=1))

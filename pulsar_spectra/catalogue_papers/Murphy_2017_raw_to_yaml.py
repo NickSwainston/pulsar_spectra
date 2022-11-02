@@ -15,7 +15,12 @@ for row in lines:
 
     flux, flux_err = row[2].split("±")
 
-    pulsar_dict[pulsar] = {"Frequency MHz":[200], "Flux Density mJy":[float(flux)], "Flux Density error mJy":[float(flux_err)]}
+    pulsar_dict[pulsar] = {
+        "Frequency MHz":[151.5],
+        "Bandwidth MHz":[159],
+        "Flux Density mJy":[float(flux)],
+        "Flux Density error mJy":[float(flux_err)]
+    }
 
 with open("Murphy_2017_raw_table_4.txt", "r") as raw_file:
     lines = raw_file.readlines()
@@ -32,6 +37,7 @@ for row in lines[:15]:
             #print(pair)
             flux, flux_err = pair.split("±")
             pulsar_dict[pulsar]["Frequency MHz"] += [freq]
+            pulsar_dict[pulsar]["Bandwidth MHz"] += [7.68]
             pulsar_dict[pulsar]["Flux Density mJy"] +=[float(flux)]
             pulsar_dict[pulsar]["Flux Density error mJy"] += [float(flux_err)]
 for row in lines[16:]:
@@ -46,6 +52,7 @@ for row in lines[16:]:
             #print(pair)
             flux, flux_err = pair.split("±")
             pulsar_dict[pulsar]["Frequency MHz"] += [freq]
+            pulsar_dict[pulsar]["Bandwidth MHz"] += [7.68]
             pulsar_dict[pulsar]["Flux Density mJy"] +=[float(flux)]
             pulsar_dict[pulsar]["Flux Density error mJy"] += [float(flux_err)]
 

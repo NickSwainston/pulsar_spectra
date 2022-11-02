@@ -4,6 +4,10 @@
    430,
    1400,
   ],
+  "Bandwidth MHz": [
+   8,
+   40,
+  ],
   "Flux Density mJy": [
    10,
    1,

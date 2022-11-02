@@ -18,10 +18,18 @@ for row in lines:
     print(row)
 
     pulsar = "J" + row[0].strip().replace("–", "-")
+    # Wrong names I found
+    if "J1717-40433" in pulsar:
+        pulsar = "J1717-40435"
 
     flux = float(row[1])
     flux_err = float(row[2])
-    pulsar_dict[pulsar] = {"Frequency MHz":[1400.], "Flux Density mJy":[flux], "Flux Density error mJy":[flux_err]}
+    pulsar_dict[pulsar] = {
+        "Frequency MHz":[1374],
+        "Bandwidth MHz":[288],
+        "Flux Density mJy":[flux],
+        "Flux Density error mJy":[flux_err]
+    }
 
 with open("Kramer_2003a.yaml", "w") as cat_file:
     cat_file.write(json.dumps(pulsar_dict, indent=1))

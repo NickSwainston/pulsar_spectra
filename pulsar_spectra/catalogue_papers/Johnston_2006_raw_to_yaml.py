@@ -12,10 +12,13 @@ for row in lines:
         continue
     flux = float(row[4].split("(")[0])
 
-    pulsar_dict[pulsar] = {"Frequency MHz":[8400],
-                           "Flux Density mJy":[flux],
-                           # Text doesn't mention uncertainty so assuming 50%
-                           "Flux Density error mJy":[flux*0.5]}
+    pulsar_dict[pulsar] = {
+        "Frequency MHz":[8356],
+        "Bandwidth MHz":[512],
+        "Flux Density mJy":[flux],
+        # Text doesn't mention uncertainty so assuming 50%
+        "Flux Density error mJy":[flux*0.5]
+        }
 
 with open("Johnston_2006.yaml", "w") as cat_file:
     cat_file.write(json.dumps(pulsar_dict, indent=1))

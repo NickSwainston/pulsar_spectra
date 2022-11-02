@@ -3,6 +3,7 @@ import psrqpy
 import csv
 
 query = psrqpy.QueryATNF(params=['PSRJ', 'NAME', 'PSRB']).pandas
+all_jnames = list(query['PSRJ'])
 
 with open("Malofeev_2000_raw.tsv", "r") as raw_file:
     tsv_file = csv.reader(raw_file, delimiter="\t")
@@ -28,11 +29,38 @@ for row in lines:
         bname = "B" + row[0].strip().replace("–", "-")
         pid = list(query['PSRB']).index(bname)
         pulsar = query['PSRJ'][pid]
+    if len(pulsar) < 10:
+        # look for real name
+        possible_names = []
+        for jname in all_jnames:
+            if jname.startswith(pulsar):
+                possible_names.append(jname)
+        if len(possible_names) == 1:
+            pulsar = possible_names[0]
+        else:
+            possible_names
+            exit()
+    # Wrong names I found
+    if pulsar == "J1025-0709":
+        pulsar = "J1024-0719"
+    elif pulsar == "J1549+2110":
+        pulsar = "J1549+2113"
+    elif pulsar == "J2347-0612":
+        pulsar = "J2346-0609"
+    elif pulsar == "J1235-5516":
+        pulsar = "J1235-54"
+
 
     flux = float(row[3])
     flux_err = float(row[4])
-    pulsar_dict[pulsar] = {"Frequency MHz":[102.5], "Flux Density mJy":[flux], "Flux Density error mJy":[flux_err]}
+    pulsar_dict[pulsar] = {
+        "Frequency MHz":[102.5],
+        "Bandwidth MHz":[0.64],
+        "Flux Density mJy":[flux],
+        "Flux Density error mJy":[flux_err]
+    }
+
 
 with open("Malofeev_2000.yaml", "w") as cat_file:
     cat_file.write(json.dumps(pulsar_dict, indent=1))
-print(pulsar_dict)
+#print(pulsar_dict)

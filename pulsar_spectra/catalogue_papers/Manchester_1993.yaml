@@ -1,7 +1,10 @@
 {
  "J0540-6919": {
   "Frequency MHz": [
-   640
+   660
+  ],
+  "Bandwidth MHz": [
+   32
   ],
   "Flux Density mJy": [
    0.4

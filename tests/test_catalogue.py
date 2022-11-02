@@ -1,8 +1,10 @@
 #! /usr/bin/env python
 
 import os
+import yaml
+import psrqpy
 
-from pulsar_spectra.catalogue import collect_catalogue_fluxes, CAT_YAMLS, ADS_REF
+from pulsar_spectra.catalogue import collect_catalogue_fluxes, CAT_YAMLS, ADS_REF, ATNF_VER
 
 import logging
 logger = logging.getLogger(__name__)
@@ -28,15 +30,16 @@ def test_ref_duplicates_removed():
     """
     cat_dict = collect_catalogue_fluxes()
     for pulsar in cat_dict.keys():
+        print(pulsar)
         ref_ps = []
         ref_atnf = []
-        for ref in cat_dict[pulsar][3]:
+        for ref in cat_dict[pulsar][4]:
             if 'ATNF' in ref:
-                ref_atnf.append(ref)
+                ref_atnf.append(ref[:-5])
             else:
                 ref_ps.append(ref)
         for ref in ref_atnf:
-            assert ref not in ref_ps
+            assert ref not in tuple(ref_ps)
 
 
 def test_missing_ads_refs():
@@ -46,6 +49,38 @@ def test_missing_ads_refs():
         cat_ref = os.path.basename(cat_file).split(".")[0]
         print(cat_ref)
         assert cat_ref in ADS_REF
+
+
+def test_catalogue_format():
+    """Check the pulsar names are correct and that all the keys are correct.
+    """
+    query = psrqpy.QueryATNF(version=ATNF_VER).pandas
+    jnames = list(query['PSRJ'])
+    for cat_file in CAT_YAMLS:
+        print(cat_file)
+        with open(cat_file, "r") as stream:
+            cat_dict = yaml.safe_load(stream)
+        for pulsar in cat_dict.keys():
+            print(pulsar)
+            # Below is a typo in ATNF v1.68
+            if pulsar not in ("J1643-10"):
+                assert pulsar in jnames
+            assert 'Frequency MHz' in cat_dict[pulsar].keys()
+            assert 'Bandwidth MHz' in cat_dict[pulsar].keys()
+            assert 'Flux Density mJy' in cat_dict[pulsar].keys()
+            assert 'Flux Density error mJy' in cat_dict[pulsar].keys()
+            assert len(cat_dict[pulsar]['Frequency MHz']) == len(cat_dict[pulsar]['Bandwidth MHz']) ==\
+                   len(cat_dict[pulsar]['Flux Density mJy' ]) == len(cat_dict[pulsar]['Flux Density error mJy'])
+            # Check no zeros in cat
+            for freq, band, flux, flux_err in zip(cat_dict[pulsar]['Frequency MHz'],
+                                                  cat_dict[pulsar]['Bandwidth MHz'],
+                                                  cat_dict[pulsar]['Flux Density mJy'],
+                                                  cat_dict[pulsar]['Flux Density error mJy']):
+                assert freq != 0.
+                assert band != 0.
+                assert flux != 0.
+                assert flux_err != 0.
+
 
 
 # TODO finish below

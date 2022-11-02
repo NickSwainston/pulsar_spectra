@@ -3,33 +3,10 @@
 Tests the spectral_fit.py script
 """
 
-import os
 import numpy as np
-from numpy.testing import assert_almost_equal
-import csv
-import sys
 
 from pulsar_spectra.spectral_fit import find_best_spectral_fit
 from pulsar_spectra.catalogue import collect_catalogue_fluxes
-
-import logging
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-
-# formatter = logging.Formatter('%(asctime)s  %(name)s  %(lineno)-4d  %(levelname)-9s :: %(message)s')
-# ch = logging.StreamHandler()
-# ch.setFormatter(formatter)
-# # Set up local logger
-# logger.setLevel(logging.DEBUG)
-# logger.addHandler(ch)
-# logger.propagate = False
-# # Loop over imported vcstools modules and set up their loggers
-# for imported_module in sys.modules.keys():
-#     if imported_module.startswith('pulsar_spectra'):
-#         logging.getLogger(imported_module).setLevel(logging.DEBUG)
-#         logging.getLogger(imported_module).addHandler(ch)
-#         logging.getLogger(imported_module).propagate = False
-
 
 
 def test_find_best_spectral_fit():
@@ -38,35 +15,40 @@ def test_find_best_spectral_fit():
     # limit the input publications to prevent future additions making the tests fail
     cat_list = collect_catalogue_fluxes(
         only_use=[
-            "Murphy_2017",
-            "McEwen_2022",
-            "Xue_2017",
-            "Taylor_1993",
-            "Stappers_2008",
-            "Jankowski_2018",
-            "Jankowski_2019",
-            "Bell_2016",
-            "Johnston_2018",
-            "Zhao_2019",
-            "van_Ommen_1997",
-            "Keith_2011",
-            "Seiber_1973",
-            "Keith_2011",
-            "Sieber_1973",
-            "Malofeev_2000",
-            "Lorimer_1995b",
-            "Bondonneau_2020",
-            "Zakharenki_2013",
-            "Sanidas_2019",
-            "Izekova_1981",
-            "Bartel_1978",
-            "Johnston_2006",
-            "Zakharenko_2013",
-            "Izvekova_1981",
-            "Kijak_2017",
-            "Han_2016",
-            "Hobbs_2004a",
-            "Dembska_2014",
+            'Jankowski_2018',
+            'Keith_2011',
+            'Johnston_1993',
+            'Jankowski_2019',
+            'Bondonneau_2020',
+            'Dai_2015',
+            'Manchester_1996',
+            'Bell_2016',
+            'Fake data',
+            'Toscano_1998',
+            'Dewey_1985',
+            'Bilous_2016',
+            'Malofeev_2000',
+            'Hobbs_2004a',
+            'Murphy_2017',
+            'Lee_2022',
+            'Bilous_2020',
+            'Kramer_1998',
+            'Manchester_1978a',
+            'Spiewak_2022',
+            'Zhang_2019',
+            'Lorimer_1995b',
+            'Izvekova_1981',
+            'Zhao_2019',
+            'Johnston_2018',
+            'Bhat_2022',
+            'Bartel_1978',
+            'van_Ommen_1997',
+            'Xue_2017',
+            'Zakharenko_2013',
+            'Sanidas_2019',
+            'Robinson_1995',
+            'McEwen_2020',
+            'Frail_2016'
         ]
     )
     ref_markers = {
@@ -75,26 +57,28 @@ def test_find_best_spectral_fit():
         "Xue_2017":       ("y",       "P", 7.5),  # yellow thick plus)
     }
     pulsars = [
-        ('J0034-0534', "simple_power_law"),
-        ('J0835-4510', "broken_power_law"),
-        ('J1751-4657', "high_frequency_cut_off_power_law"),
-        ('J0953+0755', "low_frequency_turn_over_power_law"),
-        # Removed until I can find a more consistent example
-        #('J1852-0635', "double_turn_over_spectrum"),
+        ('J0415+6954', "simple_power_law"),
+        ('J0437-4715', "broken_power_law"),
+        ('J1703-1846', "high_frequency_cut_off_power_law"),
+        ('J0024-7204C', "low_frequency_turn_over_power_law"),
+        ('J1932+1059', "double_turn_over_spectrum"),
     ]
+    refs_needed = []
     for pulsar, exp_model_name in pulsars:
         print(f"\nFitting {pulsar}")
-        freq_all, flux_all, flux_err_all, ref_all = cat_list[pulsar]
-        if pulsar == 'J0034-0534':
-            # Remove the Bondonneau_2020 data point
-            freq_all = freq_all[:-1]
-            flux_all = flux_all[:-1]
-            flux_err_all = flux_err_all[:-1]
-            ref_all = ref_all[:-1]
-        for freq, flux, flux_err, ref in zip(freq_all, flux_all, flux_err_all, ref_all):
-            print(f"{float(freq):8.1f}{float(flux):12.4f}{float(flux_err):12.4f} {str(ref):20s}")
+        freq_all, band_all, flux_all, flux_err_all, ref_all = cat_list[pulsar]
+        if pulsar == 'J1932+1059':
+            # Add an extra point to encourage a high frequency cut off
+            freq_all.append(25000)
+            band_all.append(1000)
+            flux_all.append(0.2)
+            flux_err_all.append(0.02)
+            ref_all.append("Fake data")
+        for freq, band, flux, flux_err, ref in zip(freq_all, band_all, flux_all, flux_err_all, ref_all):
+            print(f"{float(freq):8.1f}{float(band):8.1f}{float(flux):12.4f}{float(flux_err):12.4f} {str(ref):20s}")
+            refs_needed.append(ref)
         model_name, iminuit_result, fit_info, p_best, p_category = find_best_spectral_fit(
-            pulsar, freq_all, flux_all, flux_err_all, ref_all,
+            pulsar, freq_all, band_all, flux_all, flux_err_all, ref_all,
             plot_compare=True, ref_markers=ref_markers,
         )
         for p, v, e in zip(iminuit_result.parameters, iminuit_result.values, iminuit_result.errors):
@@ -103,6 +87,7 @@ def test_find_best_spectral_fit():
             else:
                 print(f"{p} = {v:.5f} +/- {e:.5}")
         np.testing.assert_string_equal(model_name, exp_model_name)
+    print(f"Refs needed:{list(set(refs_needed))}")
 
 
 def test_plot_methods():
@@ -112,13 +97,13 @@ def test_plot_methods():
     pulsar = 'J0820-1350'
     print(f"Fitting {pulsar}")
     print("Plotting Compare")
-    find_best_spectral_fit(pulsar, cat_list[pulsar][0], cat_list[pulsar][1], cat_list[pulsar][2], cat_list[pulsar][3], plot_compare=True)
+    find_best_spectral_fit(pulsar, cat_list[pulsar][0], cat_list[pulsar][1], cat_list[pulsar][2], cat_list[pulsar][3], cat_list[pulsar][4], plot_compare=True)
     print("Plotting All")
-    find_best_spectral_fit(pulsar, cat_list[pulsar][0], cat_list[pulsar][1], cat_list[pulsar][2], cat_list[pulsar][3], plot_all=True)
+    find_best_spectral_fit(pulsar, cat_list[pulsar][0], cat_list[pulsar][1], cat_list[pulsar][2], cat_list[pulsar][3], cat_list[pulsar][4], plot_all=True)
     print("Plotting Best")
-    find_best_spectral_fit(pulsar, cat_list[pulsar][0], cat_list[pulsar][1], cat_list[pulsar][2], cat_list[pulsar][3], plot_best=True)
+    find_best_spectral_fit(pulsar, cat_list[pulsar][0], cat_list[pulsar][1], cat_list[pulsar][2], cat_list[pulsar][3], cat_list[pulsar][4], plot_best=True)
     print("Plotting Best alternate style and fit range")
-    find_best_spectral_fit(pulsar, cat_list[pulsar][0], cat_list[pulsar][1], cat_list[pulsar][2], cat_list[pulsar][3],
+    find_best_spectral_fit(pulsar, cat_list[pulsar][0], cat_list[pulsar][1], cat_list[pulsar][2], cat_list[pulsar][3], cat_list[pulsar][4],
                            plot_best=True, alternate_style=True, fit_range=(10, 1100))
 
 

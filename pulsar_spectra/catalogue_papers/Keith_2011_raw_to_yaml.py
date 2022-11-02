@@ -9,12 +9,16 @@ for row in lines[:16]:
     print(row)
     if len(row) == 12:
         pulsar = row[0].replace("−", "-").replace("–", "-")
-        pulsar_dict[pulsar] = {"Frequency MHz":[],
-                               "Flux Density mJy":[],
-                               "Flux Density error mJy":[]}
+        pulsar_dict[pulsar] = {
+            "Frequency MHz":[],
+            "Bandwidth MHz":[],
+            "Flux Density mJy":[],
+            "Flux Density error mJy":[]
+        }
     freq = float(row[-9])*1e3
     flux = float(row[-7])
     pulsar_dict[pulsar]["Frequency MHz"] += [freq]
+    pulsar_dict[pulsar]["Bandwidth MHz"] += [1024]
     pulsar_dict[pulsar]["Flux Density mJy"] += [flux]
     # Text says assume %20 uncertainty
     pulsar_dict[pulsar]["Flux Density error mJy"] += [round(flux*.2, 4)]

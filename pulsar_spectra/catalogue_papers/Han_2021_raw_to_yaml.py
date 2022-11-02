@@ -18,10 +18,20 @@ for row in lines:
     print(row)
 
     pulsar = row[0].strip().replace("–", "-")
+    # Wrong names I found
+    if pulsar == "J1914+0805g":
+        pulsar = "J1914+0805"
+    if pulsar == "J1916+1030Bg":
+        pulsar = "J1916+1030g"
 
     flux = round(float(row[1]) / 1e3, 3)
     flux_err = round(float(row[1]) / 1e3* 0.5, 3)
-    pulsar_dict[pulsar] = {"Frequency MHz":[1250.], "Flux Density mJy":[flux], "Flux Density error mJy":[flux_err]}
+    pulsar_dict[pulsar] = {
+        "Frequency MHz":[1250.],
+        "Bandwidth MHz":[450.],
+        "Flux Density mJy":[flux],
+        "Flux Density error mJy":[flux_err]
+    }
 
 with open("Han_2021.yaml", "w") as cat_file:
     cat_file.write(json.dumps(pulsar_dict, indent=1))

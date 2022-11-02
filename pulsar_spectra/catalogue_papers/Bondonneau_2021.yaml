@@ -1,0 +1,170 @@
+{
+ "J0030+0451": {
+  "Frequency MHz": [
+   50
+  ],
+  "Bandwidth MHz": [
+   75
+  ],
+  "Flux Density mJy": [
+   67.0
+  ],
+  "Flux Density error mJy": [
+   34.0
+  ]
+ },
+ "J0034-0534": {
+  "Frequency MHz": [
+   50
+  ],
+  "Bandwidth MHz": [
+   75
+  ],
+  "Flux Density mJy": [
+   1168.0
+  ],
+  "Flux Density error mJy": [
+   584.0
+  ]
+ },
+ "J0214+5222": {
+  "Frequency MHz": [
+   50
+  ],
+  "Bandwidth MHz": [
+   75
+  ],
+  "Flux Density mJy": [
+   5.0
+  ],
+  "Flux Density error mJy": [
+   3.0
+  ]
+ },
+ "J0740+6620": {
+  "Frequency MHz": [
+   50
+  ],
+  "Bandwidth MHz": [
+   75
+  ],
+  "Flux Density mJy": [
+   6.0
+  ],
+  "Flux Density error mJy": [
+   3.0
+  ]
+ },
+ "J1022+1001": {
+  "Frequency MHz": [
+   50
+  ],
+  "Bandwidth MHz": [
+   75
+  ],
+  "Flux Density mJy": [
+   31.0
+  ],
+  "Flux Density error mJy": [
+   16.0
+  ]
+ },
+ "J1231-1411": {
+  "Frequency MHz": [
+   50
+  ],
+  "Bandwidth MHz": [
+   75
+  ],
+  "Flux Density mJy": [
+   34.0
+  ],
+  "Flux Density error mJy": [
+   17.0
+  ]
+ },
+ "J1300+1240": {
+  "Frequency MHz": [
+   50
+  ],
+  "Bandwidth MHz": [
+   75
+  ],
+  "Flux Density mJy": [
+   25.0
+  ],
+  "Flux Density error mJy": [
+   13.0
+  ]
+ },
+ "J1400-1431": {
+  "Frequency MHz": [
+   50
+  ],
+  "Bandwidth MHz": [
+   75
+  ],
+  "Flux Density mJy": [
+   386.0
+  ],
+  "Flux Density error mJy": [
+   193.0
+  ]
+ },
+ "J1658+3630": {
+  "Frequency MHz": [
+   50
+  ],
+  "Bandwidth MHz": [
+   75
+  ],
+  "Flux Density mJy": [
+   12.0
+  ],
+  "Flux Density error mJy": [
+   6.0
+  ]
+ },
+ "J1710+4923": {
+  "Frequency MHz": [
+   50
+  ],
+  "Bandwidth MHz": [
+   75
+  ],
+  "Flux Density mJy": [
+   4.0
+  ],
+  "Flux Density error mJy": [
+   2.0
+  ]
+ },
+ "J1806+2819": {
+  "Frequency MHz": [
+   50
+  ],
+  "Bandwidth MHz": [
+   75
+  ],
+  "Flux Density mJy": [
+   30.0
+  ],
+  "Flux Density error mJy": [
+   15.0
+  ]
+ },
+ "J2145-0750": {
+  "Frequency MHz": [
+   50
+  ],
+  "Bandwidth MHz": [
+   75
+  ],
+  "Flux Density mJy": [
+   90.0
+  ],
+  "Flux Density error mJy": [
+   45.0
+  ]
+ }
+}

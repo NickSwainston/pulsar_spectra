@@ -10,8 +10,21 @@ for row in lines:
     print(row)
     pulsar = row[0].replace("–", "-").replace("−", "-")
     flux, flux_err = row[10].split("(")
+    freq = float(row[8])
+    if freq == 65.:
+        band = 30
+    else:
+        band = 55
+    # Wrong names I found
+    if pulsar == "J0927+23":
+        pulsar = "J0927+2345"
 
-    pulsar_dict[pulsar] = {"Frequency MHz":[float(row[8])], "Flux Density mJy":[float(flux)], "Flux Density error mJy":[float(flux_err[:-1])]}
+    pulsar_dict[pulsar] = {
+        "Frequency MHz":[freq],
+        "Bandwidth MHz":[band],
+        "Flux Density mJy":[float(flux)],
+        "Flux Density error mJy":[float(flux_err[:-1])]
+    }
 
 with open("Bondonneau_2020.yaml", "w") as cat_file:
     cat_file.write(json.dumps(pulsar_dict, indent=1))

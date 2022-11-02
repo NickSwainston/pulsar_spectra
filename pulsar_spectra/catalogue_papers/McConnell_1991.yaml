@@ -3,6 +3,9 @@
   "Frequency MHz": [
    610
   ],
+  "Bandwidth MHz": [
+   120
+  ],
   "Flux Density mJy": [
    1.0
   ],
@@ -13,6 +16,9 @@
  "J0455-6951": {
   "Frequency MHz": [
    610
+  ],
+  "Bandwidth MHz": [
+   120
   ],
   "Flux Density mJy": [
    1.0
@@ -25,6 +31,9 @@
   "Frequency MHz": [
    610
   ],
+  "Bandwidth MHz": [
+   120
+  ],
   "Flux Density mJy": [
    0.7
   ],
@@ -35,6 +44,9 @@
  "J0529-6652": {
   "Frequency MHz": [
    610
+  ],
+  "Bandwidth MHz": [
+   120
   ],
   "Flux Density mJy": [
    1.8

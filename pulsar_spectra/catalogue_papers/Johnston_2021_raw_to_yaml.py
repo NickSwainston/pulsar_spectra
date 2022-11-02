@@ -11,7 +11,12 @@ for row in lines[1:]:
     pulsar = row[0].replace("−", "-")
     flux = float(row[1])
     flux_err = float(row[2])
-    pulsar_dict[pulsar] = {"Frequency MHz":[1400.], "Flux Density mJy":[flux], "Flux Density error mJy":[flux_err]}
+    pulsar_dict[pulsar] = {
+        "Frequency MHz":[1369],
+        "Bandwidth MHz":[256],
+        "Flux Density mJy":[flux],
+        "Flux Density error mJy":[flux_err]
+    }
 
 with open("Johnston_2021.yaml", "w") as cat_file:
     cat_file.write(json.dumps(pulsar_dict, indent=1))
