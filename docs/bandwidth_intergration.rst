@@ -68,18 +68,18 @@ This will output the second derivative of the specified function:
 
 Integration of the model functions
 ----------------------------------
-In this section, the bandwidth integration is performed over the complete model functions which are detailed in Swainston et al. (2022).
+In this section, bandwidth integrations are performed directly using the model functions which are detailed in Swainston et al. (2022).
 
-Simple power-law
+Simple power law
 ~~~~~~~~~~~~~~~~
-The simple power-law model is
+The simple power law model is
 
 .. math::
 
     S_\nu &= c \left( \frac{\nu}{\nu_0} \right)^\alpha,
 
 where :math:`\nu_0` is the reference frequency, :math:`\alpha` is the spectral index, and :math:`c` is a constant.
-The bandwidth integration is performed as:
+The bandwidth integration for this model is relatively simple, as shown below:
 
 .. math::
 
@@ -90,10 +90,10 @@ The bandwidth integration is performed as:
 
 .. _broken_power_law_intergral:
 
-Broken power-law
+Broken power law
 ~~~~~~~~~~~~~~~~
 
-The broken power-law model is two connected power-laws with spectral indices :math:`\nu_1` and :math:`nu_2`
+The broken power law model is two connected power laws with spectral indices :math:`\nu_1` and :math:`nu_2`
 and a break frequency :math:`\nu_b`,
 
 .. math::
@@ -103,26 +103,26 @@ and a break frequency :math:`\nu_b`,
             \left( \frac{\nu}{\nu_0} \right)^{\alpha_2} \left( \frac{{\nu_b}}{\nu_0} \right)^{\alpha_1-\alpha_2} & \mathrm{otherwise} \\
         \end{cases}.
 
-
-If :math:`{\nu_\text{min}} < {\nu_\text{max}} \le{\nu_b}`, then :math:`S_\text{avg}` is identical to the simple power-law with the substitution :math:`\alpha \leftarrow \alpha_1`:
+If :math:`{\nu_\text{min}} < {\nu_\text{max}} \le{\nu_b}`, then :math:`S_\text{avg}` is identical to the simple power law with the substitution :math:`\alpha \leftarrow \alpha_1`:
 
 .. math::
 
     S_\text{avg} = \frac{c({\nu_\text{max}}^{\alpha_1+1} - {\nu_\text{min}}^{\alpha_1+1})}{\rm{BW}\,\nu_0^{\alpha_1}(\alpha_1+1)}.
 
-If both :math:`{\nu_b} \le {\nu_\text{min}} < {\nu_\text{max}}`, then
+If both :math:`{\nu_b} \le {\nu_\text{min}} < {\nu_\text{max}}`, then the subtitution :math:`\alpha \leftarrow \alpha_2` is performed,
+and an additional factor is introduced to match the power law with the break frequency:
 
 .. math::
 
     S_\text{avg} = \frac{c({\nu_\text{max}}^{\alpha_2+1} - {\nu_\text{min}}^{\alpha_2+1})}{\rm{BW}\,\nu_0^{\alpha_2}(\alpha_2+1)} \left( \frac{{\nu_b}}{\nu_0} \right)^{\alpha_1-\alpha_2}.
 
-
-In the final case, when :math:`{\nu_\text{min}} < {\nu_b} < {\nu_\text{max}}`,
+In the final case, when :math:`{\nu_\text{min}} < {\nu_b} < {\nu_\text{max}}`, the solution is a combination of the above:
 
 .. math::
 
-    S_\text{avg} = \frac{c({\nu_b}^{\alpha_1+1} - {\nu_\text{min}}^{\alpha_1+1})}{({\nu_b} - {\nu_\text{min}})\,\nu_0^{\alpha_1}(\alpha_1+1)} + \frac{c({\nu_\text{max}}^{\alpha_2+1} - {\nu_b}^{\alpha_2+1})}{({\nu_\text{max}} - {\nu_b})\,\nu_0^{\alpha_2}(\alpha_2+1)} \left( \frac{{\nu_b}}{\nu_0} \right)^{\alpha_1-\alpha_2}.
+    S_\text{avg} = \frac{c({\nu_b}^{\alpha_1+1} - {\nu_\text{min}}^{\alpha_1+1})}{({\nu_b} - {\nu_\text{min}})\,\nu_0^{\alpha_1}(\alpha_1+1)} + \frac{c({\nu_\text{max}}^{\alpha_2+1} - {\nu_b}^{\alpha_2+1})}{({\nu_\text{max}} - {\nu_b})\,\nu_0^{\alpha_2}(\alpha_2+1)} \left( \frac{{\nu_b}}{\nu_0} \right)^{\alpha_1-\alpha_2},
 
+where the factors :math:`(\nu_b-\nu_\rm{min})^{-1}` and :math:`(\nu_\rm{max}-\nu_b)^{-1}` replace the :math:`\rm{BW}^{-1}` in normalising the integrated flux density.
 
 Log-parabolic spectrum
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -134,7 +134,7 @@ The log-parabolic spectrum is a parabola in log-space, with the form:
         &= a \left [ \log_{10} \left ( \frac{\nu}{\nu_0} \right ) \right]^2 + b \, \log_{10} \left ( \frac{\nu}{\nu_0} \right ) + c,
 
 where :math:`a` is the curvature parameter, :math:`b` is the spectral index for :math:`a=0`, and :math:`c` is a constant.
-This model can be re-expressed as follows:
+This model can be re-expressed to be linear in :math:`S_\nu` as
 
 .. math::
 
@@ -142,14 +142,12 @@ This model can be re-expressed as follows:
     &= e^{\ln 10 \left(a  \left [ \log_{10} \left ( \frac{\nu}{\nu_0} \right ) \right]^2 + b \, \log_{10} \left ( \frac{\nu}{\nu_0} \right ) + c\right)} \\
     &= Ce^{\ln 10 \left(a  \left [ \log_{10} \left ( \frac{\nu}{\nu_0} \right ) \right]^2 + b \, \log_{10} \left ( \frac{\nu}{\nu_0} \right )\right)},
 
-
-where :math:`C = e^{c\ln 10} = 10^c`. The model can then be expressed in terms of the natural logarithm:
+where :math:`C = e^{c\ln 10} = 10^c`. The :math:`\log_{10}` terms can be expressed in terms of the natural logarithm as
 
 .. math::
 
     S_\nu &= Ce^{\ln 10 \left(a  \left [ \frac{\ln\left ( \frac{\nu}{\nu_0} \right )}{\ln 10} \right]^2 + b \, \frac{\ln \left ( \frac{\nu}{\nu_0} \right )}{\ln 10}\right)} \\
     &= Ce^{\left(\frac{a}{\ln 10}  \left [ \ln\left ( \frac{\nu}{\nu_0} \right )\right]^2 + b \, \ln \left ( \frac{\nu}{\nu_0} \right )\right)}.
-
 
 In this form, the integration becomes slightly easier. WolframAlpha then returns the generic solution
 
@@ -157,7 +155,6 @@ In this form, the integration becomes slightly easier. WolframAlpha then returns
 
     \int e^{A(\ln x)^2 + B\ln x}\,\text{d}x
         = \frac{\sqrt{\pi} e^{-\frac{(B+1)^2}{4A}} \text{erfi} \left(\frac{2A\ln x + B + 1}{2\sqrt{A}}\right)}{2\sqrt{A}}.
-
 
 In our case, this works out to
 
@@ -171,16 +168,21 @@ In our case, this works out to
 
 High-frequency cut-off power law
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+This model is a power law spectrum with a high-frequency cut-off occurring at the cut-off frequency :math:`\nu_c`:
 
 .. math::
 
-    S_\nu &= c\left( \frac{\nu}{\nu_0} \right)^{\alpha} \left ( 1 - \frac{\nu}{\nu_c} \right ),\qquad \nu < \nu_c, \\
+    S_\nu &= c\left( \frac{\nu}{\nu_0} \right)^{\alpha} \left ( 1 - \frac{\nu}{\nu_c} \right ),\qquad \nu < \nu_c.
+
+The bandwidth integration is performed as follows:
+
+.. math::
+
     S_\text{avg} &= \frac{1}{\rm{BW}} \int_{\nu_\text{min}}^{\nu_\text{max}} c\left( \frac{\nu}{\nu_0} \right)^{\alpha} \left ( 1 - \frac{\nu}{\nu_c} \right ) \,\text{d}\nu \\
     &= -\frac{c}{\rm{BW} \nu_0^\alpha} \left[ \frac{\nu^{\alpha + 1}}{\alpha + 1} + \frac{\nu^{\alpha + 2}}{\nu_c (\alpha + 2)}\right]_{\nu_\text{min}}^{\nu_\text{max}} \\
-    &= -\frac{c}{\rm{BW} \nu_0^\alpha} \left( \frac{{\nu_\text{max}}^{\alpha + 1} - {\nu_\text{min}}^{\alpha + 1}}{\alpha + 1} + \frac{{\nu_\text{max}}^{\alpha + 2} - {\nu_\text{min}}^{\alpha + 2}}{\nu_c (\alpha + 2)}\right ) \\
+    &= -\frac{c}{\rm{BW} \nu_0^\alpha} \left( \frac{{\nu_\text{max}}^{\alpha + 1} - {\nu_\text{min}}^{\alpha + 1}}{\alpha + 1} + \frac{{\nu_\text{max}}^{\alpha + 2} - {\nu_\text{min}}^{\alpha + 2}}{\nu_c (\alpha + 2)}\right ).
 
-
-sympy solution:
+sympy provides the solution:
 
 .. code::
 
@@ -188,70 +190,76 @@ sympy solution:
 
 .. math::
 
-    S_\text{avg} &=  \left( \frac{c \nu}{\rm{BW}\nu_c} \right) \left ( \frac{\nu}{\nu_0} \right)^ \alpha \left ( \frac{- \alpha  \nu +  \alpha  \nu_c -  \nu + 2  \nu_c}{ (\alpha + 1)(\alpha + 2)} \right)\\
+    S_\text{avg} &=  \left( \frac{c \nu}{\rm{BW}\nu_c} \right) \left ( \frac{\nu}{\nu_0} \right)^ \alpha \left ( \frac{- \alpha  \nu +  \alpha  \nu_c -  \nu + 2  \nu_c}{ (\alpha + 1)(\alpha + 2)} \right).
 
 .. _low_frequency_turn_over_power_law_intergral:
 
 Low-frequency turn-over power law
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The low-frequency turn-over introduces an exponential cut-off to the power law model at low frequencies, of the form
 
 .. math::
 
-    S_\nu = c\left( \frac{\nu}{\nu_0} \right)^{\alpha} \exp\left [ \frac{\alpha}{\beta} \left( \frac{\nu}{\nu_c} \right)^{-\beta} \right ].
+    S_\nu = c\left( \frac{\nu}{\nu_0} \right)^{\alpha} \exp\left [ \frac{\alpha}{\beta} \left( \frac{\nu}{\nu_\rm{peak}} \right)^{-\beta} \right ],
 
-
-Again with \alpha little help from WolframAlpha, defining
+where :math:`\alpha` is the spectral index, :math:`\beta` is a parameter describing the smoothness of the turn-over, and :math:`\nu_\rm{peak}` is the turn-over frequency.
+To perform this integration, we define the following parameters:
 
 .. math::
 
     X &= \left( \frac{\nu}{\nu_0} \right)^{\alpha}, \\
-    Y &= -\frac{\alpha}{\beta} \left( \frac{\nu}{\nu_c} \right)^{-\beta}, \\
-    Z &= -\frac{\alpha + 1}{\beta},
+    Y &= -\frac{\alpha}{\beta} \left( \frac{\nu}{\nu_\rm{peak}} \right)^{-\beta}, \\
+    Z &= -\frac{\alpha + 1}{\beta}.
 
-we have
+WolframAlpha returns the solution
 
 .. math::
 
     S_\text{avg} &= \frac{1}{\rm{BW}} \int_{\nu_\text{min}}^{\nu_\text{max}} cX e^{-Y} \,\text{d}\nu \\
         &= \frac{c}{\rm{BW}}\left[\frac{\nu X Y^{-Z}}{\beta} \Gamma(Z, Y) \right]_{\nu_\text{min}}^{\nu_\text{max}},
 
-where :math:`\Gamma(a,x)`` is the incomplete gamma function.
+where :math:`\Gamma(a,x)`` is the upper incomplete gamma function.
 
 .. _double_turn_over_spectrum_intergral:
 
 Double turn-over spectrum
 ~~~~~~~~~~~~~~~~~~~~~~~~~
-
+The double turn-over spectrum combines the low-frequency turn-over and high-frequency cut-off into a single model.
+It takes the following form:
 
 .. math::
 
-    S_\nu = c\left( \frac{\nu}{\nu_0} \right)^{\alpha} \exp\left [ \frac{\alpha}{\beta} \left( \frac{\nu}{\nu_{peak}} \right)^{-\beta} \right ] \left ( 1 - \frac{\nu}{\nu_c} \right ) ,\qquad \nu < \nu_c,
+    S_\nu = c\left( \frac{\nu}{\nu_0} \right)^{\alpha} \exp\left [ \frac{\alpha}{\beta} \left( \frac{\nu}{\nu_\rm{peak}} \right)^{-\beta} \right ] \left ( 1 - \frac{\nu}{\nu_c} \right ) ,\qquad \nu < \nu_c.
 
-
+We first re-arrange as follows:
 .. math::
 
     S_\text{avg}
-    &= \frac{c}{\rm{BW}}\int_{\nu_\text{min}}^{\nu_\text{max}} \left( \frac{\nu}{\nu_0} \right)^{\alpha} \exp\left [ \frac{\alpha}{\beta} \left( \frac{\nu}{\nu_{peak}} \right)^{-\beta} \right ] \left ( 1 - \frac{\nu}{\nu_c} \right )\,\text{d}\nu \\
+    &= \frac{c}{\rm{BW}}\int_{\nu_\text{min}}^{\nu_\text{max}} \left( \frac{\nu}{\nu_0} \right)^{\alpha} \exp\left [ \frac{\alpha}{\beta} \left( \frac{\nu}{\nu_\rm{peak}} \right)^{-\beta} \right ] \left ( 1 - \frac{\nu}{\nu_c} \right )\,\text{d}\nu \\
     &=
-        \frac{c}{\rm{BW}} \int_{\nu_\text{min}}^{\nu_\text{max}} \left( \frac{\nu}{\nu_0} \right)^{\alpha} \exp\left [ \frac{\alpha}{\beta} \,\text{d}\nu \left( \frac{\nu}{\nu_{peak}} \right)^{-\beta} \right ] \,\text{d}\nu -
-        \frac{c}{\rm{BW}} \int_{\nu_\text{min}}^{\nu_\text{max}} \left( \frac{\nu}{\nu_0} \right)^{\alpha} \exp\left [ \frac{\alpha}{\beta} \,\text{d}\nu \left( \frac{\nu}{\nu_{peak}} \right)^{-\beta} \right ] \frac{\nu}{\nu_c} \,\text{d}\nu \\
-    &=
-        \frac{c}{\rm{BW}} \int_{\nu_\text{min}}^{\nu_\text{max}} Xe^{-Y} \,\text{d}\nu -
-        \frac{c\nu_0}{\rm{BW}\,\nu_c} \int_{\nu_\text{min}}^{\nu_\text{max}} X^\prime e^{-Y} \,\text{d}\nu \\
-    &=
-        \frac{c}{\rm{BW}}\left[\frac{\nu X Y^{-Z}}{\beta} \Gamma(Z, Y) \right]_{\nu_\text{min}}^{\nu_\text{max}} -
-        \frac{c\nu_0}{\rm{BW}\,\nu_c}\left[\frac{\nu X^\prime Y^{-Z^\prime}}{\beta} \Gamma(Z^\prime, Y) \right]_{\nu_\text{min}}^{\nu_\text{max}},
-
-where
+        \frac{c}{\rm{BW}} \int_{\nu_\text{min}}^{\nu_\text{max}} \left( \frac{\nu}{\nu_0} \right)^{\alpha} \exp\left [ \frac{\alpha}{\beta} \left( \frac{\nu}{\nu_\rm{peak}} \right)^{-\beta} \right ] \,\text{d}\nu -{} \\
+    &\qquad \frac{c}{\rm{BW}} \int_{\nu_\text{min}}^{\nu_\text{max}} \left( \frac{\nu}{\nu_0} \right)^{\alpha} \exp\left [ \frac{\alpha}{\beta} \left( \frac{\nu}{\nu_\rm{peak}} \right)^{-\beta} \right ] \frac{\nu}{\nu_c} \,\text{d}\nu \\
+    
+This integral can then be written in terms of the paramters
 
 .. math::
 
     X &= \left( \frac{\nu}{\nu_0} \right)^{\alpha}, &
-    Y &= -\frac{\alpha}{\beta} \left( \frac{\nu}{\nu_c} \right)^{-\beta}, &
+    Y &= -\frac{\alpha}{\beta} \left( \frac{\nu}{\nu_\rm{peak}} \right)^{-\beta}, &
     Z &= -\frac{\alpha + 1}{\beta}, \\
     X^\prime &= \left( \frac{\nu}{\nu_0} \right)^{\alpha+1}, &
     & &
-    Z^\prime &= -\frac{\alpha + 2}{\beta},
+    Z^\prime &= -\frac{\alpha + 2}{\beta}.
+
+WolframAlpha returns the solution
+
+.. math::
+
+    S_\text{avg}
+    &=  \frac{c}{\rm{BW}} \int_{\nu_\text{min}}^{\nu_\text{max}} Xe^{-Y} \,\text{d}\nu -
+        \frac{c\nu_0}{\rm{BW}\,\nu_c} \int_{\nu_\text{min}}^{\nu_\text{max}} X^\prime e^{-Y} \,\text{d}\nu \\
+    &=  \frac{c}{\rm{BW}}\left[\frac{\nu X Y^{-Z}}{\beta} \Gamma(Z, Y) \right]_{\nu_\text{min}}^{\nu_\text{max}} -
+        \frac{c\nu_0}{\rm{BW}\,\nu_c}\left[\frac{\nu X^\prime Y^{-Z^\prime}}{\beta} \Gamma(Z^\prime, Y) \right]_{\nu_\text{min}}^{\nu_\text{max}}.
 
 
 Taylor Expansion Derivations
