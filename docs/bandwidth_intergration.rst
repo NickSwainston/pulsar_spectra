@@ -17,6 +17,7 @@ If a flux density measurement is reported along with a bandwidth, then the corre
 
 where :math:`\rm{BW} = \nu_\text{min} - \nu_\text{min}`.
 The evaluation of this expression for each of the models currently implemented in pulsar_spectra follows.
+Derivations for the log-parabolic are also included, although this model is deactivated in pulsar_spectra by default.
 
 How to use sympy to help with derivations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -56,8 +57,11 @@ Integration over the bandwidth is performed as follows:
     &= \frac{\nu_0}{\rm{BW}} \frac{c}{\alpha+1} \left[ \left(\frac{{\nu_\text{max}}}{\nu_0}\right)^{\alpha + 1} - \left(\frac{{\nu_\text{min}}}{\nu_0}\right)^{\alpha + 1} \right] \\
     &= \frac{c({\nu_\text{max}}^{\alpha+1} - {\nu_\text{min}}^{\alpha+1})}{\rm{BW}\,\nu_0^\alpha(\alpha+1)}.
 
-Broken power law
+Broken power-law
 ~~~~~~~~~~~~~~~~
+
+The broken power-law model is two connected power-laws with spectral indices :math:`\nu_1` and :math:`nu_2`
+and a break frequency :math:`\nu_b`,
 
 .. math::
 
@@ -67,7 +71,7 @@ Broken power law
         \end{cases}.
 
 
-If :math:`{\nu_\text{min}} < {\nu_\text{max}} \le{\nu_b}`, then :math:`S_\text{avg}` is identical to the simple power law with the substitution :math:`\alpha \leftarrow \alpha_1`:
+If :math:`{\nu_\text{min}} < {\nu_\text{max}} \le{\nu_b}`, then :math:`S_\text{avg}` is identical to the simple power-law with the substitution :math:`\alpha \leftarrow \alpha_1`:
 
 .. math::
 
@@ -89,18 +93,24 @@ In the final case, when :math:`{\nu_\text{min}} < {\nu_b} < {\nu_\text{max}}`,
 
 Log-parabolic spectrum
 ~~~~~~~~~~~~~~~~~~~~~~
+The log-parabolic spectrum is a parabola in log-space, with the form:
 
 .. math::
 
     \log_{10} S_\nu
-        &= \alpha  \left [ \log_{10} \left ( \frac{\nu}{\nu_0} \right ) \right]^2 +
-            b \, \log_{10} \left ( \frac{\nu}{\nu_0} \right ) + c \\
+        &= a \left [ \log_{10} \left ( \frac{\nu}{\nu_0} \right ) \right]^2 + b \, \log_{10} \left ( \frac{\nu}{\nu_0} \right ) + c,
+
+where :math:`a` is the curvature parameter, :math:`b` is the spectral index for :math:`a=0`, and :math:`c` is a constant.
+This model can be re-expressed as follows:
+
+.. math::
+
     S_\nu &= 10^{a  \left [ \log_{10} \left ( \frac{\nu}{\nu_0} \right ) \right]^2 + b \, \log_{10} \left ( \frac{\nu}{\nu_0} \right ) + c} \\
     &= e^{\ln 10 \left(a  \left [ \log_{10} \left ( \frac{\nu}{\nu_0} \right ) \right]^2 + b \, \log_{10} \left ( \frac{\nu}{\nu_0} \right ) + c\right)} \\
     &= Ce^{\ln 10 \left(a  \left [ \log_{10} \left ( \frac{\nu}{\nu_0} \right ) \right]^2 + b \, \log_{10} \left ( \frac{\nu}{\nu_0} \right )\right)},
 
 
-where :math:`C = e^{c\ln 10} = 10^c`.
+where :math:`C = e^{c\ln 10} = 10^c`. The model can then be expressed in terms of the natural logarithm:
 
 .. math::
 
@@ -108,7 +118,7 @@ where :math:`C = e^{c\ln 10} = 10^c`.
     &= Ce^{\left(\frac{a}{\ln 10}  \left [ \ln\left ( \frac{\nu}{\nu_0} \right )\right]^2 + b \, \ln \left ( \frac{\nu}{\nu_0} \right )\right)}.
 
 
-In this form, the integration becomes \emph{slightly} easier (at least, WolframAlpha gives an answer!):
+In this form, the integration becomes slightly easier. WolframAlpha then returns the generic solution
 
 .. math::
 
