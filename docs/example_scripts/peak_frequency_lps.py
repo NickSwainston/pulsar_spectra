@@ -4,8 +4,8 @@ from pulsar_spectra.analysis import calc_log_parabolic_spectrum_max_freq
 
 cat_dict = collect_catalogue_fluxes()
 pulsar = 'J1136+1551'
-freqs, fluxs, flux_errs, refs = cat_dict[pulsar]
-model_name, m, _, _, _ = find_best_spectral_fit(pulsar, freqs, fluxs, flux_errs, refs)
+freqs, bands, fluxs, flux_errs, refs = cat_dict[pulsar]
+model_name, m, _, _, _ = find_best_spectral_fit(pulsar, freqs, bands, fluxs, flux_errs, refs)
 if model_name == "log_parabolic_spectrum":
     v_peak, u_v_peak = calc_log_parabolic_spectrum_max_freq(
         m.values["a"],
