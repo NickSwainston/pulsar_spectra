@@ -7,6 +7,35 @@ This assumption becomes increasingly inaccurate for wider fractional bandwidths.
 For this reason we have expanded the catalogue's database to include the bandwidth of all detections and
 expanded our equations to model the integrated flux across the band.
 
+When the bandwidth integration is used
+---------------------------------------
+The software first tries to fit the spectrum with the simple models (the models without the bandwidth integration)
+then uses their fit results and intial parameters in the bandwidth integration model fit.
+If the simple model fails to converge, the bandwidth integration model is not attempted.
+If any of the data has `None` as their bandwidth, the bandwidth integration models can not be used.
+This is most common when there is ANTF data in the fit (which you can replace :ref:`like so <adding_papers>`).
+
+You can see that the bandwidth integration model was used or not based on the tick or cross on the plot label.
+Here is an example of J0048+3412 which could not be fit with the band integration model due to the ATNF data:
+
+.. image:: figures/J0048+3412_no_bandwidth.png
+  :width: 800
+
+
+.. _display_band:
+
+Displaying the bandwidth
+------------------------
+In the pulsar_spectra plots, the x error bars do not display an uncertainty.
+We use the x error bars to display the bandwidth of each flux density measurement.
+The following is an example of J0024-7204J which Zhang et al. (2019) split into
+many frequency subintegrations:
+
+.. image:: figures/J0024-7204J_bandwidth_example.png
+  :width: 800
+
+You can see how the bandwidth of each flux density measurement is now clearly displayed.
+
 .. _derivations:
 
 Derivations
