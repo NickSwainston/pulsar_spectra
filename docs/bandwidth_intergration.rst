@@ -5,22 +5,22 @@ Pulsar spectral fitting often assumes that the reported average flux densities a
 the flux density at one specific (usually central) frequency, whereas in reality, they are averaged over some finite bandwidth.
 This assumption becomes increasingly inaccurate for wider fractional bandwidths.
 For this reason we have expanded the catalogue's database to include the bandwidth of all detections and
-expanded our equations to model the integrated flux across the band.
+expanded our equations to model the integrated flux density across the band.
 
 Derivations
 -----------
-If \alpha measurement is reported along with \alpha bandwidth, then the correct way to fit models is to find the expected mean flux across the band for each model,
+If a flux density measurement is reported along with a bandwidth, then the correct way to fit models is to find the expected mean flux density across the band for each model,
 
 .. math::
 
-    S_{avg} = \frac{1}{\rm{BW}} \int_{\nu_\text{min}}^{\nu_\text{min}} S_v\,\text{d}\nu,
+    S_\rm{avg} = \frac{1}{\rm{BW}} \int_{\nu_\text{min}}^{\nu_\text{min}} S_\nu\,\text{d}\nu,
 
 where :math:`\rm{BW} = \nu_\text{min} - \nu_\text{min}`.
-The evaluation of this expression for each model follows.
+The evaluation of this expression for each of the models currently implemented in pulsar_spectra follows.
 
 How to use sympy to help with derivations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-`Sympy <https://docs.sympy.org/latest/index.html>`_ is an excellent tool for performing differentation and simple intergration like so:
+`Sympy <https://docs.sympy.org/latest/index.html>`_ is an excellent tool for performing differentation and simple intergration. An example is given below:
 
 .. code::
 
@@ -28,25 +28,32 @@ How to use sympy to help with derivations
     f = c * (v/v0)^a * exp( \alpha / beta * (v/vpeak)^(-beta) )
     f2 = f.diff(v).diff(v).simplify()
 
-Which will output the second differentatial:
+This will output the second derivative of the specified function:
 
 .. code::
 
     a*c*(v/v0)^a*(v/vpeak)^(-2*(a + (v/vpeak)^(2*(a - 1) + (v/vpeak)^beta*(-2*a + beta + 1))*exp(a*(v/vpeak)^(-beta)/beta)/v^2
 
-Intergration Derivations
-------------------------
+Integration of the model functions
+----------------------------------
+In this section, the bandwidth integration is performed over the complete model functions detailed in Swainston et al. (2022).
 
-
-Simple power law
+Simple power-law
 ~~~~~~~~~~~~~~~~
+The simple power-law model is
 
 .. math::
 
-    S_\nu &= c \left( \frac{\nu}{\nu_0} \right)^\alpha, \\
+    S_\nu &= c \left( \frac{\nu}{\nu_0} \right)^\alpha,
+
+where :math:`\nu_0` is the reference frequency, :math:`\alpha` is the spectral index, and :math:`c` is a constant.
+Integration over the bandwidth is performed as follows:
+
+.. math::
+
     S_\text{avg} &= \frac{1}{\rm{BW}} \int_{\nu_\text{min}}^{\nu_\text{max}} c \left( \frac{\nu}{\nu_0} \right)^\alpha \,\text{d}\nu, \\
     &= \frac{\nu_0}{\rm{BW}} \left[\frac{c}{\alpha+1} \left(\frac{\nu}{\nu_0}\right)^{\alpha + 1}  \right]_{\nu_\text{min}}^{\nu_\text{max}} \\
-    &= \frac{\nu_0}{\rm{BW}} \frac{c}{\alpha+1} \left( \left(\frac{{\nu_\text{max}}}{\nu_0}\right)^{\alpha + 1} - \left(\frac{{\nu_\text{min}}}{\nu_0}\right)^{\alpha + 1} \right) \\
+    &= \frac{\nu_0}{\rm{BW}} \frac{c}{\alpha+1} \left[ \left(\frac{{\nu_\text{max}}}{\nu_0}\right)^{\alpha + 1} - \left(\frac{{\nu_\text{min}}}{\nu_0}\right)^{\alpha + 1} \right] \\
     &= \frac{c({\nu_\text{max}}^{\alpha+1} - {\nu_\text{min}}^{\alpha+1})}{\rm{BW}\,\nu_0^\alpha(\alpha+1)}.
 
 Broken power law
