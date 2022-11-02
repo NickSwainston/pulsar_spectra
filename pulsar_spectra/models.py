@@ -255,7 +255,7 @@ def high_frequency_cut_off_power_law_intergral(vmin_vmax, vc, a, c, v0):
 
 def high_frequency_cut_off_power_law_taylor(vmin_vmax, vc, a, c, v0):
     """The bandwith intergration correction for the
-    high-frequency cut-off power law using taylor series expansion (see :ref:`derivation <high_frequency_cut_off_power_law_taylor>` for full equation):
+    high-frequency cut-off power law using Taylor series expansion (see :ref:`derivation <high_frequency_cut_off_power_law_taylor>` for full equation):
 
     Parameters
     ----------
@@ -355,7 +355,7 @@ def low_frequency_turn_over_power_law_intergral(vmin_vmax, vpeak, a, c, beta, v0
 
 def low_frequency_turn_over_power_law_taylor(vmin_vmax, vpeak, a, c, beta, v0):
     """The bandwith intergration correction for the
-    low-frequency turn-over power law using taylor series expansion (see :ref:`derivation <low_frequency_turn_over_power_law_taylor>` for full equation):
+    low-frequency turn-over power law using Taylor series expansion (see :ref:`derivation <low_frequency_turn_over_power_law_taylor>` for full equation):
 
     Parameters
     ----------
@@ -490,7 +490,7 @@ def double_turn_over_spectrum_intergral(vmin_vmax, vc, vpeak, a, beta, c, v0):
 def double_turn_over_spectrum_taylor(vmin_vmax, vc, vpeak, a, beta, c, v0):
     """The bandwith intergration correction for the
     double turn over spectrum (has a low-frequency turnover and a high-frequency cut-off)
-    using taylor series expansion (see :ref:`derivation <double_turn_over_spectrum_taylor>` for full equation):
+    using Taylor series expansion (see :ref:`derivation <double_turn_over_spectrum_taylor>` for full equation):
 
     Parameters
     ----------

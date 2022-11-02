@@ -12,7 +12,7 @@ When the bandwidth integration is used
 The software first tries to fit the spectrum with the simple models (the models without the bandwidth integration)
 then uses their fit results and intial parameters in the bandwidth integration model fit.
 If the simple model fails to converge, the bandwidth integration model is not attempted.
-If any of the data has `None` as their bandwidth, the bandwidth integration models can not be used.
+If any of the data has `None` as their bandwidth, the bandwidth integration models cannot be used.
 This is most common when there is ANTF data in the fit (which you can replace :ref:`like so <adding_papers>`).
 
 You can see that the bandwidth integration model was used or not based on the tick or cross on the plot label.
