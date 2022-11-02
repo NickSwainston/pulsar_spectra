@@ -1,5 +1,5 @@
 """
-Spectral models from Jankowski et al. 2018 and references within
+Spectral models used for fitting
 """
 
 import numpy as np
@@ -38,16 +38,18 @@ def simple_power_law(v, a, c, v0):
     return c*(v/v0)**a
 
 
-def simple_power_law_intergrate(vmin_vmax, a, c, v0):
-    """Simple power law:
+def simple_power_law_integrate(vmin_vmax, a, c, v0):
+    """The bandwith intergration correction for the
+    simple power law using direct intergration (:ref:`derivation <simple_power_law_integrate>`):
 
     .. math::
-        S_v =  c \\left( \\frac{v}{v_0} \\right)^a
+        S_v =  \\frac{c({\\nu_\\text{max}}^{a+1} - {\\nu_\\text{min}}^{a+1})}{\\rm{BW}\,\\nu_0^a(a+1)}
 
     Parameters
     ----------
-    v : `list`
-        Frequency in Hz.
+    vmin_vmax : `tuple` (vmin, vmax)
+        Where vmin is the minimum and vmax is the maximum frequency
+        in Hz for each flux density measurement's bandwidth.
     a : `float`
         Spectral Index.
     c : `float`
@@ -102,19 +104,14 @@ def broken_power_law(v, vb, a1, a2, c, v0):
 
 
 def broken_power_law_intergral(vmin_vmax, vb, a1, a2, c, v0):
-    """Broken power law:
-
-    .. math::
-
-        S_v = \\begin{cases}
-        c \\left( \\frac{v}{v0} \\right)^{a1}   & \\mathrm{if}\\: v \\leq vb \\\\
-        c \\left( \\frac{v}{v0} \\right)^{a2} \\left( \\frac{vb}{v0} \\right)^{a1-a2} & \\mathrm{otherwise} \\\\
-        \\end{cases}
+    """The bandwith intergration correction for the
+    broken power law using direct intergration (see :ref:`derivation <broken_power_law_intergral>` for full equation):
 
     Parameters
     ----------
-    v : `list`
-        Frequency in Hz.
+    vmin_vmax : `tuple` (vmin, vmax)
+        Where vmin is the minimum and vmax is the maximum frequency
+        in Hz for each flux density measurement's bandwidth.
     vb : `float`
         The frequency of the break in Hz.
     a1 : `float`
@@ -195,7 +192,7 @@ def log_parabolic_spectrum(v, a, b, c, v0):
 
 
 def high_frequency_cut_off_power_law(v, vc, a, c, v0):
-    """Power law with high-frequency cut-off off:
+    """High-frequency cut-off power law:
 
     .. math::
         S_v = c \\left( \\frac{v}{v0} \\right)^{a} \\left ( 1 - \\frac{v}{vc} \\right ),\\qquad v < vc
@@ -226,15 +223,14 @@ def high_frequency_cut_off_power_law(v, vc, a, c, v0):
 
 
 def high_frequency_cut_off_power_law_intergral(vmin_vmax, vc, a, c, v0):
-    """Power law with high-frequency cut-off off:
-
-    .. math::
-        S_v = c \\left( \\frac{v}{v0} \\right)^{a} \\left ( 1 - \\frac{v}{vc} \\right ),\\qquad v < vc
+    """The bandwith intergration correction for the
+    high-frequency cut-off power law using direct intergration (see :ref:`derivation <high_frequency_cut_off_power_law_intergral>` for full equation):
 
     Parameters
     ----------
-    v : `list`
-        Frequency in Hz.
+    vmin_vmax : `tuple` (vmin, vmax)
+        Where vmin is the minimum and vmax is the maximum frequency
+        in Hz for each flux density measurement's bandwidth.
     vc : `list`
         Cut off frequency in Hz.
     a : `float`
@@ -258,15 +254,14 @@ def high_frequency_cut_off_power_law_intergral(vmin_vmax, vc, a, c, v0):
 
 
 def high_frequency_cut_off_power_law_taylor(vmin_vmax, vc, a, c, v0):
-    """Power law with high-frequency cut-off off:
-
-    .. math::
-        S_v = c \\left( \\frac{v}{v0} \\right)^{a} \\left ( 1 - \\frac{v}{vc} \\right ),\\qquad v < vc
+    """The bandwith intergration correction for the
+    high-frequency cut-off power law using Taylor series expansion (see :ref:`derivation <high_frequency_cut_off_power_law_taylor>` for full equation):
 
     Parameters
     ----------
-    v : `list`
-        Frequency in Hz.
+    vmin_vmax : `tuple` (vmin, vmax)
+        Where vmin is the minimum and vmax is the maximum frequency
+        in Hz for each flux density measurement's bandwidth.
     vc : `list`
         Cut off frequency in Hz.
     a : `float`
@@ -293,7 +288,7 @@ def high_frequency_cut_off_power_law_taylor(vmin_vmax, vc, a, c, v0):
 
 
 def low_frequency_turn_over_power_law(v, vpeak, a, c, beta, v0):
-    """power law with low-frequency turn-over:
+    """Low-frequency turn-over power law:
 
     .. math::
         S_v = c \\left( \\frac{v}{v0} \\right)^{a} \\exp\\left [ \\frac{a}{\\beta} \\left( \\frac{v}{vc} \\right)^{-\\beta} \\right ]
@@ -324,15 +319,14 @@ def low_frequency_turn_over_power_law(v, vpeak, a, c, beta, v0):
 
 
 def low_frequency_turn_over_power_law_intergral(vmin_vmax, vpeak, a, c, beta, v0):
-    """power law with low-frequency turn-over:
-
-    .. math::
-        S_v = c \\left( \\frac{v}{v0} \\right)^{a} \\exp\\left [ \\frac{a}{\\beta} \\left( \\frac{v}{vc} \\right)^{-\\beta} \\right ]
+    """The bandwith intergration correction for the
+    low-frequency turn-over power law using direct intergration (see :ref:`derivation <low_frequency_turn_over_power_law_intergral>` for full equation):
 
     Parameters
     ----------
-    v : `list`
-        Frequency in Hz.
+    vmin_vmax : `tuple` (vmin, vmax)
+        Where vmin is the minimum and vmax is the maximum frequency
+        in Hz for each flux density measurement's bandwidth.
     vpeak : `list`
         Peak/Turn-over frequency in Hz.
     a : `float`
@@ -360,15 +354,14 @@ def low_frequency_turn_over_power_law_intergral(vmin_vmax, vpeak, a, c, beta, v0
 
 
 def low_frequency_turn_over_power_law_taylor(vmin_vmax, vpeak, a, c, beta, v0):
-    """power law with low-frequency turn-over:
-
-    .. math::
-        S_v = c \\left( \\frac{v}{v0} \\right)^{a} \\exp\\left [ \\frac{a}{\\beta} \\left( \\frac{v}{vc} \\right)^{-\\beta} \\right ]
+    """The bandwith intergration correction for the
+    low-frequency turn-over power law using Taylor series expansion (see :ref:`derivation <low_frequency_turn_over_power_law_taylor>` for full equation):
 
     Parameters
     ----------
-    v : `list`
-        Frequency in Hz.
+    vmin_vmax : `tuple` (vmin, vmax)
+        Where vmin is the minimum and vmax is the maximum frequency
+        in Hz for each flux density measurement's bandwidth.
     vpeak : `list`
         Peak/Turn-over frequency in Hz.
     a : `float`
@@ -413,7 +406,7 @@ def low_frequency_turn_over_power_law_taylor(vmin_vmax, vpeak, a, c, beta, v0):
 
 
 def double_turn_over_spectrum(v, vc, vpeak, a, beta, c, v0):
-    """Double turn over spectrum, has a low frequency turn over and a high frequency cut off:
+    """Double turn over spectrum (has a low-frequency turnover and a high-frequency cut-off):
 
     .. math::
         S_v = c \\left( \\frac{v}{v0} \\right)^{a} \\left ( 1 - \\frac{v}{vc} \\right ) \\exp\\left [ \\frac{a}{\\beta} \\left( \\frac{v}{vc} \\right)^{-\\beta} \\right ],\\qquad v < vc
@@ -449,15 +442,15 @@ def double_turn_over_spectrum(v, vc, vpeak, a, beta, c, v0):
 
 
 def double_turn_over_spectrum_intergral(vmin_vmax, vc, vpeak, a, beta, c, v0):
-    """Double turn over spectrum, has a low frequency turn over and a high frequency cut off:
-
-    .. math::
-        S_v = c \\left( \\frac{v}{v0} \\right)^{a} \\left ( 1 - \\frac{v}{vc} \\right ) \\exp\\left [ \\frac{a}{\\beta} \\left( \\frac{v}{vc} \\right)^{-\\beta} \\right ],\\qquad v < vc
+    """The bandwith intergration correction for the
+    double turn over spectrum (has a low-frequency turnover and a high-frequency cut-off)
+    using direct intergration (see :ref:`derivation <double_turn_over_spectrum_intergral>` for full equation):
 
     Parameters
     ----------
-    v : `list`
-        Frequency in Hz.
+    vmin_vmax : `tuple` (vmin, vmax)
+        Where vmin is the minimum and vmax is the maximum frequency
+        in Hz for each flux density measurement's bandwidth.
     vc : `list`
         Cut off frequency in Hz.
     vpeak : `list`
@@ -495,15 +488,15 @@ def double_turn_over_spectrum_intergral(vmin_vmax, vc, vpeak, a, beta, c, v0):
 
 
 def double_turn_over_spectrum_taylor(vmin_vmax, vc, vpeak, a, beta, c, v0):
-    """Double turn over spectrum, has a low frequency turn over and a high frequency cut off:
-
-    .. math::
-        S_v = c \\left( \\frac{v}{v0} \\right)^{a} \\left ( 1 - \\frac{v}{vc} \\right ) \\exp\\left [ \\frac{a}{\\beta} \\left( \\frac{v}{vc} \\right)^{-\\beta} \\right ],\\qquad v < vc
+    """The bandwith intergration correction for the
+    double turn over spectrum (has a low-frequency turnover and a high-frequency cut-off)
+    using Taylor series expansion (see :ref:`derivation <double_turn_over_spectrum_taylor>` for full equation):
 
     Parameters
     ----------
-    v : `list`
-        Frequency in Hz.
+    vmin_vmax : `tuple` (vmin, vmax)
+        Where vmin is the minimum and vmax is the maximum frequency
+        in Hz for each flux density measurement's bandwidth.
     vc : `list`
         Cut off frequency in Hz.
     vpeak : `list`
@@ -598,7 +591,7 @@ def model_settings(print_models=False):
             # (a, c)
             (a_s, c_s),
             [(a_min, a_max), (c_min, c_max)],
-            simple_power_law_intergrate,
+            simple_power_law_integrate,
         ],
         "broken_power_law" : [
             broken_power_law,
@@ -651,10 +644,11 @@ def model_settings(print_models=False):
         # Print the models dictionary which is useful for debuging new models
         for mod in model_dict.keys():
             print(f"\n{mod}")
-            model_function, short_name, start_params, mod_limits = model_dict[mod]
-            print(f"    model_function: {model_function}")
-            print(f"    short_name: {short_name}")
-            print(f"    start_params: {start_params}")
-            print(f"    mod_limits: {mod_limits}")
+            model_function, short_name, start_params, mod_limits, model_function_integrate = model_dict[mod]
+            print(f"    model_function:           {model_function.__name__}")
+            print(f"    model_function_integrate: {model_function_integrate.__name__}")
+            print(f"    short_name:               {short_name}")
+            print(f"    start_params:             {start_params}")
+            print(f"    mod_limits:               {mod_limits}")
 
     return model_dict

@@ -391,7 +391,7 @@ def iminuit_fit_spectral_model(
     # Load model settings
     model_dict = model_settings()
     model_function = model_dict[model_name][0]
-    model_function_intergrate = model_dict[model_name][4]
+    model_function_integrate = model_dict[model_name][4]
 
     # Check for model dependent defaults
     if start_params is None:
@@ -434,7 +434,7 @@ def iminuit_fit_spectral_model(
                 print(f"{float(freq):8.1f}{float(band):8.1f}{float(flux):12.4f}{float(flux_err):12.4f} {str(ref):20s}")
             return 1e9, None, None, False
         max_freqs_Hz = freqs_Hz + bands_Hz / 2
-        least_squares = LeastSquares((min_freqs_Hz, max_freqs_Hz), fluxs_Jy, flux_errs_Jy, model_function_intergrate)
+        least_squares = LeastSquares((min_freqs_Hz, max_freqs_Hz), fluxs_Jy, flux_errs_Jy, model_function_integrate)
         least_squares.loss = huber_loss_function
         # Set start params as results from first fit
         past_params = ()
@@ -471,7 +471,7 @@ def iminuit_fit_spectral_model(
 
     # Calculate AIC
     if band_bool:
-        beta = robust_cost_function(model_function_intergrate((min_freqs_Hz, max_freqs_Hz), *m.values), fluxs_Jy, flux_errs_Jy)
+        beta = robust_cost_function(model_function_integrate((min_freqs_Hz, max_freqs_Hz), *m.values), fluxs_Jy, flux_errs_Jy)
     else:
         beta = robust_cost_function(model_function(freqs_Hz, *m.values), fluxs_Jy, flux_errs_Jy)
     aic = 2*beta + 2*k + (2*k*(k+1)) / (len(freqs_Hz) - k -1)

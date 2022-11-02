@@ -52,6 +52,7 @@ For example, at the time of writing this documentation, the list of models withi
             # (a, c)
             (a_s, c_s),
             [(a_min, a_max), (c_min, c_max)],
+            simple_power_law_integrate,
         ],
         "broken_power_law" : [
             broken_power_law,
@@ -59,13 +60,7 @@ For example, at the time of writing this documentation, the list of models withi
             #(vb, a1, a2, c)
             (1e9, a_s, a_s, c_s),
             [(50e6, 5e9), (a_min, a_max), (a_min, a_max), (c_min, c_max)],
-        ],
-        "log_parabolic_spectrum" : [
-            log_parabolic_spectrum,
-            "lps",
-            #(a, b, c)
-            (-1, -1., c_s),
-            [(-5, 2), (-5, 2), (None, c_max)],
+            broken_power_law_intergral,
         ],
         "high_frequency_cut_off_power_law" : [
             high_frequency_cut_off_power_law,
@@ -73,6 +68,7 @@ For example, at the time of writing this documentation, the list of models withi
             #(vc, a, c)
             (vc_s, a_s, c_s),
             [vc_both, (a_min, 0.), (c_min, c_max)],
+            high_frequency_cut_off_power_law_taylor,
         ],
         "low_frequency_turn_over_power_law" : [
             low_frequency_turn_over_power_law,
@@ -80,6 +76,15 @@ For example, at the time of writing this documentation, the list of models withi
             #(vpeak, a, c, beta)
             (vpeak_s, a_s, c_s, beta_s),
             [(vpeak_min, vpeak_max), (a_min, 0.), (c_min, c_max) , (beta_min, beta_max)],
+            low_frequency_turn_over_power_law_taylor,
+        ],
+        "double_turn_over_spectrum" : [
+            double_turn_over_spectrum,
+            "double turn over spectrum",
+            #(vc, vpeak, a, beta, c)
+            (vc_s, vpeak_s, a_s, beta_s, c_s),
+            [(vc_both), (vpeak_min, vpeak_max), (a_min, 0.), (beta_min, beta_max), (c_min, c_max)],
+            double_turn_over_spectrum_taylor,
         ],
     }
 
@@ -97,6 +102,7 @@ You can change some of the starting parameters of fit limits if you think it wil
             # (a, c)
             (a_s, c_s),
             [(a_min, a_max), (c_min, c_max)],
+            simple_power_law_integrate,
         ],
         "broken_power_law" : [
             broken_power_law,
@@ -104,20 +110,15 @@ You can change some of the starting parameters of fit limits if you think it wil
             #(vb, a1, a2, c)
             (1e9, a_s, a_s, c_s),
             [(50e6, 5e9), (a_min, a_max), (a_min, a_max), (c_min, c_max)],
+            broken_power_law_intergral,
         ],
-        # "log_parabolic_spectrum" : [
-        #     log_parabolic_spectrum,
-        #     "lps",
-        #     #(a, b, c)
-        #     (-1, -1., c_s),
-        #     [(-5, 2), (-5, 2), (None, c_max)],
-        # ],
         "high_frequency_cut_off_power_law" : [
             high_frequency_cut_off_power_law,
             "pl hard cut-off",
             #(vc, a, c)
             (vc_s, a_s, c_s),
             [vc_both, (a_min, 0.), (c_min, c_max)],
+            high_frequency_cut_off_power_law_taylor,
         ],
         "low_frequency_turn_over_power_law" : [
             low_frequency_turn_over_power_law,
@@ -125,10 +126,71 @@ You can change some of the starting parameters of fit limits if you think it wil
             #(vpeak, a, c, beta)
             (vpeak_s, a_s, c_s, beta_s),
             [(vpeak_min, vpeak_max), (a_min, 0.), (c_min, c_max) , (beta_min, beta_max)],
+            low_frequency_turn_over_power_law_taylor,
         ],
+        # "double_turn_over_spectrum" : [
+        #     double_turn_over_spectrum,
+        #     "double turn over spectrum",
+        #     #(vc, vpeak, a, beta, c)
+        #     (vc_s, vpeak_s, a_s, beta_s, c_s),
+        #     [(vc_both), (vpeak_min, vpeak_max), (a_min, 0.), (beta_min, beta_max), (c_min, c_max)],
+        #     double_turn_over_spectrum_taylor,
+        # ],
     }
 
-So now, once you reinstall the software, the code will not fit a log parabolic model.
+So now, once you reinstall the software, the code will not fit a double turn over spectrum model.
+
+
+Checking which models you are using
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+If you are unsure which models or :ref:`derivations <derivations>` you are using in your fitting,
+you can use the following function option to print the models info like so:
+
+.. code-block:: python
+
+    from pulsar_spectra.models import model_settings
+    model_settings(print_models=True)
+
+Which will output something like this:
+
+.. code-block:: bash
+
+    simple_power_law
+        model_function:           simple_power_law
+        model_function_integrate: simple_power_law_integrate
+        short_name:               simple pl
+        start_params:             (-1.6, 1.0)
+        mod_limits:               [(-8.0, 3.0), (0.0, None)]
+
+    broken_power_law
+        model_function:           broken_power_law
+        model_function_integrate: broken_power_law_intergral
+        short_name:               broken pl
+        start_params:             (1000000000.0, -1.6, -1.6, 1.0)
+        mod_limits:               [(50000000.0, 5000000000.0), (-8.0, 3.0), (-8.0, 3.0), (0.0, None)]
+
+    high_frequency_cut_off_power_law
+        model_function:           high_frequency_cut_off_power_law
+        model_function_integrate: high_frequency_cut_off_power_law_taylor
+        short_name:               pl hard cut-off
+        start_params:             (4000000000.0, -1.6, 1.0)
+        mod_limits:               [None, (-8.0, 0.0), (0.0, None)]
+
+    low_frequency_turn_over_power_law
+        model_function:           low_frequency_turn_over_power_law
+        model_function_integrate: low_frequency_turn_over_power_law_taylor
+        short_name:               pl low turn-over
+        start_params:             (100000000.0, -1.6, 1.0, 1.0)
+        mod_limits:               [(10000000.0, 2000000000.0), (-8.0, 0.0), (0.0, None), (0.1, 2.1)]
+
+    double_turn_over_spectrum
+        model_function:           double_turn_over_spectrum
+        model_function_integrate: double_turn_over_spectrum_taylor
+        short_name:               double turn over spectrum
+        start_params:             (4000000000.0, 100000000.0, -1.6, 1.0, 1.0)
+        mod_limits:               [None, (10000000.0, 2000000000.0), (-8.0, 0.0), (0.1, 2.1), (0.0, None)]
+
+You can find the descriptions of the models in the :ref:`the models module<modelsmodule>`.
 
 
 Adding a new model
