@@ -7,6 +7,37 @@ This assumption becomes increasingly inaccurate for wider fractional bandwidths.
 For this reason we have expanded the catalogue's database to include the bandwidth of all detections and
 expanded our equations to model the integrated flux density across the band.
 
+When the bandwidth integration is used
+---------------------------------------
+The software first tries to fit the spectrum with the simple models (the models without the bandwidth integration)
+then uses their fit results and intial parameters in the bandwidth integration model fit.
+If the simple model fails to converge, the bandwidth integration model is not attempted.
+If any of the data has `None` as their bandwidth, the bandwidth integration models cannot be used.
+This is most common when there is ANTF data in the fit (which you can replace :ref:`like so <adding_papers>`).
+
+You can see that the bandwidth integration model was used or not based on the tick or cross on the plot label.
+Here is an example of J0048+3412 which could not be fit with the band integration model due to the ATNF data:
+
+.. image:: figures/J0048+3412_no_bandwidth.png
+  :width: 800
+
+
+.. _display_band:
+
+Displaying the bandwidth
+------------------------
+In the pulsar_spectra plots, the x error bars do not display an uncertainty.
+We use the x error bars to display the bandwidth of each flux density measurement.
+The following is an example of J0024-7204J which Zhang et al. (2019) split into
+many frequency subintegrations:
+
+.. image:: figures/J0024-7204J_bandwidth_example.png
+  :width: 800
+
+You can see how the bandwidth of each flux density measurement is now clearly displayed.
+
+.. _derivations:
+
 Derivations
 -----------
 If a flux density measurement is reported along with a bandwidth, then the correct way to fit models is to find the expected mean flux density across the band for each model,
@@ -37,7 +68,7 @@ This will output the second derivative of the specified function:
 
 Integration of the model functions
 ----------------------------------
-In this section, the bandwidth integration is performed over the complete model functions detailed in Swainston et al. (2022).
+In this section, the bandwidth integration is performed over the complete model functions which are detailed in Swainston et al. (2022).
 
 Simple power-law
 ~~~~~~~~~~~~~~~~
@@ -48,7 +79,7 @@ The simple power-law model is
     S_\nu &= c \left( \frac{\nu}{\nu_0} \right)^\alpha,
 
 where :math:`\nu_0` is the reference frequency, :math:`\alpha` is the spectral index, and :math:`c` is a constant.
-Integration over the bandwidth is performed as follows:
+The bandwidth integration is performed as:
 
 .. math::
 
@@ -56,6 +87,8 @@ Integration over the bandwidth is performed as follows:
     &= \frac{\nu_0}{\rm{BW}} \left[\frac{c}{\alpha+1} \left(\frac{\nu}{\nu_0}\right)^{\alpha + 1}  \right]_{\nu_\text{min}}^{\nu_\text{max}} \\
     &= \frac{\nu_0}{\rm{BW}} \frac{c}{\alpha+1} \left[ \left(\frac{{\nu_\text{max}}}{\nu_0}\right)^{\alpha + 1} - \left(\frac{{\nu_\text{min}}}{\nu_0}\right)^{\alpha + 1} \right] \\
     &= \frac{c({\nu_\text{max}}^{\alpha+1} - {\nu_\text{min}}^{\alpha+1})}{\rm{BW}\,\nu_0^\alpha(\alpha+1)}.
+
+.. _broken_power_law_intergral:
 
 Broken power-law
 ~~~~~~~~~~~~~~~~
@@ -134,9 +167,10 @@ In our case, this works out to
         \frac{1}{\rm{BW}}\int_{\nu_\text{min}}^{\nu_\text{max}} Ce^{\left(\frac{a}{\ln 10}  \left [ \ln\left ( \frac{\nu}{\nu_0} \right )\right]^2 + b \, \ln \left ( \frac{\nu}{\nu_0} \right )\right)}\,\text{d}\nu \\
         &= \frac{C\nu_0}{2\rm{BW}} \sqrt{\frac{\pi \ln 10}{a}} \, 10^{-\frac{(b+1)^2}{4a}} \left[\text{erfi} \left(\frac{2a\ln \left(\frac{\nu}{\nu_0}\right) + b + 1}{2\sqrt{a\ln 10}}\right)\right]_{\nu_\text{min}}^{\nu_\text{max}}.
 
+.. _high_frequency_cut_off_power_law_intergral:
 
-Power law with high-frequency cut-off
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+High-frequency cut-off power law
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. math::
 
@@ -156,9 +190,10 @@ sympy solution:
 
     S_\text{avg} &=  \left( \frac{c \nu}{\rm{BW}\nu_c} \right) \left ( \frac{\nu}{\nu_0} \right)^ \alpha \left ( \frac{- \alpha  \nu +  \alpha  \nu_c -  \nu + 2  \nu_c}{ (\alpha + 1)(\alpha + 2)} \right)\\
 
+.. _low_frequency_turn_over_power_law_intergral:
 
-Power law with low-frequency turn-over
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Low-frequency turn-over power law
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. math::
 
@@ -181,6 +216,8 @@ we have
         &= \frac{c}{\rm{BW}}\left[\frac{\nu X Y^{-Z}}{\beta} \Gamma(Z, Y) \right]_{\nu_\text{min}}^{\nu_\text{max}},
 
 where :math:`\Gamma(a,x)`` is the incomplete gamma function.
+
+.. _double_turn_over_spectrum_intergral:
 
 Double turn-over spectrum
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -335,9 +372,10 @@ The first four derivatives are:
         &= \frac{S_\nu}{\nu^4}\left( X^4 - 6X^3 + 6X^2 Y + 11X^2 - 18XY - 6X + 11Y + 3Y^2 \right)
 
 
+.. _high_frequency_cut_off_power_law_taylor:
 
-Power law with high-frequency cut-off
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+High-frequency cut-off power law
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This one is really just the sum of two simple power laws:
 
@@ -392,9 +430,10 @@ Deratives we need are:
             \frac{(\alpha+1) \nu^{\alpha -5}}{\nu_c}
           \right)
 
+.. _low_frequency_turn_over_power_law_taylor:
 
-Power law with low-frequency turn-over
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Low-frequency turn-over power law
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Shorthands:
 
@@ -602,9 +641,10 @@ Shorthands:
         \bigg ]
 
 
+.. _double_turn_over_spectrum_taylor:
 
-Double turn over
-~~~~~~~~~~~~~~~~
+Double turn over spectrum
+~~~~~~~~~~~~~~~~~~~~~~~~~
 Shorthands:
 
 .. math::

@@ -18,7 +18,7 @@ You can use the following command to get all fluxes from the catalogue.
 
 .. code-block:: python
 
-    from pulsar_spectra.catalogues import collect_catalogue_fluxes
+    from pulsar_spectra.catalogue import collect_catalogue_fluxes
     cat_dict = collect_catalogue_fluxes()
 
 cat_dict will have the format

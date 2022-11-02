@@ -3,6 +3,10 @@ Frequently Asked Questions
 
 The following are some common questions or issues.
 
+What are these x error bars?
+----------------------------
+The x error bars are the bandwidth of each flux density measurement (:ref:`see full explanation <display_band>`).
+
 ATNF reference error
 --------------------
 
