@@ -7,6 +7,8 @@ This assumption becomes increasingly inaccurate for wider fractional bandwidths.
 For this reason we have expanded the catalogue's database to include the bandwidth of all detections and
 expanded our equations to model the integrated flux across the band.
 
+.. _derivations:
+
 Derivations
 -----------
 If \alpha measurement is reported along with \alpha bandwidth, then the correct way to fit models is to find the expected mean flux across the band for each model,

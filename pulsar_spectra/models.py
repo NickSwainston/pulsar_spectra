@@ -644,10 +644,11 @@ def model_settings(print_models=False):
         # Print the models dictionary which is useful for debuging new models
         for mod in model_dict.keys():
             print(f"\n{mod}")
-            model_function, short_name, start_params, mod_limits = model_dict[mod]
-            print(f"    model_function: {model_function}")
-            print(f"    short_name: {short_name}")
-            print(f"    start_params: {start_params}")
-            print(f"    mod_limits: {mod_limits}")
+            model_function, short_name, start_params, mod_limits, model_function_integrate = model_dict[mod]
+            print(f"    model_function:           {model_function.__name__}")
+            print(f"    model_function_integrate: {model_function_integrate.__name__}")
+            print(f"    short_name:               {short_name}")
+            print(f"    start_params:             {start_params}")
+            print(f"    mod_limits:               {mod_limits}")
 
     return model_dict
