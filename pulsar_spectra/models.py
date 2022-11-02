@@ -46,8 +46,9 @@ def simple_power_law_intergrate(vmin_vmax, a, c, v0):
 
     Parameters
     ----------
-    v : `list`
-        Frequency in Hz.
+    vmin_vmax : `tuple` (vmin, vmax)
+        Where vmin is the minimum and vmax is the maximum frequency
+        in Hz for each flux density measurement's bandwidth.
     a : `float`
         Spectral Index.
     c : `float`
@@ -113,8 +114,9 @@ def broken_power_law_intergral(vmin_vmax, vb, a1, a2, c, v0):
 
     Parameters
     ----------
-    v : `list`
-        Frequency in Hz.
+    vmin_vmax : `tuple` (vmin, vmax)
+        Where vmin is the minimum and vmax is the maximum frequency
+        in Hz for each flux density measurement's bandwidth.
     vb : `float`
         The frequency of the break in Hz.
     a1 : `float`
@@ -233,8 +235,9 @@ def high_frequency_cut_off_power_law_intergral(vmin_vmax, vc, a, c, v0):
 
     Parameters
     ----------
-    v : `list`
-        Frequency in Hz.
+    vmin_vmax : `tuple` (vmin, vmax)
+        Where vmin is the minimum and vmax is the maximum frequency
+        in Hz for each flux density measurement's bandwidth.
     vc : `list`
         Cut off frequency in Hz.
     a : `float`
@@ -265,8 +268,9 @@ def high_frequency_cut_off_power_law_taylor(vmin_vmax, vc, a, c, v0):
 
     Parameters
     ----------
-    v : `list`
-        Frequency in Hz.
+    vmin_vmax : `tuple` (vmin, vmax)
+        Where vmin is the minimum and vmax is the maximum frequency
+        in Hz for each flux density measurement's bandwidth.
     vc : `list`
         Cut off frequency in Hz.
     a : `float`
@@ -331,8 +335,9 @@ def low_frequency_turn_over_power_law_intergral(vmin_vmax, vpeak, a, c, beta, v0
 
     Parameters
     ----------
-    v : `list`
-        Frequency in Hz.
+    vmin_vmax : `tuple` (vmin, vmax)
+        Where vmin is the minimum and vmax is the maximum frequency
+        in Hz for each flux density measurement's bandwidth.
     vpeak : `list`
         Peak/Turn-over frequency in Hz.
     a : `float`
@@ -367,8 +372,9 @@ def low_frequency_turn_over_power_law_taylor(vmin_vmax, vpeak, a, c, beta, v0):
 
     Parameters
     ----------
-    v : `list`
-        Frequency in Hz.
+    vmin_vmax : `tuple` (vmin, vmax)
+        Where vmin is the minimum and vmax is the maximum frequency
+        in Hz for each flux density measurement's bandwidth.
     vpeak : `list`
         Peak/Turn-over frequency in Hz.
     a : `float`
@@ -456,8 +462,9 @@ def double_turn_over_spectrum_intergral(vmin_vmax, vc, vpeak, a, beta, c, v0):
 
     Parameters
     ----------
-    v : `list`
-        Frequency in Hz.
+    vmin_vmax : `tuple` (vmin, vmax)
+        Where vmin is the minimum and vmax is the maximum frequency
+        in Hz for each flux density measurement's bandwidth.
     vc : `list`
         Cut off frequency in Hz.
     vpeak : `list`
@@ -502,8 +509,9 @@ def double_turn_over_spectrum_taylor(vmin_vmax, vc, vpeak, a, beta, c, v0):
 
     Parameters
     ----------
-    v : `list`
-        Frequency in Hz.
+    vmin_vmax : `tuple` (vmin, vmax)
+        Where vmin is the minimum and vmax is the maximum frequency
+        in Hz for each flux density measurement's bandwidth.
     vc : `list`
         Cut off frequency in Hz.
     vpeak : `list`
