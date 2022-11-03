@@ -232,6 +232,7 @@ It takes the following form:
     S_\nu = c\left( \frac{\nu}{\nu_0} \right)^{\alpha} \exp\left [ \frac{\alpha}{\beta} \left( \frac{\nu}{\nu_\rm{peak}} \right)^{-\beta} \right ] \left ( 1 - \frac{\nu}{\nu_c} \right ) ,\qquad \nu < \nu_c.
 
 We first re-arrange as follows:
+
 .. math::
 
     S_\text{avg}
