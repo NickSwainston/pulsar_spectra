@@ -1315,6 +1315,20 @@
    20.620748386031
   ]
  },
+ "J1358-2533": {
+  "Frequency MHz": [
+   154.24
+  ],
+  "Bandwidth MHz": [
+   30.72
+  ],
+  "Flux Density mJy": [
+   27
+  ],
+  "Flux Density error mJy": [
+   8
+  ]
+ },
  "J1418-3921": {
   "Frequency MHz": [
    154.24
