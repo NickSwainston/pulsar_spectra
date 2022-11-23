@@ -16,7 +16,7 @@ reqs = [
         'sympy',
        ]
 
-pulsar_spectra_version = '2.0.0'
+pulsar_spectra_version = '2.0.1'
 
 setup(name="pulsar_spectra",
       version=pulsar_spectra_version,
