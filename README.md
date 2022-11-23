@@ -20,6 +20,8 @@ You can install via pip using
 
 Or you can clone or download the repository and then use `python setup.py install` or `pip install .`
 
+There is also a docker container that you can install with `docker pull nickswainston/pulsar_spectra`.
+
 
 Help
 =====
