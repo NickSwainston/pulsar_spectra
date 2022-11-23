@@ -8,7 +8,7 @@ from setuptools import setup
 reqs = [
         'numpy>=1.13.3',
         'matplotlib>=3.4.0',
-        'psrqpy>=1.0.5',
+        'psrqpy>=1.2.4',
         'iminuit>=2.11.1',
         'jacobi',
         'PyYAML',
@@ -16,7 +16,7 @@ reqs = [
         'sympy',
        ]
 
-pulsar_spectra_version = '2.0.0'
+pulsar_spectra_version = '2.0.1'
 
 setup(name="pulsar_spectra",
       version=pulsar_spectra_version,

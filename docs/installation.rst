@@ -18,3 +18,9 @@ or
 .. code-block:: bash
 
     pip install .
+
+There is also a docker container that you can install with
+
+.. code-block:: bash
+
+    docker pull nickswainston/pulsar_spectra
