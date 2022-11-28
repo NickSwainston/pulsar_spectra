@@ -340,13 +340,13 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
         yamls_to_check = yamls_to_use
         yamls_to_use = []
         for y_dir in yamls_to_check:
-            yaml_label = y_dir.split("/")[-1].split(".")[0]
+            yaml_label = os.path.basename(y_dir).split(".")[0]
             if yaml_label not in exclude:
                 yamls_to_use.append(y_dir)
 
     # Loop over catalogues and put them into a dictionary
     for cat_file in yamls_to_use:
-        cat_label = cat_file.split("/")[-1].split(".")[0]
+        cat_label = os.path.basename(cat_file).split(".")[0]
 
         # Load in the dict
         with open(cat_file, "r") as stream:
