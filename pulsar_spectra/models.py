@@ -3,12 +3,12 @@ Spectral models used for fitting
 """
 
 import numpy as np
-from mpmath import gammainc
 
 def gammainc_up(a,z):
     """Vectorised upper incomplete gamma function.
     Taken from: https://stackoverflow.com/questions/10542780/incomplete-gamma-function-in-python
     """
+    from mpmath import gammainc
     return np.asarray([gammainc(a, zi, regularized=False)
                        for zi in z]).astype(float)
 
