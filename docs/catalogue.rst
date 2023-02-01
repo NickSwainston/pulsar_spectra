@@ -220,16 +220,73 @@ Then move to the scripts subdirectory of the repository and run the command:
     python csv_to_yaml.py --csv your_paper.csv --ref author_year
 
 This will put a YAML file of the paper in pulsar_spectra/catalogue_papers/.
-You should then reinstall the software (`python setup.py install`) then run a spectral fit to confirm it worked.
+You should then reinstall the software (:code:`python setup.py install`) then run a spectral fit to confirm it worked.
 
-So others can use this paper's data, you should
 
-1. Make a fork of the pulsar_spectra repository
+Uploading the new catalogue to GitHub
+-------------------------------------
+So others can use this paper's data, you should create `a fork <https://docs.github.com/en/get-started/quickstart/fork-a-repo>`_ of the pulsar_spectra,
+and the new catalogue files and make a `pull request <https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork>`_.
+The following are the steps this will require and what you should include in your pull request.
+
+1. Make a fork of pulsar spectra
+    Go to the `pulsar_spectra <https://github.com/NickSwainston/pulsar_spectra>`_ repository and fork it by clicking the fork button in the top right.
+    Follow the steps until you are on the webpage with your fork (the URL should look like https://github.com/yourusername/pulsar_spectra).
+
 2. Clone your fork
-3. Add the new paper YAML file and make a commit
-4. Git push to your fork and then make a pull request on GitHub
-5. Wait for your pull request to be approved and merged
-6. Pat yourself on the back for contributing to open-source software!
+    From your fork webpage, click the code button and copy the clone URL.
+    In your terminal, go to a directory where you would like to put the code and run the command
+
+    :code:`git clone <copied url here>`
+
+    The :code:`pulsar_spectra` directory it creates is where you should be working on your changes.
+
+3. Add each paper
+    For each paper, perform the following sub-steps
+
+    a. Create the YAML paper file
+        Follow the steps in the :ref:`added to the catalogue <adding_papers>` section,
+        will make a YAML file in the directory :code:`pulsar_spectra/catalogue_papers/`.
+
+    b. Update ADS links
+        In the :code:`pulsar_spectra/catalogue.py`, there is a dictionary called :code:`ADS_REF` (currently on line 25).
+        Add a new line to this dictionary by making the key "Author_year" and the link to the ADS abstract page for the paper.
+        So the format is:
+
+        :code:`"Author_year": "adslink",`
+
+    c. Commit the changed files
+        First, you must add the new YAML file and the updated ADS ref like so (changing the command for your file):
+
+        :code:`git add pulsar_spectra/catalogue_papers/<AUTHOR_YEAR>.yaml pulsar_spectra/catalogue.py`
+
+        Then make a commit describing your changes:
+
+        :code:`git commit -m "Added <AUTHOR_YEAR> to the catalogue.`
+
+        Feel free to add a brief description of the paper if you'd like.
+
+4. Create a pull request
+    Once you have finished adding to the repo, you can push your changes to your GitHub fork using:
+
+    :code:`git push`
+
+    Then go to your GitHub pulsar_spectra fork webpage and click on "Pull requests", and then "Create pull request"
+    (It may have prompted you to make a pull request already).
+
+    What we want (and what should happen by default) is the pull request will say something like this:
+
+    :code:`base respository:NickSwainston/pulsar_spectra  base:main   <-   head respository:YOURUSERNAME/pulsar_spectra  base:main`
+
+    Write a description of the changes you have made and click submit.
+
+5. Wait for approval
+    The maintainers will review your changes, run some of the tests and either help you fix any errors or fix them on your behalf.
+    Once the pull request is fixed and tested, it will be merged into the main branch so everyone can use it.
+
+6. Celebrate!
+    Pat yourself on the back for contributing to open-source software!
+    You should now see yourself listed under the contributors to the repository.
 
 
 Catalogue format
