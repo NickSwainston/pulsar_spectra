@@ -1,10 +1,10 @@
 {
  "J0108-1431": {
   "Frequency MHz": [
-   1600.0
+   1650.0
   ],
   "Bandwidth MHz": [
-   0.0
+   16
   ],
   "Flux Density mJy": [
    0.8
@@ -15,10 +15,10 @@
  },
  "J0437-4715": {
   "Frequency MHz": [
-   1600.0
+   8400
   ],
   "Bandwidth MHz": [
-   0.0
+   16
   ],
   "Flux Density mJy": [
    140.0
@@ -29,10 +29,10 @@
  },
  "J0630-2834": {
   "Frequency MHz": [
-   1600.0
+   1650.0
   ],
   "Bandwidth MHz": [
-   0.0
+   16
   ],
   "Flux Density mJy": [
    23.0
@@ -43,10 +43,10 @@
  },
  "J0737-3039A": {
   "Frequency MHz": [
-   1600.0
+   1650.0
   ],
   "Bandwidth MHz": [
-   0.0
+   16
   ],
   "Flux Density mJy": [
    1.6
@@ -57,10 +57,10 @@
  },
  "J1559-4438": {
   "Frequency MHz": [
-   1600.0
+   1650.0
   ],
   "Bandwidth MHz": [
-   0.0
+   16
   ],
   "Flux Density mJy": [
    40.0
@@ -71,10 +71,10 @@
  },
  "J2048-1616": {
   "Frequency MHz": [
-   1600.0
+   1650.0
   ],
   "Bandwidth MHz": [
-   0.0
+   16
   ],
   "Flux Density mJy": [
    13.0
@@ -85,10 +85,10 @@
  },
  "J2144-3933": {
   "Frequency MHz": [
-   1600.0
+   1650.0
   ],
   "Bandwidth MHz": [
-   0.0
+   16
   ],
   "Flux Density mJy": [
    0.8
@@ -99,10 +99,10 @@
  },
  "J2145-0750": {
   "Frequency MHz": [
-   1600.0
+   1650.0
   ],
   "Bandwidth MHz": [
-   0.0
+   16
   ],
   "Flux Density mJy": [
    8.0
@@ -113,10 +113,10 @@
  },
  "J0737-3039B": {
   "Frequency MHz": [
-   1600.0
+   1650.0
   ],
   "Bandwidth MHz": [
-   0.0
+   16
   ],
   "Flux Density mJy": [
    1.6
