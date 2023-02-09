@@ -5,8 +5,8 @@
    1400.0
   ],
   "Bandwidth MHz": [
-   0.0,
-   0.0
+   100,
+   800
   ],
   "Flux Density mJy": [
    14.56,
@@ -23,8 +23,8 @@
    1400.0
   ],
   "Bandwidth MHz": [
-   0.0,
-   0.0
+   100,
+   800
   ],
   "Flux Density mJy": [
    10.77,
@@ -38,11 +38,11 @@
  "J1744-1134": {
   "Frequency MHz": [
    820.0,
-   1400.0
+   1500.0
   ],
   "Bandwidth MHz": [
-   0.0,
-   0.0
+   200,
+   800
   ],
   "Flux Density mJy": [
    2.93,
