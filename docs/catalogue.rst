@@ -223,6 +223,30 @@ This will put a YAML file of the paper in pulsar_spectra/catalogue_papers/.
 You should then reinstall the software (:code:`python setup.py install`) then run a spectral fit to confirm it worked.
 
 
+Catalogue standards for new paper
+---------------------------------
+For flux density measurements to be uploaded to the catalogue, they must meet the following criteria and standards:
+
+1. Published
+    The paper must be peer-reviewed and published.
+    We are considering altering this to accept regular measurement programs with an established and reliable method.
+
+2. New results
+    If the paper includes flux density measurements from previous publications, do not include them.
+
+3. Include bandwidth
+    A bandwidth value is required for each flux density measurement.
+    If there is no mention of the bandwidth in the paper, investigate previous publications that use the telescope to determine what bandwidth was likely used.
+    If there is no way to determine the bandwidth used, do not use the paper.
+
+4. Flux density uncertainties
+    If the paper does not supply a flux density uncertainty, assume a relative uncertainty of 50 %.
+
+5. Do not include upper limits
+    The catalogue does not currently have a way of handling upper limits, so do not include them.
+    If you have a suggestion for handling upper limits, please make an issue or start a discussion on the GitHub page.
+
+
 Uploading the new catalogue to GitHub
 -------------------------------------
 So others can use this paper's data, you should create `a fork <https://docs.github.com/en/get-started/quickstart/fork-a-repo>`_ of the pulsar_spectra,
