@@ -5,8 +5,8 @@
    1400.0
   ],
   "Bandwidth MHz": [
-   0.0,
-   0.0
+   50.0,
+   50.0
   ],
   "Flux Density mJy": [
    3.4,
@@ -23,8 +23,8 @@
    1400.0
   ],
   "Bandwidth MHz": [
-   0.0,
-   0.0
+   50.0,
+   50.0
   ],
   "Flux Density mJy": [
    3.4,
@@ -41,8 +41,8 @@
    1400.0
   ],
   "Bandwidth MHz": [
-   0.0,
-   0.0
+   50.0,
+   50.0
   ],
   "Flux Density mJy": [
    17.0,
@@ -59,8 +59,8 @@
    1400.0
   ],
   "Bandwidth MHz": [
-   0.0,
-   0.0
+   50.0,
+   50.0
   ],
   "Flux Density mJy": [
    1.2,
@@ -77,8 +77,8 @@
    1400.0
   ],
   "Bandwidth MHz": [
-   0.0,
-   0.0
+   50.0,
+   50.0
   ],
   "Flux Density mJy": [
    3.1,
@@ -95,8 +95,8 @@
    1400.0
   ],
   "Bandwidth MHz": [
-   0.0,
-   0.0
+   50.0,
+   50.0
   ],
   "Flux Density mJy": [
    2.3,
@@ -113,8 +113,8 @@
    1400.0
   ],
   "Bandwidth MHz": [
-   0.0,
-   0.0
+   50.0,
+   50.0
   ],
   "Flux Density mJy": [
    2.4,
@@ -131,8 +131,8 @@
    1400.0
   ],
   "Bandwidth MHz": [
-   0.0,
-   0.0
+   50.0,
+   50.0
   ],
   "Flux Density mJy": [
    4.3,
@@ -149,15 +149,15 @@
    1400.0
   ],
   "Bandwidth MHz": [
-   0.0,
-   0.0
+   50.0,
+   50.0
   ],
   "Flux Density mJy": [
    0.002,
    0.014
   ],
   "Flux Density error mJy": [
-   0.0,
+   0.001,
    0.005
   ]
  },
@@ -167,8 +167,8 @@
    1400.0
   ],
   "Bandwidth MHz": [
-   0.0,
-   0.0
+   50.0,
+   50.0
   ],
   "Flux Density mJy": [
    1.5,
@@ -185,8 +185,8 @@
    1400.0
   ],
   "Bandwidth MHz": [
-   0.0,
-   0.0
+   50.0,
+   50.0
   ],
   "Flux Density mJy": [
    2.6,
@@ -203,8 +203,8 @@
    1400.0
   ],
   "Bandwidth MHz": [
-   0.0,
-   0.0
+   50.0,
+   50.0
   ],
   "Flux Density mJy": [
    4.0,
