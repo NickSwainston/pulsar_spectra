@@ -132,8 +132,8 @@ ADS_REF = {
     "Michilli_2020":"https://ui.adsabs.harvard.edu/abs/2020MNRAS.491..725M/abstract",
     "Mickaliger_2012":"https://ui.adsabs.harvard.edu/abs/2012ApJ...759..127M",
     "Mikhailov_2016":"https://ui.adsabs.harvard.edu/abs/2016A%26A...593A..21M/abstract",
-    "Rozko_2015":"https://ui.adsabs.harvard.edu/abs/2015MNRAS.450.2922N",
-    "Rozko_2018":"https://ui.adsabs.harvard.edu/abs/2018MNRAS.479.2193R",
+    "Ng_2015":"https://ui.adsabs.harvard.edu/abs/2015MNRAS.450.2922N",
+    "RoZko_2018":"https://ui.adsabs.harvard.edu/abs/2018MNRAS.479.2193R",
     "Sayer_1997":"https://ui.adsabs.harvard.edu/abs/1997ApJ...474..426S",
     "Seiradakis_1995":"https://ui.adsabs.harvard.edu/abs/1995A%26AS..111..205S/abstract",
     "Shapiro_Albert_2021":"{https://ui.adsabs.harvard.edu/abs/2021ApJ...909..219S",
@@ -141,6 +141,7 @@ ADS_REF = {
     "Surnis_2019":"https://ui.adsabs.harvard.edu/abs/2019ApJ...870....8S/abstract",
     "Titus_2019":"https://ui.adsabs.harvard.edu/abs/2019MNRAS.487.4332T",
     "Zhao_2017":"https://ui.adsabs.harvard.edu/abs/2017ApJ...845..156Z/abstract",
+    "Bhat_2023": "https://ui.adsabs.harvard.edu/search/q=%20%20author%3A%22%5EBhat%22%20year%3A2023%20SMART&sort=date%20desc%2C%20bibcode%20desc&p_=0", #TODO update once published
 }
 
 
