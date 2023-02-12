@@ -416,12 +416,12 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
 
     # Add the antf to the cataogues
     antf_dict = all_flux_from_atnf(query=query)
-    # refs that have errors that we plan to inform ANTF about
-    antf_incorrect_refs = ["Zhao_2019", "Mignani_2017", "Bell_2016", "Robinson_1995", "Johnston_1994", "Manchester_1996", "Xie_2019", "Han_2016", "Kramer_1999", "Kondratiev_2015", "Crawford_2001", "Michilli_2020"]
+    # refs that have errors that we plan to inform ATNF about
+    antf_incorrect_refs = ["Zhao_2019", "Mignani_2017", "Bell_2016", "Robinson_1995", "Johnston_1994", "Manchester_1996", "Xie_2019", "Han_2016", "Kramer_1999", "Kondratiev_2015", "Crawford_2001", "Michilli_2020", "Manchester_2013", "Brinkman_2018"]
     # refs that are correct but where scaled to by their spectral index for the ATNF frequencies
     antf_adjusted_refs = ["Lorimer_1995b", "Stovall_2015", "Sanidas_2019", "Wolszczan_1992", "Dembska_2014", "Kaur_2019", "Alam_2021"]
     # refs that were rounded to different decimal places than the publications
-    antf_rounded_refs = ["Johnston_2018", "Dai_2015", "McEwen_2020", "McConnell_1991", "Bondonneau_2020", "Johnston_2021", "Bates_2011", "Han_2021", "Sayer_1997", "Lynch_2012"]
+    antf_rounded_refs = ["Johnston_2018", "Dai_2015", "McEwen_2020", "McConnell_1991", "Bondonneau_2020", "Johnston_2021", "Bates_2011", "Han_2021", "Sayer_1997", "Lynch_2012", "Stovall_2014"]
     # refs that have different uncertainties than published
     antf_uncert_refs = ["Stairs_1999", "Kuzmin_2001", "Jankowski_2019", "Jankowski_2018", "Kramer_2003a", "Manchester_2001", "Morris_2002", "Zhang_2019"]
     for jname in jnames:
