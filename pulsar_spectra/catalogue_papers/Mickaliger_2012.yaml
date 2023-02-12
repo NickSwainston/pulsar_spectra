@@ -1,0 +1,16 @@
+{
+ "J1725-3853": {
+  "Frequency MHz": [
+   820.0
+  ],
+  "Bandwidth MHz": [
+   200.0
+  ],
+  "Flux Density mJy": [
+   1.1
+  ],
+  "Flux Density error mJy": [
+   0.55
+  ]
+ }
+}

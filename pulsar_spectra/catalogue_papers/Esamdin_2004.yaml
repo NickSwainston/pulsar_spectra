@@ -1,0 +1,30 @@
+{
+ "J0332+5434": {
+  "Frequency MHz": [
+   327.0
+  ],
+  "Bandwidth MHz": [
+   2
+  ],
+  "Flux Density mJy": [
+   1230.0
+  ],
+  "Flux Density error mJy": [
+   38.0
+  ]
+ },
+ "J1509+5531": {
+  "Frequency MHz": [
+   327.0
+  ],
+  "Bandwidth MHz": [
+   2
+  ],
+  "Flux Density mJy": [
+   60.0
+  ],
+  "Flux Density error mJy": [
+   2.0
+  ]
+ }
+}

@@ -1,0 +1,42 @@
+{
+ "J1646-4346": {
+  "Frequency MHz": [
+   1420.0,
+   4860.0
+  ],
+  "Bandwidth MHz": [
+   25,
+   25
+  ],
+  "Flux Density mJy": [
+   1.0,
+   0.1
+  ],
+  "Flux Density error mJy": [
+   0.2,
+   0.03
+  ]
+ },
+ "J1709-4429": {
+  "Frequency MHz": [
+   1420.0,
+   4860.0,
+   8460.0
+  ],
+  "Bandwidth MHz": [
+   25,
+   25,
+   25
+  ],
+  "Flux Density mJy": [
+   11.0,
+   2.0,
+   0.8
+  ],
+  "Flux Density error mJy": [
+   0.2,
+   0.7,
+   0.1
+  ]
+ }
+}
