@@ -97,6 +97,51 @@ ADS_REF = {
     "Frail_2016": "https://ui.adsabs.harvard.edu/abs/2016ApJ...829..119F/abstract",
     "Lee_2022": "https://ui.adsabs.harvard.edu/abs/2022PASA...39...42L/abstract",
     "Bhat_2023": "https://ui.adsabs.harvard.edu/abs/2023arXiv230211920B/abstract",
+    "Aloisi_2019":"https://ui.adsabs.harvard.edu/abs/2019ApJ...875...19A/abstract",
+    "Bailes_1997":"https://ui.adsabs.harvard.edu/abs/1997ApJ...481..386B/abstract",
+    "Basu_2018":"https://ui.adsabs.harvard.edu/abs/2018MNRAS.475.1469B/abstract",
+    "Biggs_1996":"https://ui.adsabs.harvard.edu/abs/1996MNRAS.282..691B/abstract",
+    "Boyles_2012":"https://arxiv.org/abs/1209.4293",
+    "Brinkman_2018":"https://ui.adsabs.harvard.edu/abs/2018MNRAS.474.2012B",
+    "Champion_2005a":"https://ui.adsabs.harvard.edu/abs/2005MNRAS.363..929C",
+    "Champion_2005b":"https://ui.adsabs.harvard.edu/abs/2005PhDT.......282C",
+    "Crawford_2001":"https://ui.adsabs.harvard.edu/abs/2001AJ....122.2001C/abstract",
+    "Crawford_2007":"https://ui.adsabs.harvard.edu/abs/2007AJ....134.1231C/abstract",
+    "Deller_2009":"https://ui.adsabs.harvard.edu/abs/2009ApJ...701.1243D/abstract",
+    "Dembska_2015":"https://ui.adsabs.harvard.edu/abs/2015MNRAS.449.1869D",
+    "Demorest_2013":"https://ui.adsabs.harvard.edu/abs/2013ApJ...762...94D",
+    "Esamdin_2004":"https://ui.adsabs.harvard.edu/abs/2004A&A...425..949E",
+    "Freire_2007":"https://ui.adsabs.harvard.edu/abs/2007ApJ...662.1177F",
+    "Gentile_2018":"https://ui.adsabs.harvard.edu/abs/2018ApJ...868..122B",
+    "Giacani_2001":"https://ui.adsabs.harvard.edu/abs/2001AJ....121.3133G",
+    "Han_1999":"https://ui.adsabs.harvard.edu/abs/1999A&AS..136..571H",
+    "Hoensbroech_1997":"https://ui.adsabs.harvard.edu/abs/1997A%26AS..126..121V/abstract",
+    "Joshi_2009":"https://ui.adsabs.harvard.edu/abs/2009MNRAS.398..943J/abstract",
+    "Kaspi_1997":"https://ui.adsabs.harvard.edu/abs/1997ApJ...485..820K",
+    "Kijak_1998":"https://ui.adsabs.harvard.edu/abs/1998A%26AS..127..153K/abstract",
+    "Kramer_1997":"https://ui.adsabs.harvard.edu/abs/1997ApJ...488..364K",
+    "Kuniyoshi_2015":"https://ui.adsabs.harvard.edu/abs/2015MNRAS.453..828K/abstract",
+    "Lewandowski_2004":"https://ui.adsabs.harvard.edu/abs/2004ApJ...600..905L",
+    "Lorimer_1995":"https://ui.adsabs.harvard.edu/abs/1995ApJ...439..933L",
+    "Lorimer_1996":"https://ui.adsabs.harvard.edu/abs/1996MNRAS.283.1383L",
+    "Lorimer_2005":"https://ui.adsabs.harvard.edu/abs/2005MNRAS.359.1524L",
+    "Lorimer_2007":"https://ui.adsabs.harvard.edu/abs/2007MNRAS.379..282L",
+    "Lynch_2012":"https://ui.adsabs.harvard.edu/abs/2012ApJ...745..109L",
+    "Lynch_2013":"https://arxiv.org/abs/1209.4296",
+    "Manchester_1995":"https://ui.adsabs.harvard.edu/abs/1995ApJ...441L..65M/abstract",
+    "Manchester_2013":"https://ui.adsabs.harvard.edu/abs/2013PASA...30...17M/abstract",
+    "Michilli_2020":"https://ui.adsabs.harvard.edu/abs/2020MNRAS.491..725M/abstract",
+    "Mickaliger_2012":"https://ui.adsabs.harvard.edu/abs/2012ApJ...759..127M",
+    "Mikhailov_2016":"https://ui.adsabs.harvard.edu/abs/2016A%26A...593A..21M/abstract",
+    "Ng_2015":"https://ui.adsabs.harvard.edu/abs/2015MNRAS.450.2922N",
+    "RoZko_2018":"https://ui.adsabs.harvard.edu/abs/2018MNRAS.479.2193R",
+    "Sayer_1997":"https://ui.adsabs.harvard.edu/abs/1997ApJ...474..426S",
+    "Seiradakis_1995":"https://ui.adsabs.harvard.edu/abs/1995A%26AS..111..205S/abstract",
+    "Shapiro_Albert_2021":"{https://ui.adsabs.harvard.edu/abs/2021ApJ...909..219S",
+    "Stovall_2014":"https://ui.adsabs.harvard.edu/abs/2014ApJ...791...67S/abstract",
+    "Surnis_2019":"https://ui.adsabs.harvard.edu/abs/2019ApJ...870....8S/abstract",
+    "Titus_2019":"https://ui.adsabs.harvard.edu/abs/2019MNRAS.487.4332T",
+    "Zhao_2017":"https://ui.adsabs.harvard.edu/abs/2017ApJ...845..156Z/abstract",
 }
 
 
@@ -341,13 +386,13 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
         yamls_to_check = yamls_to_use
         yamls_to_use = []
         for y_dir in yamls_to_check:
-            yaml_label = y_dir.split("/")[-1].split(".")[0]
+            yaml_label = os.path.basename(y_dir).split(".")[0]
             if yaml_label not in exclude:
                 yamls_to_use.append(y_dir)
 
     # Loop over catalogues and put them into a dictionary
     for cat_file in yamls_to_use:
-        cat_label = cat_file.split("/")[-1].split(".")[0]
+        cat_label = os.path.basename(cat_file).split(".")[0]
 
         # Load in the dict
         with open(cat_file, "r") as stream:
@@ -371,12 +416,12 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
 
     # Add the antf to the cataogues
     antf_dict = all_flux_from_atnf(query=query)
-    # refs that have errors that we plan to inform ANTF about
-    antf_incorrect_refs = ["Zhao_2019", "Mignani_2017", "Bell_2016", "Robinson_1995", "Johnston_1994", "Manchester_1996", "Xie_2019", "Han_2016", "Kramer_1999", "Kondratiev_2015"]
+    # refs that have errors that we plan to inform ATNF about
+    antf_incorrect_refs = ["Zhao_2019", "Mignani_2017", "Bell_2016", "Robinson_1995", "Johnston_1994", "Manchester_1996", "Xie_2019", "Han_2016", "Kramer_1999", "Kondratiev_2015", "Crawford_2001", "Michilli_2020", "Manchester_2013", "Brinkman_2018"]
     # refs that are correct but where scaled to by their spectral index for the ATNF frequencies
     antf_adjusted_refs = ["Lorimer_1995b", "Stovall_2015", "Sanidas_2019", "Wolszczan_1992", "Dembska_2014", "Kaur_2019", "Alam_2021"]
     # refs that were rounded to different decimal places than the publications
-    antf_rounded_refs = ["Johnston_2018", "Dai_2015", "McEwen_2020", "McConnell_1991", "Bondonneau_2020", "Johnston_2021", "Bates_2011", "Han_2021"]
+    antf_rounded_refs = ["Johnston_2018", "Dai_2015", "McEwen_2020", "McConnell_1991", "Bondonneau_2020", "Johnston_2021", "Bates_2011", "Han_2021", "Sayer_1997", "Lynch_2012", "Stovall_2014"]
     # refs that have different uncertainties than published
     antf_uncert_refs = ["Stairs_1999", "Kuzmin_2001", "Jankowski_2019", "Jankowski_2018", "Kramer_2003a", "Manchester_2001", "Morris_2002", "Zhang_2019"]
     for jname in jnames:

@@ -1,0 +1,44 @@
+{
+ "J0043-73": {
+  "Frequency MHz": [
+   1382
+  ],
+  "Bandwidth MHz": [
+   400
+  ],
+  "Flux Density mJy": [
+   0.047
+  ],
+  "Flux Density error mJy": [
+   0.0235
+  ]
+ },
+ "J0052-72": {
+  "Frequency MHz": [
+   1382
+  ],
+  "Bandwidth MHz": [
+   400
+  ],
+  "Flux Density mJy": [
+   0.039
+  ],
+  "Flux Density error mJy": [
+   0.0195
+  ]
+ },
+ "J0131-7310": {
+  "Frequency MHz": [
+   1382
+  ],
+  "Bandwidth MHz": [
+   400
+  ],
+  "Flux Density mJy": [
+   0.157
+  ],
+  "Flux Density error mJy": [
+   0.0785
+  ]
+ }
+}

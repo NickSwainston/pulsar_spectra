@@ -1,0 +1,64 @@
+{
+ "J2208+5500": {
+  "Frequency MHz": [
+   1170.0,
+   610.0,
+   325.0
+  ],
+  "Bandwidth MHz": [
+   33,
+   33,
+   33
+  ],
+  "Flux Density mJy": [
+   0.4,
+   2.0,
+   5.8
+  ],
+  "Flux Density error mJy": [
+   0.1,
+   0.4,
+   1.5
+  ]
+ },
+ "J2217+5733": {
+  "Frequency MHz": [
+   1170.0,
+   610.0,
+   325.0
+  ],
+  "Bandwidth MHz": [
+   33,
+   33,
+   33
+  ],
+  "Flux Density mJy": [
+   0.5,
+   4.6,
+   10.0
+  ],
+  "Flux Density error mJy": [
+   0.1,
+   1.1,
+   3.0
+  ]
+ },
+ "J0026+6320": {
+  "Frequency MHz": [
+   610.0,
+   325.0
+  ],
+  "Bandwidth MHz": [
+   33,
+   33
+  ],
+  "Flux Density mJy": [
+   2.9,
+   8.0
+  ],
+  "Flux Density error mJy": [
+   0.8,
+   4.0
+  ]
+ }
+}

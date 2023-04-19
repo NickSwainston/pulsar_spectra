@@ -404,7 +404,7 @@ def iminuit_fit_spectral_model(
 
     if (model_name == "high_frequency_cut_off_power_law" or model_name == "double_turn_over_spectrum") and mod_limits[0] is None:
         # will set the cut off frequency based on the data set's frequency range
-        mod_limits[0] = (max(freqs_Hz), 20 * max(freqs_Hz))
+        mod_limits[0] = (max(freqs_Hz), 10 * max(freqs_Hz))
         logger.debug(f"HFCO cut off frequency limits (Hz): {mod_limits[0]}")
         # Replace vc start param with max frequency
         temp_params = list(start_params)

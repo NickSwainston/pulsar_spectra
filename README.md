@@ -24,6 +24,8 @@ You can install via pip using
 
 Or you can clone or download the repository and then use `python setup.py install` or `pip install .`
 
+There is also a docker container that you can install with `docker pull nickswainston/pulsar_spectra`.
+
 
 Help
 =====
@@ -31,7 +33,7 @@ The documentation can be found [here](https://pulsar-spectra.readthedocs.io/en/l
 
 Credit
 =====
-If you use pulsar_spectra for your research please give credit by citing [Swainston et al 2012, PASA, 39, e056](https://ui.adsabs.harvard.edu/abs/2022arXiv220913324S/abstract) and the [publications of the data](https://pulsar-spectra.readthedocs.io/en/latest/catalogue.html#papers-included-in-our-catalogue) used in your spectral fits.
+If you use pulsar_spectra for your research please give credit by citing [Swainston et al 2022, PASA, 39, e056](https://ui.adsabs.harvard.edu/abs/2022arXiv220913324S/abstract) and the [publications of the data](https://pulsar-spectra.readthedocs.io/en/latest/catalogue.html#papers-included-in-our-catalogue) used in your spectral fits.
 
 Until there is a more appropriate method for crediting software development and maintainance, please also consider including me as a co-author on publications which rely on pulsar_spectra.
 

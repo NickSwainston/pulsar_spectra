@@ -1,0 +1,42 @@
+{
+ "J1302-6350": {
+  "Frequency MHz": [
+   1400.0,
+   4600.0
+  ],
+  "Bandwidth MHz": [
+   160,
+   160
+  ],
+  "Flux Density mJy": [
+   195.0,
+   8.5
+  ],
+  "Flux Density error mJy": [
+   97.5,
+   4.25
+  ]
+ },
+ "J0437-4715": {
+  "Frequency MHz": [
+   1500.0,
+   4700.0,
+   8300.0
+  ],
+  "Bandwidth MHz": [
+   160,
+   160,
+   160
+  ],
+  "Flux Density mJy": [
+   4.6,
+   5.3,
+   2.6
+  ],
+  "Flux Density error mJy": [
+   2.3,
+   2.7,
+   1.3
+  ]
+ }
+}

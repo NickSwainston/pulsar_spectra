@@ -1,0 +1,24 @@
+{
+ "J1105-6107": {
+  "Frequency MHz": [
+   660.0,
+   1420.0,
+   1650.0
+  ],
+  "Bandwidth MHz": [
+   32,
+   320,
+   320
+  ],
+  "Flux Density mJy": [
+   4.1,
+   1.84,
+   1.58
+  ],
+  "Flux Density error mJy": [
+   0.7,
+   0.14,
+   0.06
+  ]
+ }
+}
