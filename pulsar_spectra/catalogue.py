@@ -96,6 +96,7 @@ ADS_REF = {
     "Kramer_1999": "https://ui.adsabs.harvard.edu/abs/1999ApJ...526..957K/abstract",
     "Frail_2016": "https://ui.adsabs.harvard.edu/abs/2016ApJ...829..119F/abstract",
     "Lee_2022": "https://ui.adsabs.harvard.edu/abs/2022PASA...39...42L/abstract",
+    "Bhat_2023": "https://ui.adsabs.harvard.edu/abs/2023arXiv230211920B/abstract",
     "Aloisi_2019":"https://ui.adsabs.harvard.edu/abs/2019ApJ...875...19A/abstract",
     "Bailes_1997":"https://ui.adsabs.harvard.edu/abs/1997ApJ...481..386B/abstract",
     "Basu_2018":"https://ui.adsabs.harvard.edu/abs/2018MNRAS.475.1469B/abstract",
@@ -141,7 +142,6 @@ ADS_REF = {
     "Surnis_2019":"https://ui.adsabs.harvard.edu/abs/2019ApJ...870....8S/abstract",
     "Titus_2019":"https://ui.adsabs.harvard.edu/abs/2019MNRAS.487.4332T",
     "Zhao_2017":"https://ui.adsabs.harvard.edu/abs/2017ApJ...845..156Z/abstract",
-    "Bhat_2023": "https://ui.adsabs.harvard.edu/search/q=%20%20author%3A%22%5EBhat%22%20year%3A2023%20SMART&sort=date%20desc%2C%20bibcode%20desc&p_=0", #TODO update once published
 }
 
 

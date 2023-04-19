@@ -2,14 +2,18 @@ pulsar_spectra
 ======
 <div class="bg-gray-dark" align="center" style="background-color:#24292e">
 <img src="docs/logos/logo_white.svg" height="150px" alt="pulsar_spetra logo">
-<br/>
+<!-- <br/>
 <a href='https://all-pulsar-spectra.readthedocs.io/en/latest/?badge=latest'>
     <img src='https://readthedocs.org/projects/all-pulsar-spectra/badge/?version=latest' alt='Documentation Status' />
 </a>
 <a href='https://github.com/NickSwainston/pulsar_spectra/actions'>
     <img src='https://github.com/github/docs/actions/workflows/main.yml/badge.svg' alt='Test Status' />
-</a>
+</a> -->
 </div>
+
+![tests](https://github.com/NickSwainston/pulsar_spectra/actions/workflows/pytest.yaml/badge.svg)
+![documentation](https://readthedocs.org/projects/all-pulsar-spectra/badge/?version=latest)
+
 A simple interface to record pulsar's flux density measurements for a large number of papers and perform fitting of spectral models.
 
 

@@ -163,6 +163,8 @@ for row in lines:
         pulsar = "J2150-0326"
     elif pulsar == "J2227+30":
         pulsar = "J2227+3038"
+    elif pulsar == "J1654-2636":
+        pulsar = "J1654-26"
 
 
     if pulsar not in jnames:
