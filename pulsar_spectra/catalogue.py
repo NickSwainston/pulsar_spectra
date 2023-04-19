@@ -102,10 +102,10 @@ ADS_REF = {
 
 def get_antf_references():
     """Wrapper for psrqpy.get_references() that ensures the cache is only Updated once."""
-    ref_dict  = psrqpy.get_references()
+    ref_dict  = psrqpy.get_references(version=ATNF_VER)
     if not isinstance(ref_dict, dict):
         # Reference error so update the cache
-        ref_dict  = psrqpy.get_references(updaterefcache=True)
+        ref_dict  = psrqpy.get_references(version=ATNF_VER, updaterefcache=True)
     return ref_dict
 
 
