@@ -96,6 +96,7 @@ ADS_REF = {
     "Kramer_1999": "https://ui.adsabs.harvard.edu/abs/1999ApJ...526..957K/abstract",
     "Frail_2016": "https://ui.adsabs.harvard.edu/abs/2016ApJ...829..119F/abstract",
     "Lee_2022": "https://ui.adsabs.harvard.edu/abs/2022PASA...39...42L/abstract",
+    "Bhat_2023": "https://ui.adsabs.harvard.edu/abs/2023arXiv230211920B/abstract",
 }
 
 
