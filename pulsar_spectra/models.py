@@ -291,7 +291,7 @@ def low_frequency_turn_over_power_law(v, vpeak, a, c, beta, v0):
     """Low-frequency turn-over power law:
 
     .. math::
-        S_v = c \\left( \\frac{v}{v0} \\right)^{a} \\exp\\left [ \\frac{a}{\\beta} \\left( \\frac{v}{vc} \\right)^{-\\beta} \\right ]
+        S_v = c \\left( \\frac{v}{v0} \\right)^{a} \\exp\\left [ \\frac{a}{\\beta} \\left( \\frac{v}{vpeak} \\right)^{-\\beta} \\right ]
 
     Parameters
     ----------
