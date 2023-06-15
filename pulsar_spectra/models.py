@@ -291,7 +291,7 @@ def low_frequency_turn_over_power_law(v, vpeak, a, c, beta, v0):
     """Low-frequency turn-over power law:
 
     .. math::
-        S_v = c \\left( \\frac{v}{v0} \\right)^{a} \\exp\\left [ \\frac{a}{\\beta} \\left( \\frac{v}{vc} \\right)^{-\\beta} \\right ]
+        S_v = c \\left( \\frac{v}{v0} \\right)^{a} \\exp\\left [ \\frac{a}{\\beta} \\left( \\frac{v}{vpeak} \\right)^{-\\beta} \\right ]
 
     Parameters
     ----------
@@ -409,7 +409,7 @@ def double_turn_over_spectrum(v, vc, vpeak, a, beta, c, v0):
     """Double turn over spectrum (has a low-frequency turnover and a high-frequency cut-off):
 
     .. math::
-        S_v = c \\left( \\frac{v}{v0} \\right)^{a} \\left ( 1 - \\frac{v}{vc} \\right ) \\exp\\left [ \\frac{a}{\\beta} \\left( \\frac{v}{vc} \\right)^{-\\beta} \\right ],\\qquad v < vc
+        S_v = c \\left( \\frac{v}{v0} \\right)^{a} \\left ( 1 - \\frac{v}{vc} \\right ) \\exp\\left [ \\frac{a}{\\beta} \\left( \\frac{v}{vpeak} \\right)^{-\\beta} \\right ],\\qquad v < vc
 
     Parameters
     ----------
