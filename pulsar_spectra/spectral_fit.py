@@ -2,6 +2,8 @@
 Functions used to fit different spectral models to the fluxs_mJy densities of pulsars
 """
 
+import os
+import yaml
 import numpy as np
 from iminuit import Minuit
 from iminuit.cost import LeastSquares
@@ -16,6 +18,11 @@ from pulsar_spectra.catalogue import convert_cat_list_to_dict
 
 import logging
 logger = logging.getLogger(__name__)
+
+
+# Hard code the path of the plotting configuration
+CONFIG_DIR = os.path.join(os.path.dirname(__file__), 'plotting_config')
+
 
 def robust_cost_function(f_y, y, sigma_y, k=1.345):
     """Robust cost function. The negative log-likelihood of a Gaussian likelihood with Huber loss.
@@ -47,6 +54,7 @@ def robust_cost_function(f_y, y, sigma_y, k=1.345):
         else:
             beta_array.append( k * abs(relative_error) - 1./2. * k**2 )
     return sum(beta_array)
+
 
 def huber_loss_function(sq_resi, k=1.345):
     """Robust loss function which penalises outliers, as detailed in Jankowski et al (2018).
@@ -116,6 +124,24 @@ def propagate_flux_n_err(freqs, model, iminuit_result):
     return fitted_flux, fitted_flux_err
 
 
+def compute_log_lims(vals, val_errs=None, margin=0.3):
+    if margin <= 0 or margin >= 1:
+        print('Invald plot margin. Defaulting to 30%.')
+        margin = 0.3
+    if val_errs == None:
+        val_errs = [0]*len(vals)
+    else:
+        val_errs = [x if x != None else 0 for x in val_errs]
+    lower_vals = np.array(vals)-np.array(val_errs)
+    upper_vals = np.array(vals)+np.array(val_errs)
+    log_vals = np.log10(np.array(vals))
+    lower_log_vals = np.log10(lower_vals, where=lower_vals>0)
+    upper_log_vals = np.log10(upper_vals, where=upper_vals>0)
+    lim_lower = (1-margin)*10**(np.min(np.concatenate([lower_log_vals, log_vals])))
+    lim_upper = (1+margin)*10**(np.max(np.concatenate([upper_log_vals, log_vals])))
+    return [lim_lower, lim_upper]
+
+
 def plot_fit(freqs_MHz, bands_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fit_info,
              plot_error=True, save_name="fit.png", alternate_style=False, axis=None,
              secondary_fit=False, fit_range=None, ref_markers=None, plot_bands=False):
@@ -151,83 +177,69 @@ def plot_fit(freqs_MHz, bands_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit
         Frequency range to plot the second model over in MHz, eg. (100, 3000). |br| Default: None, will use input frequency range.
     ref_markers : `dict` [`str`, `tuple`], optional
         Used to overwrite the data marker defaults. The key is the reference name and the tuple contains (color, marker, markersize). |br| Default: None.
+    plot_bands : `boolean`, optional
+        Plot bandwidths as error bars. |br| Default: False.
     """
     if ref_markers is None:
         ref_markers = {}
 
+    with open(CONFIG_DIR+'/config.yaml', 'r') as f:
+        config = yaml.safe_load(f)
+
     # Set up plot
-    plotsize = 3.2
     if axis is None:
-        fig, ax = plt.subplots(figsize=(plotsize*4/3, plotsize))
+        fig, ax = plt.subplots(figsize=(config["Figure height"]*config["Aspect ratio"], config["Figure height"]))
     else:
         ax = axis
 
     # Set up default mpl markers
-    capsize = 1.5
-    errorbar_linewidth = 0.7
-    marker_border_thickness = 0.5
-    marker_scale = 0.7
-    marker_types = [("#006ddb", "o", 6),    # blue circle
-                    ("#24ff24", "^", 7),    # green triangle
-                    ("r",       "D", 5),    # red diamond
-                    ("#920000", "s", 5.5),  # maroon square
-                    ("#6db6ff", "p", 6.5),  # sky blue pentagon
-                    ("#ff6db6", "*", 9),    # pink star
-                    ("m",       "v", 7),    # purple upside-down triangle
-                    ("#b6dbff", "d", 7),    # light blue thin diamond
-                    ("#009292", "P", 7.5),  # turqoise thick plus
-                    ("#b66dff", "h", 7),    # lavender hexagon
-                    ("#db6d00", ">", 7),    # orange right-pointing triangle
-                    ("c",       "H", 7),    # cyan sideways hexagon
-                    ("#ffb6db", "X", 7.5),  # light pink thick cross
-                    ("#004949", "<", 7),    # dark green right-pointing triangle
-                    ("k",       "x", 7),    # black thin cross
-                    ("y",       "s", 5.5),  # yellow square
-                    ("#009292", "^", 7),    # turquoise triangle
-                    ("k",       "d", 7),    # black thin diamond
-                    ("#b6dbff", "*", 9),    # light blue star
-                    ("y",       "P", 7.5)]  # yellow thick plus
-    custom_cycler = (cycler(color = [p[0] for p in marker_types])
-                    + cycler(marker = [p[1] for p in marker_types])
-                    + cycler(markersize = np.array([p[2] for p in marker_types])*marker_scale))
+    custom_cycler = (cycler(color = [p[1] for p in config["Markers"]])
+                    + cycler(marker = [p[2] for p in config["Markers"]])
+                    + cycler(markersize = [p[3] for p in config["Markers"]]))
     ax.set_prop_cycle(custom_cycler)
 
     # Add data
     data_dict = convert_cat_list_to_dict({"dummy_pulsar":[freqs_MHz, bands_MHz, fluxs_mJy, flux_errs_mJy, ref]})["dummy_pulsar"]
-    if not secondary_fit:
-        for ref in data_dict.keys():
-            if ref in ref_markers.keys():
-                # ref in user define marker so use theirs
-                color, marker, markersize = ref_markers[ref]
-            else:
-                # Use our defaults
-                color = None
-                marker = None
-                markersize = None
-            freqs_ref = np.array(data_dict[ref]['Frequency MHz'])
-            if plot_bands:
-                bands_ref = np.array(data_dict[ref]['Bandwidth MHz']) / 2.
-            else:
-                bands_ref = None
-            fluxs_ref = np.array(data_dict[ref]['Flux Density mJy'])
-            flux_errs_ref = np.array(data_dict[ref]['Flux Density error mJy']) / 2.
-            (_, caps, _) = ax.errorbar(
-                freqs_ref,
-                fluxs_ref,
-                xerr=bands_ref,
-                yerr=flux_errs_ref,
-                linestyle='None',
-                mec='k',
-                markeredgewidth=marker_border_thickness,
-                elinewidth=errorbar_linewidth,
-                capsize=capsize,
-                label=ref.replace('_',' '),
-                color=color,
-                marker=marker,
-                markersize=markersize,
-            )
-            for cap in caps:
-                cap.set_markeredgewidth(errorbar_linewidth)
+    for ref in data_dict.keys():
+        if ref in ref_markers.keys():
+            # ref in user define marker so use theirs
+            color, marker, markersize = ref_markers[ref]
+        else:
+            # Use our defaults
+            color = None
+            marker = None
+            markersize = None
+        freqs_ref = np.array(data_dict[ref]['Frequency MHz'])
+        if plot_bands:
+            bands_ref = np.array(data_dict[ref]['Bandwidth MHz']) / 2.
+        else:
+            bands_ref = None
+        if secondary_fit:
+            marker_alpha = 0.
+            marker_label = None
+        else:
+            marker_alpha = 1.
+            marker_label = ref.replace('_',' ')
+        fluxs_ref = np.array(data_dict[ref]['Flux Density mJy'])
+        flux_errs_ref = np.array(data_dict[ref]['Flux Density error mJy']) / 2.
+        (_, caps, _) = ax.errorbar(
+            freqs_ref,
+            fluxs_ref,
+            xerr=bands_ref,
+            yerr=flux_errs_ref,
+            linestyle='None',
+            mec='k',
+            markeredgewidth=config["Marker border"],
+            elinewidth=config["Errorbar linewidth"],
+            capsize=config["Capsize"],
+            label=marker_label,
+            color=color,
+            marker=marker,
+            markersize=markersize,
+            alpha=marker_alpha,
+        )
+        for cap in caps:
+            cap.set_markeredgewidth(config["Errorbar linewidth"])
 
     # Create fit line
     if fit_range is None:
@@ -252,23 +264,24 @@ def plot_fit(freqs_MHz, bands_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit
         model_dict = model_settings()
         fit_info = model_dict[fit_info.split()[0]][1]
     if secondary_fit:
-        ax.plot(fitted_freq, fitted_flux, 'k', marker="None", ls=(0, (0.7, 1)), lw=2, alpha=0.5, label=fit_info)
+        ax.plot(fitted_freq, fitted_flux, 'k', marker="None", ls=config["Secondary linestyle"], lw=2, alpha=0.5, label=fit_info)
     else:
-        ax.plot(fitted_freq, fitted_flux, 'k--', label=fit_info)
+        ax.plot(fitted_freq, fitted_flux, 'k', marker="None", ls=config["Primary linestyle"], label=fit_info)
 
     if plot_error and iminuit_result.valid and fitted_flux_prop[0] is not None:
         # draw 1 sigma error band
-        if secondary_fit:
-            facecolor = "r"
-            alpha = 0
-        else:
-            facecolor = "C1"
-            alpha = 0.5
-        ax.fill_between(fitted_freq, fitted_flux - fitted_flux_prop, fitted_flux + fitted_flux_prop, facecolor=facecolor, alpha=alpha)
+        if secondary_fit: alpha = 0
+        else: alpha = 0.5
+        ax.fill_between(fitted_freq, fitted_flux - fitted_flux_prop, fitted_flux + fitted_flux_prop, facecolor=config["Model error colour"], alpha=alpha)
 
     # Format plot and save
     ax.set_xscale('log')
     ax.set_yscale('log')
+    if plot_bands:
+        ax.set_xlim(compute_log_lims(freqs_MHz, bands_MHz))
+    else:
+        ax.set_xlim(compute_log_lims(freqs_MHz))
+    ax.set_ylim(compute_log_lims(fluxs_mJy, flux_errs_mJy))
     ax.get_xaxis().set_major_formatter(FormatStrFormatter('%g'))
     ax.get_yaxis().set_major_formatter(FormatStrFormatter('%g'))
     ax.tick_params(which='both', direction='in', top=1, right=1)
@@ -281,8 +294,9 @@ def plot_fit(freqs_MHz, bands_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit
     ax.grid(visible=True, ls=':', lw=0.6)
     if axis is None:
         # Not using axis mode so save figure
-        plt.savefig(save_name, bbox_inches='tight', dpi=300)
+        plt.savefig(save_name, bbox_inches='tight', dpi=config["Resolution"])
         plt.clf()
+
 
 def migrad_simplex_scan(m, mod_limits, model_name):
     """Find the minimum of least_squares function using the in-built minimisation

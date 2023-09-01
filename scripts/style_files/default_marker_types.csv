@@ -1,0 +1,28 @@
+%marker_colour,marker_type,marker_size,description
+#006ddb,o,6,blue circle
+#24ff24,^,7,green triangle
+r,D,5,red diamond
+#920000,s,5.5,maroon square
+#6db6ff,p,6.5,sky blue pentagon
+#ff6db6,*,9,pink star
+m,v,7,purple upside-down triangle
+#b6dbff,d,7,light blue thin diamond
+#009292,P,7.5,turqoise thick plus
+#b66dff,h,7,lavender hexagon
+#db6d00,>,7,orange right-pointing triangle
+c,H,7,cyan sideways hexagon
+#ffb6db,X,7.5,light pink thick cross
+#004949,<,7,dark green right-pointing triangle
+k,x,7,black thin cross
+y,s,5.5,yellow square
+#009292,^,7,turquoise triangle
+k,d,7,black thin diamond
+#b6dbff,*,9,light blue star
+y,P,7.5,yellow thick plus
+#24ff24,o,6,green circle
+r,^,7,red triangle
+#920000,D,5,maroon diamond
+#6db6ff,s,5.5,blue square
+#ff6db6,p,6.5,sky pink pentagon
+m,*,9,purple star
+#b6dbff,v,7,light blue upside-down triangle
