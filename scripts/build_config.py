@@ -109,8 +109,10 @@ def main():
         if not is_valid_colour(style[0]) and not is_valid_marker(style[1]):
             print(f'Error: invalid marker style - {style} (skipping)')
             continue
-        if style[3] == '': desc = 'Unlabelled'
-        else: desc = str(style[3])
+        if style[3] == '':
+            desc = 'Unlabelled'
+        else:
+            desc = str(style[3])
         config["Markers"].append([desc, str(style[0]), str(style[1]), round(float(style[2])*opts.marker_scale,2)])
 
     with open('../pulsar_spectra/plotting_config/config.yaml', 'w') as f:
