@@ -124,21 +124,42 @@ def propagate_flux_n_err(freqs, model, iminuit_result):
     return fitted_flux, fitted_flux_err
 
 
-def compute_log_lims(vals, val_errs=None, margin=0.3):
+def compute_log_lims(vals, val_errs=None, margin=0.1):
     if margin <= 0 or margin >= 1:
+        # Margin cannot be greater than the figure size
         print('Invald plot margin. Defaulting to 30%.')
-        margin = 0.3
+        margin = 0.1
+        
     if val_errs == None:
+        # If no errors are given, assume no error bars
         val_errs = [0]*len(vals)
     else:
+        # Ignore Nones
         val_errs = [x if x != None else 0 for x in val_errs]
-    lower_vals = np.array(vals)-np.array(val_errs)
-    upper_vals = np.array(vals)+np.array(val_errs)
+        
+    # Max and min values including error bars
+    lower_vals = np.array(vals) - np.array(val_errs) / 2
+    upper_vals = np.array(vals) + np.array(val_errs) / 2
+    
+    # Transform to log space
     log_vals = np.log10(np.array(vals))
     lower_log_vals = np.log10(lower_vals, where=lower_vals>0)
     upper_log_vals = np.log10(upper_vals, where=upper_vals>0)
-    lim_lower = (1-margin)*10**(np.min(np.concatenate([lower_log_vals, log_vals])))
-    lim_upper = (1+margin)*10**(np.max(np.concatenate([upper_log_vals, log_vals])))
+    
+    # Log limits
+    min_log_val = np.min(np.concatenate([lower_log_vals, log_vals]))
+    max_log_val = np.max(np.concatenate([upper_log_vals, log_vals]))
+    log_range = max_log_val - min_log_val
+    log_centre = 0.5*(max_log_val + min_log_val)
+    
+    # Log limits with margins
+    expanded_log_range = log_range*(1+margin)
+    expanded_min_log_val = log_centre - 0.5*expanded_log_range
+    expanded_max_log_val = log_centre + 0.5*expanded_log_range
+    
+    # Compute limits in linear space
+    lim_lower = 10**expanded_min_log_val
+    lim_upper = 10**expanded_max_log_val
     return [lim_lower, lim_upper]
 
 
@@ -270,8 +291,10 @@ def plot_fit(freqs_MHz, bands_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit
 
     if plot_error and iminuit_result.valid and fitted_flux_prop[0] is not None:
         # draw 1 sigma error band
-        if secondary_fit: alpha = 0
-        else: alpha = 0.5
+        if secondary_fit:
+            alpha = 0
+        else:
+            alpha = 0.5
         ax.fill_between(fitted_freq, fitted_flux - fitted_flux_prop, fitted_flux + fitted_flux_prop, facecolor=config["Model error colour"], alpha=alpha)
 
     # Format plot and save
