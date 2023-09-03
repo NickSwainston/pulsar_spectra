@@ -78,10 +78,10 @@ def huber_loss_function(sq_resi, k=1.345):
     elif isinstance(sq_resi, list):
         sq_resi = np.array(sq_resi)
     rho = []
-    residual = np.sqrt(abs(sq_resi))
+    residual = np.sqrt(np.abs(sq_resi))
     for j in range(len(residual)):
         if residual[j] < k:
-            rho.append( sq_resi[j]/2 )
+            rho.append( 1./2. * sq_resi[j] )
         else:
             rho.append( k * residual[j] - 1./2. * k**2 )
     if single_value:
@@ -266,8 +266,8 @@ def plot_fit(freqs_MHz, bands_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit
     if fit_range is None:
         # No fit range given so use full range
         if plot_bands:
-            min_freqs_MHz = min(np.array(freqs_MHz) - np.array(bands_MHz) / 2)
-            max_freqs_MHz = max(np.array(freqs_MHz) + np.array(bands_MHz) / 2)
+            min_freqs_MHz = np.min(np.array(freqs_MHz) - np.array(bands_MHz) / 2)
+            max_freqs_MHz = np.max(np.array(freqs_MHz) + np.array(bands_MHz) / 2)
         else:
             min_freqs_MHz = min(freqs_MHz)
             max_freqs_MHz = max(freqs_MHz)
