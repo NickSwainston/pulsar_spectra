@@ -122,6 +122,22 @@ def propagate_flux_n_err(freqs, model, iminuit_result):
 
 
 def compute_log_lims(vals, val_errs=None, margin=0.1):
+    """Compute the plot limits based on data and data error bars.
+
+    Parameters
+    ----------
+    vals : `list`
+        List of data values.
+    val_errs : `list`, optional
+        List of data value errors. |br| Default: None.
+    margin : `float`, optional
+        Margin of space beyond min and max data points, in range (0, 1). |br| Default: 0.1.
+
+    Returns
+    -------
+    plot_lims : `list`
+        The plot limits in the form [lower_lim, upper_lim].
+    """
     if margin <= 0 or margin >= 1:
         # Margin cannot be greater than the figure size
         print('Invald plot margin. Defaulting to 30%.')
@@ -162,7 +178,8 @@ def compute_log_lims(vals, val_errs=None, margin=0.1):
 
 def plot_fit(freqs_MHz, bands_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fit_info,
              plot_error=True, save_name="fit.png", alternate_style=False, axis=None,
-             secondary_fit=False, fit_range=None, ref_markers=None, plot_bands=False, plot_config=DEFAULT_PLOTTING_CONFIG):
+             secondary_fit=False, fit_range=None, ref_markers=None, plot_bands=False,
+             plot_config=DEFAULT_PLOTTING_CONFIG):
     """Create a plot of the pulsar spectral fit.
 
     Parameters
@@ -197,6 +214,8 @@ def plot_fit(freqs_MHz, bands_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit
         Used to overwrite the data marker defaults. The key is the reference name and the tuple contains (color, marker, markersize). |br| Default: None.
     plot_bands : `boolean`, optional
         Plot bandwidths as error bars. |br| Default: False.
+    plotting_config : `string`, optional
+        File path of plotting config file. |br| Default: configs/plotting_config.yaml
     """
     if ref_markers is None:
         ref_markers = {}
