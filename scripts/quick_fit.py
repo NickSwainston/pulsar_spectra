@@ -29,9 +29,11 @@ def quick_fit(pulsars):
         logger.debug(ref_all)
         model_name, iminuit_result, fit_info, p_best, p_category = find_best_spectral_fit(
             pulsar, freq_all, band_all, flux_all, flux_err_all, ref_all,
-            plot_compare=True,
+            plot_best=True
         )
         logger.info(f"\n{pulsar} fit: {model_name}")
+        if iminuit_result is None:
+            continue
         for p, v, e in zip(iminuit_result.parameters, iminuit_result.values, iminuit_result.errors):
             if p.startswith("v"):
                 logger.info(f"{p} = {v/1e6:8.1f} +/- {e/1e6:8.1} MHz")
