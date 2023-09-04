@@ -9,11 +9,19 @@ import numpy as np
 import matplotlib.colors as mcolors
 import matplotlib.lines as mlines
 
+from pulsar_spectra.load_data import DEFAULT_PLOTTING_CONFIG, DEFAULT_MARKER_CSV
+
 
 def parse_opts():
     parser = OptionParser(usage='Usage: %prog [options]',
                           description='Create a plotting configuration file.')
     
+    output_options = OptionGroup(parser, 'Output Options')
+    output_options.add_option('-F', '--filename',
+                  action='store', type='string', dest='output_file', default=DEFAULT_PLOTTING_CONFIG,
+                  help='Location of output configuration file to write to [default: %default]')
+    parser.add_option_group(output_options)
+
     figure_config = OptionGroup(parser, 'Figure Configuration')
     figure_config.add_option('-H', '--fig_height',
                   action='store', type='float', dest='fig_height', default=3.2,
@@ -36,6 +44,10 @@ def parse_opts():
                   action='store', type='string', dest='secondary_ls',
                   default=':',
                   help='Line style of secondary model curve [default: %default]')
+    model_config.add_option('--model_colour',
+                  action='store', type='string', dest='model_colour',
+                  default='k',
+                  help='Colour of the model curves [default: %default]')
     model_config.add_option('--model_error_colour',
                   action='store', type='string', dest='model_error_colour',
                   default='C1',
@@ -45,7 +57,7 @@ def parse_opts():
     marker_config = OptionGroup(parser, 'Marker Configuration')
     marker_config.add_option('--marker_file',
                   action='store', type='string', dest='marker_file',
-                  default='default_marker_types.csv',
+                  default=DEFAULT_MARKER_CSV,
                   help='List of marker styles [default: %default]')
     marker_config.add_option('--marker_scale',
                   action='store', type='float', dest='marker_scale', default=0.7,
@@ -63,11 +75,17 @@ def parse_opts():
     
     (opts, _) = parser.parse_args()
 
-    if not os.path.isfile('style_files/' + opts.marker_file):
+    if not os.path.isfile(opts.marker_file):
         parser.error('cannot locate marker style file')
 
     if len(opts.aspect_ratio.split('x')) != 2:
         parser.error('invalid aspect ratio')
+
+    if not is_valid_colour(opts.model_colour):
+        parser.error(f'invalid model colour')
+
+    if not is_valid_colour(opts.model_error_colour):
+        parser.error(f'invalid model error colour')
 
     return opts
 
@@ -99,12 +117,13 @@ def main():
     config["Resolution"] = opts.dpi
     config["Primary linestyle"] = opts.primary_ls
     config["Secondary linestyle"] = opts.secondary_ls
+    config["Model colour"] = opts.model_colour
     config["Model error colour"] = opts.model_error_colour
     config["Marker border"] = opts.marker_border_lw
     config["Capsize"] = opts.capsize
     config["Errorbar linewidth"] = opts.errorbar_lw
     config["Markers"] = []
-    marker_styles = np.loadtxt('style_files/' + opts.marker_file, delimiter=',', dtype=str, comments='%')
+    marker_styles = np.loadtxt(opts.marker_file, delimiter=',', dtype=str, comments='%')
     for style in marker_styles:
         if not is_valid_colour(style[0]) and not is_valid_marker(style[1]):
             print(f'Error: invalid marker style - {style} (skipping)')
@@ -115,7 +134,7 @@ def main():
             desc = str(style[3])
         config["Markers"].append([desc, str(style[0]), str(style[1]), round(float(style[2])*opts.marker_scale,2)])
 
-    with open('../pulsar_spectra/plotting_config/config.yaml', 'w') as f:
+    with open(opts.output_file, 'w') as f:
         yaml.dump(config, f, sort_keys=False)
 
 

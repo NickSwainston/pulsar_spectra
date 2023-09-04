@@ -15,13 +15,10 @@ from cycler import cycler
 
 from pulsar_spectra.models import model_settings
 from pulsar_spectra.catalogue import convert_cat_list_to_dict
+from pulsar_spectra.load_data import DEFAULT_PLOTTING_CONFIG
 
 import logging
 logger = logging.getLogger(__name__)
-
-
-# Hard code the path of the plotting configuration
-CONFIG_DIR = os.path.join(os.path.dirname(__file__), 'plotting_config')
 
 
 def robust_cost_function(f_y, y, sigma_y, k=1.345):
@@ -130,7 +127,7 @@ def compute_log_lims(vals, val_errs=None, margin=0.1):
         print('Invald plot margin. Defaulting to 30%.')
         margin = 0.1
         
-    if val_errs == None:
+    if val_errs is None:
         # If no errors are given, assume no error bars
         val_errs = [0]*len(vals)
     else:
@@ -165,7 +162,7 @@ def compute_log_lims(vals, val_errs=None, margin=0.1):
 
 def plot_fit(freqs_MHz, bands_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit_result, fit_info,
              plot_error=True, save_name="fit.png", alternate_style=False, axis=None,
-             secondary_fit=False, fit_range=None, ref_markers=None, plot_bands=False):
+             secondary_fit=False, fit_range=None, ref_markers=None, plot_bands=False, plot_config=DEFAULT_PLOTTING_CONFIG):
     """Create a plot of the pulsar spectral fit.
 
     Parameters
@@ -204,7 +201,7 @@ def plot_fit(freqs_MHz, bands_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit
     if ref_markers is None:
         ref_markers = {}
 
-    with open(CONFIG_DIR+'/config.yaml', 'r') as f:
+    with open(plot_config, 'r') as f:
         config = yaml.safe_load(f)
 
     # Set up plot
@@ -285,9 +282,9 @@ def plot_fit(freqs_MHz, bands_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit
         model_dict = model_settings()
         fit_info = model_dict[fit_info.split()[0]][1]
     if secondary_fit:
-        ax.plot(fitted_freq, fitted_flux, 'k', marker="None", ls=config["Secondary linestyle"], lw=2, alpha=0.5, label=fit_info)
+        ax.plot(fitted_freq, fitted_flux, config["Model colour"], marker="None", ls=config["Secondary linestyle"], lw=2, alpha=0.5, label=fit_info)
     else:
-        ax.plot(fitted_freq, fitted_flux, 'k', marker="None", ls=config["Primary linestyle"], label=fit_info)
+        ax.plot(fitted_freq, fitted_flux, config["Model colour"], marker="None", ls=config["Primary linestyle"], label=fit_info)
 
     if plot_error and iminuit_result.valid and fitted_flux_prop[0] is not None:
         # draw 1 sigma error band
@@ -301,7 +298,10 @@ def plot_fit(freqs_MHz, bands_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit
     ax.set_xscale('log')
     ax.set_yscale('log')
     if plot_bands:
-        ax.set_xlim(compute_log_lims(freqs_MHz, bands_MHz))
+        if fit_range is None:
+            ax.set_xlim(compute_log_lims(freqs_MHz, bands_MHz))
+        else:
+            ax.set_xlim(compute_log_lims(freqs_MHz + [*fit_range], bands_MHz + [0]*2))
     else:
         ax.set_xlim(compute_log_lims(freqs_MHz))
     ax.set_ylim(compute_log_lims(fluxs_mJy, flux_errs_mJy))
