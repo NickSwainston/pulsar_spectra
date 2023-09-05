@@ -17,9 +17,9 @@ within the figure box and with an abbreviated model name and no fit info. This i
     from pulsar_spectra.spectral_fit import find_best_spectral_fit
 
     cat_dict = collect_catalogue_fluxes()
-    pulsar = 'J0034-0534'
-    freqs, fluxs, flux_errs, refs = cat_dict[pulsar]
-    best_model_name, iminuit_result, fit_info, p_best, p_category = find_best_spectral_fit(pulsar, freqs, fluxs, flux_errs, refs, plot_best=True, alternate_style=True)
+    pulsar = 'J1909-3744'
+    freqs, bands, fluxs, flux_errs, refs = cat_dict[pulsar]
+    best_model_name, iminuit_result, fit_info, p_best, p_category = find_best_spectral_fit(pulsar, freqs, bands, fluxs, flux_errs, refs, plot_best=True)
 
 This will produce the following plot:
 
@@ -41,21 +41,21 @@ marker to each reference. You can specify custom marker types using the followin
 
     custom_markers = {
     #   reference           :   (marker colour, marker type, marker size)
-        "Murphy_2017"       :   ('tab:orange', 'o', 5), # orange circle
-        "Bondonneau_2020"   :   ('tab:green',  'D', 5)  # green diamond
+        "Jankowski_2018"    :   ('magenta', 'h', 5), # orange circle
+        "Jankowski_2019"    :   ('cyan', 'H', 5)  # green diamond
     }
 
     cat_dict = collect_catalogue_fluxes()
-    pulsar = 'J0034-0534'
-    freqs, fluxs, flux_errs, refs = cat_dict[pulsar]
-    best_model_name, iminuit_result, fit_info, p_best, p_category = find_best_spectral_fit(pulsar, freqs, fluxs, flux_errs, refs, plot_best=True, ref_markers=custom_markers)
+    pulsar = 'J1909-3744'
+    freqs, bands, fluxs, flux_errs, refs = cat_dict[pulsar]
+    best_model_name, iminuit_result, fit_info, p_best, p_category = find_best_spectral_fit(pulsar, freqs, bands, fluxs, flux_errs, refs, plot_best=True, ref_markers=custom_markers)
 
 This will produce the following plot:
 
 .. image:: figures/example_custom_markers.png
   :width: 800
 
-In Lee et al. (2022, submitted), 32 custom marker types were created to ensure unique and consistent markers were
+In `Lee et al. (2022) <https://ui.adsabs.harvard.edu/abs/2022PASA...39...42L/abstract>`, 32 custom marker types were created to ensure unique and consistent markers were
 used throughout the figures. These custom marker types are proved below:
 
 .. code-block:: python
@@ -102,7 +102,8 @@ Plotting a secondary model
 
 Sometimes you may want to plot more than one best-fit model on the same figure with different subsets of data included
 in the fit. To differentiate between the two models, we have included an alternate model style which is light grey
-and does not show the uncertainty envelope. An example of how to use this is given below:
+and does not show the uncertainty envelope. For example, the following code can be used to show the model fit
+before and after the addition of your data:
 
 .. code-block:: python
 
@@ -110,16 +111,19 @@ and does not show the uncertainty envelope. An example of how to use this is giv
     from pulsar_spectra.catalogue import collect_catalogue_fluxes
     from pulsar_spectra.spectral_fit import find_best_spectral_fit
 
-    cat_dict    = collect_catalogue_fluxes()
-    cat_dict_2  = collect_catalogue_fluxes(exclude=["Murphy_2017"])
-    pulsar = 'J0034-0534'
-    freqs, fluxs, flux_errs, refs = cat_dict[pulsar]
-    freqs_2, fluxs_2, flux_errs_2, refs_2 = cat_dict_2[pulsar]
+    cat_dict = collect_catalogue_fluxes()
+    pulsar = 'J1909-3744'
+    freqs, bands, fluxs, flux_errs, refs = cat_dict[pulsar]
 
-    plotsize = 3.2
-    fig, ax = plt.subplots(figsize=(plotsize*4/3, plotsize))
-    best_model_name, iminuit_result, fit_info, p_best, p_category = find_best_spectral_fit(pulsar, freqs, fluxs, flux_errs, refs, plot_best=True, axis=ax)
-    best_model_name_2, iminuit_result_2, fit_info_2, p_best_2, p_category_2 = find_best_spectral_fit(pulsar, freqs_2, fluxs_2, flux_errs_2, refs_2, plot_best=True, secondary_fit=True, axis=ax)
+    fig, ax = plt.subplots(figsize=(5,4))
+    find_best_spectral_fit(pulsar, freqs, bands, fluxs, flux_errs, refs, plot_best=True, secondary_fit=True, axis=ax)
+
+    freqs = [150.] + freqs
+    bands = [30.] + bands
+    fluxs = [6.] + fluxs
+    flux_errs = [1.] + flux_errs
+    refs = ['Your Work'] + refs
+    best_model_name, iminuit_result, fit_info, p_best, p_category = find_best_spectral_fit(pulsar, freqs, bands, fluxs, flux_errs, refs, plot_best=True, axis=ax)
 
     plt.savefig(pulsar+'_'+best_model_name+'_fit.png', bbox_inches='tight', dpi=300)
 
