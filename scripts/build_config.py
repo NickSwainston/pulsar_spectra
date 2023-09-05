@@ -290,7 +290,7 @@ def main():
                 desc = 'Unlabelled'
             else:
                 desc = str(style[3])
-            markers.append([desc, str(style[0]), str(style[1]), round(float(style[2])*opts.marker_scale,2)])
+            markers.append([desc, str(style[0]), str(style[1]), round(float(style[2]),2)])
 
     config["Markers"] = markers
 
