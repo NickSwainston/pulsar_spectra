@@ -16,9 +16,22 @@ import matplotlib.pyplot as plt
 from pulsar_spectra.load_data import DEFAULT_PLOTTING_CONFIG, DEFAULT_MARKER_CSV
 
 
-# Colour pallettes from https://davidmathlogic.com/colorblind/
 # [colour, description]
-PALLETTE_IBM = [
+# Standard matplotlib colours
+PALETTE_TABLEAU = [
+    ['tab:blue', 'blue'],
+    ['tab:orange', 'orange'],
+    ['tab:green', 'green'],
+    ['tab:purple', 'purple'],
+    ['tab:brown', 'brown'],
+    ['tab:pink', 'pink'],
+    ['tab:gray', 'grey'],
+    ['tab:olive', 'olive'],
+    ['tab:cyan', 'cyan'],
+]
+
+# ref: https://davidmathlogic.com/colorblind/
+PALETTE_IBM = [
     ['#648FFF', 'blue'],
     ['#785EF0', 'dark lavender'],
     ['#DC267F', 'deep pink'],
@@ -32,7 +45,8 @@ PALLETTE_IBM = [
     ['#449C8C', 'teal'],
     ['#EA83B7', 'pink'],
 ]
-PALLETTE_WONG = [
+# ref: https://davidmathlogic.com/colorblind/
+PALETTE_WONG = [
     ['#DF0A10', 'red'],
     ['#E69F00', 'orange'],
     ['#56B4E9', 'sky blue'],
@@ -143,10 +157,10 @@ def parse_opts():
     marker_generation.add_option('--num_markers',
                   action='store', type='int', dest='num_markers', default=30,
                   help='Number of unique markers to generate [default: %default]')
-    marker_generation.add_option('--pallette',
-                  action='store', type='string', dest='pallette',
-                  default='IBM',
-                  help="Colour pallette to use (Available: 'IBM', 'WONG') [default: %default]")
+    marker_generation.add_option('--palette',
+                  action='store', type='string', dest='palette',
+                  default='TAB',
+                  help="Colour palette to use (Available: 'TAB', 'IBM', 'WONG') [default: %default]")
     marker_generation.add_option('--marker_file_savename',
                   action='store', type='string', dest='marker_file_savename',
                   default=None,
@@ -187,25 +201,27 @@ def is_valid_marker(marker_string):
     return marker_string in valid_markers
 
 
-def generate_marker_set(num_markers, marker_size, pallette_name='IBM',
+def generate_marker_set(num_markers, marker_size, palette_name='IBM',
                         shuffle=True, uniform_size=True, plot_preview=False,
                         savename=None):
-    if pallette_name == 'IBM':
-        pallette = PALLETTE_IBM
-    elif pallette_name == 'WONG':
-        pallette = PALLETTE_WONG
+    if palette_name == 'TAB':
+        palette = PALETTE_TABLEAU
+    elif palette_name == 'IBM':
+        palette = PALETTE_IBM
+    elif palette_name == 'WONG':
+        palette = PALETTE_WONG
     else:
-        print(f'Error: pallette name not valid. Defaulting to IBM.')
-        pallette = PALLETTE_IBM
+        print(f'Error: palette name not valid. Defaulting to IBM.')
+        palette = PALETTE_IBM
 
     if shuffle:
-        random.shuffle(pallette)
+        random.shuffle(palette)
         random.shuffle(MARKERS)
 
-    if num_markers < len(pallette):
-        colours = pallette[0:num_markers]
+    if num_markers < len(palette):
+        colours = palette[0:num_markers]
     else:
-        colours = (num_markers//len(pallette))*pallette + pallette[0:len(pallette)%num_markers]
+        colours = (num_markers//len(palette))*palette + palette[0:len(palette)%num_markers]
 
     if num_markers < len(MARKERS):
         markers = MARKERS[0:num_markers]
@@ -223,7 +239,10 @@ def generate_marker_set(num_markers, marker_size, pallette_name='IBM',
     
     unique_markers = []
     for i in range(num_markers):
-        marker = [f'{colours[i][1]} {markers[i][2]}', colours[i][0], markers[i][0], round(marker_size*markers[i][1], 2)]
+        if uniform_size:
+            marker = [f'{colours[i][1]} {markers[i][2]}', colours[i][0], markers[i][0], round(marker_size*markers[i][1], 2)]
+        else:
+            marker = [f'{colours[i][1]} {markers[i][2]}', colours[i][0], markers[i][0], round(marker_size, 2)]
         if marker in unique_markers:
             print(f'Duplicate marker skipped: {marker}')
             continue
@@ -244,6 +263,7 @@ def generate_marker_set(num_markers, marker_size, pallette_name='IBM',
                 elinewidth=0.7,
                 capsize=1.5,
             )
+    print(f'{len(unique_markers)} unique markers generated')
 
     if savename:
         with open(savename, 'w') as f:
@@ -277,7 +297,7 @@ def main():
 
     if opts.generate:
         markers = generate_marker_set(opts.num_markers, opts.marker_size,
-            opts.pallette, opts.shuffle, opts.uniform_size, opts.plot_preview,
+            opts.palette, opts.shuffle, opts.uniform_size, opts.plot_preview,
             opts.marker_file_savename)
     else:
         markers = []
