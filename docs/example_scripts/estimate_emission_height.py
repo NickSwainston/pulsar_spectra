@@ -3,7 +3,7 @@ from pulsar_spectra.catalogue import collect_catalogue_fluxes
 from pulsar_spectra.analysis import calc_high_frequency_cutoff_emission_height
 
 cat_dict = collect_catalogue_fluxes()
-pulsar = 'J0452-1759'
+pulsar = 'J1730-2304'
 freqs, bands, fluxs, flux_errs, refs = cat_dict[pulsar]
 model_name, m, _, _, _ = find_best_spectral_fit(pulsar, freqs, bands, fluxs, flux_errs, refs)
 if model_name == "high_frequency_cut_off_power_law":

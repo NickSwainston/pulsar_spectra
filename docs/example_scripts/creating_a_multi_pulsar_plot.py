@@ -13,16 +13,16 @@ pulsar_flux = [
 ]
 cols = 2
 rows = 3
-fig, axs = plt.subplots(nrows=rows, ncols=cols, figsize=(5*cols, 3*rows))
+fig, axs = plt.subplots(nrows=rows, ncols=cols, figsize=(5*cols, 3.5*rows))
 
-cat_list = collect_catalogue_fluxes()
+cat_dict = collect_catalogue_fluxes()
 for pulsar, flux, flux_err, ax_i in pulsar_flux:
-    freqs, bands, fluxs, flux_errs, refs = cat_list[pulsar]
-    freqs += [150.]
-    bands += [10.]
-    fluxs += [flux]
-    flux_errs += [flux_err]
-    refs += ["Your Work"]
+    freqs, bands, fluxs, flux_errs, refs = cat_dict[pulsar]
+    freqs = [150.] + freqs
+    bands = [10.] + bands
+    fluxs = [flux] + fluxs
+    flux_errs = [flux_err] + flux_errs
+    refs = ["Your Work"] + refs
 
     model, m, fit_info, p_best, p_category = find_best_spectral_fit(pulsar, freqs, bands, fluxs, flux_errs, refs, plot_best=True, alternate_style=True, axis=axs[ax_i//cols, ax_i%cols])
     axs[ax_i//cols, ax_i%cols].set_title('PSR '+pulsar)

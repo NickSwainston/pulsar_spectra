@@ -4,7 +4,7 @@ Examples
 Simple example
 --------------
 
-The following can be run to fit J0332+5434
+The following code can be run to fit PSR J0332+5434:
 
 .. script location: example_scripts/simple_example.py
 .. code-block:: python
@@ -38,11 +38,11 @@ which will output
 .. code-block::
 
     Best fit model: low_frequency_turn_over_power_law
-    vpeak =    161.5 +/-    6e+00 MHz
-    a = -2.42975 +/- 0.1469
-    c = 1.66104 +/- 0.15576
-    beta = 0.69976 +/- 0.019222
-    v0 =    753.3 +/-    8e+00 MHz
+    vpeak =    142.7 +/-    2e+01 MHz
+    a = -2.97665 +/- 0.62124
+    c = 3.04974 +/- 3.8789
+    beta = 0.47638 +/- 0.19826
+    v0 =   1036.8 +/-    1e+01 MHz
 
 Adding your data
 ----------------
@@ -58,14 +58,14 @@ Expanding on the previous example you add your own example like so
     cat_list = collect_catalogue_fluxes()
     pulsar = 'J0040+5716'
     freqs, bands, fluxs, flux_errs, refs = cat_list[pulsar]
-    freqs += [300.]
-    bands += [30.]
-    fluxs += [10.]
-    flux_errs += [2.]
-    refs += ["Your Work"]
+    freqs = [300.] + freqs
+    bands = [30.] + bands
+    fluxs = [10.] + fluxs
+    flux_errs = [2.] + flux_errs
+    refs = ["Your Work"] + refs
     find_best_spectral_fit(pulsar, freqs, bands, fluxs, flux_errs, refs, plot_best=True)
 
-This will also produce J0040+5716_simple_power_law_fit.png with your data included in the fit and plot.
+This will produce J0040+5716_simple_power_law_fit.png with your data included in the fit and plot.
 
 .. image:: figures/J0040+5716_simple_power_law_fit.png
   :width: 800
@@ -94,16 +94,16 @@ You can create a plot containing multiple pulsars by handing the find_best_spect
     ]
     cols = 2
     rows = 3
-    fig, axs = plt.subplots(nrows=rows, ncols=cols, figsize=(5*cols, 3*rows))
+    fig, axs = plt.subplots(nrows=rows, ncols=cols, figsize=(5*cols, 3.5*rows))
 
     cat_dict = collect_catalogue_fluxes()
     for pulsar, flux, flux_err, ax_i in pulsar_flux:
-        freqs, bands, fluxs, flux_errs, refs = cat_list[pulsar]
-        freqs += [150.]
-        bands += [10.]
-        fluxs += [flux]
-        flux_errs += [flux_err]
-        refs += ["Your Work"]
+        freqs, bands, fluxs, flux_errs, refs = cat_dict[pulsar]
+        freqs = [150.] + freqs
+        bands = [10.] + bands
+        fluxs = [flux] + fluxs
+        flux_errs = [flux_err] + flux_errs
+        refs = ["Your Work"] + refs
 
         model, m, fit_info, p_best, p_category = find_best_spectral_fit(pulsar, freqs, bands, fluxs, flux_errs, refs, plot_best=True, alternate_style=True, axis=axs[ax_i//cols, ax_i%cols])
         axs[ax_i//cols, ax_i%cols].set_title('PSR '+pulsar)
@@ -129,7 +129,7 @@ You can use the pulsar's fit to estimate a pulsar's flux density at a certain fr
 
     cat_dict = collect_catalogue_fluxes()
     pulsar = 'J0820-1350'
-    freqs, bands, fluxs, flux_errs, refs = cat_list[pulsar]
+    freqs, bands, fluxs, flux_errs, refs = cat_dict[pulsar]
     model, m, _, _, _ = find_best_spectral_fit(pulsar, freqs, bands, fluxs, flux_errs, refs, plot_best=True)
     fitted_flux, fitted_flux_err = estimate_flux_density(150., model, m)
     print(f"{pulsar} estimated flux: {fitted_flux:.1f} ± {fitted_flux_err:.1f} mJy")
@@ -138,7 +138,7 @@ Which will output
 
 .. code-block::
 
-    J0820-1350 estimated flux: 197.6 ± 11.6 mJy
+    J0820-1350 estimated flux: 220.7 ± 11.0 mJy
 
 Calculate the peak frequency for a log parabolic spectrum fit
 -------------------------------------------------------------
@@ -189,10 +189,10 @@ To perform this calculation, use the in-built function as follows:
 
     from pulsar_spectra.spectral_fit import find_best_spectral_fit
     from pulsar_spectra.catalogue import collect_catalogue_fluxes
-    from pulsar_spectra.models import calc_high_frequency_cutoff_emission_height
+    from pulsar_spectra.analysis import calc_high_frequency_cutoff_emission_height
 
     cat_dict = collect_catalogue_fluxes()
-    pulsar = 'J0452-1759'
+    pulsar = 'J1730-2304'
     freqs, bands, fluxs, flux_errs, refs = cat_dict[pulsar]
     model_name, m, _, _, _ = find_best_spectral_fit(pulsar, freqs, bands, fluxs, flux_errs, refs)
     if model_name == "high_frequency_cut_off_power_law":
@@ -214,9 +214,9 @@ Which will output
 
 .. code-block::
 
-    B_pc:    (0.22 +/- 0.01)x10^11 G
-    B_surf:  1.80x10^12 G
-    B_LC:    101.92 G
-    R_LC:    26184 km
-    z_e:     52.0 +/- 8.7 km
-    z/R_LC:  0.20 +/- 0.03 %
+    B_pc:    (0.02 +/- 0.00)x10^11 G
+    B_surf:  0.00x10^12 G
+    B_LC:    7167.39 G
+    R_LC:    387 km
+    z_e:     7.6 +/- 1.3 km
+    z/R_LC:  1.95 +/- 0.34 %
