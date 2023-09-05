@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 # TODO: setup logging
+# TODO: work out how to get user input for custom linestyle: e.g. (0, (0.7, 1))
 
 import os
 import csv
@@ -15,7 +16,8 @@ import matplotlib.pyplot as plt
 from pulsar_spectra.load_data import DEFAULT_PLOTTING_CONFIG, DEFAULT_MARKER_CSV
 
 
-# Colour Pallettes from https://davidmathlogic.com/colorblind/
+# Colour pallettes from https://davidmathlogic.com/colorblind/
+# [colour, description]
 PALLETTE_IBM = [
     ['#648FFF', 'blue'],
     ['#785EF0', 'dark lavender'],
@@ -30,7 +32,6 @@ PALLETTE_IBM = [
     ['#449C8C', 'teal'],
     ['#EA83B7', 'pink'],
 ]
-
 PALLETTE_WONG = [
     ['#DF0A10', 'red'],
     ['#E69F00', 'orange'],
@@ -46,7 +47,7 @@ PALLETTE_WONG = [
     ['#BDD1D2', 'grey'],
 ]
 
-# Marker size fudge factors are for perceptual uniformity
+# [marker_type, size_scale, description]
 MARKERS = [
     ['o', 0.95, 'circle'],
     ['v', 1, 'down-pointing triangle'],
@@ -89,7 +90,6 @@ def parse_opts():
     parser.add_option_group(figure_config)
 
     model_config = OptionGroup(parser, 'Model Configuration')
-    # TODO: work out how to input custom linestyle: (0, (0.7, 1))
     model_config.add_option('--primary_ls',
                   action='store', type='string', dest='primary_ls',
                   default='--',
@@ -128,29 +128,30 @@ def parse_opts():
     parser.add_option_group(marker_config)
 
     marker_generation = OptionGroup(parser, 'Marker Generation Options')
-    marker_config.add_option('-g', '--generate_markers',
+    marker_generation.add_option('-g', '--generate_markers',
                   action='store_true', dest='generate', default=False,
                   help='Generate a set of unique markers.')
-    marker_config.add_option('--shuffle',
+    marker_generation.add_option('--shuffle',
                   action='store_true', dest='shuffle', default=False,
                   help='Randomise the marker colour/type order.')
-    marker_config.add_option('--no_scaling',
+    marker_generation.add_option('--no_scaling',
                   action='store_false', dest='uniform_size', default=True,
                   help='Do not use perceptually uniform marker sizes.')
-    marker_config.add_option('--marker_preview',
+    marker_generation.add_option('--marker_preview',
                   action='store_true', dest='plot_preview', default=False,
                   help='Plot a preview of the generated marker types.')
     marker_generation.add_option('--num_markers',
                   action='store', type='int', dest='num_markers', default=30,
                   help='Number of unique markers to generate [default: %default]')
-    marker_config.add_option('--pallette',
+    marker_generation.add_option('--pallette',
                   action='store', type='string', dest='pallette',
                   default='IBM',
-                  help="Colour pallette to use. Available pallettes: 'IBM', 'WONG' [default: %default]")
-    marker_config.add_option('--marker_file_savename',
+                  help="Colour pallette to use (Available: 'IBM', 'WONG') [default: %default]")
+    marker_generation.add_option('--marker_file_savename',
                   action='store', type='string', dest='marker_file_savename',
                   default=None,
                   help='Write generated markers to the specified file [default: %default]')
+    parser.add_option_group(marker_generation)
     
     (opts, _) = parser.parse_args()
 
@@ -256,7 +257,6 @@ def generate_marker_set(num_markers, marker_size, pallette_name='IBM',
         plt.clf()
 
     return unique_markers
-
 
 
 def main():
