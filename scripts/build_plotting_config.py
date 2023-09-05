@@ -13,7 +13,7 @@ import matplotlib.colors as mcolors
 import matplotlib.lines as mlines
 import matplotlib.pyplot as plt
 
-from pulsar_spectra.load_data import DEFAULT_PLOTTING_CONFIG, DEFAULT_MARKER_CSV
+from pulsar_spectra.load_data import DEFAULT_MARKER_CSV
 
 
 # [colour, description]
@@ -87,7 +87,7 @@ def parse_opts():
     
     output_options = OptionGroup(parser, 'Output Options')
     output_options.add_option('-F', '--filename',
-                  action='store', type='string', dest='output_file', default='../pulsar_spectra/configs/plotting_config.yaml',
+                  action='store', type='string', dest='output_file', default='plotting_config.yaml',
                   help='Location of output configuration file to write to [default: %default]')
     parser.add_option_group(output_options)
 
