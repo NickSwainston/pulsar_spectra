@@ -50,4 +50,4 @@ If you see a reference label ending in \_ATNF (see below for an example), those 
 The ATNF catalogue values often record flux density measurements at the nearest standard frequency
 which can be inaccurate and should be replaced with the actual value.
 If you see the \_ATNF label, you should :ref:`look up the ATNF reference <look_up_ATNF>` and
- :ref:`incorporate the true values into the pulsar_spectra catalouge<adding_papers>`.
+:ref:`incorporate the true values into the pulsar_spectra catalouge<adding_papers>`.
