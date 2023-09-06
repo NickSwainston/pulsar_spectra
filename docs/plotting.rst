@@ -26,6 +26,7 @@ This will produce the following plot:
 .. image:: figures/example_alternate_style.png
   :width: 800
 
+.. _custom_markers:
 
 Using custom marker types
 -------------------------
@@ -131,3 +132,142 @@ This will produce the following plot:
 
 .. image:: figures/example_secondary_fit.png
   :width: 800
+
+Creating a custom plotting configuration
+----------------------------------------
+
+The figure, marker, and model styles are specified in the plotting_config.yaml file.
+Customisation of the plotting configuration is made easy with the build_plotting_config.py script.
+Information about all available customisations can be found in the help menu:
+
+.. code-block::
+    build_plotting_config.py -h
+
+The default configuration is created by omitting all command line inputs,
+which will write to a file called plotting_config.yaml in the current directory.
+If you customise the configuration and want to make it the new default,
+you can replace the default plotting_config.yaml (located in pulsar_spectra/configs)
+and then reinstall pulsar_spectra from the source code directory:
+
+.. code-block::
+    pip install .
+
+If you would like to use a non-default configuration in your script, you can
+include it by giving the file path to find_best_spectral_fit like so:
+
+.. code-block:: python
+
+    from pulsar_spectra.catalogue import collect_catalogue_fluxes
+    from pulsar_spectra.spectral_fit import find_best_spectral_fit
+
+    cat_dict = collect_catalogue_fluxes()
+    pulsar = 'J0953+0755'
+    freqs, bands, fluxs, flux_errs, refs = cat_dict[pulsar]
+    best_model_name, iminuit_result, fit_info, p_best, p_category = find_best_spectral_fit(pulsar, freqs, bands, fluxs, flux_errs, refs, plot_best=True, plotting_config='custom_plotting_config.yaml')
+
+In the following example, we want to make the following customisations:
+- Increase the figure width to 4 inches (keeping the default aspect ratio)
+- Change the line style of the primary model to a solid line
+- Change the colour of the model and model error regions to cyan
+- Generate a set of unique and randomised markers with the IBM colour palette
+- Save the file as custom_plotting_config.yaml
+
+This can be done with the command
+
+.. code-block::
+    build_plotting_config.py \
+    --fig_height 4 \
+    --primary_ls - \
+    --model_colour c \
+    --model_error_colour c
+    --generate_markers \
+    --shuffle \
+    --palette IBM \
+    -F custom_plotting_config.yaml
+
+The result is the following plot
+
+.. image:: figures/J0953+0755_low_frequency_turn_over_power_law_fit.png
+  :width: 800
+
+By default, the '--generate_markers' (or just '-g') option will create a set of
+30 unique markers, which will be ordered based on the order of the colour palette
+and marker type lists (currently hard-coded in build_plotting_config.py).
+You can use the '--num_markers' option to increase the size of the unique marker set,
+and the '--shuffle' option to shuffle the order of markers and colours.
+Please note that the shuffle option is not completely random. All of the makers types
+will be used up before a marker type is reused, and the same is true for the marker colours.
+
+If you would like to save the generated marker set, you can use the '--marker_file_savename'
+option to specify a file to write to. This can then be imported with the '--marker_file' option.
+You can preview the generated marker set using '--marker_preview',
+producing marker_preview.png:
+
+.. image:: figures/marker_preview.png
+  :width: 800
+
+Generating a consistent marker set for a multi-pulsar plot
+----------------------------------------------------------
+
+As discussed in :ref:`Using custom markers <custom markers>`, you may want to
+use a consistent set of markers when showing :ref:`spectral plots side by side <multi plot>`.
+This is may easy with the build_plotting_config.py script. To generate a
+consistent marker set for a set of pulsars, use the '-pulsars' (or '-p') option:
+
+.. code-block::
+    build_plotting_config.py \
+    --primary_ls - \
+    --model_colour c \
+    --model_error_colour c
+    --generate_markers \
+    --shuffle \
+    --palette WONG \
+    -F custom_plotting_config.yaml \
+    -p J0820-1350 J0837+0610 J1453-6413 J1456-6843 J1645-0317 J2018+2839
+
+In addition to custom_plotting_config.yaml, this will also generate ref_markers.yaml.
+You can then import them in a multi-pulsar plot like so:
+
+.. code-block:: python
+
+    import yaml
+    import matplotlib.pyplot as plt
+    from pulsar_spectra.spectral_fit import find_best_spectral_fit
+    from pulsar_spectra.catalogue import collect_catalogue_fluxes
+
+    with open('ref_markers.yaml', 'r') as f:
+        ref_markers = yaml.safe_load(f)
+
+    pulsars = [
+        'J0820-1350',
+        'J0837+0610',
+        'J1453-6413',
+        'J1456-6843',
+        'J1645-0317',
+        'J2018+2839'
+    ]
+
+    cols = 2
+    rows = 3
+    fig, axs = plt.subplots(nrows=rows, ncols=cols, figsize=(5*cols, 3.5*rows))
+
+    cat_dict = collect_catalogue_fluxes()
+    for ax_i, pulsar in enumerate(pulsars):
+        freqs, bands, fluxs, flux_errs, refs = cat_dict[pulsar]
+        model, m, fit_info, p_best, p_category = find_best_spectral_fit(pulsar, freqs, bands, fluxs, flux_errs, refs, plot_best=True, alternate_style=True, axis=axs[ax_i//cols, ax_i%cols], ref_markers=ref_markers)
+        axs[ax_i//cols, ax_i%cols].set_title('PSR '+pulsar)
+
+    plt.tight_layout(pad=2.5)
+    plt.savefig("multi_pulsar_spectra.png", bbox_inches='tight', dpi=300)
+
+This will produce multi_pulsar_spectra.png:
+
+.. image:: figures/multi_pulsar_spectra_ref_markers.png
+  :width: 800
+
+You can add your own data as shown `here <multi plot>`. You can then add a custom marker
+for your own data by adding a new entry to the 'ref_markers' dictionary. For example:
+
+.. code-block:: python
+
+    ref_markers["Your Work"] = ['green', 'o', 7]

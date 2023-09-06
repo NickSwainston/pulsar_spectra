@@ -70,6 +70,7 @@ This will produce J0040+5716_simple_power_law_fit.png with your data included in
 .. image:: figures/J0040+5716_simple_power_law_fit.png
   :width: 800
 
+.. _multi_plot:
 
 Making a multi pulsar plot
 --------------------------
