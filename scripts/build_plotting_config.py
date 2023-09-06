@@ -7,7 +7,7 @@ import os
 import csv
 import random
 import yaml
-from optparse import OptionParser, OptionGroup
+import argparse
 import numpy as np
 import matplotlib.colors as mcolors
 import matplotlib.lines as mlines
@@ -81,107 +81,106 @@ MARKERS = [
 ]
 
 
-def parse_opts():
-    parser = OptionParser(usage='Usage: %prog [options]',
+def parse_args():
+    parser = argparse.ArgumentParser(usage='Usage: %(prog)s [options]',
                           description='Create a plotting configuration file.')
     
-    output_options = OptionGroup(parser, 'Output Options')
-    output_options.add_option('-F', '--filename',
-                  action='store', type='string', dest='output_file', default='plotting_config.yaml',
-                  help='Location of output configuration file to write to [default: %default]')
-    parser.add_option_group(output_options)
+    output_options = parser.add_argument_group('Output')
+    output_options.add_argument('-F', '--filename',
+                  action='store', type=str, dest='output_file', default='plotting_config.yaml',
+                  help='Location of output configuration file to write to [default: %(default)s]')
 
-    figure_config = OptionGroup(parser, 'Figure Configuration')
-    figure_config.add_option('-H', '--fig_height',
-                  action='store', type='float', dest='fig_height', default=3.2,
-                  help='Height of figure in inches [default: %default]')
-    figure_config.add_option('-R', '--aspect_ratio',
-                  action='store', type='string', dest='aspect_ratio', default='4x3',
-                  help='Aspect ratio (WxH) [default: %default]')
-    figure_config.add_option('--dpi',
-                  action='store', type='int', dest='dpi', default=300,
-                  help='Resolution of figure in dots-per-inch [default: %default]')
-    parser.add_option_group(figure_config)
+    figure_config = parser.add_argument_group('Figure Configuration')
+    figure_config.add_argument('-H', '--fig_height',
+                  action='store', type=float, dest='fig_height', default=3.2,
+                  help='Height of figure in inches [default: %(default)s]')
+    figure_config.add_argument('-R', '--aspect_ratio',
+                  action='store', type=str, dest='aspect_ratio', default='4x3',
+                  help='Aspect ratio (WxH) [default: %(default)s]')
+    figure_config.add_argument('--dpi',
+                  action='store', type=int, dest='dpi', default=300,
+                  help='Resolution of figure in dots-per-inch [default: %(default)s]')
 
-    model_config = OptionGroup(parser, 'Model Configuration')
-    model_config.add_option('--primary_ls',
-                  action='store', type='string', dest='primary_ls',
+    model_config = parser.add_argument_group('Model Configuration')
+    model_config.add_argument('--primary_ls',
+                  action='store', type=str, dest='primary_ls',
                   default='--',
-                  help='Line style of primary model curve [default: %default]')
-    model_config.add_option('--secondary_ls',
-                  action='store', type='string', dest='secondary_ls',
+                  help='Line style of primary model curve [default: %(default)s]')
+    model_config.add_argument('--secondary_ls',
+                  action='store', type=str, dest='secondary_ls',
                   default=':',
-                  help='Line style of secondary model curve [default: %default]')
-    model_config.add_option('--model_colour',
-                  action='store', type='string', dest='model_colour',
+                  help='Line style of secondary model curve [default: %(default)s]')
+    model_config.add_argument('--model_colour',
+                  action='store', type=str, dest='model_colour',
                   default='k',
-                  help='Colour of the model curves [default: %default]')
-    model_config.add_option('--model_error_colour',
-                  action='store', type='string', dest='model_error_colour',
+                  help='Colour of the model curves [default: %(default)s]')
+    model_config.add_argument('--model_error_colour',
+                  action='store', type=str, dest='model_error_colour',
                   default='C1',
-                  help='Colour of the model error region [default: %default]')
-    parser.add_option_group(model_config)
+                  help='Colour of the model error region [default: %(default)s]')
     
-    marker_config = OptionGroup(parser, 'Marker Configuration')
-    marker_config.add_option('--marker_file',
-                  action='store', type='string', dest='marker_file',
+    marker_config = parser.add_argument_group('Marker Configuration')
+    marker_config.add_argument('--marker_file',
+                  action='store', type=str, dest='marker_file',
                   default=DEFAULT_MARKER_CSV,
-                  help='List of marker styles [default: %default]')
-    marker_config.add_option('--marker_size',
-                  action='store', type='float', dest='marker_size', default=4.5,
-                  help='Marker size [default: %default]')
-    marker_config.add_option('--marker_border_lw',
-                  action='store', type='float', dest='marker_border_lw', default=0.5,
-                  help='Marker border thickness [default: %default]')
-    marker_config.add_option('--capsize',
-                  action='store', type='float', dest='capsize', default=1.5,
-                  help='Marker cap size [default: %default]')
-    marker_config.add_option('--errorbar_lw',
-                  action='store', type='float', dest='errorbar_lw', default=0.7,
-                  help='Errorbar line width [default: %default]')
-    parser.add_option_group(marker_config)
+                  help='List of marker styles [default: %(default)s]')
+    marker_config.add_argument('--marker_size',
+                  action='store', type=float, dest='marker_size', default=4.5,
+                  help='Marker size [default: %(default)s]')
+    marker_config.add_argument('--marker_border_lw',
+                  action='store', type=float, dest='marker_border_lw', default=0.5,
+                  help='Marker border thickness [default: %(default)s]')
+    marker_config.add_argument('--capsize',
+                  action='store', type=float, dest='capsize', default=1.5,
+                  help='Marker cap size [default: %(default)s]')
+    marker_config.add_argument('--errorbar_lw',
+                  action='store', type=float, dest='errorbar_lw', default=0.7,
+                  help='Errorbar line width [default: %(default)s]')
 
-    marker_generation = OptionGroup(parser, 'Marker Generation Options')
-    marker_generation.add_option('-g', '--generate_markers',
+    marker_generation = parser.add_argument_group('Marker Generation')
+    marker_generation.add_argument('-g', '--generate_markers',
                   action='store_true', dest='generate', default=False,
                   help='Generate a set of unique markers.')
-    marker_generation.add_option('--shuffle',
+    marker_generation.add_argument('--shuffle',
                   action='store_true', dest='shuffle', default=False,
                   help='Randomise the marker colour/type order.')
-    marker_generation.add_option('--no_scaling',
+    marker_generation.add_argument('--no_scaling',
                   action='store_false', dest='uniform_size', default=True,
                   help='Do not use perceptually uniform marker sizes.')
-    marker_generation.add_option('--marker_preview',
+    marker_generation.add_argument('--marker_preview',
                   action='store_true', dest='plot_preview', default=False,
                   help='Plot a preview of the generated marker types.')
-    marker_generation.add_option('--num_markers',
-                  action='store', type='int', dest='num_markers', default=30,
-                  help='Number of unique markers to generate [default: %default]')
-    marker_generation.add_option('--palette',
-                  action='store', type='string', dest='palette',
+    marker_generation.add_argument('--num_markers',
+                  action='store', type=int, dest='num_markers', default=30,
+                  help='Number of unique markers to generate [default: %(default)s]')
+    marker_generation.add_argument('--palette',
+                  action='store', type=str, dest='palette',
                   default='TAB',
-                  help="Colour palette to use (Available: 'TAB', 'IBM', 'WONG') [default: %default]")
-    marker_generation.add_option('--marker_file_savename',
-                  action='store', type='string', dest='marker_file_savename',
+                  help="Colour palette to use (Available: 'TAB', 'IBM', 'WONG') [default: %(default)s]")
+    marker_generation.add_argument('--marker_file_savename',
+                  action='store', type=str, dest='marker_file_savename',
                   default=None,
-                  help='Write generated markers to the specified file [default: %default]')
-    parser.add_option_group(marker_generation)
+                  help='Write generated markers to the specified file [default: %(default)s]')
+    marker_generation.add_argument('-p', '--pulsars',
+                  type=str, dest='psrs', nargs='*',
+                  help='Space seperated list of pulsar J names. ' + \
+                  'If given, will assign a unique marker to every publication in the pulsar set.')
     
-    (opts, _) = parser.parse_args()
+    args = parser.parse_args()
 
-    if not os.path.isfile(opts.marker_file):
+    if not os.path.isfile(args.marker_file):
         parser.error('cannot locate marker style file')
 
-    if len(opts.aspect_ratio.split('x')) != 2:
+    if len(args.aspect_ratio.split('x')) != 2:
         parser.error('invalid aspect ratio')
 
-    if not is_valid_colour(opts.model_colour):
+    if not is_valid_colour(args.model_colour):
         parser.error(f'invalid model colour')
 
-    if not is_valid_colour(opts.model_error_colour):
+    if not is_valid_colour(args.model_error_colour):
         parser.error(f'invalid model error colour')
 
-    return opts
+    return args
 
 
 def is_valid_colour(colour_string):
@@ -307,42 +306,69 @@ def generate_marker_set(num_markers, marker_size, palette_name='IBM',
     return unique_markers
 
 
+def create_ref_marker_combinations(psrs, args):
+    from pulsar_spectra.catalogue import collect_catalogue_fluxes
+
+    cat_dict = collect_catalogue_fluxes()
+    all_refs = []
+    for psr in psrs:
+        _, _, _, _, refs = cat_dict[psr]
+        all_refs += refs
+    unique_refs = list(np.unique(np.array(all_refs)))
+    num_unique_refs = len(unique_refs)
+
+    markers = generate_marker_set(num_unique_refs, args.marker_size,
+            args.palette, args.shuffle, args.uniform_size, args.plot_preview,
+            args.marker_file_savename)
+    
+    ref_markers = {}
+    for i, ref in enumerate(unique_refs):
+        ref_markers[str(ref)] = [str(markers[i][1]), str(markers[i][2]), float(markers[i][3])]
+
+    return markers, ref_markers
+
+
 def main():
-    opts = parse_opts()
+    args = parse_args()
 
     config = {}
 
-    config["Figure height"] = opts.fig_height
-    config["Aspect ratio"] = float(opts.aspect_ratio.split('x')[0]) / float(opts.aspect_ratio.split('x')[1])
-    config["Resolution"] = opts.dpi
-    config["Primary linestyle"] = opts.primary_ls
-    config["Secondary linestyle"] = opts.secondary_ls
-    config["Model colour"] = opts.model_colour
-    config["Model error colour"] = opts.model_error_colour
-    config["Marker border"] = opts.marker_border_lw
-    config["Capsize"] = opts.capsize
-    config["Errorbar linewidth"] = opts.errorbar_lw
+    config["Figure height"] = args.fig_height
+    config["Aspect ratio"] = float(args.aspect_ratio.split('x')[0]) / float(args.aspect_ratio.split('x')[1])
+    config["Resolution"] = args.dpi
+    config["Primary linestyle"] = args.primary_ls
+    config["Secondary linestyle"] = args.secondary_ls
+    config["Model colour"] = args.model_colour
+    config["Model error colour"] = args.model_error_colour
+    config["Marker border"] = args.marker_border_lw
+    config["Capsize"] = args.capsize
+    config["Errorbar linewidth"] = args.errorbar_lw
 
-    if opts.generate:
-        markers = generate_marker_set(opts.num_markers, opts.marker_size,
-            opts.palette, opts.shuffle, opts.uniform_size, opts.plot_preview,
-            opts.marker_file_savename)
+    if args.psrs is not None:
+        markers, ref_markers = create_ref_marker_combinations(args.psrs, args)
+        with open('ref_markers.yaml', 'w') as f:
+            yaml.dump(ref_markers, f, sort_keys=False)
     else:
-        markers = []
-        marker_styles = np.loadtxt(opts.marker_file, delimiter=',', dtype=str, comments='%')
-        for style in marker_styles:
-            if not is_valid_colour(style[0]) and not is_valid_marker(style[1]):
-                print(f'Error: invalid marker style - {style} (skipping)')
-                continue
-            if style[3] == '':
-                desc = 'Unlabelled'
-            else:
-                desc = str(style[3])
-            markers.append([desc, str(style[0]), str(style[1]), round(float(style[2]),2)])
+        if args.generate:
+            markers = generate_marker_set(args.num_markers, args.marker_size,
+                args.palette, args.shuffle, args.uniform_size, args.plot_preview,
+                args.marker_file_savename)
+        else:
+            markers = []
+            marker_styles = np.loadtxt(args.marker_file, delimiter=',', dtype=str, comments='%')
+            for style in marker_styles:
+                if not is_valid_colour(style[0]) and not is_valid_marker(style[1]):
+                    print(f'Error: invalid marker style - {style} (skipping)')
+                    continue
+                if style[3] == '':
+                    desc = 'Unlabelled'
+                else:
+                    desc = str(style[3])
+                markers.append([desc, str(style[0]), str(style[1]), round(float(style[2]),2)])
 
     config["Markers"] = markers
 
-    with open(opts.output_file, 'w') as f:
+    with open(args.output_file, 'w') as f:
         yaml.dump(config, f, sort_keys=False)
 
 
