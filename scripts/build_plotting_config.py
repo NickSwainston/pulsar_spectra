@@ -214,46 +214,75 @@ def generate_marker_set(num_markers, marker_size, palette_name='IBM',
         print(f'Error: palette name not valid. Defaulting to IBM.')
         palette = PALETTE_IBM
 
-    if shuffle:
-        random.shuffle(palette)
-        random.shuffle(MARKERS)
-
-    if num_markers < len(palette):
-        colours = palette[0:num_markers]
-    else:
-        colours = (num_markers//len(palette))*palette + palette[0:len(palette)%num_markers]
-
-    if num_markers < len(MARKERS):
-        markers = MARKERS[0:num_markers]
-    else:
-        markers = (num_markers//len(MARKERS))*MARKERS + MARKERS[0:len(MARKERS)%num_markers]
-
     if plot_preview:
         # Preview markers as a sinusoid
         fig, ax = plt.subplots(figsize=(4,2))
         ax.set_xticks([])
         ax.set_yticks([])
         ax.set_ylim([-1.5, 1.5])
-        x_arr = np.arange(num_markers)*2*np.pi/num_markers
+        phases_to_plot = num_markers//50 + 1
+        x_arr = np.arange(num_markers)*2*np.pi/num_markers*phases_to_plot
         y_arr = np.sin(x_arr)
-    
+
+    max_unique_markers = len(palette) * len(MARKERS)
+    if num_markers > max_unique_markers:
+        print(f'Warning: Only {max_unique_markers} unique markers are possible.')
+        num_markers = max_unique_markers
+
     unique_markers = []
-    for i in range(num_markers):
-        if uniform_size:
-            marker = [f'{colours[i][1]} {markers[i][2]}', colours[i][0], markers[i][0], round(marker_size*markers[i][1], 2)]
+    num_left_to_generate = num_markers
+    while num_left_to_generate > 0:
+        generate_on_current_loop = num_left_to_generate
+
+        if shuffle:
+            random.shuffle(palette)
+            random.shuffle(MARKERS)
+
+        if num_markers < len(palette):
+            colours = palette[0:num_markers]
         else:
-            marker = [f'{colours[i][1]} {markers[i][2]}', colours[i][0], markers[i][0], round(marker_size, 2)]
-        if marker in unique_markers:
-            print(f'Duplicate marker skipped: {marker}')
-            continue
-        unique_markers.append(marker)
-        
-        if plot_preview:
+            if shuffle:
+                colours = []
+                for _ in range(num_markers//len(palette)):
+                    colours += palette
+                    random.shuffle(palette)
+                colours += palette[0:len(palette)%num_markers]
+            else:
+                colours = (num_markers//len(palette))*palette + palette[0:len(palette)%num_markers]
+
+        if num_markers < len(MARKERS):
+            markers = MARKERS[0:num_markers]
+        else:
+            if shuffle:
+                markers = []
+                for _ in range(num_markers//len(MARKERS)):
+                    markers += MARKERS
+                    random.shuffle(MARKERS)
+                markers += MARKERS[0:len(MARKERS)%num_markers]
+            else:
+                markers = (num_markers//len(MARKERS))*MARKERS + MARKERS[0:len(MARKERS)%num_markers]
+    
+        for i in range(generate_on_current_loop):
+            if uniform_size:
+                marker = [f'{colours[i][1]} {markers[i][2]}', colours[i][0], markers[i][0], round(marker_size*markers[i][1], 2)]
+            else:
+                marker = [f'{colours[i][1]} {markers[i][2]}', colours[i][0], markers[i][0], round(marker_size, 2)]
+            if marker in unique_markers:
+                # print(f'Duplicate marker skipped: {marker}')
+                continue
+            else:
+                num_left_to_generate -= 1
+            unique_markers.append(marker)
+    
+    print(f'{len(unique_markers)} unique markers generated')
+
+    if plot_preview:
+        for i, marker in enumerate(unique_markers):
             ax.errorbar(
                 x_arr[i],
                 y_arr[i],
-                yerr=0.1,
-                xerr=0.1,
+                yerr=[0.1],
+                xerr=[0.1],
                 c=marker[1],
                 marker=marker[2],
                 ms=marker[3],
@@ -263,7 +292,6 @@ def generate_marker_set(num_markers, marker_size, palette_name='IBM',
                 elinewidth=0.7,
                 capsize=1.5,
             )
-    print(f'{len(unique_markers)} unique markers generated')
 
     if savename:
         with open(savename, 'w') as f:
