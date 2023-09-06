@@ -17,7 +17,7 @@ The following code can be run to fit PSR J0332+5434:
     freqs, bands, fluxs, flux_errs, refs = cat_dict[pulsar]
     best_model_name, iminuit_result, fit_info, p_best, p_category = find_best_spectral_fit(pulsar, freqs, bands, fluxs, flux_errs, refs, plot_best=True)
 
-This will produce J0332+5434_low_frequency_turn_over_power_law_fit.png
+This will produce `J0332+5434_low_frequency_turn_over_power_law_fit.png`
 
 .. image:: figures/J0332+5434_low_frequency_turn_over_power_law_fit.png
   :width: 800
@@ -65,7 +65,7 @@ Expanding on the previous example you add your own example like so
     refs = ["Your Work"] + refs
     find_best_spectral_fit(pulsar, freqs, bands, fluxs, flux_errs, refs, plot_best=True)
 
-This will produce J0040+5716_simple_power_law_fit.png with your data included in the fit and plot.
+This will produce `J0040+5716_simple_power_law_fit.png` with your data included in the fit and plot.
 
 .. image:: figures/J0040+5716_simple_power_law_fit.png
   :width: 800
@@ -75,7 +75,7 @@ This will produce J0040+5716_simple_power_law_fit.png with your data included in
 Making a multi pulsar plot
 --------------------------
 
-You can create a plot containing multiple pulsars by handing the find_best_spectral_fit a matplotlib axes like so:
+You can create a plot containing multiple pulsars by handing ``find_best_spectral_fit()`` a matplotlib axis like so:
 
 .. script location: example_scripts/creating_a_multi_pulsar_plot.py
 .. code-block:: python
@@ -116,6 +116,8 @@ This will produce the following plot.
 
 .. image:: figures/multi_pulsar_spectra.png
   :width: 800
+
+To make the marker types consistent across all subplots, see :ref:`Generating a consistent marker set for a multi-pulsar plot <consistent_markers>`.
 
 Estimate flux density
 ---------------------
