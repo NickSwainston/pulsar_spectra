@@ -1,0 +1,119 @@
+Figure height: 3.2
+Aspect ratio: 1.3333333333333333
+Resolution: 300
+Primary linestyle: --
+Secondary linestyle: ':'
+Model colour: k
+Model error colour: C1
+Marker border: 0.5
+Capsize: 1.5
+Errorbar linewidth: 0.7
+Markers:
+- - blue circle
+  - '#006ddb'
+  - o
+  - 4.2
+- - green triangle
+  - '#24ff24'
+  - ^
+  - 4.9
+- - red diamond
+  - r
+  - D
+  - 3.5
+- - maroon square
+  - '#920000'
+  - s
+  - 3.85
+- - sky blue pentagon
+  - '#6db6ff'
+  - p
+  - 4.55
+- - pink star
+  - '#ff6db6'
+  - '*'
+  - 6.3
+- - purple upside-down triangle
+  - m
+  - v
+  - 4.9
+- - light blue thin diamond
+  - '#b6dbff'
+  - d
+  - 4.9
+- - turqoise thick plus
+  - '#009292'
+  - P
+  - 5.25
+- - lavender hexagon
+  - '#b66dff'
+  - h
+  - 4.9
+- - orange right-pointing triangle
+  - '#db6d00'
+  - '>'
+  - 4.9
+- - cyan sideways hexagon
+  - c
+  - H
+  - 4.9
+- - light pink thick cross
+  - '#ffb6db'
+  - X
+  - 5.25
+- - dark green right-pointing triangle
+  - '#004949'
+  - <
+  - 4.9
+- - black thin cross
+  - k
+  - x
+  - 4.9
+- - yellow square
+  - y
+  - s
+  - 3.85
+- - turquoise triangle
+  - '#009292'
+  - ^
+  - 4.9
+- - black thin diamond
+  - k
+  - d
+  - 4.9
+- - light blue star
+  - '#b6dbff'
+  - '*'
+  - 6.3
+- - yellow thick plus
+  - y
+  - P
+  - 5.25
+- - green circle
+  - '#24ff24'
+  - o
+  - 4.2
+- - red triangle
+  - r
+  - ^
+  - 4.9
+- - maroon diamond
+  - '#920000'
+  - D
+  - 3.5
+- - blue square
+  - '#6db6ff'
+  - s
+  - 3.85
+- - sky pink pentagon
+  - '#ff6db6'
+  - p
+  - 4.55
+- - purple star
+  - m
+  - '*'
+  - 6.3
+- - light blue upside-down triangle
+  - '#b6dbff'
+  - v
+  - 4.9

@@ -391,6 +391,7 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
                 yamls_to_use.append(y_dir)
 
     # Loop over catalogues and put them into a dictionary
+    yamls_to_use.sort()
     for cat_file in yamls_to_use:
         cat_label = os.path.basename(cat_file).split(".")[0]
 

@@ -4,9 +4,9 @@ from pulsar_spectra.spectral_fit import find_best_spectral_fit
 cat_list = collect_catalogue_fluxes()
 pulsar = 'J0040+5716'
 freqs, bands, fluxs, flux_errs, refs = cat_list[pulsar]
-freqs += [300.]
-bands += [30.]
-fluxs += [10.]
-flux_errs += [2.]
-refs += ["Your Work"]
+freqs = [300.] + freqs
+bands = [30.] + bands
+fluxs = [10.] + fluxs
+flux_errs = [2.] + flux_errs
+refs = ["Your Work"] + refs
 find_best_spectral_fit(pulsar, freqs, bands, fluxs, flux_errs, refs, plot_best=True)

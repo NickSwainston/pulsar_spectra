@@ -4,3 +4,4 @@ pulsar_spectra/__pycache__
 build/
 docs/build/
 pulsar_spectra.egg-info/
+dist/
