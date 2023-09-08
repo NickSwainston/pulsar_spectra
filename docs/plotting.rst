@@ -108,7 +108,7 @@ Information about all available customisations can be found in the help menu:
 The default configuration is created by omitting all command line inputs,
 which will write to a file called `plotting_config.yaml` in the current directory.
 If you customise the configuration and want to make it the new default,
-you can replace the default `plotting_config.yaml` and then reinstall
+you can replace the default ``pulsar_spectra/configs/plotting_config.yaml`` and then reinstall
 pulsar_spectra from the base directory:
 
 .. code-block::
@@ -130,17 +130,17 @@ include it by giving the file path to ``plotting_config`` in ``find_best_spectra
 
 In the following example, we want to make the following customisations:
 
-- Increase the figure width to 4 inches (keeping the default aspect ratio)
+- Increase the figure width to 4 inches (keeping the default aspect ratio) (``--fig_height 4``)
 
-- Change the line style of the primary model to a solid line
+- Change the line style of the primary model to a solid line (``--primary_ls -``)
 
-- Change the colour of the model and model error regions to cyan
+- Change the colour of the model and model error regions to cyan (``--model_colour c --model_error_colour c``)
 
-- Generate a set of unique and randomised markers with the `IBM colour palette <https://davidmathlogic.com/colorblind/>`_
+- Generate a set of unique and randomised markers with the `IBM colour palette <https://davidmathlogic.com/colorblind/>`_ (``--generate_markers --shuffle --palette IBM``)
 
-- Save the file as `custom_plotting_config.yaml`
+- Save the file as `custom_plotting_config.yaml` (``-F custom_plotting_config.yaml``)
 
-This can be done with the command
+This can be done with the command:
 
 .. code-block::
 
