@@ -142,20 +142,21 @@ def compute_log_lims(vals, val_errs=None, margin=0.1):
         # Margin cannot be greater than the figure size
         print('Invald plot margin. Defaulting to 30%.')
         margin = 0.1
-        
+
+    vals = np.array(vals)
+
     if val_errs is None:
-        # If no errors are given, assume no error bars
-        val_errs = [0]*len(vals)
+        val_errs = 0.0
     else:
-        # Ignore Nones
         val_errs = [x if x != None else 0 for x in val_errs]
-        
+        val_errs = np.array(val_errs)
+
     # Max and min values including error bars
-    lower_vals = np.array(vals) - np.array(val_errs) / 2
-    upper_vals = np.array(vals) + np.array(val_errs) / 2
+    lower_vals = vals - val_errs / 2
+    upper_vals = vals + val_errs / 2
     
     # Transform to log space
-    log_vals = np.log10(np.array(vals))
+    log_vals = np.log10(vals, where=vals>0)
     lower_log_vals = np.log10(lower_vals, where=lower_vals>0)
     upper_log_vals = np.log10(upper_vals, where=upper_vals>0)
     
@@ -337,7 +338,7 @@ def plot_fit(freqs_MHz, bands_MHz, fluxs_mJy, flux_errs_mJy, ref, model, iminuit
     if axis is None:
         # Not using axis mode so save figure
         plt.savefig(save_name, bbox_inches='tight', dpi=config["Resolution"])
-        plt.clf()
+        plt.close()
 
 
 def migrad_simplex_scan(m, mod_limits, model_name):
@@ -669,7 +670,7 @@ def find_best_spectral_fit(pulsar, freqs_MHz, bands_MHz, fluxs_mJy, flux_errs_mJ
             )
             fig.patches.extend([rect])
             plt.savefig(f"{pulsar}_comparison_fit.png", bbox_inches='tight', dpi=300)
-            plt.clf()
+            plt.close()
         if plot_best:
             plot_fit(freqs_MHz, bands_MHz, fluxs_mJy, flux_errs_mJy, ref_all, model_dict[best_model_name][0], iminuit_results[aici], fit_infos[aici],
                     save_name=f"{pulsar}_{best_model_name}_fit.png", plot_error=plot_error, alternate_style=alternate_style,
