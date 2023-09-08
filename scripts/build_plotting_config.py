@@ -323,7 +323,7 @@ def create_ref_marker_combinations(psrs, args):
     
     ref_markers = {}
     for i, ref in enumerate(unique_refs):
-        ref_markers[str(ref)] = [str(markers[i][1]), str(markers[i][2]), float(markers[i][3])]
+        ref_markers[ref] = [markers[i][1], markers[i][2], markers[i][3]]
 
     return markers, ref_markers
 
