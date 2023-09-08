@@ -195,7 +195,7 @@ To perform this calculation, use the in-built function as follows:
     from pulsar_spectra.analysis import calc_high_frequency_cutoff_emission_height
 
     cat_dict = collect_catalogue_fluxes()
-    pulsar = 'J1730-2304'
+    pulsar = 'J1116-4122'
     freqs, bands, fluxs, flux_errs, refs = cat_dict[pulsar]
     model_name, m, _, _, _ = find_best_spectral_fit(pulsar, freqs, bands, fluxs, flux_errs, refs)
     if model_name == "high_frequency_cut_off_power_law":
@@ -217,9 +217,9 @@ Which will output
 
 .. code-block::
 
-    B_pc:    (0.02 +/- 0.00)x10^11 G
-    B_surf:  0.00x10^12 G
-    B_LC:    7167.39 G
-    R_LC:    387 km
-    z_e:     7.6 +/- 1.3 km
-    z/R_LC:  1.95 +/- 0.34 %
+    B_pc:    (2.05 +/- 0.26)x10^11 G
+    B_surf:  2.77x10^12 G
+    B_LC:    30.97 G
+    R_LC:    44989 km
+    z_e:     28.6 +/- 4.9 km
+    z/R_LC:  0.06 +/- 0.01 %
