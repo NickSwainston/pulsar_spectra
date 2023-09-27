@@ -142,6 +142,7 @@ ADS_REF = {
     "Surnis_2019":"https://ui.adsabs.harvard.edu/abs/2019ApJ...870....8S/abstract",
     "Titus_2019":"https://ui.adsabs.harvard.edu/abs/2019MNRAS.487.4332T",
     "Zhao_2017":"https://ui.adsabs.harvard.edu/abs/2017ApJ...845..156Z/abstract",
+    "Gitika_2023":"https://academic.oup.com/mnras/advance-article/doi/10.1093/mnras/stad2841/7276629",
 }
 
 
