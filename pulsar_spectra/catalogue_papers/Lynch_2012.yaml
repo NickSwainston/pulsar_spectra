@@ -41,6 +41,48 @@
    0.036
   ]
  },
+  "J1701-3006D": {
+  "Frequency MHz": [
+   2000.0
+  ],
+  "Bandwidth MHz": [
+   800.0
+  ],
+  "Flux Density mJy": [
+   0.069
+  ],
+  "Flux Density error mJy": [
+   0.0345
+  ]
+ },
+ "J1701-3006E": {
+  "Frequency MHz": [
+   2000.0
+  ],
+  "Bandwidth MHz": [
+   800.0
+  ],
+  "Flux Density mJy": [
+   0.039
+  ],
+  "Flux Density error mJy": [
+   0.0195
+  ]
+ },
+ "J1701-3006F": {
+  "Frequency MHz": [
+   2000.0
+  ],
+  "Bandwidth MHz": [
+   800.0
+  ],
+  "Flux Density mJy": [
+   0.052
+  ],
+  "Flux Density error mJy": [
+   0.026
+  ]
+ },
  "J1807-2459A": {
   "Frequency MHz": [
    2000.0
