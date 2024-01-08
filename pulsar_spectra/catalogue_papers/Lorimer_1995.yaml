@@ -19,20 +19,16 @@
  },
  "J1455-3330": {
   "Frequency MHz": [
-   436.0,
-   1520.0
+   436.0
   ],
   "Bandwidth MHz": [
-   32,
    32
   ],
   "Flux Density mJy": [
-   13.0,
-   0.3
+   13.0
   ],
   "Flux Density error mJy": [
-   2.0,
-   0.15
+   2.0
   ]
  },
  "J1643-1224": {
