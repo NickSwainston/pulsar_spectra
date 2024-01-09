@@ -1,0 +1,44 @@
+{
+ "J0922+0638": {
+  "Frequency MHz": [
+   1452.4
+  ],
+  "Bandwidth MHz": [
+   25
+  ],
+  "Flux Density mJy": [
+   5.7
+  ],
+  "Flux Density error mJy": [
+   0.1
+  ]
+ },
+ "J1239+2453": {
+  "Frequency MHz": [
+   1452.4
+  ],
+  "Bandwidth MHz": [
+   25
+  ],
+  "Flux Density mJy": [
+   4.6
+  ],
+  "Flux Density error mJy": [
+   0.2
+  ]
+ },
+ "J1941-2602": {
+  "Frequency MHz": [
+   1452.4
+  ],
+  "Bandwidth MHz": [
+   25
+  ],
+  "Flux Density mJy": [
+   1.0
+  ],
+  "Flux Density error mJy": [
+   0.2
+  ]
+ }
+}
