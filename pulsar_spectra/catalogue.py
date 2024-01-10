@@ -155,6 +155,11 @@ ADS_REF = {
     "Lazarus_2015":"https://ui.adsabs.harvard.edu/abs/2015ApJ...812...81L/abstract",
     "Curylo_2020":"https://ui.adsabs.harvard.edu/abs/2020MNRAS.495.3052C/abstract",
     "Shrauner_1998":"https://ui.adsabs.harvard.edu/abs/1998ApJ...509..785S/abstract",
+    "Foster_1991": "https://ui.adsabs.harvard.edu/abs/1991ApJ...378..687F/abstract",
+    "Bhattacharyya_2016": "https://ui.adsabs.harvard.edu/abs/2016ApJ...817..130B/abstract",
+    "Kouwenhoven_2000": "https://ui.adsabs.harvard.edu/abs/2000A%26AS..145..243K/abstract",
+    "Dowell_2013": "https://ui.adsabs.harvard.edu/abs/2013ApJ...775L..28D/abstract",
+    "Deneva_2016": "https://ui.adsabs.harvard.edu/abs/2016ApJ...821...10D/abstract",
 }
 
 
