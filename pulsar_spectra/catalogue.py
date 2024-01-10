@@ -145,15 +145,15 @@ ADS_REF = {
     "Gitika_2023":"https://academic.oup.com/mnras/advance-article/doi/10.1093/mnras/stad2841/7276629",
     "Crowter_2020":"https://ui.adsabs.harvard.edu/abs/2020MNRAS.495.3052C/abstract",
     "Janssen_2009":"https://ui.adsabs.harvard.edu/abs/2009A%26A...498..223J/abstract",
-    "Weisberg_1999":"https://ui.adsabs.harvard.edu/abs/1999ApJS..121..171W/abstract”,
-    "Stokes_1985":"https://ui.adsabs.harvard.edu/abs/1985Natur.317..787S/abstract”,
+    "Weisberg_1999":"https://ui.adsabs.harvard.edu/abs/1999ApJS..121..171W/abstract",
+    "Stokes_1985":"https://ui.adsabs.harvard.edu/abs/1985Natur.317..787S/abstract",
     "Stokes_1986":"https://ui.adsabs.harvard.edu/abs/1986ApJ...311..694S/abstract",
     "Tan_2020":"https://ui.adsabs.harvard.edu/abs/2020MNRAS.492.5878T/abstract",
     "Ng_2015":"https://ui.adsabs.harvard.edu/abs/2015MNRAS.450.2922N/abstract",
     "McLean_1973":"https://ui.adsabs.harvard.edu/abs/1973MNRAS.165..133M/abstract",
     "McGary_2001":"https://ui.adsabs.harvard.edu/abs/2001AJ....121.1192M/abstract",
     "Lazarus_2015":"https://ui.adsabs.harvard.edu/abs/2015ApJ...812...81L/abstract",
-    "Curylo_2022":"https://ui.adsabs.harvard.edu/abs/2020MNRAS.495.3052C/abstract",
+    "Curylo_2020":"https://ui.adsabs.harvard.edu/abs/2020MNRAS.495.3052C/abstract",
 }
 
 
