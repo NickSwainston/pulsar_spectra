@@ -153,6 +153,7 @@ ADS_REF = {
     "McLean_1973":"https://ui.adsabs.harvard.edu/abs/1973MNRAS.165..133M/abstract",
     "McGary_2001":"https://ui.adsabs.harvard.edu/abs/2001AJ....121.1192M/abstract",
     "Lazarus_2015":"https://ui.adsabs.harvard.edu/abs/2015ApJ...812...81L/abstract",
+    "Curylo_2022":"https://ui.adsabs.harvard.edu/abs/2020MNRAS.495.3052C/abstract",
 }
 
 
