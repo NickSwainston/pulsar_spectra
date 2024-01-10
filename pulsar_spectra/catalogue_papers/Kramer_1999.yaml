@@ -1,17 +1,9 @@
 {
  "J0437-4715": {
-  "Frequency MHz": [
-   4850.0
-  ],
-  "Bandwidth MHz": [
-   80.0
-  ],
-  "Flux Density mJy": [
-   8.5
-  ],
-  "Flux Density error mJy": [
-   2.5
-  ]
+  "Frequency MHz": [],
+  "Bandwidth MHz": [],
+  "Flux Density mJy": [],
+  "Flux Density error mJy": []
  },
  "J0621+1002": {
   "Frequency MHz": [
