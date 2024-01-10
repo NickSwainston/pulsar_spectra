@@ -154,6 +154,7 @@ ADS_REF = {
     "McGary_2001":"https://ui.adsabs.harvard.edu/abs/2001AJ....121.1192M/abstract",
     "Lazarus_2015":"https://ui.adsabs.harvard.edu/abs/2015ApJ...812...81L/abstract",
     "Curylo_2020":"https://ui.adsabs.harvard.edu/abs/2020MNRAS.495.3052C/abstract",
+    "Shrauner_1998":"https://ui.adsabs.harvard.edu/abs/1998ApJ...509..785S/abstract",
 }
 
 
