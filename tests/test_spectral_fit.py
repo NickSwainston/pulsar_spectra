@@ -71,8 +71,8 @@ def test_find_best_spectral_fit():
             # Add an extra point to encourage a high frequency cut off
             freq_all.append(25000)
             band_all.append(1000)
-            flux_all.append(0.2)
-            flux_err_all.append(0.02)
+            flux_all.append(0.01)
+            flux_err_all.append(0.001)
             ref_all.append("Fake data")
         for freq, band, flux, flux_err, ref in zip(freq_all, band_all, flux_all, flux_err_all, ref_all):
             print(f"{float(freq):8.1f}{float(band):8.1f}{float(flux):12.4f}{float(flux_err):12.4f} {str(ref):20s}")
