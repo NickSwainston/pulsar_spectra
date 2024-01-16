@@ -23,6 +23,10 @@ jobs:
         with:
           python-version: 3.8
 
+      - name: Install python dependencies
+        run: |
+          pip install .
+
       - name: Run Update Script
         run: |
           cd docs
