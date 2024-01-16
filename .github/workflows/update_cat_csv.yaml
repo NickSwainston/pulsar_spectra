@@ -36,23 +36,7 @@ jobs:
           python get_ref_number_freq_range.py
 
       - name: Commit Changes
-        run: |
-          git config --global user.email "actions@github.com"
-          git config --global user.name "GitHub Actions"
-          timestamp=$(date +'%Y%m%d%H%M%S')
-          branch_name="update-csv-$timestamp"
-
-          git checkout -b "$branch_name"
-          git add docs/papers_in_catalogue.csv
-          git commit -m "Update papers_in_catalogue.csv file [skip ci]" || true
-          git push origin "$branch_name"
-
-          git remote update
-          git fetch
-          git checkout --track origin/${BRANCH_NAME}
-          git merge --no-ff --allow-unrelated-histories "$branch_name"
-          git push origin ${BRANCH_NAME}
-
-          # delete the temporary branch
-          git branch -d "$branch_name"
-          git push origin --delete "$branch_name"
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          file_pattern: 'docs/papers_in_catalogue.csv'
+          commit_message: 'Update papers_in_catalogue.csv file [skip ci]'
