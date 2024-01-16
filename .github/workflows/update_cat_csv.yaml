@@ -40,7 +40,7 @@ jobs:
           branch_name="update-csv-$timestamp"
 
           git checkout -b "$branch_name"
-          git add papers_in_catalogue.csv
+          git add docs/papers_in_catalogue.csv
           git commit -m "Update papers_in_catalogue.csv file [skip ci]" || true
           git push origin "$branch_name"
 
