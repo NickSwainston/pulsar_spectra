@@ -1,0 +1,37 @@
+name: Update CSV and Commit
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - pulsar_spectra/catalogue.py
+  pull_request:
+    paths:
+      - pulsar_spectra/catalogue.py
+
+jobs:
+  update-csv:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Run Update Script
+        run: |
+          cd docs
+          python get_ref_number_freq_range.py
+
+      - name: Commit Changes
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git add .
+          git commit -m "Update papers_in_catalogue.csv file [skip ci]" || true
+          git push
