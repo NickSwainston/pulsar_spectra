@@ -1,7 +1,7 @@
 {
  "J0108-1431": {
   "Frequency MHz": [
-   1600.0
+   1650
   ],
   "Bandwidth MHz": [
    16
@@ -15,7 +15,7 @@
  },
  "J0437-4715": {
   "Frequency MHz": [
-   1600
+   1650
   ],
   "Bandwidth MHz": [
    16
@@ -29,7 +29,7 @@
  },
  "J0630-2834": {
   "Frequency MHz": [
-   1600.0
+   1650
   ],
   "Bandwidth MHz": [
    16
@@ -43,7 +43,7 @@
  },
  "J0737-3039A": {
   "Frequency MHz": [
-   1600.0
+   1650
   ],
   "Bandwidth MHz": [
    16
@@ -57,7 +57,7 @@
  },
  "J1559-4438": {
   "Frequency MHz": [
-   1600.0
+   1650
   ],
   "Bandwidth MHz": [
    16
@@ -71,7 +71,7 @@
  },
  "J2048-1616": {
   "Frequency MHz": [
-   1600.0
+   1650
   ],
   "Bandwidth MHz": [
    16
@@ -85,7 +85,7 @@
  },
  "J2144-3933": {
   "Frequency MHz": [
-   1600.0
+   1650
   ],
   "Bandwidth MHz": [
    16
@@ -99,7 +99,7 @@
  },
  "J2145-0750": {
   "Frequency MHz": [
-   1600.0
+   1650
   ],
   "Bandwidth MHz": [
    16
@@ -113,7 +113,7 @@
  },
  "J0737-3039B": {
   "Frequency MHz": [
-   1600.0
+   1650
   ],
   "Bandwidth MHz": [
    16
