@@ -1,5 +1,8 @@
 name: Update CSV and Commit
 
+env:
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+
 on:
   push:
     branches:
@@ -46,9 +49,9 @@ jobs:
 
           git remote update
           git fetch
-          git checkout --track origin/${GITHUB_REF##*/}
+          git checkout --track origin/${BRANCH_NAME}
           git merge --no-ff "$branch_name"
-          git push origin ${GITHUB_REF##*/}
+          git push origin ${BRANCH_NAME}
 
           # delete the temporary branch
           git branch -d "$branch_name"
