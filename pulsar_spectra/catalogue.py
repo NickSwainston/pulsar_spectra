@@ -26,7 +26,7 @@ ADS_REF = {
     "Sieber_1973": "https://ui.adsabs.harvard.edu/abs/1973A%26A....28..237S/abstract",
     "Bartel_1978": "https://ui.adsabs.harvard.edu/abs/1978A%26A....68..361B/abstract",
     "Izvekova_1981": "https://ui.adsabs.harvard.edu/abs/1981Ap%26SS..78...45I/abstract",
-    "Lorimer_1995": "https://ui.adsabs.harvard.edu/abs/1995MNRAS.273..411L/abstract",
+    "Lorimer_1995": "https://ui.adsabs.harvard.edu/abs/1995ApJ...439..933L/abstract",
     "van_Ommen_1997": "https://ui.adsabs.harvard.edu/abs/1997MNRAS.287..307V/abstract",
     "Maron_2000": "https://ui.adsabs.harvard.edu/abs/2000A%26AS..147..195M/abstract",
     "Malofeev_2000": "https://ui.adsabs.harvard.edu/abs/2000ARep...44..436M/abstract",
