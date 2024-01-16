@@ -38,41 +38,43 @@ for jname in jnames:
             if jname not in pulsar_track:
                 pulsar_count += 1
                 pulsar_track.append(jname)
-if paper_format:
-    print(f"ATNF pulsar catalogue & {pulsar_count} & {int(min(all_freq))}-{int(max(all_freq))} \\\\")
-else:
-    print(f'"ATNF pulsar catalogue","{pulsar_count}","{int(min(all_freq))}-{int(max(all_freq))}","`Catalogue website <https://www.atnf.csiro.au/research/pulsar/psrcat/>`_"')
 
 
-# Loop over catalogues and put them into a dictionary
-for cat_file in CAT_YAMLS:
-    cat_label = cat_file.split("/")[-1].split(".")[0]
-
-    # Load in the dict
-    with open(cat_file, "r") as stream:
-        cat_dict = yaml.safe_load(stream)
-    pulsar_count = len(cat_dict.keys())
-
-    all_freq = []
-    # Find which pulsars in the dictionary
-    for jname in jnames:
-        if jname in cat_dict.keys():
-            # Update dict
-            jname_cat_dict[jname][cat_label] = cat_dict[jname]
-            # add freq
-            all_freq += cat_dict[jname]['Frequency MHz']
-
-    # output result
+with open("papers_in_catalogue.csv", "w") as output:
     if paper_format:
-        cat_label = cat_label.replace("_", "")
-        print(f"\cite{{{cat_label}}} & {pulsar_count} & {int(min(all_freq))}-{int(max(all_freq))} \\\\")
+        output.write(f"ATNF pulsar catalogue & {pulsar_count} & {int(min(all_freq))}-{int(max(all_freq))} \\\\\n")
     else:
-        ads_link = ADS_REF[cat_label]
-        if cat_label == "Sieber_1973":
-            cat_label = "Sieber (1973)"
+        output.write(f'"ATNF pulsar catalogue","{pulsar_count}","{int(min(all_freq))}-{int(max(all_freq))}","`Catalogue website <https://www.atnf.csiro.au/research/pulsar/psrcat/>`_"\n')
+
+    # Loop over catalogues and put them into a dictionary
+    for cat_file in CAT_YAMLS:
+        cat_label = cat_file.split("/")[-1].split(".")[0]
+
+        # Load in the dict
+        with open(cat_file, "r") as stream:
+            cat_dict = yaml.safe_load(stream)
+        pulsar_count = len(cat_dict.keys())
+
+        all_freq = []
+        # Find which pulsars in the dictionary
+        for jname in jnames:
+            if jname in cat_dict.keys():
+                # Update dict
+                jname_cat_dict[jname][cat_label] = cat_dict[jname]
+                # add freq
+                all_freq += cat_dict[jname]['Frequency MHz']
+
+        # output result
+        if paper_format:
+            cat_label = cat_label.replace("_", "")
+            output.write(f"\cite{{{cat_label}}} & {pulsar_count} & {int(min(all_freq))}-{int(max(all_freq))} \\\\\n")
         else:
-            author = " ".join(cat_label.split("_")[:-1])
-            year = cat_label.split("_")[-1]
-            cat_label = f"{author} et al. ({year})"
-        print(f'"{cat_label}","{pulsar_count}","{int(min(all_freq))}-{int(max(all_freq))}","`ADS <{ads_link}>`_"')
-    #print(all_freq)
+            ads_link = ADS_REF[cat_label]
+            if cat_label == "Sieber_1973":
+                cat_label = "Sieber (1973)"
+            else:
+                author = " ".join(cat_label.split("_")[:-1])
+                year = cat_label.split("_")[-1]
+                cat_label = f"{author} et al. ({year})"
+            output.write(f'"{cat_label}","{pulsar_count}","{int(min(all_freq))}-{int(max(all_freq))}","`ADS <{ads_link}>`__"\n')
+        #print(all_freq)
