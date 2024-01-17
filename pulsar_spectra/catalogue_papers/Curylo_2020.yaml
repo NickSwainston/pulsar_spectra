@@ -1,0 +1,16 @@
+{
+ "J1740+1000": {
+  "Frequency MHz": [
+   150
+  ],
+  "Bandwidth MHz": [
+   78.125
+  ],
+  "Flux Density mJy": [
+   3.42
+  ],
+  "Flux Density error mJy": [
+   1.65
+  ]
+ }
+}

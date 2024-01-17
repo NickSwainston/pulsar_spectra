@@ -26,7 +26,7 @@ ADS_REF = {
     "Sieber_1973": "https://ui.adsabs.harvard.edu/abs/1973A%26A....28..237S/abstract",
     "Bartel_1978": "https://ui.adsabs.harvard.edu/abs/1978A%26A....68..361B/abstract",
     "Izvekova_1981": "https://ui.adsabs.harvard.edu/abs/1981Ap%26SS..78...45I/abstract",
-    "Lorimer_1995": "https://ui.adsabs.harvard.edu/abs/1995MNRAS.273..411L/abstract",
+    "Lorimer_1995": "https://ui.adsabs.harvard.edu/abs/1995ApJ...439..933L/abstract",
     "van_Ommen_1997": "https://ui.adsabs.harvard.edu/abs/1997MNRAS.287..307V/abstract",
     "Maron_2000": "https://ui.adsabs.harvard.edu/abs/2000A%26AS..147..195M/abstract",
     "Malofeev_2000": "https://ui.adsabs.harvard.edu/abs/2000ARep...44..436M/abstract",
@@ -101,7 +101,7 @@ ADS_REF = {
     "Bailes_1997":"https://ui.adsabs.harvard.edu/abs/1997ApJ...481..386B/abstract",
     "Basu_2018":"https://ui.adsabs.harvard.edu/abs/2018MNRAS.475.1469B/abstract",
     "Biggs_1996":"https://ui.adsabs.harvard.edu/abs/1996MNRAS.282..691B/abstract",
-    "Boyles_2012":"https://arxiv.org/abs/1209.4293",
+    "Boyles_2013":"https://ui.adsabs.harvard.edu/abs/2013ApJ...763...80B/abstract",
     "Brinkman_2018":"https://ui.adsabs.harvard.edu/abs/2018MNRAS.474.2012B",
     "Champion_2005a":"https://ui.adsabs.harvard.edu/abs/2005MNRAS.363..929C",
     "Champion_2005b":"https://ui.adsabs.harvard.edu/abs/2005PhDT.......282C",
@@ -127,7 +127,7 @@ ADS_REF = {
     "Lorimer_2005":"https://ui.adsabs.harvard.edu/abs/2005MNRAS.359.1524L",
     "Lorimer_2007":"https://ui.adsabs.harvard.edu/abs/2007MNRAS.379..282L",
     "Lynch_2012":"https://ui.adsabs.harvard.edu/abs/2012ApJ...745..109L",
-    "Lynch_2013":"https://arxiv.org/abs/1209.4296",
+    "Lynch_2013":"https://ui.adsabs.harvard.edu/abs/2013ApJ...763...81L/abstract",
     "Manchester_1995":"https://ui.adsabs.harvard.edu/abs/1995ApJ...441L..65M/abstract",
     "Manchester_2013":"https://ui.adsabs.harvard.edu/abs/2013PASA...30...17M/abstract",
     "Michilli_2020":"https://ui.adsabs.harvard.edu/abs/2020MNRAS.491..725M/abstract",
@@ -137,12 +137,30 @@ ADS_REF = {
     "RoZko_2018":"https://ui.adsabs.harvard.edu/abs/2018MNRAS.479.2193R",
     "Sayer_1997":"https://ui.adsabs.harvard.edu/abs/1997ApJ...474..426S",
     "Seiradakis_1995":"https://ui.adsabs.harvard.edu/abs/1995A%26AS..111..205S/abstract",
-    "Shapiro_Albert_2021":"{https://ui.adsabs.harvard.edu/abs/2021ApJ...909..219S",
+    "Shapiro_Albert_2021":"https://ui.adsabs.harvard.edu/abs/2021ApJ...909..219S",
     "Stovall_2014":"https://ui.adsabs.harvard.edu/abs/2014ApJ...791...67S/abstract",
     "Surnis_2019":"https://ui.adsabs.harvard.edu/abs/2019ApJ...870....8S/abstract",
     "Titus_2019":"https://ui.adsabs.harvard.edu/abs/2019MNRAS.487.4332T",
     "Zhao_2017":"https://ui.adsabs.harvard.edu/abs/2017ApJ...845..156Z/abstract",
-    "Gitika_2023":"https://academic.oup.com/mnras/advance-article/doi/10.1093/mnras/stad2841/7276629",
+    "Gitika_2023":"https://ui.adsabs.harvard.edu/abs/2023MNRAS.526.3370G/abstract",
+    "Crowter_2020":"https://ui.adsabs.harvard.edu/abs/2020MNRAS.495.3052C/abstract",
+    "Janssen_2009":"https://ui.adsabs.harvard.edu/abs/2009A%26A...498..223J/abstract",
+    "Weisberg_1999":"https://ui.adsabs.harvard.edu/abs/1999ApJS..121..171W/abstract",
+    "Stokes_1985":"https://ui.adsabs.harvard.edu/abs/1985Natur.317..787S/abstract",
+    "Stokes_1986":"https://ui.adsabs.harvard.edu/abs/1986ApJ...311..694S/abstract",
+    "Tan_2020":"https://ui.adsabs.harvard.edu/abs/2020MNRAS.492.5878T/abstract",
+    "Ng_2015":"https://ui.adsabs.harvard.edu/abs/2015MNRAS.450.2922N/abstract",
+    "McLean_1973":"https://ui.adsabs.harvard.edu/abs/1973MNRAS.165..133M/abstract",
+    "McGary_2001":"https://ui.adsabs.harvard.edu/abs/2001AJ....121.1192M/abstract",
+    "Lazarus_2015":"https://ui.adsabs.harvard.edu/abs/2015ApJ...812...81L/abstract",
+    "Curylo_2020":"https://ui.adsabs.harvard.edu/abs/2020MNRAS.495.3052C/abstract",
+    "Shrauner_1998":"https://ui.adsabs.harvard.edu/abs/1998ApJ...509..785S/abstract",
+    "Foster_1991":"https://ui.adsabs.harvard.edu/abs/1991ApJ...378..687F/abstract",
+    "Bhattacharyya_2016":"https://ui.adsabs.harvard.edu/abs/2016ApJ...817..130B/abstract",
+    "Kouwenhoven_2000":"https://ui.adsabs.harvard.edu/abs/2000A%26AS..145..243K/abstract",
+    "Dowell_2013":"https://ui.adsabs.harvard.edu/abs/2013ApJ...775L..28D/abstract",
+    "Deneva_2016":"https://ui.adsabs.harvard.edu/abs/2016ApJ...821...10D/abstract",
+    "Malofeev_1993":"https://ui.adsabs.harvard.edu/abs/1993AstL...19..138M/abstract",
 }
 
 
@@ -421,9 +439,9 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
     # refs that have errors that we plan to inform ATNF about
     antf_incorrect_refs = ["Zhao_2019", "Mignani_2017", "Bell_2016", "Robinson_1995", "Johnston_1994", "Manchester_1996", "Xie_2019", "Han_2016", "Kramer_1999", "Kondratiev_2015", "Crawford_2001", "Michilli_2020", "Manchester_2013", "Brinkman_2018"]
     # refs that are correct but where scaled to by their spectral index for the ATNF frequencies
-    antf_adjusted_refs = ["Lorimer_1995b", "Stovall_2015", "Sanidas_2019", "Wolszczan_1992", "Dembska_2014", "Kaur_2019", "Alam_2021"]
+    antf_adjusted_refs = ["Lorimer_1995b", "Stovall_2015", "Sanidas_2019", "Wolszczan_1992", "Dembska_2014", "Kaur_2019", "Alam_2021", "Foster_1991"]
     # refs that were rounded to different decimal places than the publications
-    antf_rounded_refs = ["Johnston_2018", "Dai_2015", "McEwen_2020", "McConnell_1991", "Bondonneau_2020", "Johnston_2021", "Bates_2011", "Han_2021", "Sayer_1997", "Lynch_2012", "Stovall_2014"]
+    antf_rounded_refs = ["Johnston_2018", "Dai_2015", "McEwen_2020", "McConnell_1991", "Bondonneau_2020", "Johnston_2021", "Bates_2011", "Han_2021", "Sayer_1997", "Lynch_2012", "Stovall_2014", "Crowter_2020"]
     # refs that have different uncertainties than published
     antf_uncert_refs = ["Stairs_1999", "Kuzmin_2001", "Jankowski_2019", "Jankowski_2018", "Kramer_2003a", "Manchester_2001", "Morris_2002", "Zhang_2019"]
     for jname in jnames:
