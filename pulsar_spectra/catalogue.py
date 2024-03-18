@@ -112,7 +112,7 @@ ADS_REF = {
     "Demorest_2013":"https://ui.adsabs.harvard.edu/abs/2013ApJ...762...94D",
     "Esamdin_2004":"https://ui.adsabs.harvard.edu/abs/2004A&A...425..949E",
     "Freire_2007":"https://ui.adsabs.harvard.edu/abs/2007ApJ...662.1177F",
-    "Gentile_2018":"https://ui.adsabs.harvard.edu/abs/2018ApJ...868..122B",
+    "Gentile_2018":"https://ui.adsabs.harvard.edu/abs/2018ApJ...862...47G/abstract",
     "Giacani_2001":"https://ui.adsabs.harvard.edu/abs/2001AJ....121.3133G",
     "Han_1999":"https://ui.adsabs.harvard.edu/abs/1999A&AS..136..571H",
     "Hoensbroech_1997":"https://ui.adsabs.harvard.edu/abs/1997A%26AS..126..121V/abstract",
