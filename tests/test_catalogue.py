@@ -1,10 +1,12 @@
 #! /usr/bin/env python
 
 import os
+import re
 import yaml
 import psrqpy
+import pandas as pd
 
-from pulsar_spectra.catalogue import collect_catalogue_fluxes, CAT_YAMLS, ADS_REF, ATNF_VER
+from pulsar_spectra.catalogue import collect_catalogue_fluxes, get_antf_references, convert_antf_ref, CAT_YAMLS, ADS_REF, ATNF_VER
 
 import logging
 logger = logging.getLogger(__name__)
@@ -80,6 +82,44 @@ def test_catalogue_format():
                 assert band != 0.
                 assert flux != 0.
                 assert flux_err != 0.
+
+
+def test_convert_antf_ref():
+    ref_dict = get_antf_references()
+
+    # Get ref codes for all pulsar fluxes
+    query = psrqpy.QueryATNF(version=ATNF_VER).pandas
+    flux_queries = []
+    for table_param in query.keys():
+        if re.match(r"S\d*\d$", table_param) or re.match(r"S\d*G$", table_param):
+            flux_queries.append(table_param)
+
+    ref_codes = []
+    jnames = list(query['PSRJ'])
+    for query_id, pulsar in enumerate(jnames):
+        for flux_query in flux_queries:
+            ref_code = query[flux_query+"_REF"][query_id]
+            if not pd.isna(ref_code):
+                ref_codes.append(ref_code)
+
+    print(ref_codes)
+    for ref_code in list(set(ref_codes)):
+        print(f"{ref_code}: '{ref_dict[ref_code]}'")
+        ref = convert_antf_ref(ref_code, ref_dict=ref_dict)
+        print(ref)
+        author, year = ref.split("_")
+
+        # Author has no numbers
+        for char in author:
+            assert not char.isdigit()
+
+        if len(year) == 5 and year[-1].isalpha():
+            # Format ends with a letter so remove it before tests
+            year = year[:-1]
+        # Assert year is 4 digits
+        assert len(year) == 4
+        # Assert year is a reasonable year
+        assert 1900 < int(year) < 2100
 
 
 

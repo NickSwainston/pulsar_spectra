@@ -112,7 +112,7 @@ ADS_REF = {
     "Demorest_2013":"https://ui.adsabs.harvard.edu/abs/2013ApJ...762...94D",
     "Esamdin_2004":"https://ui.adsabs.harvard.edu/abs/2004A&A...425..949E",
     "Freire_2007":"https://ui.adsabs.harvard.edu/abs/2007ApJ...662.1177F",
-    "Gentile_2018":"https://ui.adsabs.harvard.edu/abs/2018ApJ...868..122B",
+    "Gentile_2018":"https://ui.adsabs.harvard.edu/abs/2018ApJ...862...47G/abstract",
     "Giacani_2001":"https://ui.adsabs.harvard.edu/abs/2001AJ....121.3133G",
     "Han_1999":"https://ui.adsabs.harvard.edu/abs/1999A&AS..136..571H",
     "Hoensbroech_1997":"https://ui.adsabs.harvard.edu/abs/1997A%26AS..126..121V/abstract",
@@ -191,23 +191,72 @@ def convert_antf_ref(ref_code, ref_dict=None):
     if ref_dict is None:
         ref_dict = get_antf_references()
     try:
-        ref_string_list = ref_dict[ref_code].split()
+        ref_string = ref_dict[ref_code]
     except KeyError or TypeError:
         # If the psrcat database file is changed this will update the ref_code
         logger.debug(ref_dict)
         psrqpy.QueryATNF(version=ATNF_VER, checkupdate=True)
         ref_dict = get_antf_references()
         logger.debug(ref_dict)
-        ref_string_list = ref_dict[ref_code].split()
+        ref_string = ref_dict[ref_code]
+
+    # These one doesn't even have a title so returning maunally
+    if ref_code == "san16":
+        return "Sanpa-arsa_2016"
+    elif ref_code == "gg74":
+        return "Gomez-Gonzalez_1974"
 
     # Find the parts we need
-    author = ref_string_list[0][:-1]
-    #logger.debug(ref_string_list)
-    for ref_part in ref_string_list:
-        if ref_part.endswith('.') and len(ref_part) == 5 and ref_part[:-1].isnumeric():
-            year = ref_part[:-1]
-        elif ref_part.endswith('.') and len(ref_part) == 6 and ref_part[:-2].isnumeric():
-            year = ref_part[:-1]
+    if ref_string.startswith("eds "):
+        # Remove the eds part which I think is a typo
+        ref_string = ref_string[4:]
+    author = ref_string.split(",")[0].replace(" ", "")
+
+    # Get only author year part of the string, example string:
+    # Anderson, S. B., Wolszczan, A., Kulkarni, S. R. & Prince, T. A., 1997. Observations of two millisecond pulsars in the globular cluster NGC 5904. ApJ, 482, 870-873.
+    if "ArXiv" in ref_string:
+        author_year_title = ref_string.split(". ArXiv")[0]
+    elif "arXiv" in ref_string:
+        author_year_title = ref_string.split(". arXiv")[0]
+    elif "ApJ" in ref_string:
+        author_year_title = ref_string.split(". ApJ")[0]
+    elif "-" not in ref_string:
+        # Has no refence code so skip the removal
+        author_year_title = ref_string
+    else:
+        author_year_title = ref_string[:ref_string[:-1].rfind('.')]
+
+    if "New York" in author_year_title:
+        # Different format for American Institute of Physics, New York references
+        author_year = author_year_title
+    elif "IAU Circ. No" in author_year_title:
+        # Different format for IAU Circular references
+        author_year = author_year_title.split("IAU Circ. No")[0].replace("M.", "").replace("M5.", "")
+    else:
+        removal_patterns = [
+            ". Phys. Rev", # This journal isn't removed in previous logic so remove it here
+            ". ATel", # This journal isn't removed in previous logic so remove it here
+            "(", # Remove the brackets
+            ":", # Remove the colins
+            "1E", # Remove weird name convertion
+            "NGC", # NGC often in titles that ruin formatting
+            "PSR", # Parts of pulsar names are mistaken for years
+            "Sgr", # Parts of soft gamma ray repeaters are mistaken for years
+        ]
+        for pattern in removal_patterns:
+            author_year_title = author_year_title.split(pattern)[0]
+        author_year = author_year_title[:author_year_title.rfind('.')]
+
+    # Loop through what is left to find the year
+    for ref_part in author_year.split():
+        if ref_part.endswith("."):
+            # Remove trailing full stop
+            ref_part = ref_part[:-1]
+        if len(ref_part) == 4 and ref_part.isnumeric():
+            year = ref_part
+        elif len(ref_part) == 5 and ref_part[:-1].isnumeric():
+            year = ref_part
+
     return f"{author}_{year}"
 
 
@@ -247,7 +296,7 @@ def flux_from_atnf(pulsar, query=None, ref_dict=None, assumed_error=0.5):
     # Find all flux queries from keys
     flux_queries = []
     for table_param in query.keys():
-        if re.match("S\d*\d$", table_param) or re.match("S\d*G$", table_param):
+        if re.match(r"S\d*\d$", table_param) or re.match(r"S\d*G$", table_param):
             flux_queries.append(table_param)
 
     freq_all     = []
