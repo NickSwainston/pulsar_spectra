@@ -91,7 +91,7 @@ def test_convert_antf_ref():
     query = psrqpy.QueryATNF(version=ATNF_VER).pandas
     flux_queries = []
     for table_param in query.keys():
-        if re.match("S\d*\d$", table_param) or re.match("S\d*G$", table_param):
+        if re.match(r"S\d*\d$", table_param) or re.match(r"S\d*G$", table_param):
             flux_queries.append(table_param)
 
     ref_codes = []

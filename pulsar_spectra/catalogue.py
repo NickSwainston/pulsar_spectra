@@ -296,7 +296,7 @@ def flux_from_atnf(pulsar, query=None, ref_dict=None, assumed_error=0.5):
     # Find all flux queries from keys
     flux_queries = []
     for table_param in query.keys():
-        if re.match("S\d*\d$", table_param) or re.match("S\d*G$", table_param):
+        if re.match(r"S\d*\d$", table_param) or re.match(r"S\d*G$", table_param):
             flux_queries.append(table_param)
 
     freq_all     = []
