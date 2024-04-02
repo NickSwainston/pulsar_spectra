@@ -202,7 +202,7 @@ def high_frequency_cut_off_power_law(v, vc, a, c, v0):
     v : `list`
         Frequency in Hz.
     vc : `list`
-        Cut off frequency in Hz.
+        Cut-off frequency in Hz.
     a : `float`
         Spectral Index.
     c : `float`
@@ -232,7 +232,7 @@ def high_frequency_cut_off_power_law_intergral(vmin_vmax, vc, a, c, v0):
         Where vmin is the minimum and vmax is the maximum frequency
         in Hz for each flux density measurement's bandwidth.
     vc : `list`
-        Cut off frequency in Hz.
+        Cut-off frequency in Hz.
     a : `float`
         Spectral Index.
     c : `float`
@@ -263,7 +263,7 @@ def high_frequency_cut_off_power_law_taylor(vmin_vmax, vc, a, c, v0):
         Where vmin is the minimum and vmax is the maximum frequency
         in Hz for each flux density measurement's bandwidth.
     vc : `list`
-        Cut off frequency in Hz.
+        Cut-off frequency in Hz.
     a : `float`
         Spectral Index.
     c : `float`
@@ -406,7 +406,7 @@ def low_frequency_turn_over_power_law_taylor(vmin_vmax, vpeak, a, c, beta, v0):
 
 
 def double_turn_over_spectrum(v, vc, vpeak, a, beta, c, v0):
-    """Double turn over spectrum (has a low-frequency turnover and a high-frequency cut-off):
+    """Double turn-over spectrum (has a low-frequency turn-over and a high-frequency cut-off):
 
     .. math::
         S_v = c \\left( \\frac{v}{v0} \\right)^{a} \\left ( 1 - \\frac{v}{vc} \\right ) \\exp\\left [ \\frac{a}{\\beta} \\left( \\frac{v}{vpeak} \\right)^{-\\beta} \\right ],\\qquad v < vc
@@ -416,7 +416,7 @@ def double_turn_over_spectrum(v, vc, vpeak, a, beta, c, v0):
     v : `list`
         Frequency in Hz.
     vc : `list`
-        Cut off frequency in Hz.
+        Cut-off frequency in Hz.
     vpeak : `list`
         Peak/turn-over frequency in Hz.
     a : `float`
@@ -443,7 +443,7 @@ def double_turn_over_spectrum(v, vc, vpeak, a, beta, c, v0):
 
 def double_turn_over_spectrum_intergral(vmin_vmax, vc, vpeak, a, beta, c, v0):
     """The bandwith intergration correction for the
-    double turn over spectrum (has a low-frequency turnover and a high-frequency cut-off)
+    double turn-over spectrum (has a low-frequency turn-over and a high-frequency cut-off)
     using direct intergration (see :ref:`derivation <double_turn_over_spectrum_intergral>` for full equation):
 
     Parameters
@@ -452,7 +452,7 @@ def double_turn_over_spectrum_intergral(vmin_vmax, vc, vpeak, a, beta, c, v0):
         Where vmin is the minimum and vmax is the maximum frequency
         in Hz for each flux density measurement's bandwidth.
     vc : `list`
-        Cut off frequency in Hz.
+        Cut-off frequency in Hz.
     vpeak : `list`
         Peak/turn-over frequency in Hz.
     a : `float`
@@ -489,7 +489,7 @@ def double_turn_over_spectrum_intergral(vmin_vmax, vc, vpeak, a, beta, c, v0):
 
 def double_turn_over_spectrum_taylor(vmin_vmax, vc, vpeak, a, beta, c, v0):
     """The bandwith intergration correction for the
-    double turn over spectrum (has a low-frequency turnover and a high-frequency cut-off)
+    double turn-over spectrum (has a low-frequency turn-over and a high-frequency cut-off)
     using Taylor series expansion (see :ref:`derivation <double_turn_over_spectrum_taylor>` for full equation):
 
     Parameters
@@ -498,7 +498,7 @@ def double_turn_over_spectrum_taylor(vmin_vmax, vc, vpeak, a, beta, c, v0):
         Where vmin is the minimum and vmax is the maximum frequency
         in Hz for each flux density measurement's bandwidth.
     vc : `list`
-        Cut off frequency in Hz.
+        Cut-off frequency in Hz.
     vpeak : `list`
         Peak/turn-over frequency in Hz.
     a : `float`
@@ -570,14 +570,14 @@ def model_settings(print_models=False):
     a_s = -1.6
     a_min = -8.
     a_max = 3.
-    # Beta, he smoothness of the turn-over
+    # beta, the smoothness of the turn-over
     beta_s = 1.
     beta_min = 0.1
     beta_max = 2.1
-    # High frequency cut off frequency
+    # frequency of the high-frequency cut-off
     vc_s = 4e9
-    vc_both = None # will set the cut off frequency based on the data set's frequency range
-    # Lof frequency turn over frequency peak
+    vc_both = None # will set the cut-off frequency based on the data set's frequency range
+    # peak frequency of the low-frequency turn-over
     vpeak_s = 100e6
     vpeak_min = 10e6
     vpeak_max = 2e9
@@ -626,7 +626,7 @@ def model_settings(print_models=False):
         ],
         "double_turn_over_spectrum" : [
             double_turn_over_spectrum,
-            "double turn over spectrum",
+            "double turn-over spectrum",
             #(vc, vpeak, a, beta, c)
             (vc_s, vpeak_s, a_s, beta_s, c_s),
             [(vc_both), (vpeak_min, vpeak_max), (a_min, 0.), (beta_min, beta_max), (c_min, c_max)],
