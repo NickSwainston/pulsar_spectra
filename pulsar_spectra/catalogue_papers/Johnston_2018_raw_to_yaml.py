@@ -31,6 +31,10 @@ for row in lines:
     elif pulsar == "J1705-52":
         pulsar = "J1704-5236"
 
+    # Class N pulsar incorrectly set to 0.01 mJy, should be removed
+    if pulsar == "J1842-0359":
+        continue
+
     flux = float(row[1])
     round_to = -int(floor(log10(abs(flux*.2))))
     flux = round(flux, round_to)

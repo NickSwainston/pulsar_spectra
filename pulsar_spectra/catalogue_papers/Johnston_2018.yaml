@@ -7139,20 +7139,6 @@
    0.08
   ]
  },
- "J1842-0359": {
-  "Frequency MHz": [
-   1360
-  ],
-  "Bandwidth MHz": [
-   256
-  ],
-  "Flux Density mJy": [
-   0.01
-  ],
-  "Flux Density error mJy": [
-   0.002
-  ]
- },
  "J1842-0905": {
   "Frequency MHz": [
    1360
