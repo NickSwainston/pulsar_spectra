@@ -7,13 +7,13 @@ import re
 from setuptools import setup
 
 reqs = [
-    "numpy>=1.13.3",
-    "matplotlib>=3.7.5",
-    "psrqpy>=1.3.2",
-    "iminuit>=2.27.0",
-    "jacobi>=0.9.2",
-    "PyYAML>=6.0.2",
-    "panda<=1.3.5",
+    "numpy>=1.13,<2",
+    "matplotlib>=3.4",
+    "psrqpy>=1.2.9",
+    "iminuit>=2.9",
+    "jacobi>=0.2",
+    "pyyaml>=3.10",
+    "pandas>=1.3,<2",
 ]
 
 VERSIONFILE = "pulsar_spectra/_version.py"
@@ -40,7 +40,7 @@ setup(
         ]
     },
     scripts=["scripts/quick_fit.py", "scripts/build_plotting_config.py"],
-    python_requires=">=3.8",
+    python_requires=">=3.7",
     install_requires=reqs,
     setup_requires=["pytest-runner"],
     tests_require=["pytest"],
