@@ -384,7 +384,7 @@ def all_flux_from_atnf(query=None):
             The error of the flux density in mJy.
     """
     if query is None:
-        query = psrqpy.QueryATNF(version=ATNF_VER, checkupdate=True).pandas
+        query = psrqpy.QueryATNF(version=ATNF_VER).pandas
     ref_dict = get_atnf_references()
     jnames = list(query['PSRJ'])
     jname_cat = {}
