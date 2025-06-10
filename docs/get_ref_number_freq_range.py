@@ -26,15 +26,15 @@ for jname in jnames:
     # freq, flux, flux_err, references
     jname_cat_list[jname] = [[],[],[],[]]
 
-# Add the antf to the cataogues
-antf_dict = all_flux_from_atnf()
+# Add the atnf to the cataogues
+atnf_dict = all_flux_from_atnf()
 all_freq = []
 pulsar_count = 0
 pulsar_track = []
 for jname in jnames:
-    for ref in antf_dict[jname].keys():
-        if len(antf_dict[jname][ref]['Frequency MHz']) > 0:
-            all_freq += antf_dict[jname][ref]['Frequency MHz']
+    for ref in atnf_dict[jname].keys():
+        if len(atnf_dict[jname][ref]['Frequency MHz']) > 0:
+            all_freq += atnf_dict[jname][ref]['Frequency MHz']
             if jname not in pulsar_track:
                 pulsar_count += 1
                 pulsar_track.append(jname)

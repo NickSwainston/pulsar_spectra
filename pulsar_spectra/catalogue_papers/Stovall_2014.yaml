@@ -1,18 +1,4 @@
 {
- "J2206+6151": {
-  "Frequency MHz": [
-   350.0
-  ],
-  "Bandwidth MHz": [
-   100
-  ],
-  "Flux Density mJy": [
-   1.2
-  ],
-  "Flux Density error mJy": [
-   0.6
-  ]
- },
  "J0034+69": {
   "Frequency MHz": [
    350.0
@@ -419,7 +405,7 @@
    2.8
   ]
  },
- "J1629+43": {
+ "J1628+4406": {
   "Frequency MHz": [
    350.0
   ],

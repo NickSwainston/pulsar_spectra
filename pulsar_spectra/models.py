@@ -43,7 +43,7 @@ def simple_power_law_integrate(vmin_vmax, a, c, v0):
     simple power law using direct intergration (:ref:`derivation <simple_power_law_integrate>`):
 
     .. math::
-        S_v =  \\frac{c({\\nu_\\text{max}}^{a+1} - {\\nu_\\text{min}}^{a+1})}{\\rm{BW}\,\\nu_0^a(a+1)}
+        S_v =  \\frac{c({\\nu_\\text{max}}^{a+1} - {\\nu_\\text{min}}^{a+1})}{\\rm{BW}\\,\\nu_0^a(a+1)}
 
     Parameters
     ----------

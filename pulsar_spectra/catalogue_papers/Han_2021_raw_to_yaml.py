@@ -19,10 +19,16 @@ for row in lines:
 
     pulsar = row[0].strip().replace("–", "-")
     # Wrong names I found
+    if pulsar == "J1901+0659g":
+        pulsar = "J1901+0658"
     if pulsar == "J1914+0805g":
         pulsar = "J1914+0805"
+    if pulsar == "J1916+0748g":
+        pulsar = "J1916+07481"
     if pulsar == "J1916+1030Bg":
-        pulsar = "J1916+1030g"
+        pulsar = "J1916+10305"
+    if pulsar == "J1953+1844g":
+        pulsar = "J1953+1844"
 
     flux = round(float(row[1]) / 1e3, 3)
     flux_err = round(float(row[1]) / 1e3* 0.5, 3)
