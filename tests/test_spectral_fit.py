@@ -40,7 +40,7 @@ def test_find_best_spectral_fit():
             'Izvekova_1981',
             'Zhao_2019',
             'Johnston_2018',
-            'Bhat_2022',
+            'Bhat_2023',
             'Bartel_1978',
             'van_Ommen_1997',
             'Xue_2017',
