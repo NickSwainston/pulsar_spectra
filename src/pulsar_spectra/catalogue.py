@@ -579,9 +579,10 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
         "Morris_2002",
         "Zhang_2019",
     ]
-    # this paper provides multiple epochs over multiple subbands and ATNF includes a mixture of epochs
-    # will need to add this to the pulsar_spectra catalogue properly
-    atnf_other_refs = ["Ahmad_2024"]
+    atnf_other_refs = [
+        "Taylor_1993",  # excluding due to duplication of other references
+        "Ahmad_2024",  # need to add this to the pulsar_spectra catalogue properly
+    ]
 
     for jname in jnames:
         for ref in atnf_dict[jname].keys():
