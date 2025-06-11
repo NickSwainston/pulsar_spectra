@@ -1,1 +1,3 @@
-from ._version import __version__
+from importlib.metadata import version
+
+__version__ = version(__name__)

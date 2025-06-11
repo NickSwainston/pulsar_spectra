@@ -8,8 +8,10 @@ import psrqpy
 
 from pulsar_spectra.catalogue import ATNF_VER
 
+
 query = psrqpy.QueryATNF(version=ATNF_VER, params=['PSRJ', 'NAME', 'PSRB']).pandas
 all_jnames = list(query['PSRJ'])
+
 
 def convert_csv_to_yaml(csv_location, ref_label):
     pulsar_dict = {}
@@ -62,7 +64,7 @@ def convert_csv_to_yaml(csv_location, ref_label):
     print(json.dumps(pulsar_dict, indent=4))
 
 
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser(description='Convert a csv file to pulsar_spectra catalogue formated yaml file.')
     parser.add_argument('--csv', type=str,
                         help='The location of the csv file')
@@ -71,3 +73,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     convert_csv_to_yaml(args.csv, args.ref)
+
+
+if __name__ == '__main__':
+    main()

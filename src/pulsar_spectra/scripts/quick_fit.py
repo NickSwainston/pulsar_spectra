@@ -40,7 +40,8 @@ def quick_fit(pulsars):
             else:
                 logger.info(f"{p} = {v:.5f} +/- {e:.5}")
 
-if __name__ == '__main__':
+
+def main():
     # Dictionary for choosing log-levels
     loglevels = dict(DEBUG=logging.DEBUG,
                      INFO=logging.INFO,
@@ -69,3 +70,7 @@ if __name__ == '__main__':
             logging.getLogger(imported_module).propagate = False
 
     quick_fit(args.pulsars)
+
+
+if __name__ == '__main__':
+    main()
