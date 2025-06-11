@@ -119,6 +119,7 @@ ADS_REF = {
     "Hoensbroech_1997": "https://ui.adsabs.harvard.edu/abs/1997A%26AS..126..121V",
     "Joshi_2009": "https://ui.adsabs.harvard.edu/abs/2009MNRAS.398..943J",
     "Kaspi_1997": "https://ui.adsabs.harvard.edu/abs/1997ApJ...485..820K",
+    "Kijak_1997":"https://ui.adsabs.harvard.edu/abs/1997A%26A...318L..63K",
     "Kijak_1998": "https://ui.adsabs.harvard.edu/abs/1998A%26AS..127..153K",
     "Kramer_1997": "https://ui.adsabs.harvard.edu/abs/1997ApJ...488..364K",
     "Kuniyoshi_2015": "https://ui.adsabs.harvard.edu/abs/2015MNRAS.453..828K",
