@@ -1,9 +1,10 @@
-import json
-import psrqpy
 import csv
+import json
 
-query = psrqpy.QueryATNF(params=['PSRJ', 'NAME', 'PSRB', 'P0']).pandas
-all_jnames = list(query['PSRJ'])
+import psrqpy
+
+query = psrqpy.QueryATNF(params=["PSRJ", "NAME", "PSRB", "P0"]).pandas
+all_jnames = list(query["PSRJ"])
 
 # was converted from image to csv using ABBYY FineReader
 with open("Kramer_1998_raw.csv") as file:
@@ -18,8 +19,8 @@ for row in lines:
 
     pulsar = row[0].strip().replace("–", "-").replace(" ", "").replace("−", "-")
     if pulsar.startswith("B"):
-        pid = list(query['PSRB']).index(pulsar)
-        pulsar = query['PSRJ'][pid]
+        pid = list(query["PSRB"]).index(pulsar)
+        pulsar = query["PSRJ"][pid]
 
     # Wrong names
     if pulsar == "J1730-2324":
@@ -27,14 +28,15 @@ for row in lines:
     if pulsar not in all_jnames:
         print(pulsar)
 
-    flux= float(row[4][:-1])
+    freq = float(row[3]) * 1e3
+    flux = float(row[4][:-1])
     flux_err = float(row[5])
 
     pulsar_dict[pulsar] = {
-        "Frequency MHz":[1400.],
-        "Bandwidth MHz":[40.],
-        "Flux Density mJy":[flux],
-        "Flux Density error mJy":[flux_err]
+        "Frequency MHz": [freq],
+        "Bandwidth MHz": [40.0],
+        "Flux Density mJy": [flux],
+        "Flux Density error mJy": [flux_err],
     }
 
 with open("Kramer_1998.yaml", "w") as cat_file:
