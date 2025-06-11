@@ -1,30 +1,30 @@
 #!/usr/bin/env python
 
 import argparse
-import json
 import csv
+import json
 import os
+
 import psrqpy
 
 from pulsar_spectra.catalogue import ATNF_VER
 
-
-query = psrqpy.QueryATNF(version=ATNF_VER, params=['PSRJ', 'NAME', 'PSRB']).pandas
-all_jnames = list(query['PSRJ'])
+query = psrqpy.QueryATNF(version=ATNF_VER, params=["PSRJ", "NAME", "PSRB"]).pandas
+all_jnames = list(query["PSRJ"])
 
 
 def convert_csv_to_yaml(csv_location, ref_label):
     pulsar_dict = {}
 
     # Read in the csv
-    with open(csv_location, newline='') as csvfile:
+    with open(csv_location, newline="") as csvfile:
         spamreader = csv.reader(csvfile)
         # This skips the header row of the CSV file.
         next(spamreader)
         print("Input data:")
         for row in spamreader:
-            #logger.debug(row)
-            #print(row)
+            # logger.debug(row)
+            # print(row)
             if len(row) == 5:
                 pulsar, freq, band, flux, flux_err = row
             elif len(row) == 4:
@@ -36,8 +36,8 @@ def convert_csv_to_yaml(csv_location, ref_label):
             pulsar = pulsar.replace("–", "-").replace("−", "-")
             if pulsar.startswith("B"):
                 # convert from Bname to Jname
-                pid = list(query['PSRB']).index(pulsar)
-                pulsar = query['PSRJ'][pid]
+                pid = list(query["PSRB"]).index(pulsar)
+                pulsar = query["PSRJ"][pid]
             if pulsar not in all_jnames:
                 print(f"{pulsar} not in the ANTF")
 
@@ -50,14 +50,16 @@ def convert_csv_to_yaml(csv_location, ref_label):
             else:
                 # Make dict for this pulsar
                 pulsar_dict[pulsar] = {
-                    "Frequency MHz":[float(freq)],
-                    "Bandwidth MHz":[float(band)],
-                    "Flux Density mJy":[float(flux)],
-                    "Flux Density error mJy":[float(flux_err)]
+                    "Frequency MHz": [float(freq)],
+                    "Bandwidth MHz": [float(band)],
+                    "Flux Density mJy": [float(flux)],
+                    "Flux Density error mJy": [float(flux_err)],
                 }
 
     # Dump the dict to the jsonfile in the catalogue directory
-    with open(f"{os.path.dirname(os.path.realpath(__file__))}/../pulsar_spectra/catalogue_papers/{ref_label}.yaml", "w") as cat_file:
+    with open(
+        f"{os.path.dirname(os.path.realpath(__file__))}/../pulsar_spectra/catalogue_papers/{ref_label}.yaml", "w"
+    ) as cat_file:
         cat_file.write(json.dumps(pulsar_dict, indent=1))
 
     print("\nCatalogue data written:")
@@ -65,15 +67,13 @@ def convert_csv_to_yaml(csv_location, ref_label):
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Convert a csv file to pulsar_spectra catalogue formated yaml file.')
-    parser.add_argument('--csv', type=str,
-                        help='The location of the csv file')
-    parser.add_argument('--ref', type=str,
-                        help='The reference label (in the format "Author_year")')
+    parser = argparse.ArgumentParser(description="Convert a csv file to pulsar_spectra catalogue formated yaml file.")
+    parser.add_argument("--csv", type=str, help="The location of the csv file")
+    parser.add_argument("--ref", type=str, help='The reference label (in the format "Author_year")')
     args = parser.parse_args()
 
     convert_csv_to_yaml(args.csv, args.ref)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

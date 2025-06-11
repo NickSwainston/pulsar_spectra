@@ -59,6 +59,7 @@ include = [
     "src/pulsar_spectra/*.py",
     "src/pulsar_spectra/scripts/*.py",
 ]
+exclude = ["src/pulsar_spectra/catalogue_papers/*"]
 
 [tool.ruff.lint]
 select = [
@@ -71,6 +72,8 @@ select = [
     # isort
     "I",
 ]
+# Ignore 'line too long' warning
+ignore = ["E501"]
 
 [tool.ruff.format]
 # Like Black, use double quotes for strings.
