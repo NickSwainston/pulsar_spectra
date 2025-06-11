@@ -2211,20 +2211,6 @@
    20.0
   ]
  },
- "J1939+2134": {
-  "Frequency MHz": [
-   102.5
-  ],
-  "Bandwidth MHz": [
-   0.64
-  ],
-  "Flux Density mJy": [
-   2200.0
-  ],
-  "Flux Density error mJy": [
-   1100.0
-  ]
- },
  "J1945-0040": {
   "Frequency MHz": [
    102.5
