@@ -1,9 +1,10 @@
-import json
-import psrqpy
 import csv
+import json
 
-query = psrqpy.QueryATNF(params=['PSRJ', 'NAME', 'PSRB', 'P0']).pandas
-all_jnames = list(query['PSRJ'])
+import psrqpy
+
+query = psrqpy.QueryATNF(params=["PSRJ", "NAME", "PSRB", "P0"]).pandas
+all_jnames = list(query["PSRJ"])
 
 # was converted from image to csv using ABBYY FineReader
 with open("Kramer_1999_raw.csv") as file:
@@ -22,32 +23,36 @@ for row in lines:
         pulsar = "J1640+2224"
 
     if pulsar.startswith("B"):
-        pid = list(query['PSRB']).index(pulsar)
-        pulsar = query['PSRJ'][pid]
+        pid = list(query["PSRB"]).index(pulsar)
+        pulsar = query["PSRJ"][pid]
 
     if pulsar not in all_jnames:
         print(pulsar)
 
+    if pulsar == "J0437-4715":
+        # Quoted S4850 is from Manchester & Johnston (1995)
+        continue
+
     pulsar_dict[pulsar] = {
-        "Frequency MHz":[],
-        "Bandwidth MHz":[],
-        "Flux Density mJy":[],
-        "Flux Density error mJy":[]
+        "Frequency MHz": [],
+        "Bandwidth MHz": [],
+        "Flux Density mJy": [],
+        "Flux Density error mJy": [],
     }
 
     if row[4] == "^":
-        flux= float(row[3])
+        flux = float(row[3])
         flux_err = float(row[5])
-        pulsar_dict[pulsar]["Frequency MHz"].append(2695.)
-        pulsar_dict[pulsar]["Bandwidth MHz"].append(80.)
+        pulsar_dict[pulsar]["Frequency MHz"].append(2695.0)
+        pulsar_dict[pulsar]["Bandwidth MHz"].append(80.0)
         pulsar_dict[pulsar]["Flux Density mJy"].append(flux)
         pulsar_dict[pulsar]["Flux Density error mJy"].append(flux_err)
 
     if row[7] == "^":
-        flux= float(row[6])
+        flux = float(row[6])
         flux_err = float(row[8])
-        pulsar_dict[pulsar]["Frequency MHz"].append(4850.)
-        pulsar_dict[pulsar]["Bandwidth MHz"].append(80.)
+        pulsar_dict[pulsar]["Frequency MHz"].append(4850.0)
+        pulsar_dict[pulsar]["Bandwidth MHz"].append(80.0)
         pulsar_dict[pulsar]["Flux Density mJy"].append(flux)
         pulsar_dict[pulsar]["Flux Density error mJy"].append(flux_err)
 
