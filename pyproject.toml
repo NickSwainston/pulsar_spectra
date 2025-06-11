@@ -1,0 +1,83 @@
+[project]
+name = "pulsar-spectra"
+version = "2.1.0"
+description = "A simple interface to record pulsar's flux density measurements for a large number of papers and perform fitting of spectral models."
+authors = [
+    { name = "Nick Swainston", email = "nickaswainston@gmail.com" },
+    { name = "Christopher Lee" },
+]
+license = { file = "LICENSE" }
+readme = { file = "README.md", content-type = "text/markdown" }
+requires-python = ">= 3.7"
+dependencies = [
+    "numpy>=1.13,<2",
+    "matplotlib>=3.4",
+    "psrqpy>=1.2.9",
+    "iminuit>=2.9",
+    "jacobi>=0.2",
+    "pyyaml>=3.10",
+    "pandas>=1.3,<2",
+]
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "ruff",
+]
+docs = [
+    "myst-parser>=3",
+    "numpydoc>=1.7",
+    "sphinx>=7.3",
+    "sphinx-rtd-theme>=2",
+]
+
+[project.scripts]
+quick-fit = "pulsar_spectra.scripts.quick_fit:main"
+csv-to-yaml = "pulsar_spectra.scripts.csv_to_yaml:main"
+build-plotting-config = "pulsar_spectra.scripts.build_plotting_config:main"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.package-data]
+pulsar_spectra = [
+    'catalogue_papers/*.yaml',
+    'catalogue_papers/*.db',
+    'configs/*.yaml',
+    'configs/*.csv'
+]
+
+[tool.ruff]
+line-length = 120
+indent-width = 4
+target-version = "py38"
+include = [
+    "pyproject.toml",
+    "docs/*.py",
+    "tests/*.py",
+    "src/pulsar_spectra/*.py",
+    "src/pulsar_spectra/scripts/*.py",
+]
+
+[tool.ruff.lint]
+select = [
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F",
+    # flake8-bugbear
+    "B",
+    # isort
+    "I",
+]
+
+[tool.ruff.format]
+# Like Black, use double quotes for strings.
+quote-style = "double"
+
+# Like Black, indent with spaces, rather than tabs.
+indent-style = "space"
+
+# Like Black, automatically detect the appropriate line ending.
+line-ending = "auto"
