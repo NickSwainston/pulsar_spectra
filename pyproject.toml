@@ -54,8 +54,10 @@ indent-width = 4
 target-version = "py38"
 include = [
     "pyproject.toml",
-    "pulsar_spectra/*.py",
-    "pulsar_spectra/scripts/*.py",
+    "docs/*.py",
+    "tests/*.py",
+    "src/pulsar_spectra/*.py",
+    "src/pulsar_spectra/scripts/*.py",
 ]
 
 [tool.ruff.lint]
