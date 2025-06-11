@@ -533,6 +533,7 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
         "Michilli_2020",
         "Manchester_2013",
         "Brinkman_2018",
+        "Fruchter_1990",
     ]
     # refs that are correct but where scaled to by their spectral index for the ATNF frequencies
     atnf_adjusted_refs = [
@@ -563,6 +564,7 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
         "Frail_2016",
         "Gitika_2023",
         "Dembska_2015",
+        "Wang_2024",
     ]
     # refs that have different uncertainties than published
     atnf_uncert_refs = [
