@@ -113,6 +113,8 @@ for row in lines:
         pulsar = "J2227+3038"
     elif pulsar == "J0220+36":
         pulsar = "J0220+3626"
+    elif pulsar == "J1629+43":
+        pulsar = "J1628+4406"
 
     # CAN'T FIND THIS IN ATNF
     if pulsar == "J2301+48":

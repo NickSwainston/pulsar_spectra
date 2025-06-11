@@ -6,7 +6,7 @@ import yaml
 import psrqpy
 import pandas as pd
 
-from pulsar_spectra.catalogue import collect_catalogue_fluxes, get_antf_references, convert_antf_ref, CAT_YAMLS, ADS_REF, ATNF_VER
+from pulsar_spectra.catalogue import collect_catalogue_fluxes, get_atnf_references, convert_atnf_ref, CAT_YAMLS, ADS_REF, ATNF_VER
 
 import logging
 logger = logging.getLogger(__name__)
@@ -84,8 +84,8 @@ def test_catalogue_format():
                 assert flux_err != 0.
 
 
-def test_convert_antf_ref():
-    ref_dict = get_antf_references()
+def test_convert_atnf_ref():
+    ref_dict = get_atnf_references()
 
     # Get ref codes for all pulsar fluxes
     query = psrqpy.QueryATNF(version=ATNF_VER).pandas
@@ -104,9 +104,13 @@ def test_convert_antf_ref():
 
     print(ref_codes)
     for ref_code in list(set(ref_codes)):
-        print(f"{ref_code}: '{ref_dict[ref_code]}'")
-        ref = convert_antf_ref(ref_code, ref_dict=ref_dict)
-        print(ref)
+        ref = convert_atnf_ref(ref_code, ref_dict=ref_dict)
+        if ref is None:
+            print(f"no name found for reference {ref_code}")
+            ref = ref_code
+            
+        print(f"{ref_code}: '{ref}'")
+
         author, year = ref.split("_")
 
         # Author has no numbers

@@ -18,8 +18,8 @@ CAT_DIR = os.path.join(os.path.dirname(__file__), 'catalogue_papers')
 # Grab all the catalogue yamls
 CAT_YAMLS = glob.glob("{}/*yaml".format(CAT_DIR))
 
-# ANTF version to be used with all psrqpy querys
-ATNF_VER = '1.68'
+# atnf version to be used with all psrqpy querys
+ATNF_VER = '2.6.1'
 
 # dictionary of ADS links
 ADS_REF = {
@@ -164,16 +164,16 @@ ADS_REF = {
 }
 
 
-def get_antf_references():
+def get_atnf_references():
     """Wrapper for psrqpy.get_references() that ensures the cache is only Updated once."""
-    ref_dict  = psrqpy.get_references(version=ATNF_VER)
+    ref_dict = psrqpy.get_references(version=ATNF_VER)
     if not isinstance(ref_dict, dict):
         # Reference error so update the cache
-        ref_dict  = psrqpy.get_references(version=ATNF_VER, updaterefcache=True)
+        ref_dict = psrqpy.get_references(version=ATNF_VER, updaterefcache=True)
     return ref_dict
 
 
-def convert_antf_ref(ref_code, ref_dict=None):
+def convert_atnf_ref(ref_code, ref_dict=None):
     """Converts an ATNF psrcat reference code to a reference in the format "Author Year"
 
     Parameters
@@ -188,23 +188,35 @@ def convert_antf_ref(ref_code, ref_dict=None):
     ref : `str`
         Reference in the format "Author Year".
     """
-    if ref_dict is None:
-        ref_dict = get_antf_references()
-    try:
-        ref_string = ref_dict[ref_code]
-    except KeyError or TypeError:
-        # If the psrcat database file is changed this will update the ref_code
-        logger.debug(ref_dict)
-        psrqpy.QueryATNF(version=ATNF_VER, checkupdate=True)
-        ref_dict = get_antf_references()
-        logger.debug(ref_dict)
-        ref_string = ref_dict[ref_code]
-
     # These one doesn't even have a title so returning maunally
     if ref_code == "san16":
         return "Sanpa-arsa_2016"
     elif ref_code == "gg74":
         return "Gomez-Gonzalez_1974"
+
+    if ref_dict is None:
+        ref_dict = get_atnf_references()
+
+    try:
+        ref_string = ref_dict[ref_code]
+    except KeyError or TypeError:
+        # These references don't exist in psrcat_refs
+        if ref_code == "adl+24":
+            return "Ahmad_2024"
+        elif ref_code == "bnc+24":
+            return "Burgay_2024"
+        elif ref_code == "gsw+24":
+            return "Gao_2024"
+        elif ref_code == "lsb+24":
+            return "Liu_2024"
+        elif ref_code == "mlk+24":
+            return "McEwen_2024"
+        elif ref_code == "mmr+24":
+            return "McCarver_2024"
+        elif ref_code == "plg+24":
+            return "Prayag_2024"
+        else:
+            return None
 
     # Find the parts we need
     if ref_string.startswith("eds "):
@@ -290,7 +302,7 @@ def flux_from_atnf(pulsar, query=None, ref_dict=None, assumed_error=0.5):
     if query is None:
         query = psrqpy.QueryATNF(version=ATNF_VER, psrs=[pulsar]).pandas
     if ref_dict is None:
-        ref_dict = get_antf_references()
+        ref_dict = get_atnf_references()
     query_id = list(query['PSRJ']).index(pulsar)
 
     # Find all flux queries from keys
@@ -316,12 +328,11 @@ def flux_from_atnf(pulsar, query=None, ref_dict=None, assumed_error=0.5):
             flux_error_found = True
             try:
                 flux_err = query[flux_query+"_ERR"][query_id]
-                if flux_err == 0.0:
+                if np.isnan(flux_err) or flux_err == 0.0:
                     flux_error_found = False
             except KeyError:
                 flux_error_found = False
-            if np.isnan(flux_err):
-                flux_error_found = False
+
             if not flux_error_found:
                 logger.debug("{0} flux error for query: {1}, is zero. Assuming {2:.1f}% uncertainty"\
                                 .format(pulsar, flux_query, assumed_error*100))
@@ -338,8 +349,12 @@ def flux_from_atnf(pulsar, query=None, ref_dict=None, assumed_error=0.5):
             band_all.append(None)
 
             # Grab reference code and convert to "Author Year" format
-            ref_code = query[flux_query+"_REF"][query_id]
-            ref = convert_antf_ref(ref_code, ref_dict=ref_dict)
+            # If reference is not found, fallback to ref_code
+            ref_code = query[flux_query + "_REF"][query_id]
+            ref = convert_atnf_ref(ref_code, ref_dict=ref_dict)
+            if ref is None:
+                logger.warning(f"no name found for reference {ref_code}")
+                ref = ref_code
             references.append(f"{ref}_ATNF")
 
     return freq_all, band_all, flux_all, flux_err_all, references
@@ -370,7 +385,7 @@ def all_flux_from_atnf(query=None):
     """
     if query is None:
         query = psrqpy.QueryATNF(version=ATNF_VER).pandas
-    ref_dict = get_antf_references()
+    ref_dict = get_atnf_references()
     jnames = list(query['PSRJ'])
     jname_cat = {}
     for jname in jnames:
@@ -483,19 +498,23 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
         # return before including atnf
         return jname_cat_list
 
-    # Add the antf to the cataogues
-    antf_dict = all_flux_from_atnf(query=query)
+    # Add the atnf to the cataogues
+    atnf_dict = all_flux_from_atnf(query=query)
     # refs that have errors that we plan to inform ATNF about
-    antf_incorrect_refs = ["Zhao_2019", "Mignani_2017", "Bell_2016", "Robinson_1995", "Johnston_1994", "Manchester_1996", "Xie_2019", "Han_2016", "Kramer_1999", "Kondratiev_2015", "Crawford_2001", "Michilli_2020", "Manchester_2013", "Brinkman_2018"]
+    atnf_incorrect_refs = ["Zhao_2019", "Mignani_2017", "Bell_2016", "Robinson_1995", "Johnston_1994", "Manchester_1996", "Xie_2019", "Han_2016", "Kramer_1999", "Kondratiev_2015", "Crawford_2001", "Michilli_2020", "Manchester_2013", "Brinkman_2018"]
     # refs that are correct but where scaled to by their spectral index for the ATNF frequencies
-    antf_adjusted_refs = ["Lorimer_1995b", "Stovall_2015", "Sanidas_2019", "Wolszczan_1992", "Dembska_2014", "Kaur_2019", "Alam_2021", "Foster_1991"]
+    atnf_adjusted_refs = ["Lorimer_1995b", "Stovall_2015", "Sanidas_2019", "Wolszczan_1992", "Dembska_2014", "Kaur_2019", "Alam_2021", "Foster_1991"]
     # refs that were rounded to different decimal places than the publications
-    antf_rounded_refs = ["Johnston_2018", "Dai_2015", "McEwen_2020", "McConnell_1991", "Bondonneau_2020", "Johnston_2021", "Bates_2011", "Han_2021", "Sayer_1997", "Lynch_2012", "Stovall_2014", "Crowter_2020"]
+    atnf_rounded_refs = ["Johnston_2018", "Dai_2015", "McEwen_2020", "McConnell_1991", "Bondonneau_2020", "Johnston_2021", "Bates_2011", "Han_2021", "Sayer_1997", "Lynch_2012", "Stovall_2014", "Crowter_2020", "Bilous_2016", "Frail_2016", "Gitika_2023", "Dembska_2015"]
     # refs that have different uncertainties than published
-    antf_uncert_refs = ["Stairs_1999", "Kuzmin_2001", "Jankowski_2019", "Jankowski_2018", "Kramer_2003a", "Manchester_2001", "Morris_2002", "Zhang_2019"]
+    atnf_uncert_refs = ["Stairs_1999", "Kuzmin_2001", "Jankowski_2019", "Jankowski_2018", "Kramer_2003a", "Manchester_2001", "Morris_2002", "Zhang_2019"]
+    # this paper provides multiple epochs over multiple subbands and ATNF includes a mixture of epochs
+    # will need to add this to the pulsar_spectra catalogue properly
+    atnf_other_refs = ["Ahmad_2024"]
+
     for jname in jnames:
-        for ref in antf_dict[jname].keys():
-            # Remove "_antf" from the end of  the reference
+        for ref in atnf_dict[jname].keys():
+            # Remove "_atnf" from the end of  the reference
             raw_ref = ref[:-5]
             # Check if only_use or exclude allow this ref
             if only_use is not None:
@@ -504,16 +523,16 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
                     continue
             if exclude is None:
                 exclude = []
-            if raw_ref in exclude + antf_incorrect_refs + antf_adjusted_refs + antf_rounded_refs + antf_uncert_refs:
+            if raw_ref in exclude + atnf_incorrect_refs + atnf_adjusted_refs + atnf_rounded_refs + atnf_uncert_refs + atnf_other_refs:
                 # exclude by skipping
                 continue
 
             if raw_ref in jname_cat_dict[jname].keys():
                 # Check for redundant data
-                for freq, band, flux, flux_err in zip(antf_dict[jname][ref]['Frequency MHz'],
-                                                      antf_dict[jname][ref]['Bandwidth MHz'],
-                                                      antf_dict[jname][ref]['Flux Density mJy'],
-                                                      antf_dict[jname][ref]['Flux Density error mJy']):
+                for freq, band, flux, flux_err in zip(atnf_dict[jname][ref]['Frequency MHz'],
+                                                      atnf_dict[jname][ref]['Bandwidth MHz'],
+                                                      atnf_dict[jname][ref]['Flux Density mJy'],
+                                                      atnf_dict[jname][ref]['Flux Density error mJy']):
                     if flux     in jname_cat_dict[jname][raw_ref]['Flux Density mJy'] and \
                        flux_err in jname_cat_dict[jname][raw_ref]['Flux Density error mJy']:
                         logger.debug(f"Redundant data  pulsar:{jname}  ref:{raw_ref}  freq:{freq}  flux:{flux}  flux_err:{flux_err}")
@@ -526,10 +545,10 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
                         jname_cat_list[jname][4] += [ref]
             else:
                 # Update list
-                for freq, band, flux, flux_err in zip(antf_dict[jname][ref]['Frequency MHz'],
-                                                      antf_dict[jname][ref]['Bandwidth MHz'],
-                                                      antf_dict[jname][ref]['Flux Density mJy'],
-                                                      antf_dict[jname][ref]['Flux Density error mJy']):
+                for freq, band, flux, flux_err in zip(atnf_dict[jname][ref]['Frequency MHz'],
+                                                      atnf_dict[jname][ref]['Bandwidth MHz'],
+                                                      atnf_dict[jname][ref]['Flux Density mJy'],
+                                                      atnf_dict[jname][ref]['Flux Density error mJy']):
                     jname_cat_list[jname][0] += [freq]
                     jname_cat_list[jname][1] += [band]
                     jname_cat_list[jname][2] += [flux]
