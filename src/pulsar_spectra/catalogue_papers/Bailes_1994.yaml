@@ -1,0 +1,44 @@
+{
+ "J0034-0534": {
+  "Frequency MHz": [
+   436.0
+  ],
+  "Bandwidth MHz": [
+   32.0
+  ],
+  "Flux Density mJy": [
+   16.0
+  ],
+  "Flux Density error mJy": [
+   8.0
+  ]
+ },
+ "J1045-4509": {
+  "Frequency MHz": [
+   436.0
+  ],
+  "Bandwidth MHz": [
+   32.0
+  ],
+  "Flux Density mJy": [
+   20.0
+  ],
+  "Flux Density error mJy": [
+   10.0
+  ]
+ },
+ "J2145-0750": {
+  "Frequency MHz": [
+   436.0
+  ],
+  "Bandwidth MHz": [
+   32.0
+  ],
+  "Flux Density mJy": [
+   50.0
+  ],
+  "Flux Density error mJy": [
+   25.0
+  ]
+ }
+}

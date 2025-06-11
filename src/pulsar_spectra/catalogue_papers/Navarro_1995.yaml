@@ -1,0 +1,24 @@
+{
+ "J0218+4232": {
+  "Frequency MHz": [
+   411.0,
+   606.0,
+   1404.0
+  ],
+  "Bandwidth MHz": [
+   8.0,
+   8.0,
+   32.0
+  ],
+  "Flux Density mJy": [
+   35.0,
+   8.0,
+   0.9
+  ],
+  "Flux Density error mJy": [
+   5.0,
+   5.0,
+   0.2
+  ]
+ }
+}

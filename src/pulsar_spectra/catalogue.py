@@ -161,6 +161,19 @@ ADS_REF = {
     "Dowell_2013": "https://ui.adsabs.harvard.edu/abs/2013ApJ...775L..28D",
     "Deneva_2016": "https://ui.adsabs.harvard.edu/abs/2016ApJ...821...10D",
     "Malofeev_1993": "https://ui.adsabs.harvard.edu/abs/1993AstL...19..138M",
+    "Slee_1986": "https://ui.adsabs.harvard.edu/abs/1986AuJPh..39..103S",
+    "Fruchter_1988": "https://ui.adsabs.harvard.edu/abs/1988Natur.333..237F",
+    "Fruchter_1990": "https://ui.adsabs.harvard.edu/abs/1990ApJ...351..642F",
+    "Bailes_1994": "https://ui.adsabs.harvard.edu/abs/1994ApJ...425L..41B",
+    "Navarro_1995": "https://ui.adsabs.harvard.edu/abs/1995ApJ...455L..55N",
+    "Camilo_1996": "https://ui.adsabs.harvard.edu/abs/1996ApJ...469..819C",
+    "Maron_2004": "https://ui.adsabs.harvard.edu/abs/2004A%26A...413L..19M",
+    "Wielebinski_1993": "https://ui.adsabs.harvard.edu/abs/1993A%26A...272L..13W",
+    "Champion_2008": "https://ui.adsabs.harvard.edu/abs/2008Sci...320.1309C",
+    "Hessels_2011": "https://ui.adsabs.harvard.edu/abs/2011AIPC.1357...40H",
+    "Kowalinska_2012": "https://ui.adsabs.harvard.edu/abs/2012ASPC..466..101K",
+    "Levin_2016": "https://ui.adsabs.harvard.edu/abs/2016ApJ...818..166L",
+    "Wang_2024": "https://ui.adsabs.harvard.edu/abs/2024ApJ...961...48W",
 }
 
 
