@@ -207,8 +207,8 @@ def plot_fit(
         A list of the flux density in mJy.
     flux_errs_mJy : `list`
         A list of the uncertainty of the flux density in mJy.
-    ref : `list`
-        A list of the reference label (in the format 'Author_year').
+    refs : `list`
+        A list of the reference labels (in the format 'Author_year').
     model : `function`
         One of the model functions from :py:meth:`pulsar_spectra.models`.
     iminuit_result : `iminuit.Minuit`
