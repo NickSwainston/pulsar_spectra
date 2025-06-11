@@ -183,7 +183,7 @@ def plot_fit(
     bands_MHz,
     fluxs_mJy,
     flux_errs_mJy,
-    ref,
+    refs,
     model,
     iminuit_result,
     fit_info,
@@ -255,7 +255,7 @@ def plot_fit(
     ax.set_prop_cycle(custom_cycler)
 
     # Add data
-    data_dict = convert_cat_list_to_dict({"dummy_pulsar": [freqs_MHz, bands_MHz, fluxs_mJy, flux_errs_mJy, ref]})[
+    data_dict = convert_cat_list_to_dict({"dummy_pulsar": [freqs_MHz, bands_MHz, fluxs_mJy, flux_errs_mJy, refs]})[
         "dummy_pulsar"
     ]
     for ref in data_dict.keys():
@@ -593,7 +593,7 @@ def iminuit_fit_spectral_model(
             bands_MHz,
             fluxs_mJy,
             flux_errs_mJy,
-            ref,
+            refs,
             model_function,
             m,
             fit_info,
