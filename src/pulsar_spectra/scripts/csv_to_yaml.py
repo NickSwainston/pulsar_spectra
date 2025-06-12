@@ -31,6 +31,7 @@ def convert_csv_to_yaml(csv_location, ref_label):
                 flux_err = float(flux) * 0.5
             else:
                 print(f"Error on row: {row}")
+                continue
             # Make sure there are no weird dash characters in the pulsar name
             pulsar = pulsar.replace("–", "-").replace("−", "-")
             if pulsar.startswith("B"):
