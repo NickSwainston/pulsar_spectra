@@ -160,6 +160,7 @@ ADS_REF = {
     "Dowell_2013": "https://ui.adsabs.harvard.edu/abs/2013ApJ...775L..28D",
     "Deneva_2016": "https://ui.adsabs.harvard.edu/abs/2016ApJ...821...10D",
     "Malofeev_1993": "https://ui.adsabs.harvard.edu/abs/1993AstL...19..138M",
+    "Kumar_2025": "https://ui.adsabs.harvard.edu/abs/2025ApJ...982..132K",
 }
 
 
