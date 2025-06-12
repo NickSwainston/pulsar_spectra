@@ -175,6 +175,7 @@ ADS_REF = {
     "Levin_2016": "https://ui.adsabs.harvard.edu/abs/2016ApJ...818..166L",
     "Wang_2024": "https://ui.adsabs.harvard.edu/abs/2024ApJ...961...48W",
     "Keith_2024": "https://ui.adsabs.harvard.edu/abs/2024MNRAS.530.1581K",
+    "Kumar_2025": "https://ui.adsabs.harvard.edu/abs/2025ApJ...982..132K",
 }
 
 
