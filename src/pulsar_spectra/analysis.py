@@ -1,8 +1,10 @@
-import numpy as np
 from math import pi
+
+import numpy as np
 from psrqpy import QueryATNF
 
 from pulsar_spectra.catalogue import ATNF_VER
+
 
 def calc_log_parabolic_spectrum_max_freq(a, b, v0, u_a, u_b, u_ab):
     """Calculate the frequency where the flux is at its maximum for the log parabolic model (:py:meth:`pulsar_spectra.models.log_parabolic_spectrum`).
@@ -29,9 +31,10 @@ def calc_log_parabolic_spectrum_max_freq(a, b, v0, u_a, u_b, u_ab):
     u_v_peak : `float`
         The uncertainty of v_peak in Hz.
     """
-    v_peak = v0 * 10**(-b/(2*a))
-    u_v_peak = abs(v_peak * np.log(10) / (2*a) * np.sqrt( (u_b)**2 + (b*u_a/a)**2 - 2*b*u_ab/a ))
+    v_peak = v0 * 10 ** (-b / (2 * a))
+    u_v_peak = abs(v_peak * np.log(10) / (2 * a) * np.sqrt((u_b) ** 2 + (b * u_a / a) ** 2 - 2 * b * u_ab / a))
     return v_peak, u_v_peak
+
 
 def calc_high_frequency_cutoff_emission_height(psrname, v_c, u_v_c, z_surf=12, u_z_surf=2):
     """Calculate emission height and magetic field strengths using high-frequency cut-off model (:py:meth:`pulsar_spectra.models.high_frequency_cut_off_power_law`).
@@ -72,11 +75,11 @@ def calc_high_frequency_cutoff_emission_height(psrname, v_c, u_v_c, z_surf=12, u
     u_z_percent : `float`
         Uncertainty of z_percent as a percentage of light-cylinder radius.
     """
-    m_e = 9.1094e-28 # electron mass (g)
-    c0 = 2.99792458e10 # speed of light (cm s^{-1})
-    e = 4.8032e-10 # electron charge (cm^{3/2} g^{1/2} s^{-1})
-    c_lc = 4.77e4 # light cylinder calculation constant (km s^{-1})
-    c_B = m_e*c0/(pi*e) # magnetic field calculation constant
+    m_e = 9.1094e-28  # electron mass (g)
+    c0 = 2.99792458e10  # speed of light (cm s^{-1})
+    e = 4.8032e-10  # electron charge (cm^{3/2} g^{1/2} s^{-1})
+    c_lc = 4.77e4  # light cylinder calculation constant (km s^{-1})
+    c_B = m_e * c0 / (pi * e)  # magnetic field calculation constant
 
     query = QueryATNF(params=["P0", "BSurf", "B_LC"], psrs=[psrname], version=ATNF_VER)
     psrs = query.get_pulsars()
@@ -85,15 +88,15 @@ def calc_high_frequency_cutoff_emission_height(psrname, v_c, u_v_c, z_surf=12, u
     B_surf = psrs[psrname].BSurf
     B_lc = psrs[psrname].B_LC
 
-    B_pc = c_B*P*v_c**2
-    u_B_pc = 2*c_B*P*v_c*u_v_c
+    B_pc = c_B * P * v_c**2
+    u_B_pc = 2 * c_B * P * v_c * u_v_c
 
-    z_e = z_surf*(B_pc/B_surf)**(-1/3)
-    u_z_e = (B_pc/B_surf)**(-1/3) * np.sqrt(u_z_surf**2 + (u_B_pc*z_surf/(3*B_pc))**2)
+    z_e = z_surf * (B_pc / B_surf) ** (-1 / 3)
+    u_z_e = (B_pc / B_surf) ** (-1 / 3) * np.sqrt(u_z_surf**2 + (u_B_pc * z_surf / (3 * B_pc)) ** 2)
 
-    r_lc = c_lc*P
+    r_lc = c_lc * P
 
-    z_percent = z_e/r_lc*100
-    u_z_percent = u_z_e*100/r_lc
+    z_percent = z_e / r_lc * 100
+    u_z_percent = u_z_e * 100 / r_lc
 
     return B_pc, u_B_pc, B_surf, B_lc, r_lc, z_e, u_z_e, z_percent, u_z_percent

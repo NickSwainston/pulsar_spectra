@@ -2,166 +2,165 @@
 Loads all the data required by vcstools from the data directory.
 """
 
+import glob
+import logging
 import os
 import re
-import glob
-import yaml
-import psrqpy
-import numpy as np
 
-import logging
+import numpy as np
+import psrqpy
+import yaml
+
 logger = logging.getLogger(__name__)
 
 # Hard code the path of the flux catalogue directories
-CAT_DIR = os.path.join(os.path.dirname(__file__), 'catalogue_papers')
+CAT_DIR = os.path.join(os.path.dirname(__file__), "catalogue_papers")
 
 # Grab all the catalogue yamls
 CAT_YAMLS = glob.glob("{}/*yaml".format(CAT_DIR))
 
 # atnf version to be used with all psrqpy querys
-ATNF_VER = '2.6.1'
+ATNF_VER = "2.6.1"
 
 # dictionary of ADS links
 ADS_REF = {
-    "Sieber_1973": "https://ui.adsabs.harvard.edu/abs/1973A%26A....28..237S/abstract",
-    "Bartel_1978": "https://ui.adsabs.harvard.edu/abs/1978A%26A....68..361B/abstract",
-    "Izvekova_1981": "https://ui.adsabs.harvard.edu/abs/1981Ap%26SS..78...45I/abstract",
-    "Lorimer_1995": "https://ui.adsabs.harvard.edu/abs/1995ApJ...439..933L/abstract",
-    "van_Ommen_1997": "https://ui.adsabs.harvard.edu/abs/1997MNRAS.287..307V/abstract",
-    "Maron_2000": "https://ui.adsabs.harvard.edu/abs/2000A%26AS..147..195M/abstract",
-    "Malofeev_2000": "https://ui.adsabs.harvard.edu/abs/2000ARep...44..436M/abstract",
-    "Karastergiou_2005": "https://ui.adsabs.harvard.edu/abs/2005MNRAS.359..481K/abstract",
-    "Johnston_2006": "https://ui.adsabs.harvard.edu/abs/2006MNRAS.369.1916J/abstract",
-    "Kijak_2007": "https://ui.adsabs.harvard.edu/abs/2007A%26A...462..699K/abstract",
-    "Keith_2011": "https://ui.adsabs.harvard.edu/abs/2011MNRAS.416..346K/abstract",
-    "Bates_2011": "https://ui.adsabs.harvard.edu/abs/2011MNRAS.411.1575B/abstract",
-    "Kijak_2011": "https://ui.adsabs.harvard.edu/abs/2011A%26A...531A..16K/abstract",
-    "Zakharenko_2013": "https://ui.adsabs.harvard.edu/abs/2013MNRAS.431.3624Z/abstract",
-    "Dai_2015": "https://ui.adsabs.harvard.edu/abs/2015MNRAS.449.3223D/abstract",
-    "Basu_2016": "https://ui.adsabs.harvard.edu/abs/2016MNRAS.458.2509B/abstract",
-    "Bell_2016": "https://ui.adsabs.harvard.edu/abs/2016MNRAS.461..908B/abstract",
-    "Bilous_2016": "https://ui.adsabs.harvard.edu/abs/2016A%26A...591A.134B/abstract",
-    "Han_2016": "https://ui.adsabs.harvard.edu/abs/2016RAA....16..159H/abstract",
-    "Murphy_2017": "https://ui.adsabs.harvard.edu/abs/2017PASA...34...20M/abstract",
-    "Kijak_2017": "https://ui.adsabs.harvard.edu/abs/2017ApJ...840..108K/abstract",
-    "Hobbs_2004a": "https://ui.adsabs.harvard.edu/abs/2004MNRAS.352.1439H/abstract",
-    "Johnston_1993": "https://ui.adsabs.harvard.edu/abs/1993Natur.361..613J/abstract",
-    "Stovall_2015": "https://ui.adsabs.harvard.edu/abs/2015ApJ...808..156S/abstract",
-    "Xue_2017": "https://ui.adsabs.harvard.edu/abs/2017PASA...34...70X/abstract",
-    "Jankowski_2018": "https://ui.adsabs.harvard.edu/abs/2018MNRAS.473.4436J/abstract",
-    "Bondonneau_2020": "https://ui.adsabs.harvard.edu/abs/2020A%26A...635A..76B/abstract",
-    "Johnston_2021": "https://ui.adsabs.harvard.edu/abs/2021MNRAS.502.1253J/abstract",
-    "Taylor_1993": "https://ui.adsabs.harvard.edu/abs/1993ApJS...88..529T/abstract",
-    "Mignani_2017": "https://ui.adsabs.harvard.edu/abs/2017ApJ...851L..10M/abstract",
-    "Johnston_2018": "https://ui.adsabs.harvard.edu/abs/2018MNRAS.474.4629J/abstract",
-    "Jankowski_2019": "https://ui.adsabs.harvard.edu/abs/2019MNRAS.484.3691J/abstract",
-    "Sanidas_2019": "https://ui.adsabs.harvard.edu/abs/2019A%26A...626A.104S/abstract",
-    "Zhao_2019": "https://ui.adsabs.harvard.edu/abs/2019ApJ...874...64Z/abstract",
-    "Bilous_2020": "https://ui.adsabs.harvard.edu/abs/2020A%26A...635A..75B/abstract",
-    "Stappers_2008" :"https://ui.adsabs.harvard.edu/abs/2008AIPC..983..593S/abstract",
-    "McEwen_2020": "https://ui.adsabs.harvard.edu/abs/2020ApJ...892...76M/abstract",
-    "Lorimer_2006": "https://ui.adsabs.harvard.edu/abs/2006MNRAS.372..777L/abstract",
-    "Kramer_2003a": "https://ui.adsabs.harvard.edu/abs/2003MNRAS.342.1299K/abstract",
-    "Han_2021" : "https://ui.adsabs.harvard.edu/abs/2021RAA....21..107H/abstract",
-    "Dembska_2014": "https://ui.adsabs.harvard.edu/abs/2014MNRAS.445.3105D/abstract",
-    "Camilo_1995": "https://ui.adsabs.harvard.edu/abs/1995ApJ...445..756C/abstract",
-    "Robinson_1995": "https://ui.adsabs.harvard.edu/abs/1995MNRAS.274..547R/abstract",
-    "McConnell_1991": "https://ui.adsabs.harvard.edu/abs/1991MNRAS.249..654M/abstract",
-    "Manchester_1996": "https://ui.adsabs.harvard.edu/abs/1996MNRAS.279.1235M/abstract",
-    "Qiao_1995": "https://ui.adsabs.harvard.edu/abs/1995MNRAS.274..572Q/abstract",
-    "Manchester_1993": "https://ui.adsabs.harvard.edu/abs/1993ApJ...403L..29M/abstract",
-    "Zepka_1996": "https://ui.adsabs.harvard.edu/abs/1996ApJ...456..305Z/abstract",
-    "Manchester_1978a": "https://ui.adsabs.harvard.edu/abs/1978MNRAS.185..409M/abstract",
-    "Lundgren_1995": "https://ui.adsabs.harvard.edu/abs/1995ApJ...453..419L/abstract",
-    "Dewey_1985": "https://ui.adsabs.harvard.edu/abs/1985ApJ...294L..25D/abstract",
-    "Nicastro_1995": "https://ui.adsabs.harvard.edu/abs/1995MNRAS.273L..68N/abstract",
-    "Johnston_1992": "https://ui.adsabs.harvard.edu/abs/1992MNRAS.255..401J/abstract",
-    "Wolszczan_1992": "https://ui.adsabs.harvard.edu/abs/1992Natur.355..145W/abstract",
-    "Xie_2019": "https://ui.adsabs.harvard.edu/abs/2019RAA....19..103X/abstract",
-    "Lorimer_1995b": "https://ui.adsabs.harvard.edu/abs/1995MNRAS.273..411L/abstract",
-    "Kaur_2019": "https://ui.adsabs.harvard.edu/abs/2019ApJ...882..133K/abstract",
-    "Manchester_2001": "https://ui.adsabs.harvard.edu/abs/2001MNRAS.328...17M/abstract",
-    "Morris_2002": "https://ui.adsabs.harvard.edu/abs/2002MNRAS.335..275M/abstract",
-    "Kondratiev_2016": "https://ui.adsabs.harvard.edu/abs/2016A%26A...585A.128K/abstract",
-    "Kravtsov_2022": "https://ui.adsabs.harvard.edu/abs/2022MNRAS.512.4324K/abstract",
-    "Toscano_1998": "https://ui.adsabs.harvard.edu/abs/1998ApJ...506..863T/abstract",
-    "Kuzmin_2001": "https://ui.adsabs.harvard.edu/abs/2001A%26A...368..230K/abstract",
-    "Stairs_1999": "https://ui.adsabs.harvard.edu/abs/1999ApJS..123..627S/abstract",
-    "Spiewak_2022": "https://ui.adsabs.harvard.edu/abs/2022PASA...39...27S/abstract",
-    "Zhang_2019": "https://ui.adsabs.harvard.edu/abs/2019ApJ...885L..37Z/abstract",
-    "Lommen_2000": "https://ui.adsabs.harvard.edu/abs/2000ApJ...545.1007L/abstract",
-    "Alam_2021": "https://ui.adsabs.harvard.edu/abs/2021ApJS..252....4A/abstract",
-    "Bondonneau_2021": "https://ui.adsabs.harvard.edu/abs/2021A%26A...652A..34B/abstract",
-    "Kramer_1998": "https://ui.adsabs.harvard.edu/abs/1998ApJ...501..270K/abstract",
-    "Kramer_1999": "https://ui.adsabs.harvard.edu/abs/1999ApJ...526..957K/abstract",
-    "Frail_2016": "https://ui.adsabs.harvard.edu/abs/2016ApJ...829..119F/abstract",
-    "Lee_2022": "https://ui.adsabs.harvard.edu/abs/2022PASA...39...42L/abstract",
-    "Bhat_2023": "https://ui.adsabs.harvard.edu/abs/2023arXiv230211920B/abstract",
-    "Aloisi_2019":"https://ui.adsabs.harvard.edu/abs/2019ApJ...875...19A/abstract",
-    "Bailes_1997":"https://ui.adsabs.harvard.edu/abs/1997ApJ...481..386B/abstract",
-    "Basu_2018":"https://ui.adsabs.harvard.edu/abs/2018MNRAS.475.1469B/abstract",
-    "Biggs_1996":"https://ui.adsabs.harvard.edu/abs/1996MNRAS.282..691B/abstract",
-    "Boyles_2013":"https://ui.adsabs.harvard.edu/abs/2013ApJ...763...80B/abstract",
-    "Brinkman_2018":"https://ui.adsabs.harvard.edu/abs/2018MNRAS.474.2012B",
-    "Champion_2005a":"https://ui.adsabs.harvard.edu/abs/2005MNRAS.363..929C",
-    "Champion_2005b":"https://ui.adsabs.harvard.edu/abs/2005PhDT.......282C",
-    "Crawford_2001":"https://ui.adsabs.harvard.edu/abs/2001AJ....122.2001C/abstract",
-    "Crawford_2007":"https://ui.adsabs.harvard.edu/abs/2007AJ....134.1231C/abstract",
-    "Deller_2009":"https://ui.adsabs.harvard.edu/abs/2009ApJ...701.1243D/abstract",
-    "Dembska_2015":"https://ui.adsabs.harvard.edu/abs/2015MNRAS.449.1869D",
-    "Demorest_2013":"https://ui.adsabs.harvard.edu/abs/2013ApJ...762...94D",
-    "Esamdin_2004":"https://ui.adsabs.harvard.edu/abs/2004A&A...425..949E",
-    "Freire_2007":"https://ui.adsabs.harvard.edu/abs/2007ApJ...662.1177F",
-    "Gentile_2018":"https://ui.adsabs.harvard.edu/abs/2018ApJ...862...47G/abstract",
-    "Giacani_2001":"https://ui.adsabs.harvard.edu/abs/2001AJ....121.3133G",
-    "Han_1999":"https://ui.adsabs.harvard.edu/abs/1999A&AS..136..571H",
-    "Hoensbroech_1997":"https://ui.adsabs.harvard.edu/abs/1997A%26AS..126..121V/abstract",
-    "Joshi_2009":"https://ui.adsabs.harvard.edu/abs/2009MNRAS.398..943J/abstract",
-    "Kaspi_1997":"https://ui.adsabs.harvard.edu/abs/1997ApJ...485..820K",
-    "Kijak_1998":"https://ui.adsabs.harvard.edu/abs/1998A%26AS..127..153K/abstract",
-    "Kramer_1997":"https://ui.adsabs.harvard.edu/abs/1997ApJ...488..364K",
-    "Kuniyoshi_2015":"https://ui.adsabs.harvard.edu/abs/2015MNRAS.453..828K/abstract",
-    "Lewandowski_2004":"https://ui.adsabs.harvard.edu/abs/2004ApJ...600..905L",
-    "Lorimer_1995":"https://ui.adsabs.harvard.edu/abs/1995ApJ...439..933L",
-    "Lorimer_1996":"https://ui.adsabs.harvard.edu/abs/1996MNRAS.283.1383L",
-    "Lorimer_2005":"https://ui.adsabs.harvard.edu/abs/2005MNRAS.359.1524L",
-    "Lorimer_2007":"https://ui.adsabs.harvard.edu/abs/2007MNRAS.379..282L",
-    "Lynch_2012":"https://ui.adsabs.harvard.edu/abs/2012ApJ...745..109L",
-    "Lynch_2013":"https://ui.adsabs.harvard.edu/abs/2013ApJ...763...81L/abstract",
-    "Manchester_1995":"https://ui.adsabs.harvard.edu/abs/1995ApJ...441L..65M/abstract",
-    "Manchester_2013":"https://ui.adsabs.harvard.edu/abs/2013PASA...30...17M/abstract",
-    "Michilli_2020":"https://ui.adsabs.harvard.edu/abs/2020MNRAS.491..725M/abstract",
-    "Mickaliger_2012":"https://ui.adsabs.harvard.edu/abs/2012ApJ...759..127M",
-    "Mikhailov_2016":"https://ui.adsabs.harvard.edu/abs/2016A%26A...593A..21M/abstract",
-    "Ng_2015":"https://ui.adsabs.harvard.edu/abs/2015MNRAS.450.2922N",
-    "RoZko_2018":"https://ui.adsabs.harvard.edu/abs/2018MNRAS.479.2193R",
-    "Sayer_1997":"https://ui.adsabs.harvard.edu/abs/1997ApJ...474..426S",
-    "Seiradakis_1995":"https://ui.adsabs.harvard.edu/abs/1995A%26AS..111..205S/abstract",
-    "Shapiro_Albert_2021":"https://ui.adsabs.harvard.edu/abs/2021ApJ...909..219S",
-    "Stovall_2014":"https://ui.adsabs.harvard.edu/abs/2014ApJ...791...67S/abstract",
-    "Surnis_2019":"https://ui.adsabs.harvard.edu/abs/2019ApJ...870....8S/abstract",
-    "Titus_2019":"https://ui.adsabs.harvard.edu/abs/2019MNRAS.487.4332T",
-    "Zhao_2017":"https://ui.adsabs.harvard.edu/abs/2017ApJ...845..156Z/abstract",
-    "Gitika_2023":"https://ui.adsabs.harvard.edu/abs/2023MNRAS.526.3370G/abstract",
-    "Crowter_2020":"https://ui.adsabs.harvard.edu/abs/2020MNRAS.495.3052C/abstract",
-    "Janssen_2009":"https://ui.adsabs.harvard.edu/abs/2009A%26A...498..223J/abstract",
-    "Weisberg_1999":"https://ui.adsabs.harvard.edu/abs/1999ApJS..121..171W/abstract",
-    "Stokes_1985":"https://ui.adsabs.harvard.edu/abs/1985Natur.317..787S/abstract",
-    "Stokes_1986":"https://ui.adsabs.harvard.edu/abs/1986ApJ...311..694S/abstract",
-    "Tan_2020":"https://ui.adsabs.harvard.edu/abs/2020MNRAS.492.5878T/abstract",
-    "Ng_2015":"https://ui.adsabs.harvard.edu/abs/2015MNRAS.450.2922N/abstract",
-    "McLean_1973":"https://ui.adsabs.harvard.edu/abs/1973MNRAS.165..133M/abstract",
-    "McGary_2001":"https://ui.adsabs.harvard.edu/abs/2001AJ....121.1192M/abstract",
-    "Lazarus_2015":"https://ui.adsabs.harvard.edu/abs/2015ApJ...812...81L/abstract",
-    "Curylo_2020":"https://ui.adsabs.harvard.edu/abs/2020MNRAS.495.3052C/abstract",
-    "Shrauner_1998":"https://ui.adsabs.harvard.edu/abs/1998ApJ...509..785S/abstract",
-    "Foster_1991":"https://ui.adsabs.harvard.edu/abs/1991ApJ...378..687F/abstract",
-    "Bhattacharyya_2016":"https://ui.adsabs.harvard.edu/abs/2016ApJ...817..130B/abstract",
-    "Kouwenhoven_2000":"https://ui.adsabs.harvard.edu/abs/2000A%26AS..145..243K/abstract",
-    "Dowell_2013":"https://ui.adsabs.harvard.edu/abs/2013ApJ...775L..28D/abstract",
-    "Deneva_2016":"https://ui.adsabs.harvard.edu/abs/2016ApJ...821...10D/abstract",
-    "Malofeev_1993":"https://ui.adsabs.harvard.edu/abs/1993AstL...19..138M/abstract",
-    "Kumar_2025":"https://ui.adsabs.harvard.edu/abs/2025ApJ...982..132K/abstract",
+    "Sieber_1973": "https://ui.adsabs.harvard.edu/abs/1973A%26A....28..237S",
+    "Bartel_1978": "https://ui.adsabs.harvard.edu/abs/1978A%26A....68..361B",
+    "Izvekova_1981": "https://ui.adsabs.harvard.edu/abs/1981Ap%26SS..78...45I",
+    "Lorimer_1995": "https://ui.adsabs.harvard.edu/abs/1995ApJ...439..933L",
+    "van_Ommen_1997": "https://ui.adsabs.harvard.edu/abs/1997MNRAS.287..307V",
+    "Maron_2000": "https://ui.adsabs.harvard.edu/abs/2000A%26AS..147..195M",
+    "Malofeev_2000": "https://ui.adsabs.harvard.edu/abs/2000ARep...44..436M",
+    "Karastergiou_2005": "https://ui.adsabs.harvard.edu/abs/2005MNRAS.359..481K",
+    "Johnston_2006": "https://ui.adsabs.harvard.edu/abs/2006MNRAS.369.1916J",
+    "Kijak_2007": "https://ui.adsabs.harvard.edu/abs/2007A%26A...462..699K",
+    "Keith_2011": "https://ui.adsabs.harvard.edu/abs/2011MNRAS.416..346K",
+    "Bates_2011": "https://ui.adsabs.harvard.edu/abs/2011MNRAS.411.1575B",
+    "Kijak_2011": "https://ui.adsabs.harvard.edu/abs/2011A%26A...531A..16K",
+    "Zakharenko_2013": "https://ui.adsabs.harvard.edu/abs/2013MNRAS.431.3624Z",
+    "Dai_2015": "https://ui.adsabs.harvard.edu/abs/2015MNRAS.449.3223D",
+    "Basu_2016": "https://ui.adsabs.harvard.edu/abs/2016MNRAS.458.2509B",
+    "Bell_2016": "https://ui.adsabs.harvard.edu/abs/2016MNRAS.461..908B",
+    "Bilous_2016": "https://ui.adsabs.harvard.edu/abs/2016A%26A...591A.134B",
+    "Han_2016": "https://ui.adsabs.harvard.edu/abs/2016RAA....16..159H",
+    "Murphy_2017": "https://ui.adsabs.harvard.edu/abs/2017PASA...34...20M",
+    "Kijak_2017": "https://ui.adsabs.harvard.edu/abs/2017ApJ...840..108K",
+    "Hobbs_2004a": "https://ui.adsabs.harvard.edu/abs/2004MNRAS.352.1439H",
+    "Johnston_1993": "https://ui.adsabs.harvard.edu/abs/1993Natur.361..613J",
+    "Stovall_2015": "https://ui.adsabs.harvard.edu/abs/2015ApJ...808..156S",
+    "Xue_2017": "https://ui.adsabs.harvard.edu/abs/2017PASA...34...70X",
+    "Jankowski_2018": "https://ui.adsabs.harvard.edu/abs/2018MNRAS.473.4436J",
+    "Bondonneau_2020": "https://ui.adsabs.harvard.edu/abs/2020A%26A...635A..76B",
+    "Johnston_2021": "https://ui.adsabs.harvard.edu/abs/2021MNRAS.502.1253J",
+    "Taylor_1993": "https://ui.adsabs.harvard.edu/abs/1993ApJS...88..529T",
+    "Mignani_2017": "https://ui.adsabs.harvard.edu/abs/2017ApJ...851L..10M",
+    "Johnston_2018": "https://ui.adsabs.harvard.edu/abs/2018MNRAS.474.4629J",
+    "Jankowski_2019": "https://ui.adsabs.harvard.edu/abs/2019MNRAS.484.3691J",
+    "Sanidas_2019": "https://ui.adsabs.harvard.edu/abs/2019A%26A...626A.104S",
+    "Zhao_2019": "https://ui.adsabs.harvard.edu/abs/2019ApJ...874...64Z",
+    "Bilous_2020": "https://ui.adsabs.harvard.edu/abs/2020A%26A...635A..75B",
+    "Stappers_2008": "https://ui.adsabs.harvard.edu/abs/2008AIPC..983..593S",
+    "McEwen_2020": "https://ui.adsabs.harvard.edu/abs/2020ApJ...892...76M",
+    "Lorimer_2006": "https://ui.adsabs.harvard.edu/abs/2006MNRAS.372..777L",
+    "Kramer_2003a": "https://ui.adsabs.harvard.edu/abs/2003MNRAS.342.1299K",
+    "Han_2021": "https://ui.adsabs.harvard.edu/abs/2021RAA....21..107H",
+    "Dembska_2014": "https://ui.adsabs.harvard.edu/abs/2014MNRAS.445.3105D",
+    "Camilo_1995": "https://ui.adsabs.harvard.edu/abs/1995ApJ...445..756C",
+    "Robinson_1995": "https://ui.adsabs.harvard.edu/abs/1995MNRAS.274..547R",
+    "McConnell_1991": "https://ui.adsabs.harvard.edu/abs/1991MNRAS.249..654M",
+    "Manchester_1996": "https://ui.adsabs.harvard.edu/abs/1996MNRAS.279.1235M",
+    "Qiao_1995": "https://ui.adsabs.harvard.edu/abs/1995MNRAS.274..572Q",
+    "Manchester_1993": "https://ui.adsabs.harvard.edu/abs/1993ApJ...403L..29M",
+    "Zepka_1996": "https://ui.adsabs.harvard.edu/abs/1996ApJ...456..305Z",
+    "Manchester_1978a": "https://ui.adsabs.harvard.edu/abs/1978MNRAS.185..409M",
+    "Lundgren_1995": "https://ui.adsabs.harvard.edu/abs/1995ApJ...453..419L",
+    "Dewey_1985": "https://ui.adsabs.harvard.edu/abs/1985ApJ...294L..25D",
+    "Nicastro_1995": "https://ui.adsabs.harvard.edu/abs/1995MNRAS.273L..68N",
+    "Johnston_1992": "https://ui.adsabs.harvard.edu/abs/1992MNRAS.255..401J",
+    "Wolszczan_1992": "https://ui.adsabs.harvard.edu/abs/1992Natur.355..145W",
+    "Xie_2019": "https://ui.adsabs.harvard.edu/abs/2019RAA....19..103X",
+    "Lorimer_1995b": "https://ui.adsabs.harvard.edu/abs/1995MNRAS.273..411L",
+    "Kaur_2019": "https://ui.adsabs.harvard.edu/abs/2019ApJ...882..133K",
+    "Manchester_2001": "https://ui.adsabs.harvard.edu/abs/2001MNRAS.328...17M",
+    "Morris_2002": "https://ui.adsabs.harvard.edu/abs/2002MNRAS.335..275M",
+    "Kondratiev_2016": "https://ui.adsabs.harvard.edu/abs/2016A%26A...585A.128K",
+    "Kravtsov_2022": "https://ui.adsabs.harvard.edu/abs/2022MNRAS.512.4324K",
+    "Toscano_1998": "https://ui.adsabs.harvard.edu/abs/1998ApJ...506..863T",
+    "Kuzmin_2001": "https://ui.adsabs.harvard.edu/abs/2001A%26A...368..230K",
+    "Stairs_1999": "https://ui.adsabs.harvard.edu/abs/1999ApJS..123..627S",
+    "Spiewak_2022": "https://ui.adsabs.harvard.edu/abs/2022PASA...39...27S",
+    "Zhang_2019": "https://ui.adsabs.harvard.edu/abs/2019ApJ...885L..37Z",
+    "Lommen_2000": "https://ui.adsabs.harvard.edu/abs/2000ApJ...545.1007L",
+    "Alam_2021": "https://ui.adsabs.harvard.edu/abs/2021ApJS..252....4A",
+    "Bondonneau_2021": "https://ui.adsabs.harvard.edu/abs/2021A%26A...652A..34B",
+    "Kramer_1998": "https://ui.adsabs.harvard.edu/abs/1998ApJ...501..270K",
+    "Kramer_1999": "https://ui.adsabs.harvard.edu/abs/1999ApJ...526..957K",
+    "Frail_2016": "https://ui.adsabs.harvard.edu/abs/2016ApJ...829..119F",
+    "Lee_2022": "https://ui.adsabs.harvard.edu/abs/2022PASA...39...42L",
+    "Bhat_2023": "https://ui.adsabs.harvard.edu/abs/2023arXiv230211920B",
+    "Aloisi_2019": "https://ui.adsabs.harvard.edu/abs/2019ApJ...875...19A",
+    "Bailes_1997": "https://ui.adsabs.harvard.edu/abs/1997ApJ...481..386B",
+    "Basu_2018": "https://ui.adsabs.harvard.edu/abs/2018MNRAS.475.1469B",
+    "Biggs_1996": "https://ui.adsabs.harvard.edu/abs/1996MNRAS.282..691B",
+    "Boyles_2013": "https://ui.adsabs.harvard.edu/abs/2013ApJ...763...80B",
+    "Brinkman_2018": "https://ui.adsabs.harvard.edu/abs/2018MNRAS.474.2012B",
+    "Champion_2005a": "https://ui.adsabs.harvard.edu/abs/2005MNRAS.363..929C",
+    "Champion_2005b": "https://ui.adsabs.harvard.edu/abs/2005PhDT.......282C",
+    "Crawford_2001": "https://ui.adsabs.harvard.edu/abs/2001AJ....122.2001C",
+    "Crawford_2007": "https://ui.adsabs.harvard.edu/abs/2007AJ....134.1231C",
+    "Deller_2009": "https://ui.adsabs.harvard.edu/abs/2009ApJ...701.1243D",
+    "Dembska_2015": "https://ui.adsabs.harvard.edu/abs/2015MNRAS.449.1869D",
+    "Demorest_2013": "https://ui.adsabs.harvard.edu/abs/2013ApJ...762...94D",
+    "Esamdin_2004": "https://ui.adsabs.harvard.edu/abs/2004A&A...425..949E",
+    "Freire_2007": "https://ui.adsabs.harvard.edu/abs/2007ApJ...662.1177F",
+    "Gentile_2018": "https://ui.adsabs.harvard.edu/abs/2018ApJ...862...47G",
+    "Giacani_2001": "https://ui.adsabs.harvard.edu/abs/2001AJ....121.3133G",
+    "Han_1999": "https://ui.adsabs.harvard.edu/abs/1999A&AS..136..571H",
+    "Hoensbroech_1997": "https://ui.adsabs.harvard.edu/abs/1997A%26AS..126..121V",
+    "Joshi_2009": "https://ui.adsabs.harvard.edu/abs/2009MNRAS.398..943J",
+    "Kaspi_1997": "https://ui.adsabs.harvard.edu/abs/1997ApJ...485..820K",
+    "Kijak_1998": "https://ui.adsabs.harvard.edu/abs/1998A%26AS..127..153K",
+    "Kramer_1997": "https://ui.adsabs.harvard.edu/abs/1997ApJ...488..364K",
+    "Kuniyoshi_2015": "https://ui.adsabs.harvard.edu/abs/2015MNRAS.453..828K",
+    "Lewandowski_2004": "https://ui.adsabs.harvard.edu/abs/2004ApJ...600..905L",
+    "Lorimer_1996": "https://ui.adsabs.harvard.edu/abs/1996MNRAS.283.1383L",
+    "Lorimer_2005": "https://ui.adsabs.harvard.edu/abs/2005MNRAS.359.1524L",
+    "Lorimer_2007": "https://ui.adsabs.harvard.edu/abs/2007MNRAS.379..282L",
+    "Lynch_2012": "https://ui.adsabs.harvard.edu/abs/2012ApJ...745..109L",
+    "Lynch_2013": "https://ui.adsabs.harvard.edu/abs/2013ApJ...763...81L",
+    "Manchester_1995": "https://ui.adsabs.harvard.edu/abs/1995ApJ...441L..65M",
+    "Manchester_2013": "https://ui.adsabs.harvard.edu/abs/2013PASA...30...17M",
+    "Michilli_2020": "https://ui.adsabs.harvard.edu/abs/2020MNRAS.491..725M",
+    "Mickaliger_2012": "https://ui.adsabs.harvard.edu/abs/2012ApJ...759..127M",
+    "Mikhailov_2016": "https://ui.adsabs.harvard.edu/abs/2016A%26A...593A..21M",
+    "Ng_2015": "https://ui.adsabs.harvard.edu/abs/2015MNRAS.450.2922N",
+    "RoZko_2018": "https://ui.adsabs.harvard.edu/abs/2018MNRAS.479.2193R",
+    "Sayer_1997": "https://ui.adsabs.harvard.edu/abs/1997ApJ...474..426S",
+    "Seiradakis_1995": "https://ui.adsabs.harvard.edu/abs/1995A%26AS..111..205S",
+    "Shapiro_Albert_2021": "https://ui.adsabs.harvard.edu/abs/2021ApJ...909..219S",
+    "Stovall_2014": "https://ui.adsabs.harvard.edu/abs/2014ApJ...791...67S",
+    "Surnis_2019": "https://ui.adsabs.harvard.edu/abs/2019ApJ...870....8S",
+    "Titus_2019": "https://ui.adsabs.harvard.edu/abs/2019MNRAS.487.4332T",
+    "Zhao_2017": "https://ui.adsabs.harvard.edu/abs/2017ApJ...845..156Z",
+    "Gitika_2023": "https://ui.adsabs.harvard.edu/abs/2023MNRAS.526.3370G",
+    "Crowter_2020": "https://ui.adsabs.harvard.edu/abs/2020MNRAS.495.3052C",
+    "Janssen_2009": "https://ui.adsabs.harvard.edu/abs/2009A%26A...498..223J",
+    "Weisberg_1999": "https://ui.adsabs.harvard.edu/abs/1999ApJS..121..171W",
+    "Stokes_1985": "https://ui.adsabs.harvard.edu/abs/1985Natur.317..787S",
+    "Stokes_1986": "https://ui.adsabs.harvard.edu/abs/1986ApJ...311..694S",
+    "Tan_2020": "https://ui.adsabs.harvard.edu/abs/2020MNRAS.492.5878T",
+    "McLean_1973": "https://ui.adsabs.harvard.edu/abs/1973MNRAS.165..133M",
+    "McGary_2001": "https://ui.adsabs.harvard.edu/abs/2001AJ....121.1192M",
+    "Lazarus_2015": "https://ui.adsabs.harvard.edu/abs/2015ApJ...812...81L",
+    "Curylo_2020": "https://ui.adsabs.harvard.edu/abs/2020MNRAS.495.3052C",
+    "Shrauner_1998": "https://ui.adsabs.harvard.edu/abs/1998ApJ...509..785S",
+    "Foster_1991": "https://ui.adsabs.harvard.edu/abs/1991ApJ...378..687F",
+    "Bhattacharyya_2016": "https://ui.adsabs.harvard.edu/abs/2016ApJ...817..130B",
+    "Kouwenhoven_2000": "https://ui.adsabs.harvard.edu/abs/2000A%26AS..145..243K",
+    "Dowell_2013": "https://ui.adsabs.harvard.edu/abs/2013ApJ...775L..28D",
+    "Deneva_2016": "https://ui.adsabs.harvard.edu/abs/2016ApJ...821...10D",
+    "Malofeev_1993": "https://ui.adsabs.harvard.edu/abs/1993AstL...19..138M",
+    "Kumar_2025": "https://ui.adsabs.harvard.edu/abs/2025ApJ...982..132K",
 }
 
 
@@ -200,7 +199,7 @@ def convert_atnf_ref(ref_code, ref_dict=None):
 
     try:
         ref_string = ref_dict[ref_code]
-    except KeyError or TypeError:
+    except KeyError:
         # These references don't exist in psrcat_refs
         if ref_code == "adl+24":
             return "Ahmad_2024"
@@ -237,7 +236,7 @@ def convert_atnf_ref(ref_code, ref_dict=None):
         # Has no refence code so skip the removal
         author_year_title = ref_string
     else:
-        author_year_title = ref_string[:ref_string[:-1].rfind('.')]
+        author_year_title = ref_string[: ref_string[:-1].rfind(".")]
 
     if "New York" in author_year_title:
         # Different format for American Institute of Physics, New York references
@@ -247,18 +246,18 @@ def convert_atnf_ref(ref_code, ref_dict=None):
         author_year = author_year_title.split("IAU Circ. No")[0].replace("M.", "").replace("M5.", "")
     else:
         removal_patterns = [
-            ". Phys. Rev", # This journal isn't removed in previous logic so remove it here
-            ". ATel", # This journal isn't removed in previous logic so remove it here
-            "(", # Remove the brackets
-            ":", # Remove the colins
-            "1E", # Remove weird name convertion
-            "NGC", # NGC often in titles that ruin formatting
-            "PSR", # Parts of pulsar names are mistaken for years
-            "Sgr", # Parts of soft gamma ray repeaters are mistaken for years
+            ". Phys. Rev",  # This journal isn't removed in previous logic so remove it here
+            ". ATel",  # This journal isn't removed in previous logic so remove it here
+            "(",  # Remove the brackets
+            ":",  # Remove the colins
+            "1E",  # Remove weird name convertion
+            "NGC",  # NGC often in titles that ruin formatting
+            "PSR",  # Parts of pulsar names are mistaken for years
+            "Sgr",  # Parts of soft gamma ray repeaters are mistaken for years
         ]
         for pattern in removal_patterns:
             author_year_title = author_year_title.split(pattern)[0]
-        author_year = author_year_title[:author_year_title.rfind('.')]
+        author_year = author_year_title[: author_year_title.rfind(".")]
 
     # Loop through what is left to find the year
     for ref_part in author_year.split():
@@ -304,7 +303,7 @@ def flux_from_atnf(pulsar, query=None, ref_dict=None, assumed_error=0.5):
         query = psrqpy.QueryATNF(version=ATNF_VER, psrs=[pulsar]).pandas
     if ref_dict is None:
         ref_dict = get_atnf_references()
-    query_id = list(query['PSRJ']).index(pulsar)
+    query_id = list(query["PSRJ"]).index(pulsar)
 
     # Find all flux queries from keys
     flux_queries = []
@@ -312,38 +311,41 @@ def flux_from_atnf(pulsar, query=None, ref_dict=None, assumed_error=0.5):
         if re.match(r"S\d*\d$", table_param) or re.match(r"S\d*G$", table_param):
             flux_queries.append(table_param)
 
-    freq_all     = []
-    band_all     = []
-    flux_all     = []
+    freq_all = []
+    band_all = []
+    flux_all = []
     flux_err_all = []
-    references   = []
+    references = []
     # Get all available data from dataframe and check for missing values
     for flux_query in flux_queries:
         flux = query[flux_query][query_id]
 
         # Check for flux
         if not np.isnan(flux):
-            flux_all.append(flux) # in mJy
+            flux_all.append(flux)  # in mJy
 
             # Check for flux error. Sometimes error values don't exist, causing a key error in pandas
             flux_error_found = True
             try:
-                flux_err = query[flux_query+"_ERR"][query_id]
+                flux_err = query[flux_query + "_ERR"][query_id]
                 if np.isnan(flux_err) or flux_err == 0.0:
                     flux_error_found = False
             except KeyError:
                 flux_error_found = False
 
             if not flux_error_found:
-                logger.debug("{0} flux error for query: {1}, is zero. Assuming {2:.1f}% uncertainty"\
-                                .format(pulsar, flux_query, assumed_error*100))
-                flux_err = flux*assumed_error
-            flux_err_all.append(flux_err) # in mJy
+                logger.debug(
+                    "{0} flux error for query: {1}, is zero. Assuming {2:.1f}% uncertainty".format(
+                        pulsar, flux_query, assumed_error * 100
+                    )
+                )
+                flux_err = flux * assumed_error
+            flux_err_all.append(flux_err)  # in mJy
 
             # Converts key to frequency in MHz
             if flux_query.endswith("G"):
                 # In GHz to convert to MHz
-                freq = int(flux_query[1:-1])*1e3
+                freq = int(flux_query[1:-1]) * 1e3
             else:
                 freq = int(flux_query[1:])
             freq_all.append(freq)
@@ -359,6 +361,7 @@ def flux_from_atnf(pulsar, query=None, ref_dict=None, assumed_error=0.5):
             references.append(f"{ref}_ATNF")
 
     return freq_all, band_all, flux_all, flux_err_all, references
+
 
 def all_flux_from_atnf(query=None):
     """Queries the ATNF database for flux info for all pulsar at all frequencies.
@@ -387,7 +390,7 @@ def all_flux_from_atnf(query=None):
     if query is None:
         query = psrqpy.QueryATNF(version=ATNF_VER).pandas
     ref_dict = get_atnf_references()
-    jnames = list(query['PSRJ'])
+    jnames = list(query["PSRJ"])
     jname_cat = {}
     for jname in jnames:
         jname_cat[jname] = {}
@@ -395,16 +398,16 @@ def all_flux_from_atnf(query=None):
         for freq, band, flux, flux_err, ref in zip(freq_all, band_all, flux_all, flux_err_all, references):
             if ref not in jname_cat[jname].keys():
                 jname_cat[jname][ref] = {
-                    "Frequency MHz":[],
-                    "Bandwidth MHz":[],
-                    "Flux Density mJy":[],
-                    "Flux Density error mJy":[],
+                    "Frequency MHz": [],
+                    "Bandwidth MHz": [],
+                    "Flux Density mJy": [],
+                    "Flux Density error mJy": [],
                 }
-            jname_cat[jname][ref]['Frequency MHz'] += [freq]
+            jname_cat[jname][ref]["Frequency MHz"] += [freq]
             # Add Nones so the software can easily tell there are missing bandwidths
-            jname_cat[jname][ref]['Bandwidth MHz'] += [band]
-            jname_cat[jname][ref]['Flux Density mJy'] += [flux]
-            jname_cat[jname][ref]['Flux Density error mJy'] += [flux_err]
+            jname_cat[jname][ref]["Bandwidth MHz"] += [band]
+            jname_cat[jname][ref]["Flux Density mJy"] += [flux]
+            jname_cat[jname][ref]["Flux Density error mJy"] += [flux_err]
     return jname_cat
 
 
@@ -444,13 +447,13 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
     if query is None:
         query = psrqpy.QueryATNF(version=ATNF_VER).pandas
     # Make a dictionary for each pulsar
-    jnames = list(query['PSRJ'])
+    jnames = list(query["PSRJ"])
     jname_cat_dict = {}
     jname_cat_list = {}
     for jname in jnames:
         jname_cat_dict[jname] = {}
         # freq, flux, flux_err, references
-        jname_cat_list[jname] = [[],[],[],[],[]]
+        jname_cat_list[jname] = [[], [], [], [], []]
 
     # Work out which yamls/catalogues to use
     if only_use is None:
@@ -489,11 +492,11 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
                 # Update dict
                 jname_cat_dict[jname][cat_label] = cat_dict[jname]
                 # Update list
-                jname_cat_list[jname][0] += cat_dict[jname]['Frequency MHz']
-                jname_cat_list[jname][1] += cat_dict[jname]['Bandwidth MHz']
-                jname_cat_list[jname][2] += cat_dict[jname]['Flux Density mJy']
-                jname_cat_list[jname][3] += cat_dict[jname]['Flux Density error mJy']
-                jname_cat_list[jname][4] += [cat_label] * len(cat_dict[jname]['Frequency MHz'])
+                jname_cat_list[jname][0] += cat_dict[jname]["Frequency MHz"]
+                jname_cat_list[jname][1] += cat_dict[jname]["Bandwidth MHz"]
+                jname_cat_list[jname][2] += cat_dict[jname]["Flux Density mJy"]
+                jname_cat_list[jname][3] += cat_dict[jname]["Flux Density error mJy"]
+                jname_cat_list[jname][4] += [cat_label] * len(cat_dict[jname]["Frequency MHz"])
 
     if not use_atnf:
         # return before including atnf
@@ -502,13 +505,63 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
     # Add the atnf to the cataogues
     atnf_dict = all_flux_from_atnf(query=query)
     # refs that have errors that we plan to inform ATNF about
-    atnf_incorrect_refs = ["Zhao_2019", "Mignani_2017", "Bell_2016", "Robinson_1995", "Johnston_1994", "Manchester_1996", "Xie_2019", "Han_2016", "Kramer_1999", "Kondratiev_2015", "Crawford_2001", "Michilli_2020", "Manchester_2013", "Brinkman_2018"]
+    atnf_incorrect_refs = [
+        "Zhao_2019",
+        "Mignani_2017",
+        "Bell_2016",
+        "Robinson_1995",
+        "Johnston_1994",
+        "Manchester_1996",
+        "Xie_2019",
+        "Han_2016",
+        "Kramer_1999",
+        "Kondratiev_2015",
+        "Crawford_2001",
+        "Michilli_2020",
+        "Manchester_2013",
+        "Brinkman_2018",
+    ]
     # refs that are correct but where scaled to by their spectral index for the ATNF frequencies
-    atnf_adjusted_refs = ["Lorimer_1995b", "Stovall_2015", "Sanidas_2019", "Wolszczan_1992", "Dembska_2014", "Kaur_2019", "Alam_2021", "Foster_1991"]
+    atnf_adjusted_refs = [
+        "Lorimer_1995b",
+        "Stovall_2015",
+        "Sanidas_2019",
+        "Wolszczan_1992",
+        "Dembska_2014",
+        "Kaur_2019",
+        "Alam_2021",
+        "Foster_1991",
+    ]
     # refs that were rounded to different decimal places than the publications
-    atnf_rounded_refs = ["Johnston_2018", "Dai_2015", "McEwen_2020", "McConnell_1991", "Bondonneau_2020", "Johnston_2021", "Bates_2011", "Han_2021", "Sayer_1997", "Lynch_2012", "Stovall_2014", "Crowter_2020", "Bilous_2016", "Frail_2016", "Gitika_2023", "Dembska_2015"]
+    atnf_rounded_refs = [
+        "Johnston_2018",
+        "Dai_2015",
+        "McEwen_2020",
+        "McConnell_1991",
+        "Bondonneau_2020",
+        "Johnston_2021",
+        "Bates_2011",
+        "Han_2021",
+        "Sayer_1997",
+        "Lynch_2012",
+        "Stovall_2014",
+        "Crowter_2020",
+        "Bilous_2016",
+        "Frail_2016",
+        "Gitika_2023",
+        "Dembska_2015",
+    ]
     # refs that have different uncertainties than published
-    atnf_uncert_refs = ["Stairs_1999", "Kuzmin_2001", "Jankowski_2019", "Jankowski_2018", "Kramer_2003a", "Manchester_2001", "Morris_2002", "Zhang_2019"]
+    atnf_uncert_refs = [
+        "Stairs_1999",
+        "Kuzmin_2001",
+        "Jankowski_2019",
+        "Jankowski_2018",
+        "Kramer_2003a",
+        "Manchester_2001",
+        "Morris_2002",
+        "Zhang_2019",
+    ]
     # this paper provides multiple epochs over multiple subbands and ATNF includes a mixture of epochs
     # will need to add this to the pulsar_spectra catalogue properly
     atnf_other_refs = ["Ahmad_2024"]
@@ -524,19 +577,33 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
                     continue
             if exclude is None:
                 exclude = []
-            if raw_ref in exclude + atnf_incorrect_refs + atnf_adjusted_refs + atnf_rounded_refs + atnf_uncert_refs + atnf_other_refs:
+            if (
+                raw_ref
+                in exclude
+                + atnf_incorrect_refs
+                + atnf_adjusted_refs
+                + atnf_rounded_refs
+                + atnf_uncert_refs
+                + atnf_other_refs
+            ):
                 # exclude by skipping
                 continue
 
             if raw_ref in jname_cat_dict[jname].keys():
                 # Check for redundant data
-                for freq, band, flux, flux_err in zip(atnf_dict[jname][ref]['Frequency MHz'],
-                                                      atnf_dict[jname][ref]['Bandwidth MHz'],
-                                                      atnf_dict[jname][ref]['Flux Density mJy'],
-                                                      atnf_dict[jname][ref]['Flux Density error mJy']):
-                    if flux     in jname_cat_dict[jname][raw_ref]['Flux Density mJy'] and \
-                       flux_err in jname_cat_dict[jname][raw_ref]['Flux Density error mJy']:
-                        logger.debug(f"Redundant data  pulsar:{jname}  ref:{raw_ref}  freq:{freq}  flux:{flux}  flux_err:{flux_err}")
+                for freq, band, flux, flux_err in zip(
+                    atnf_dict[jname][ref]["Frequency MHz"],
+                    atnf_dict[jname][ref]["Bandwidth MHz"],
+                    atnf_dict[jname][ref]["Flux Density mJy"],
+                    atnf_dict[jname][ref]["Flux Density error mJy"],
+                ):
+                    if (
+                        flux in jname_cat_dict[jname][raw_ref]["Flux Density mJy"]
+                        and flux_err in jname_cat_dict[jname][raw_ref]["Flux Density error mJy"]
+                    ):
+                        logger.debug(
+                            f"Redundant data  pulsar:{jname}  ref:{raw_ref}  freq:{freq}  flux:{flux}  flux_err:{flux_err}"
+                        )
                     else:
                         # Update list
                         jname_cat_list[jname][0] += [freq]
@@ -546,10 +613,12 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
                         jname_cat_list[jname][4] += [ref]
             else:
                 # Update list
-                for freq, band, flux, flux_err in zip(atnf_dict[jname][ref]['Frequency MHz'],
-                                                      atnf_dict[jname][ref]['Bandwidth MHz'],
-                                                      atnf_dict[jname][ref]['Flux Density mJy'],
-                                                      atnf_dict[jname][ref]['Flux Density error mJy']):
+                for freq, band, flux, flux_err in zip(
+                    atnf_dict[jname][ref]["Frequency MHz"],
+                    atnf_dict[jname][ref]["Bandwidth MHz"],
+                    atnf_dict[jname][ref]["Flux Density mJy"],
+                    atnf_dict[jname][ref]["Flux Density error mJy"],
+                ):
                     jname_cat_list[jname][0] += [freq]
                     jname_cat_list[jname][1] += [band]
                     jname_cat_list[jname][2] += [flux]
@@ -557,6 +626,7 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
                     jname_cat_list[jname][4] += [ref]
 
     return jname_cat_list
+
 
 def convert_cat_list_to_dict(jname_cat_list):
     """
@@ -585,15 +655,15 @@ def convert_cat_list_to_dict(jname_cat_list):
         for freq, band, flux, flux_err, ref in zip(freqs, bands, fluxs, flux_errs, refs):
             if ref in jname_cat_dict[jname].keys():
                 # Update
-                jname_cat_dict[jname][ref]['Frequency MHz'] += [freq]
-                jname_cat_dict[jname][ref]['Bandwidth MHz'] += [band]
-                jname_cat_dict[jname][ref]['Flux Density mJy'] += [flux]
-                jname_cat_dict[jname][ref]['Flux Density error mJy'] += [flux_err]
+                jname_cat_dict[jname][ref]["Frequency MHz"] += [freq]
+                jname_cat_dict[jname][ref]["Bandwidth MHz"] += [band]
+                jname_cat_dict[jname][ref]["Flux Density mJy"] += [flux]
+                jname_cat_dict[jname][ref]["Flux Density error mJy"] += [flux_err]
             else:
                 # Make new
                 jname_cat_dict[jname][ref] = {}
-                jname_cat_dict[jname][ref]['Frequency MHz'] = [freq]
-                jname_cat_dict[jname][ref]['Bandwidth MHz'] = [band]
-                jname_cat_dict[jname][ref]['Flux Density mJy'] = [flux]
-                jname_cat_dict[jname][ref]['Flux Density error mJy'] = [flux_err]
+                jname_cat_dict[jname][ref]["Frequency MHz"] = [freq]
+                jname_cat_dict[jname][ref]["Bandwidth MHz"] = [band]
+                jname_cat_dict[jname][ref]["Flux Density mJy"] = [flux]
+                jname_cat_dict[jname][ref]["Flux Density error mJy"] = [flux_err]
     return jname_cat_dict

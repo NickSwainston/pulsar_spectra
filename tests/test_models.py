@@ -1,18 +1,18 @@
 #! /usr/bin/env python
 
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 from matplotlib.ticker import FormatStrFormatter
 
 from pulsar_spectra.models import model_settings
 
+
 def test_bandwidth_model():
-    """Tests if the bandwith correction intergrals are accurate.
-    """
-    #cat_dict = collect_catalogue_fluxes(use_atnf=False)
-    c_s = 1.
+    """Tests if the bandwith correction intergrals are accurate."""
+    # cat_dict = collect_catalogue_fluxes(use_atnf=False)
+    c_s = 1.0
     a_s = -1.6
-    beta_s = 1.
+    beta_s = 1.0
     vc_s = 1e10
     vpeak_s = 5e7
     v0_s = 5e8
@@ -26,7 +26,7 @@ def test_bandwidth_model():
         # vpeak, a, c, beta, v0
         "low_frequency_turn_over_power_law": (vpeak_s, a_s, c_s, beta_s, v0_s),
         # vc, vpeak, a, beta, c, v0
-        'double_turn_over_spectrum': (vc_s, vpeak_s, a_s, beta_s, c_s, v0_s),
+        "double_turn_over_spectrum": (vc_s, vpeak_s, a_s, beta_s, c_s, v0_s),
     }
 
     freq_all = np.logspace(np.log10(1e7), np.log10(9e9), 30)
@@ -40,7 +40,7 @@ def test_bandwidth_model():
 
         # Set test plot
         plotsize = 3.2
-        fig, ax = plt.subplots(figsize=(plotsize*4/3, plotsize))
+        fig, ax = plt.subplots(figsize=(plotsize * 4 / 3, plotsize))
         # Set up default mpl markers
         capsize = 1.5
         errorbar_linewidth = 0.7
@@ -50,25 +50,25 @@ def test_bandwidth_model():
         (_, caps, _) = ax.errorbar(
             freq_all,
             fitted_flux,
-            xerr=band_all / 2.,
-            linestyle='None',
-            mec='k',
+            xerr=band_all / 2.0,
+            linestyle="None",
+            mec="k",
             markeredgewidth=marker_border_thickness,
             elinewidth=errorbar_linewidth,
             capsize=capsize,
         )
         for cap in caps:
             cap.set_markeredgewidth(errorbar_linewidth)
-        ax.plot(freq_all, fitted_flux, 'k--')
-        ax.set_xscale('log')
-        ax.set_yscale('log')
-        ax.get_xaxis().set_major_formatter(FormatStrFormatter('%g'))
-        ax.get_yaxis().set_major_formatter(FormatStrFormatter('%g'))
-        ax.tick_params(which='both', direction='in', top=1, right=1)
-        ax.set_xlabel('Frequency (MHz)')
-        ax.set_ylabel('Flux Density (mJy)')
-        ax.grid(visible=True, ls=':', lw=0.6)
-        plt.savefig(f"{model_name}_test.png", bbox_inches='tight', dpi=300)
+        ax.plot(freq_all, fitted_flux, "k--")
+        ax.set_xscale("log")
+        ax.set_yscale("log")
+        ax.get_xaxis().set_major_formatter(FormatStrFormatter("%g"))
+        ax.get_yaxis().set_major_formatter(FormatStrFormatter("%g"))
+        ax.tick_params(which="both", direction="in", top=1, right=1)
+        ax.set_xlabel("Frequency (MHz)")
+        ax.set_ylabel("Flux Density (mJy)")
+        ax.grid(visible=True, ls=":", lw=0.6)
+        plt.savefig(f"{model_name}_test.png", bbox_inches="tight", dpi=300)
         plt.clf()
 
         # For each flux check if the intergration is accurate
@@ -82,19 +82,22 @@ def test_bandwidth_model():
             freq_max = freq + band / 2
             band_freq_range = np.linspace(freq_min, freq_max, 10000)
             band_flux_range = model_function(band_freq_range, *fit_vals)
-            area_sum = 0.
+            area_sum = 0.0
             for a, b in zip(band_flux_range[:-1], band_flux_range[1:]):
                 area_sum += (a + b) / 2
-            area_sum *= (band_freq_range[1] - band_freq_range[0])
+            area_sum *= band_freq_range[1] - band_freq_range[0]
 
             # Use the intergral function to get the equivalent
             band_result = model_function_intergral((freq_min, freq_max), *fit_vals)
             band_sum = band_result * band
 
             # Compare
-            perc_diff = 2 * ( band_sum - area_sum ) / ( band_sum + area_sum ) * 100
-            print(f"freq: {freq/1e6:8.1f} band: {band/1e6:8.1f}  Percent difference: {perc_diff:10.4f} %   band_sum: {area_sum:15.2f}  band_intergral: {band_sum:15.2f}")
+            perc_diff = 2 * (band_sum - area_sum) / (band_sum + area_sum) * 100
+            print(
+                f"freq: {freq / 1e6:8.1f} band: {band / 1e6:8.1f}  Percent difference: {perc_diff:10.4f} %   band_sum: {area_sum:15.2f}  band_intergral: {band_sum:15.2f}"
+            )
             np.testing.assert_approx_equal(band_sum, area_sum, significant=1)
+
 
 if __name__ == "__main__":
     """
@@ -102,6 +105,6 @@ if __name__ == "__main__":
     """
     # introspect and run all the functions starting with 'test'
     for f in dir():
-        if f.startswith('test'):
+        if f.startswith("test"):
             print(f)
             globals()[f]()
