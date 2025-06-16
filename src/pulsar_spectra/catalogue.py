@@ -20,7 +20,7 @@ CAT_DIR = os.path.join(os.path.dirname(__file__), "catalogue_papers")
 CAT_YAMLS = glob.glob("{}/*yaml".format(CAT_DIR))
 
 # atnf version to be used with all psrqpy querys
-ATNF_VER = "2.6.1"
+ATNF_VER = "2.6.2"
 
 # dictionary of ADS links
 ADS_REF = {
@@ -215,23 +215,7 @@ def convert_atnf_ref(ref_code, ref_dict=None):
     try:
         ref_string = ref_dict[ref_code]
     except KeyError:
-        # These references don't exist in psrcat_refs
-        if ref_code == "adl+24":
-            return "Ahmad_2024"
-        elif ref_code == "bnc+24":
-            return "Burgay_2024"
-        elif ref_code == "gsw+24":
-            return "Gao_2024"
-        elif ref_code == "lsb+24":
-            return "Liu_2024"
-        elif ref_code == "mlk+24":
-            return "McEwen_2024"
-        elif ref_code == "mmr+24":
-            return "McCarver_2024"
-        elif ref_code == "plg+24":
-            return "Prayag_2024"
-        else:
-            return None
+        return None
 
     # Find the parts we need
     if ref_string.startswith("eds "):
