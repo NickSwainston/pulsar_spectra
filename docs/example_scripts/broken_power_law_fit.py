@@ -2,7 +2,7 @@ from pulsar_spectra.catalogue import collect_catalogue_fluxes
 from pulsar_spectra.spectral_fit import iminuit_fit_spectral_model
 
 cat_list = collect_catalogue_fluxes()
-pulsar = 'J1453-6413'
+pulsar = "J1453-6413"
 freqs, fluxs, flux_errs, refs = cat_list[pulsar]
 
 # Broken power law function is in the format
