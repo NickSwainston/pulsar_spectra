@@ -7,7 +7,6 @@ import re
 import pandas as pd
 import psrqpy
 import yaml
-
 from pulsar_spectra.catalogue import (
     ADS_REF,
     ATNF_VER,

@@ -4,7 +4,6 @@ Tests the spectral_fit.py script
 """
 
 import numpy as np
-
 from pulsar_spectra.catalogue import collect_catalogue_fluxes
 from pulsar_spectra.spectral_fit import find_best_spectral_fit
 

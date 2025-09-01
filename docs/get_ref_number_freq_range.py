@@ -1,6 +1,5 @@
 import psrqpy
 import yaml
-
 from pulsar_spectra.catalogue import ADS_REF, ATNF_VER, CAT_YAMLS, all_flux_from_atnf
 
 paper_format = False

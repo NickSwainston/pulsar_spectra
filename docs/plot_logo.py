@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 import numpy as np
-
 from pulsar_spectra.catalogue import collect_catalogue_fluxes
 from pulsar_spectra.models import double_turn_over_spectrum
 from pulsar_spectra.spectral_fit import find_best_spectral_fit, propagate_flux_n_err

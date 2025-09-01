@@ -5,7 +5,6 @@ import csv
 import json
 
 import psrqpy
-
 from pulsar_spectra.catalogue import ATNF_VER
 
 query = psrqpy.QueryATNF(version=ATNF_VER, params=["PSRJ", "NAME", "PSRB"]).pandas
