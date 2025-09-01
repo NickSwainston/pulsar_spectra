@@ -1,4 +1,4 @@
-import json
+import yaml
 from astroquery.vizier import Vizier
 
 with open("Jankowski_2018_raw.txt", "r") as raw_file:
@@ -42,5 +42,4 @@ for row in lines[3:]:
         }
 
 with open("Jankowski_2018.yaml", "w") as cat_file:
-    cat_file.write(json.dumps(pulsar_dict, indent=1))
-print(pulsar_dict)
+    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)

@@ -1,4 +1,4 @@
-import json
+import yaml
 import psrqpy
 
 with open("Kijak_2007_raw.txt", "r") as raw_file:
@@ -27,7 +27,5 @@ for row in lines:
         pulsar_dict[pulsar]["Flux Density mJy"] += [float(flux)]
         pulsar_dict[pulsar]["Flux Density error mJy"] += [float(flux_err)]
 
-json = json.dumps(pulsar_dict, indent=1)
 with open("Kijak_2007.yaml", "w") as cat_file:
-    cat_file.write(json)
-print(pulsar_dict)
+    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)

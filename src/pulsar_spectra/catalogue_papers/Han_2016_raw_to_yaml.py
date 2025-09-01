@@ -1,5 +1,5 @@
 import numpy as np
-import json
+import yaml
 
 raw = np.loadtxt("Han_2016_raw.txt", dtype=str)
 
@@ -22,7 +22,6 @@ for row in raw[1:]:
         "Flux Density mJy":fluxs,
         "Flux Density error mJy":flux_errs
     }
-json = json.dumps(pulsar_dict, indent=1)
+
 with open("Han_2016.yaml", "w") as cat_file:
-    cat_file.write(json)
-print(pulsar_dict)
+    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)

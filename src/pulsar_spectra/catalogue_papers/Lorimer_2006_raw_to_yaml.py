@@ -1,4 +1,4 @@
-import json
+import yaml
 import csv
 
 with open("Lorimer_2006_raw.tsv", "r") as raw_file:
@@ -29,5 +29,4 @@ for row in lines:
     }
 
 with open("Lorimer_2006.yaml", "w") as cat_file:
-    cat_file.write(json.dumps(pulsar_dict, indent=1))
-print(pulsar_dict)
+    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)

@@ -1,4 +1,4 @@
-import json
+import yaml
 
 with open("Basu_2016_raw.txt", "r") as raw_file:
     lines = raw_file.readlines()
@@ -26,7 +26,6 @@ for row in lines:
         pulsar_dict[pulsar]["Bandwidth MHz"] += [33]
         pulsar_dict[pulsar]["Flux Density mJy"] += [float(flux2)]
         pulsar_dict[pulsar]["Flux Density error mJy"] += [float(flux_err2)]
-json = json.dumps(pulsar_dict, indent=1)
+
 with open("Basu_2016.yaml", "w") as cat_file:
-    cat_file.write(json)
-print(pulsar_dict)
+    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)

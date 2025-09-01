@@ -1,4 +1,4 @@
-import json
+import yaml
 import psrqpy
 import csv
 
@@ -63,5 +63,4 @@ for row in lines[2:]:
         pulsar_dict[pulsar]["Flux Density error mJy"] += [round(flux_err, 3)]
 
 with open("Bartel_1978.yaml", "w") as cat_file:
-    cat_file.write(json.dumps(pulsar_dict, indent=1))
-print(pulsar_dict)
+    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)
