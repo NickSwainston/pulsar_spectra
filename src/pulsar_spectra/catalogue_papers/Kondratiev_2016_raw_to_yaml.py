@@ -1,9 +1,10 @@
-import json
-import psrqpy
 import csv
+import json
 
-query = psrqpy.QueryATNF(params=['PSRJ', 'NAME', 'PSRB', 'P0']).pandas
-all_jnames = list(query['PSRJ'])
+import psrqpy
+
+query = psrqpy.QueryATNF(params=["PSRJ", "NAME", "PSRB", "P0"]).pandas
+all_jnames = list(query["PSRJ"])
 
 # was converted from image to csv using ABBYY FineReader
 with open("Kondratiev_2016_raw.csv") as file:
@@ -18,8 +19,8 @@ for row in lines:
 
     pulsar = row[0].strip().replace("–", "-").replace(" ", "").replace("−", "-")
     if pulsar.startswith("B"):
-        pid = list(query['PSRB']).index(pulsar)
-        pulsar = query['PSRJ'][pid]
+        pid = list(query["PSRB"]).index(pulsar)
+        pulsar = query["PSRJ"][pid]
 
     # Wrong names
     if pulsar == "J0636+5129":
@@ -33,13 +34,14 @@ for row in lines:
     else:
         sig_fig = 0
     flux = float(flux)
-    flux_err = round(float(flux_err[:-1]) * 10**(-sig_fig), 1)
+    # flux_err = round(float(flux_err[:-1]) * 10 ** (-sig_fig), 1)
+    flux_err = flux * 0.5
 
     pulsar_dict[pulsar] = {
-        "Frequency MHz":[149.],
-        "Bandwidth MHz":[78.],
-        "Flux Density mJy":[flux],
-        "Flux Density error mJy":[flux_err]
+        "Frequency MHz": [149.0],
+        "Bandwidth MHz": [78.0],
+        "Flux Density mJy": [flux],
+        "Flux Density error mJy": [flux_err],
     }
 
 with open("Kondratiev_2016.yaml", "w") as cat_file:

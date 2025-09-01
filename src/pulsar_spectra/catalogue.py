@@ -20,7 +20,7 @@ CAT_DIR = os.path.join(os.path.dirname(__file__), "catalogue_papers")
 CAT_YAMLS = glob.glob("{}/*yaml".format(CAT_DIR))
 
 # atnf version to be used with all psrqpy querys
-ATNF_VER = "2.6.1"
+ATNF_VER = "2.6.2"
 
 # dictionary of ADS links
 ADS_REF = {
@@ -97,7 +97,7 @@ ADS_REF = {
     "Kramer_1999": "https://ui.adsabs.harvard.edu/abs/1999ApJ...526..957K",
     "Frail_2016": "https://ui.adsabs.harvard.edu/abs/2016ApJ...829..119F",
     "Lee_2022": "https://ui.adsabs.harvard.edu/abs/2022PASA...39...42L",
-    "Bhat_2023": "https://ui.adsabs.harvard.edu/abs/2023arXiv230211920B",
+    "Bhat_2023": "https://ui.adsabs.harvard.edu/abs/2023PASA...40...20B",
     "Aloisi_2019": "https://ui.adsabs.harvard.edu/abs/2019ApJ...875...19A",
     "Bailes_1997": "https://ui.adsabs.harvard.edu/abs/1997ApJ...481..386B",
     "Basu_2018": "https://ui.adsabs.harvard.edu/abs/2018MNRAS.475.1469B",
@@ -119,6 +119,7 @@ ADS_REF = {
     "Hoensbroech_1997": "https://ui.adsabs.harvard.edu/abs/1997A%26AS..126..121V",
     "Joshi_2009": "https://ui.adsabs.harvard.edu/abs/2009MNRAS.398..943J",
     "Kaspi_1997": "https://ui.adsabs.harvard.edu/abs/1997ApJ...485..820K",
+    "Kijak_1997": "https://ui.adsabs.harvard.edu/abs/1997A%26A...318L..63K",
     "Kijak_1998": "https://ui.adsabs.harvard.edu/abs/1998A%26AS..127..153K",
     "Kramer_1997": "https://ui.adsabs.harvard.edu/abs/1997ApJ...488..364K",
     "Kuniyoshi_2015": "https://ui.adsabs.harvard.edu/abs/2015MNRAS.453..828K",
@@ -160,6 +161,20 @@ ADS_REF = {
     "Dowell_2013": "https://ui.adsabs.harvard.edu/abs/2013ApJ...775L..28D",
     "Deneva_2016": "https://ui.adsabs.harvard.edu/abs/2016ApJ...821...10D",
     "Malofeev_1993": "https://ui.adsabs.harvard.edu/abs/1993AstL...19..138M",
+    "Slee_1986": "https://ui.adsabs.harvard.edu/abs/1986AuJPh..39..103S",
+    "Fruchter_1988": "https://ui.adsabs.harvard.edu/abs/1988Natur.333..237F",
+    "Fruchter_1990": "https://ui.adsabs.harvard.edu/abs/1990ApJ...351..642F",
+    "Bailes_1994": "https://ui.adsabs.harvard.edu/abs/1994ApJ...425L..41B",
+    "Navarro_1995": "https://ui.adsabs.harvard.edu/abs/1995ApJ...455L..55N",
+    "Camilo_1996": "https://ui.adsabs.harvard.edu/abs/1996ApJ...469..819C",
+    "Maron_2004": "https://ui.adsabs.harvard.edu/abs/2004A%26A...413L..19M",
+    "Wielebinski_1993": "https://ui.adsabs.harvard.edu/abs/1993A%26A...272L..13W",
+    "Champion_2008": "https://ui.adsabs.harvard.edu/abs/2008Sci...320.1309C",
+    "Hessels_2011": "https://ui.adsabs.harvard.edu/abs/2011AIPC.1357...40H",
+    "Kowalinska_2012": "https://ui.adsabs.harvard.edu/abs/2012ASPC..466..101K",
+    "Levin_2016": "https://ui.adsabs.harvard.edu/abs/2016ApJ...818..166L",
+    "Wang_2024": "https://ui.adsabs.harvard.edu/abs/2024ApJ...961...48W",
+    "Keith_2024": "https://ui.adsabs.harvard.edu/abs/2024MNRAS.530.1581K",
     "Kumar_2025": "https://ui.adsabs.harvard.edu/abs/2025ApJ...982..132K",
 }
 
@@ -200,23 +215,7 @@ def convert_atnf_ref(ref_code, ref_dict=None):
     try:
         ref_string = ref_dict[ref_code]
     except KeyError:
-        # These references don't exist in psrcat_refs
-        if ref_code == "adl+24":
-            return "Ahmad_2024"
-        elif ref_code == "bnc+24":
-            return "Burgay_2024"
-        elif ref_code == "gsw+24":
-            return "Gao_2024"
-        elif ref_code == "lsb+24":
-            return "Liu_2024"
-        elif ref_code == "mlk+24":
-            return "McEwen_2024"
-        elif ref_code == "mmr+24":
-            return "McCarver_2024"
-        elif ref_code == "plg+24":
-            return "Prayag_2024"
-        else:
-            return None
+        return None
 
     # Find the parts we need
     if ref_string.startswith("eds "):
@@ -520,6 +519,7 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
         "Michilli_2020",
         "Manchester_2013",
         "Brinkman_2018",
+        "Fruchter_1990",
     ]
     # refs that are correct but where scaled to by their spectral index for the ATNF frequencies
     atnf_adjusted_refs = [
@@ -550,6 +550,8 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
         "Frail_2016",
         "Gitika_2023",
         "Dembska_2015",
+        "Wang_2024",
+        "Keith_2024",
     ]
     # refs that have different uncertainties than published
     atnf_uncert_refs = [
@@ -562,9 +564,10 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
         "Morris_2002",
         "Zhang_2019",
     ]
-    # this paper provides multiple epochs over multiple subbands and ATNF includes a mixture of epochs
-    # will need to add this to the pulsar_spectra catalogue properly
-    atnf_other_refs = ["Ahmad_2024"]
+    atnf_other_refs = [
+        "Taylor_1993",  # excluding due to duplication of other references
+        "Ahmad_2024",  # need to add this to the pulsar_spectra catalogue properly
+    ]
 
     for jname in jnames:
         for ref in atnf_dict[jname].keys():

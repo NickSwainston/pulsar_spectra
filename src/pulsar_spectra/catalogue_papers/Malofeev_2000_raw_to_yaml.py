@@ -1,9 +1,10 @@
-import json
-import psrqpy
 import csv
+import json
 
-query = psrqpy.QueryATNF(params=['PSRJ', 'NAME', 'PSRB']).pandas
-all_jnames = list(query['PSRJ'])
+import psrqpy
+
+query = psrqpy.QueryATNF(params=["PSRJ", "NAME", "PSRB"]).pandas
+all_jnames = list(query["PSRJ"])
 
 with open("Malofeev_2000_raw.tsv", "r") as raw_file:
     tsv_file = csv.reader(raw_file, delimiter="\t")
@@ -17,9 +18,9 @@ for row in lines:
     row = [r.strip() for r in row]
     if len(row) == 0:
         continue
-    if row[0].startswith("#") or row[0].startswith("PSR") or row[0] == '' or row[0].startswith('-'):
+    if row[0].startswith("#") or row[0].startswith("PSR") or row[0] == "" or row[0].startswith("-"):
         continue
-    if row[1] == "IP" or row[2] == '<' or row[4] == '':
+    if row[1] == "IP" or row[2] == "<" or row[2] == ">" or row[4] == "":
         continue
     print(row)
 
@@ -27,8 +28,8 @@ for row in lines:
         pulsar = row[0].strip().replace("–", "-")
     else:
         bname = "B" + row[0].strip().replace("–", "-")
-        pid = list(query['PSRB']).index(bname)
-        pulsar = query['PSRJ'][pid]
+        pid = list(query["PSRB"]).index(bname)
+        pulsar = query["PSRJ"][pid]
     if len(pulsar) < 10:
         # look for real name
         possible_names = []
@@ -38,7 +39,6 @@ for row in lines:
         if len(possible_names) == 1:
             pulsar = possible_names[0]
         else:
-            possible_names
             exit()
     # Wrong names I found
     if pulsar == "J1025-0709":
@@ -50,17 +50,16 @@ for row in lines:
     elif pulsar == "J1235-5516":
         pulsar = "J1235-54"
 
-
     flux = float(row[3])
     flux_err = float(row[4])
     pulsar_dict[pulsar] = {
-        "Frequency MHz":[102.5],
-        "Bandwidth MHz":[0.64],
-        "Flux Density mJy":[flux],
-        "Flux Density error mJy":[flux_err]
+        "Frequency MHz": [102.5],
+        "Bandwidth MHz": [0.64],
+        "Flux Density mJy": [flux],
+        "Flux Density error mJy": [flux_err],
     }
 
 
 with open("Malofeev_2000.yaml", "w") as cat_file:
     cat_file.write(json.dumps(pulsar_dict, indent=1))
-#print(pulsar_dict)
+# print(pulsar_dict)

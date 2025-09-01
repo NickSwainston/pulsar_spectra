@@ -1,0 +1,16 @@
+{
+ "J1959+2048": {
+  "Frequency MHz": [
+   1490.0
+  ],
+  "Bandwidth MHz": [
+   100.0
+  ],
+  "Flux Density mJy": [
+   0.35
+  ],
+  "Flux Density error mJy": [
+   0.15
+  ]
+ }
+}
