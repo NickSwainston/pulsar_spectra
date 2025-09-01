@@ -11,7 +11,7 @@ Or you can clone or download the repository and then use
 
 .. code-block:: bash
 
-    python setup.py install
+    poetry install
 
 or
 
