@@ -1,16 +1,9 @@
-{
- "J0540-6919": {
-  "Frequency MHz": [
-   640
-  ],
-  "Bandwidth MHz": [
-   32
-  ],
-  "Flux Density mJy": [
-   0.4
-  ],
-  "Flux Density error mJy": [
-   0.2
-  ]
- },
-}
+J0540-6919:
+  Frequency MHz:
+    - 640
+  Bandwidth MHz:
+    - 32
+  Flux Density mJy:
+    - 0.4
+  Flux Density error mJy:
+    - 0.2

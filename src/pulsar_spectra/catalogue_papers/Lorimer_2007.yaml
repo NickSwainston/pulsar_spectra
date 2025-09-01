@@ -1,16 +1,9 @@
-{
- "J1453+1902": {
-  "Frequency MHz": [
-   430.0
-  ],
-  "Bandwidth MHz": [
-   7.68
-  ],
-  "Flux Density mJy": [
-   2.2
-  ],
-  "Flux Density error mJy": [
-   0.1
-  ]
- }
-}
+J1453+1902:
+  Frequency MHz:
+    - 430.0
+  Bandwidth MHz:
+    - 7.68
+  Flux Density mJy:
+    - 2.2
+  Flux Density error mJy:
+    - 0.1

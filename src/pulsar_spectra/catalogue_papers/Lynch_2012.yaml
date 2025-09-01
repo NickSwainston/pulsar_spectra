@@ -1,170 +1,108 @@
-{
- "J1701-3006A": {
-  "Frequency MHz": [
-   2000.0
-  ],
-  "Bandwidth MHz": [
-   800.0
-  ],
-  "Flux Density mJy": [
-   0.117
-  ],
-  "Flux Density error mJy": [
-   0.0585
-  ]
- },
- "J1701-3006B": {
-  "Frequency MHz": [
-   2000.0
-  ],
-  "Bandwidth MHz": [
-   800.0
-  ],
-  "Flux Density mJy": [
-   0.078
-  ],
-  "Flux Density error mJy": [
-   0.039
-  ]
- },
- "J1701-3006C": {
-  "Frequency MHz": [
-   2000.0
-  ],
-  "Bandwidth MHz": [
-   800.0
-  ],
-  "Flux Density mJy": [
-   0.072
-  ],
-  "Flux Density error mJy": [
-   0.036
-  ]
- },
-  "J1701-3006D": {
-  "Frequency MHz": [
-   2000.0
-  ],
-  "Bandwidth MHz": [
-   800.0
-  ],
-  "Flux Density mJy": [
-   0.069
-  ],
-  "Flux Density error mJy": [
-   0.0345
-  ]
- },
- "J1701-3006E": {
-  "Frequency MHz": [
-   2000.0
-  ],
-  "Bandwidth MHz": [
-   800.0
-  ],
-  "Flux Density mJy": [
-   0.039
-  ],
-  "Flux Density error mJy": [
-   0.0195
-  ]
- },
- "J1701-3006F": {
-  "Frequency MHz": [
-   2000.0
-  ],
-  "Bandwidth MHz": [
-   800.0
-  ],
-  "Flux Density mJy": [
-   0.052
-  ],
-  "Flux Density error mJy": [
-   0.026
-  ]
- },
- "J1807-2459A": {
-  "Frequency MHz": [
-   2000.0
-  ],
-  "Bandwidth MHz": [
-   800.0
-  ],
-  "Flux Density mJy": [
-   0.605
-  ],
-  "Flux Density error mJy": [
-   0.3025
-  ]
- },
- "J1807-2459B": {
-  "Frequency MHz": [
-   2000.0
-  ],
-  "Bandwidth MHz": [
-   800.0
-  ],
-  "Flux Density mJy": [
-   0.088
-  ],
-  "Flux Density error mJy": [
-   0.044
-  ]
- },
- "J1823-3021A": {
-  "Frequency MHz": [
-   2000.0
-  ],
-  "Bandwidth MHz": [
-   800.0
-  ],
-  "Flux Density mJy": [
-   0.079
-  ],
-  "Flux Density error mJy": [
-   0.0395
-  ]
- },
- "J1823-3021B": {
-  "Frequency MHz": [
-   2000.0
-  ],
-  "Bandwidth MHz": [
-   800.0
-  ],
-  "Flux Density mJy": [
-   0.076
-  ],
-  "Flux Density error mJy": [
-   0.038
-  ]
- },
- "J1823-3021C": {
-  "Frequency MHz": [
-   2000.0
-  ],
-  "Bandwidth MHz": [
-   800.0
-  ],
-  "Flux Density mJy": [
-   0.037
-  ],
-  "Flux Density error mJy": [
-   0.0185
-  ]
- },
- "J1823-3021D": {
-  "Frequency MHz": [
-   2000.0
-  ],
-  "Bandwidth MHz": [
-   800.0
-  ],
-  "Flux Density mJy": [
-   0.029
-  ],
-  "Flux Density error mJy": [
-   0.0145
-  ]
- }
-}
+J1701-3006A:
+  Frequency MHz:
+    - 2000.0
+  Bandwidth MHz:
+    - 800.0
+  Flux Density mJy:
+    - 0.117
+  Flux Density error mJy:
+    - 0.0585
+J1701-3006B:
+  Frequency MHz:
+    - 2000.0
+  Bandwidth MHz:
+    - 800.0
+  Flux Density mJy:
+    - 0.078
+  Flux Density error mJy:
+    - 0.039
+J1701-3006C:
+  Frequency MHz:
+    - 2000.0
+  Bandwidth MHz:
+    - 800.0
+  Flux Density mJy:
+    - 0.072
+  Flux Density error mJy:
+    - 0.036
+J1701-3006D:
+  Frequency MHz:
+    - 2000.0
+  Bandwidth MHz:
+    - 800.0
+  Flux Density mJy:
+    - 0.069
+  Flux Density error mJy:
+    - 0.0345
+J1701-3006E:
+  Frequency MHz:
+    - 2000.0
+  Bandwidth MHz:
+    - 800.0
+  Flux Density mJy:
+    - 0.039
+  Flux Density error mJy:
+    - 0.0195
+J1701-3006F:
+  Frequency MHz:
+    - 2000.0
+  Bandwidth MHz:
+    - 800.0
+  Flux Density mJy:
+    - 0.052
+  Flux Density error mJy:
+    - 0.026
+J1807-2459A:
+  Frequency MHz:
+    - 2000.0
+  Bandwidth MHz:
+    - 800.0
+  Flux Density mJy:
+    - 0.605
+  Flux Density error mJy:
+    - 0.3025
+J1807-2459B:
+  Frequency MHz:
+    - 2000.0
+  Bandwidth MHz:
+    - 800.0
+  Flux Density mJy:
+    - 0.088
+  Flux Density error mJy:
+    - 0.044
+J1823-3021A:
+  Frequency MHz:
+    - 2000.0
+  Bandwidth MHz:
+    - 800.0
+  Flux Density mJy:
+    - 0.079
+  Flux Density error mJy:
+    - 0.0395
+J1823-3021B:
+  Frequency MHz:
+    - 2000.0
+  Bandwidth MHz:
+    - 800.0
+  Flux Density mJy:
+    - 0.076
+  Flux Density error mJy:
+    - 0.038
+J1823-3021C:
+  Frequency MHz:
+    - 2000.0
+  Bandwidth MHz:
+    - 800.0
+  Flux Density mJy:
+    - 0.037
+  Flux Density error mJy:
+    - 0.0185
+J1823-3021D:
+  Frequency MHz:
+    - 2000.0
+  Bandwidth MHz:
+    - 800.0
+  Flux Density mJy:
+    - 0.029
+  Flux Density error mJy:
+    - 0.0145

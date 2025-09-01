@@ -1,150 +1,98 @@
-{
- "J0034-0534": {
-  "Frequency MHz": [
-   74.0
-  ],
-  "Bandwidth MHz": [
-   1.7
-  ],
-  "Flux Density mJy": [
-   1620.0
-  ],
-  "Flux Density error mJy": [
-   210.0
-  ]
- },
- "J0218+4232": {
-  "Frequency MHz": [
-   74.0,
-   325.0
-  ],
-  "Bandwidth MHz": [
-   1.7,
-   25
-  ],
-  "Flux Density mJy": [
-   2940.0,
-   113.0
-  ],
-  "Flux Density error mJy": [
-   360.0,
-   4.0
-  ]
- },
- "J1810+1744": {
-  "Frequency MHz": [
-   74.0
-  ],
-  "Bandwidth MHz": [
-   1.7
-  ],
-  "Flux Density mJy": [
-   1090.0
-  ],
-  "Flux Density error mJy": [
-   150.0
-  ]
- },
- "J1816+4510": {
-  "Frequency MHz": [
-   74.0
-  ],
-  "Bandwidth MHz": [
-   1.7
-  ],
-  "Flux Density mJy": [
-   690.0
-  ],
-  "Flux Density error mJy": [
-   110.0
-  ]
- },
- "J1843-1113": {
-  "Frequency MHz": [
-   74.0
-  ],
-  "Bandwidth MHz": [
-   1.7
-  ],
-  "Flux Density mJy": [
-   820.0
-  ],
-  "Flux Density error mJy": [
-   194.0
-  ]
- },
- "J1903+0327": {
-  "Frequency MHz": [
-   74.0
-  ],
-  "Bandwidth MHz": [
-   1.7
-  ],
-  "Flux Density mJy": [
-   440.0
-  ],
-  "Flux Density error mJy": [
-   100.0
-  ]
- },
- "J1939+2134": {
-  "Frequency MHz": [
-   74.0
-  ],
-  "Bandwidth MHz": [
-   1.7
-  ],
-  "Flux Density mJy": [
-   17940.0
-  ],
-  "Flux Density error mJy": [
-   2150.0
-  ]
- },
- "J1959+2048": {
-  "Frequency MHz": [
-   74.0
-  ],
-  "Bandwidth MHz": [
-   1.7
-  ],
-  "Flux Density mJy": [
-   1880.0
-  ],
-  "Flux Density error mJy": [
-   240.0
-  ]
- },
- "J2145-0750": {
-  "Frequency MHz": [
-   74.0,
-   1400
-  ],
-  "Bandwidth MHz": [
-   1.7,
-   25
-  ],
-  "Flux Density mJy": [
-   354,
-   2.6
-  ],
-  "Flux Density error mJy": [
-   91,
-   0.4
-  ]
- },
- "J2215+5135": {
-  "Frequency MHz": [
-   74.0
-  ],
-  "Bandwidth MHz": [
-   1.7
-  ],
-  "Flux Density mJy": [
-   800
-  ],
-  "Flux Density error mJy": [
-   120
-  ]
- }
-}
+J0034-0534:
+  Frequency MHz:
+    - 74.0
+  Bandwidth MHz:
+    - 1.7
+  Flux Density mJy:
+    - 1620.0
+  Flux Density error mJy:
+    - 210.0
+J0218+4232:
+  Frequency MHz:
+    - 74.0
+    - 325.0
+  Bandwidth MHz:
+    - 1.7
+    - 25
+  Flux Density mJy:
+    - 2940.0
+    - 113.0
+  Flux Density error mJy:
+    - 360.0
+    - 4.0
+J1810+1744:
+  Frequency MHz:
+    - 74.0
+  Bandwidth MHz:
+    - 1.7
+  Flux Density mJy:
+    - 1090.0
+  Flux Density error mJy:
+    - 150.0
+J1816+4510:
+  Frequency MHz:
+    - 74.0
+  Bandwidth MHz:
+    - 1.7
+  Flux Density mJy:
+    - 690.0
+  Flux Density error mJy:
+    - 110.0
+J1843-1113:
+  Frequency MHz:
+    - 74.0
+  Bandwidth MHz:
+    - 1.7
+  Flux Density mJy:
+    - 820.0
+  Flux Density error mJy:
+    - 194.0
+J1903+0327:
+  Frequency MHz:
+    - 74.0
+  Bandwidth MHz:
+    - 1.7
+  Flux Density mJy:
+    - 440.0
+  Flux Density error mJy:
+    - 100.0
+J1939+2134:
+  Frequency MHz:
+    - 74.0
+  Bandwidth MHz:
+    - 1.7
+  Flux Density mJy:
+    - 17940.0
+  Flux Density error mJy:
+    - 2150.0
+J1959+2048:
+  Frequency MHz:
+    - 74.0
+  Bandwidth MHz:
+    - 1.7
+  Flux Density mJy:
+    - 1880.0
+  Flux Density error mJy:
+    - 240.0
+J2145-0750:
+  Frequency MHz:
+    - 74.0
+    - 1400
+  Bandwidth MHz:
+    - 1.7
+    - 25
+  Flux Density mJy:
+    - 354
+    - 2.6
+  Flux Density error mJy:
+    - 91
+    - 0.4
+J2215+5135:
+  Frequency MHz:
+    - 74.0
+  Bandwidth MHz:
+    - 1.7
+  Flux Density mJy:
+    - 800
+  Flux Density error mJy:
+    - 120

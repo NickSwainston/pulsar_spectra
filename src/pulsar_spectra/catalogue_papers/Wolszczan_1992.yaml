@@ -1,20 +1,13 @@
-{
- "J1300+1240": {
-  "Frequency MHz": [
-   430,
-   1400
-  ],
-  "Bandwidth MHz": [
-   20,
-   332
-  ],
-  "Flux Density mJy": [
-   20,
-   1.0
-  ],
-  "Flux Density error mJy": [
-   5,
-   0.2
-  ]
- },
-}
+J1300+1240:
+  Frequency MHz:
+    - 430
+    - 1400
+  Bandwidth MHz:
+    - 20
+    - 332
+  Flux Density mJy:
+    - 20
+    - 1.0
+  Flux Density error mJy:
+    - 5
+    - 0.2
