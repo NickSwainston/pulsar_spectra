@@ -33,7 +33,7 @@ cat_dict will have the format
                                 ["List of flux densities in mJy"],
                                 ["List of flux density uncertainties in mJy"],
                                 ["The reference label (in the format 'Author_year')"]],
-               }
+                }
 
 For example, this is the data for PSR J1453-6413.
 
@@ -147,7 +147,7 @@ Then move to the scripts subdirectory of the repository and run the command:
 
 .. code-block:: bash
 
-    python csv_to_yaml.py --csv your_paper.csv --ref author_year
+    csv_to_yaml --csv your_paper.csv --ref author_year
 
 This will put a YAML file of the paper in pulsar_spectra/catalogue_papers/.
 You should then reinstall the software (:code:`python setup.py install`) then run a spectral fit to confirm it worked.
@@ -248,29 +248,45 @@ Catalogue format
 
 The catalogue is made up of YAML files of each paper. The format of the YAML files is:
 
-.. code-block:: python
+.. code-block:: yaml
 
-    {
-        "Pulsar Jname": {
-            "Frequency MHz":    ["List of frequencies in MHz"],
-            "Flux Density mJy": ["List of flux densities in mJy"],
-            "Flux Density error mJy": ["List of flux density uncertainties in mJy"]
-        }
-    }
+    Pulsar Jname:
+        Frequency MHz:
+        - First frequency value in MHz
+        - Second frequency value in MHz
+        Bandwidth MHz:
+        - First bandwidth value in MHz
+        - Second bandwidth value in MHz
+        Flux Density mJy:
+        - First flux density value in mJy
+        - Second flux density value in mJy
+        Flux Density error mJy:
+        - First flux density uncertainty value in mJy
+        - Second flux density uncertainty value in mJy
 
 For example:
 
-.. code-block:: python
+.. code-block:: yaml
 
-    {
-        "J0030+0451": {
-            "Frequency MHz": [150.0, 180.0],
-            "Flux Density mJy": [ 37.6, 32.4],
-            "Flux Density error mJy": [ 4.4, 3.2]
-        },
-        "J0034-0534": {
-            "Frequency MHz": [150.0],
-            "Flux Density mJy": [202.8],
-            "Flux Density error mJy": [7.9]
-        },
-    }
+    J0030+0451:
+        Frequency MHz:
+        - 150.0
+        - 180.0
+        Bandwidth MHz:
+        - 37.6
+        - 32.4
+        Flux Density mJy:
+        - 4.4
+        - 3.2
+        Flux Density error mJy:
+        - 2.2
+        - 1.6
+    J0034-0534:
+        Frequency MHz:
+        - 150.0
+        Bandwidth MHz:
+        - 202.8
+        Flux Density mJy:
+        - 7.9
+        Flux Density error mJy:
+        - 3.95

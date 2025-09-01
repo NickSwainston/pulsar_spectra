@@ -20,7 +20,7 @@ include = [
 
 [tool.poetry.scripts]
 quick_fit = "pulsar_spectra.scripts.quick_fit:main"
-csv-to-yaml = "pulsar_spectra.scripts.csv_to_yaml:main"
+csv_to_yaml = "pulsar_spectra.scripts.csv_to_yaml:main"
 build_plotting_config = "pulsar_spectra.scripts.build_plotting_config:main"
 
 
