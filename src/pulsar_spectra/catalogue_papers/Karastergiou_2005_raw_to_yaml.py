@@ -12,7 +12,7 @@ for row in lines:
     row = row.split(",")
     pulsar = row[0].replace("–", "-").replace("—", "-").replace("-", "-").strip()
     # Wrong names I found
-    if "J1012—5857" in pulsar:
+    if "\ufeffJ1012-5857" in pulsar:
         pulsar = "J1012-5857"
     if pulsar not in all_jnames:
         print(pulsar)

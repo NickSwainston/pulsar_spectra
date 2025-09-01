@@ -22,7 +22,10 @@ for row in lines[17:]:
     for pair in row[6:-2]:
         if "(" in pair:
             flux, flux_err = pair.split("(")
-            sig_fig = len(flux.split(".")[-1])
+            if "." in flux:
+                sig_fig = len(flux.split(".")[-1])
+            else:
+                sig_fig = 0
             pulsar_dict[pulsar] = {
                 "Frequency MHz":[6591],
                 "Bandwidth MHz":[576],

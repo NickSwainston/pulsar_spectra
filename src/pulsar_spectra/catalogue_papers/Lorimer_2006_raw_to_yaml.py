@@ -22,7 +22,7 @@ for row in lines:
     flux = float(row[1])
     flux_err = flux * 0.5
     pulsar_dict[pulsar] = {
-        "Frequency MHz":[1374],
+        "Frequency MHz":[1400],
         "Bandwidth MHz":[288],
         "Flux Density mJy":[flux],
         "Flux Density error mJy":[flux_err]
