@@ -22,7 +22,8 @@ Installation
 
 For Users
 -----
-### Using pip or uv
+
+### From PyPI
 The latest stable release can be installed from [PyPI](https://pypi.org/project/pulsar-spectra/) using `pip`:
 ```bash
 pip install pulsar-spectra
@@ -32,21 +33,22 @@ or using `uv`:
 uv pip install pulsar-spectra
 ```
 
-### Using Docker
+### From Docker Hub
 There is a Docker container that you can install with:
 ```bash
-docker pull nickswainston/pulsar_spectra`
+docker pull nickswainston/pulsar_spectra
 ```
 
 For Developers
 -----
+
 ### Using uv
 To install the package from source, first clone the repository and change into the repository directory.
 We recommend using `uv` to ensure a consistent development environment. To install the package, run:
 ```bash
 uv sync --locked
 ```
-By default, this will also install the dependencies in the `dev` group but no other groups. If you
+By default, this will install the dependencies in the `dev` group but no other groups. If you
 are developing documentation, then include the `docs` group:
 ```bash
 uv sync --locked --group docs
@@ -60,10 +62,16 @@ source .venv/bin/activate
 Alternatively, you can install the package into your working environment using `pip`. In the repository
 directory, run:
 ```bash
-pip install
+pip install .
 ```
-The develop
-
+The install the development dependencies, run:
+```bash
+pip install --group dev .
+```
+The install the documentation dependencies, run:
+```bash
+pip install --group docs .
+```
 
 Help
 =====
