@@ -13,6 +13,7 @@ import matplotlib.lines as mlines
 import matplotlib.pyplot as plt
 import numpy as np
 import yaml
+
 from pulsar_spectra.load_data import DEFAULT_MARKER_CSV
 
 # [colour, description]

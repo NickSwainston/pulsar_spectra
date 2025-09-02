@@ -3,6 +3,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.ticker import FormatStrFormatter
+
 from pulsar_spectra.models import model_settings
 
 
