@@ -23,6 +23,6 @@ jobs:
           python-version: ${{ matrix.python-version }}
           enable-cache: true
       - name: Install pulsar_spectra
-        run: uv sync --locked --all_extras --dev
+        run: uv sync --locked --all-extras --dev
       - name: Run pytest
         run: uv run pytest tests
