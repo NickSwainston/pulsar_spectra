@@ -64,11 +64,11 @@ directory, run:
 ```bash
 pip install .
 ```
-The install the development dependencies, run:
+To install the development dependencies, run:
 ```bash
 pip install --group dev .
 ```
-The install the documentation dependencies, run:
+To install the documentation dependencies, run:
 ```bash
 pip install --group docs .
 ```
