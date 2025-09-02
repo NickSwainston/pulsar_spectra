@@ -21,17 +21,7 @@ Installation
 =====
 You can install via pip using `pip install pulsar_spectra` (stable)
 
-Or you can clone or download the repository and then use either
-
-```
-poetry install
-```
-
-or
-
-```
-pip install .
-```
+Or you can clone or download the repository and then use `pip install .`
 
 There is also a docker container that you can install with `docker pull nickswainston/pulsar_spectra`
 

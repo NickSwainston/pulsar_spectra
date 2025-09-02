@@ -1,58 +1,53 @@
-
-[tool.poetry]
+[project]
 name = "pulsar-spectra"
 version = "2.1.0"
 description = "A simple interface to record pulsar's flux density measurements for a large number of papers and perform fitting of spectral models."
 authors = [
-    "Nick Swainston <nickaswainston@gmail.com>",
-    "Christopher Lee"
+    { name = "Nick Swainston", email = "nickaswainston@gmail.com" },
+    { name = "Christopher Lee" },
 ]
-license = "MIT"
-readme = "README.md"
-packages = [{include = "pulsar_spectra", from = "src"}]
-include = [
-    'src/pulsar_spectra/catalogue_papers/*.yaml',
-    'src/pulsar_spectra/catalogue_papers/*.db',
-    'src/pulsar_spectra/configs/*.yaml',
-    'src/pulsar_spectra/configs/*.csv'
+license = { file = "LICENSE" }
+readme = { file = "README.md", content-type = "text/markdown" }
+requires-python = ">= 3.7"
+dependencies = [
+    "numpy>=1.13,<2",
+    "matplotlib>=3.4",
+    "psrqpy>=1.2.9",
+    "iminuit>=2.9",
+    "jacobi>=0.2",
+    "pyyaml>=3.10",
+    "pandas>=1.3,<2",
+    "importlib-metadata>=1.0; python_version<'3.8'",
 ]
 
+[dependency-groups]
+dev = [
+    "pytest",
+    "ruff",
+]
+docs = [
+    "myst-parser>=3",
+    "numpydoc>=1.7",
+    "sphinx>=7.3",
+    "sphinx-rtd-theme>=2",
+]
 
-[tool.poetry.scripts]
-quick_fit = "pulsar_spectra.scripts.quick_fit:main"
-csv_to_yaml = "pulsar_spectra.scripts.csv_to_yaml:main"
-build_plotting_config = "pulsar_spectra.scripts.build_plotting_config:main"
-
-
-[tool.poetry.dependencies]
-python = "^3.9"
-numpy = "^1.13.3"
-matplotlib = "^3.4.0"
-psrqpy = "^1.2.9"
-iminuit = "^2.11.1"
-jacobi = "^0.9.2"
-PyYAML = "^6.0.1"
-pandas = "^1.4.2"
-scipy = "^1.13.0"
-bilby = "^2.2.3"
-
-
-[tool.poetry.group.dev.dependencies]
-pytest = "^7.3.1"
-ruff = "^0.4.4"
-
-
-[tool.poetry.group.docs.dependencies]
-sphinx = "^7.3.7"
-numpydoc = "^1.7.0"
-sphinx-rtd-theme = "^2.0.0"
-myst-parser = "^3.0.1"
-
+[project.scripts]
+quick-fit = "pulsar_spectra.scripts.quick_fit:main"
+csv-to-yaml = "pulsar_spectra.scripts.csv_to_yaml:main"
+build-plotting-config = "pulsar_spectra.scripts.build_plotting_config:main"
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
 
+[tool.setuptools.package-data]
+pulsar_spectra = [
+    'catalogue_papers/*.yaml',
+    'catalogue_papers/*.db',
+    'configs/*.yaml',
+    'configs/*.csv'
+]
 
 [tool.ruff]
 line-length = 120
