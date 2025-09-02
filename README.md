@@ -19,11 +19,50 @@ A simple interface to record pulsar's flux density measurements for a large numb
 
 Installation
 =====
-You can install via pip using `pip install pulsar_spectra` (stable)
 
-Or you can clone or download the repository and then use `pip install .`
+For Users
+-----
+### Using pip or uv
+The latest stable release can be installed from [PyPI](https://pypi.org/project/pulsar-spectra/) using `pip`:
+```bash
+pip install pulsar-spectra
+```
+or using `uv`:
+```bash
+uv pip install pulsar-spectra
+```
 
-There is also a docker container that you can install with `docker pull nickswainston/pulsar_spectra`
+### Using Docker
+There is a Docker container that you can install with:
+```bash
+docker pull nickswainston/pulsar_spectra`
+```
+
+For Developers
+-----
+### Using uv
+To install the package from source, first clone the repository and change into the repository directory.
+We recommend using `uv` to ensure a consistent development environment. To install the package, run:
+```bash
+uv sync --locked
+```
+By default, this will also install the dependencies in the `dev` group but no other groups. If you
+are developing documentation, then include the `docs` group:
+```bash
+uv sync --locked --group docs
+```
+Then activate the virtual environment:
+```bash
+source .venv/bin/activate
+```
+
+### Using pip
+Alternatively, you can install the package into your working environment using `pip`. In the repository
+directory, run:
+```bash
+pip install
+```
+The develop
 
 
 Help
