@@ -1,4 +1,4 @@
-import json
+import yaml
 import csv
 
 with open("Jankowski_2019_raw.tsv") as file:
@@ -26,5 +26,4 @@ for row in lines:
         "Flux Density error mJy":[float(row[2])]}
 
 with open("Jankowski_2019.yaml", "w") as cat_file:
-    cat_file.write(json.dumps(pulsar_dict, indent=1))
-print(pulsar_dict)
+    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)

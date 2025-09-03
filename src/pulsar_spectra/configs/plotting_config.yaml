@@ -10,110 +10,202 @@ Capsize: 1.5
 Errorbar linewidth: 0.7
 Markers:
 - - blue circle
-  - '#006ddb'
+  - '#648FFF'
   - o
-  - 4.2
-- - green triangle
-  - '#24ff24'
-  - ^
-  - 4.9
-- - red diamond
-  - r
-  - D
-  - 3.5
-- - maroon square
-  - '#920000'
+  - 4.27
+- - dark lavender square
+  - '#785EF0'
   - s
-  - 3.85
-- - sky blue pentagon
-  - '#6db6ff'
-  - p
-  - 4.55
-- - pink star
-  - '#ff6db6'
-  - '*'
-  - 6.3
-- - purple upside-down triangle
-  - m
+  - 4.05
+- - deep pink up-pointing triangle
+  - '#DC267F'
+  - ^
+  - 4.5
+- - dark orange down-pointing triangle
+  - '#FE6100'
   - v
-  - 4.9
-- - light blue thin diamond
-  - '#b6dbff'
-  - d
-  - 4.9
-- - turqoise thick plus
-  - '#009292'
-  - P
-  - 5.25
-- - lavender hexagon
-  - '#b66dff'
-  - h
-  - 4.9
-- - orange right-pointing triangle
-  - '#db6d00'
-  - '>'
-  - 4.9
-- - cyan sideways hexagon
-  - c
-  - H
-  - 4.9
-- - light pink thick cross
-  - '#ffb6db'
-  - X
-  - 5.25
-- - dark green right-pointing triangle
-  - '#004949'
+  - 4.5
+- - orange left-pointing triangle
+  - '#FFB000'
   - <
-  - 4.9
-- - black thin cross
-  - k
-  - x
-  - 4.9
-- - yellow square
-  - y
-  - s
-  - 3.85
-- - turquoise triangle
-  - '#009292'
-  - ^
-  - 4.9
-- - black thin diamond
-  - k
-  - d
-  - 4.9
-- - light blue star
-  - '#b6dbff'
-  - '*'
-  - 6.3
-- - yellow thick plus
-  - y
-  - P
-  - 5.25
-- - green circle
-  - '#24ff24'
-  - o
-  - 4.2
-- - red triangle
-  - r
-  - ^
-  - 4.9
-- - maroon diamond
-  - '#920000'
-  - D
-  - 3.5
-- - blue square
-  - '#6db6ff'
-  - s
-  - 3.85
-- - sky pink pentagon
-  - '#ff6db6'
+  - 4.5
+- - yellow right-pointing triangle
+  - '#FDDF49'
+  - '>'
+  - 4.5
+- - lime pentagon
+  - '#17E474'
   - p
-  - 4.55
-- - purple star
-  - m
+  - 4.5
+- - lime green plus
+  - '#8FB327'
+  - P
+  - 5.4
+- - teal star
+  - '#449C8C'
   - '*'
-  - 6.3
-- - light blue upside-down triangle
-  - '#b6dbff'
+  - 6.75
+- - pink hexagon
+  - '#EA83B7'
+  - h
+  - 4.5
+- - purple rotated hexagon
+  - '#902499'
+  - H
+  - 4.5
+- - blue cross
+  - '#648FFF'
+  - X
+  - 4.5
+- - dark lavender diamond
+  - '#785EF0'
+  - D
+  - 3.38
+- - deep pink thin diamond
+  - '#DC267F'
+  - d
+  - 4.05
+- - dark orange circle
+  - '#FE6100'
+  - o
+  - 4.27
+- - orange square
+  - '#FFB000'
+  - s
+  - 4.05
+- - yellow up-pointing triangle
+  - '#FDDF49'
+  - ^
+  - 4.5
+- - lime down-pointing triangle
+  - '#17E474'
   - v
-  - 4.9
+  - 4.5
+- - lime green left-pointing triangle
+  - '#8FB327'
+  - <
+  - 4.5
+- - teal right-pointing triangle
+  - '#449C8C'
+  - '>'
+  - 4.5
+- - pink pentagon
+  - '#EA83B7'
+  - p
+  - 4.5
+- - purple plus
+  - '#902499'
+  - P
+  - 5.4
+- - blue star
+  - '#648FFF'
+  - '*'
+  - 6.75
+- - dark lavender hexagon
+  - '#785EF0'
+  - h
+  - 4.5
+- - deep pink rotated hexagon
+  - '#DC267F'
+  - H
+  - 4.5
+- - dark orange cross
+  - '#FE6100'
+  - X
+  - 4.5
+- - orange diamond
+  - '#FFB000'
+  - D
+  - 3.38
+- - yellow thin diamond
+  - '#FDDF49'
+  - d
+  - 4.05
+- - lime circle
+  - '#17E474'
+  - o
+  - 4.27
+- - lime green square
+  - '#8FB327'
+  - s
+  - 4.05
+- - teal up-pointing triangle
+  - '#449C8C'
+  - ^
+  - 4.5
+- - pink down-pointing triangle
+  - '#EA83B7'
+  - v
+  - 4.5
+- - purple left-pointing triangle
+  - '#902499'
+  - <
+  - 4.5
+- - blue right-pointing triangle
+  - '#648FFF'
+  - '>'
+  - 4.5
+- - dark lavender pentagon
+  - '#785EF0'
+  - p
+  - 4.5
+- - deep pink plus
+  - '#DC267F'
+  - P
+  - 5.4
+- - dark orange star
+  - '#FE6100'
+  - '*'
+  - 6.75
+- - orange hexagon
+  - '#FFB000'
+  - h
+  - 4.5
+- - yellow rotated hexagon
+  - '#FDDF49'
+  - H
+  - 4.5
+- - lime cross
+  - '#17E474'
+  - X
+  - 4.5
+- - lime green diamond
+  - '#8FB327'
+  - D
+  - 3.38
+- - teal thin diamond
+  - '#449C8C'
+  - d
+  - 4.05
+- - pink circle
+  - '#EA83B7'
+  - o
+  - 4.27
+- - purple square
+  - '#902499'
+  - s
+  - 4.05
+- - blue up-pointing triangle
+  - '#648FFF'
+  - ^
+  - 4.5
+- - dark lavender down-pointing triangle
+  - '#785EF0'
+  - v
+  - 4.5
+- - deep pink left-pointing triangle
+  - '#DC267F'
+  - <
+  - 4.5
+- - dark orange right-pointing triangle
+  - '#FE6100'
+  - '>'
+  - 4.5
+- - orange pentagon
+  - '#FFB000'
+  - p
+  - 4.5
+- - yellow plus
+  - '#FDDF49'
+  - P
+  - 5.4

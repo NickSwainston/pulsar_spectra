@@ -1,4 +1,4 @@
-import json
+import yaml
 
 with open("Manchester_2013_raw.txt") as file:
     pulsar_dict = {}
@@ -41,4 +41,4 @@ for row in lines:
     }
 
 with open("Manchester_2013.yaml", "w") as cat_file:
-    cat_file.write(json.dumps(pulsar_dict, indent=1))
+    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)

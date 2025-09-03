@@ -1,4 +1,4 @@
-import json
+import yaml
 import psrqpy
 
 with open("van_Ommen_1997_raw.txt", "r") as raw_file:
@@ -44,5 +44,4 @@ for row in lines:
 
 
 with open("van_Ommen_1997.yaml", "w") as cat_file:
-    cat_file.write(json.dumps(pulsar_dict, indent=1))
-print(pulsar_dict)
+    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)

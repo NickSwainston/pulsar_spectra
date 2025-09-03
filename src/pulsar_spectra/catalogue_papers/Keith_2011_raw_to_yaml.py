@@ -1,4 +1,4 @@
-import json
+import yaml
 
 with open("Keith_2011_raw.txt", "r") as raw_file:
     lines = raw_file.readlines()
@@ -23,7 +23,5 @@ for row in lines[:16]:
     # Text says assume %20 uncertainty
     pulsar_dict[pulsar]["Flux Density error mJy"] += [round(flux*.2, 4)]
 
-json = json.dumps(pulsar_dict, indent=1)
 with open("Keith_2011.yaml", "w") as cat_file:
-    cat_file.write(json)
-print(pulsar_dict)
+    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)

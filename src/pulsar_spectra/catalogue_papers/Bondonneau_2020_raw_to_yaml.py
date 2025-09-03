@@ -1,4 +1,4 @@
-import json
+import yaml
 
 with open("Bondonneau_2020_raw.txt", "r") as raw_file:
     lines = raw_file.readlines()
@@ -27,5 +27,4 @@ for row in lines:
     }
 
 with open("Bondonneau_2020.yaml", "w") as cat_file:
-    cat_file.write(json.dumps(pulsar_dict, indent=1))
-print(pulsar_dict)
+    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)

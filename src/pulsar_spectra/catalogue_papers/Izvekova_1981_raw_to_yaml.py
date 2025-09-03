@@ -1,5 +1,5 @@
 #Izvekova_1981
-import json
+import yaml
 import psrqpy
 import csv
 import numpy as np
@@ -24,8 +24,7 @@ for row in lines[2:]:
     print(row)
 
     if "+" in row[1] or "-" in row[1]:
-        pulsar = row[1].strip().replace("–", "-").replace(" ", "")
-        bname = "B" + pulsar
+        bname = row[1].strip().replace("–", "-").replace(" ", "")
         if bname == "B0012+47":
             bname = "B0011+47"
         if bname == "B0153+61":
@@ -77,9 +76,8 @@ for row in lines[2:]:
         pulsar_dict[pulsar]["Bandwidth MHz"] += [band]
         flux, flux_err = row[3].replace("*", "").replace(" ", "").replace("+", "±").split("±")
         # 10^-29Jm^-2Hz^-1 = mJys
-        pulsar_dict[pulsar]["Flux Density mJy"] += [float(flux)*1e3/query['P0'][pid]]
-        pulsar_dict[pulsar]["Flux Density error mJy"] += [float(flux_err)*1e3/query['P0'][pid]]
+        pulsar_dict[pulsar]["Flux Density mJy"] += [float(flux)*1e3]
+        pulsar_dict[pulsar]["Flux Density error mJy"] += [float(flux_err)*1e3]
 
 with open("Izvekova_1981.yaml", "w") as cat_file:
-    cat_file.write(json.dumps(pulsar_dict, indent=1))
-print(pulsar_dict)
+    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)

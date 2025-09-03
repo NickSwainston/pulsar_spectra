@@ -1,4 +1,4 @@
-import json
+import yaml
 
 with open("Johnston_2021_raw.txt", "r") as raw_file:
     lines = raw_file.readlines()
@@ -19,5 +19,4 @@ for row in lines[1:]:
     }
 
 with open("Johnston_2021.yaml", "w") as cat_file:
-    cat_file.write(json.dumps(pulsar_dict, indent=1))
-print(pulsar_dict)
+    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)

@@ -2,9 +2,9 @@
 
 import argparse
 import csv
-import json
 
 import psrqpy
+import yaml
 
 from pulsar_spectra.catalogue import ATNF_VER
 
@@ -56,12 +56,12 @@ def convert_csv_to_yaml(csv_location, ref_label):
                     "Flux Density error mJy": [float(flux_err)],
                 }
 
-    # Dump the dict to the jsonfile in the catalogue directory
+    # Dump the dict to the yaml file in the catalogue directory
     with open(f"{ref_label}.yaml", "w") as cat_file:
-        cat_file.write(json.dumps(pulsar_dict, indent=1))
+        yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)
 
     print("\nCatalogue data written:")
-    print(json.dumps(pulsar_dict, indent=4))
+    print(yaml.dump(pulsar_dict, sort_keys=False, indent=2))
 
 
 def main():

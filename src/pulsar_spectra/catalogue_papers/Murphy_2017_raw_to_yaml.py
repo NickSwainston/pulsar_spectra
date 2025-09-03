@@ -1,4 +1,4 @@
-import json
+import yaml
 
 pulsar_dict = {}
 
@@ -86,5 +86,4 @@ for row in lines[16:]:
             pulsar_dict[pulsar]["Flux Density error mJy"] += [float(flux_err)]
 
 with open("Murphy_2017.yaml", "w") as cat_file:
-    cat_file.write(json.dumps(pulsar_dict, indent=1))
-print(pulsar_dict)
+    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)

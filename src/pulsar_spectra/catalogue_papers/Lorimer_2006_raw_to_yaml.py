@@ -1,4 +1,4 @@
-import json
+import yaml
 import csv
 
 with open("Lorimer_2006_raw.tsv", "r") as raw_file:
@@ -22,12 +22,11 @@ for row in lines:
     flux = float(row[1])
     flux_err = flux * 0.5
     pulsar_dict[pulsar] = {
-        "Frequency MHz":[1374],
+        "Frequency MHz":[1400],
         "Bandwidth MHz":[288],
         "Flux Density mJy":[flux],
         "Flux Density error mJy":[flux_err]
     }
 
 with open("Lorimer_2006.yaml", "w") as cat_file:
-    cat_file.write(json.dumps(pulsar_dict, indent=1))
-print(pulsar_dict)
+    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)

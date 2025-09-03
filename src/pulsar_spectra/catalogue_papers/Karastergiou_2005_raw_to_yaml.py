@@ -1,4 +1,4 @@
-import json
+import yaml
 import psrqpy
 
 query = psrqpy.QueryATNF(params=['PSRJ', 'NAME', 'PSRB']).pandas
@@ -12,7 +12,7 @@ for row in lines:
     row = row.split(",")
     pulsar = row[0].replace("–", "-").replace("—", "-").replace("-", "-").strip()
     # Wrong names I found
-    if "J1012—5857" in pulsar:
+    if "\ufeffJ1012-5857" in pulsar:
         pulsar = "J1012-5857"
     if pulsar not in all_jnames:
         print(pulsar)
@@ -27,5 +27,4 @@ for row in lines:
     }
 
 with open("Karastergiou_2005.yaml", "w") as cat_file:
-    cat_file.write(json.dumps(pulsar_dict, indent=1))
-#print(pulsar_dict)
+    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)

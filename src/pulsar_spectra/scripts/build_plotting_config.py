@@ -38,38 +38,37 @@ PALETTE_IBM = [
     ["#FE6100", "dark orange"],
     ["#FFB000", "orange"],
     ["#FDDF49", "yellow"],
-    ["#8FB327", "lime green"],
-    ["#902499", "purple"],
     ["#17E474", "lime"],
-    ["#74CE22", "green"],
+    ["#8FB327", "lime green"],
     ["#449C8C", "teal"],
     ["#EA83B7", "pink"],
+    ["#902499", "purple"],
 ]
+
 # ref: https://davidmathlogic.com/colorblind/
 PALETTE_WONG = [
-    ["#DF0A10", "red"],
-    ["#E69F00", "orange"],
-    ["#56B4E9", "sky blue"],
-    ["#009E73", "sea green"],
-    ["#F0E442", "yellow"],
     ["#0072B2", "blue"],
-    ["#D55E00", "dark orange"],
-    ["#CC79A7", "pink"],
-    ["#80C774", "lime green"],
+    ["#DF0A10", "red"],
+    ["#009E73", "sea green"],
+    ["#E69F00", "orange"],
     ["#A21DCA", "purple"],
-    ["#9BFB5F", "lawn green"],
+    ["#F0E442", "yellow"],
+    ["#80C774", "lime green"],
+    ["#D55E00", "dark orange"],
     ["#BDD1D2", "grey"],
+    ["#56B4E9", "sky blue"],
+    ["#9BFB5F", "lawn green"],
+    ["#CC79A7", "pink"],
 ]
 
 # [marker_type, size_scale, description]
 MARKERS = [
     ["o", 0.95, "circle"],
-    ["v", 1, "down-pointing triangle"],
+    ["s", 0.9, "square"],
     ["^", 1, "up-pointing triangle"],
+    ["v", 1, "down-pointing triangle"],
     ["<", 1, "left-pointing triangle"],
     [">", 1, "right-pointing triangle"],
-    ["8", 1, "octagon"],
-    ["s", 0.9, "square"],
     ["p", 1, "pentagon"],
     ["P", 1.2, "plus"],
     ["*", 1.5, "star"],
@@ -214,6 +213,20 @@ def parse_args():
         "--shuffle", action="store_true", dest="shuffle", default=False, help="Randomise the marker colour/type order."
     )
     marker_generation.add_argument(
+        "--shuffle_types",
+        action="store_true",
+        dest="shuffle_types",
+        default=False,
+        help="Randomise the marker type order.",
+    )
+    marker_generation.add_argument(
+        "--shuffle_colours",
+        action="store_true",
+        dest="shuffle_colours",
+        default=False,
+        help="Randomise the marker colour order.",
+    )
+    marker_generation.add_argument(
         "--no_scaling",
         action="store_false",
         dest="uniform_size",
@@ -296,7 +309,14 @@ def is_valid_marker(marker_string):
 
 
 def generate_marker_set(
-    num_markers, marker_size, palette_name="IBM", shuffle=True, uniform_size=True, plot_preview=False, savename=None
+    num_markers,
+    marker_size,
+    palette_name="IBM",
+    shuffle_colours=True,
+    shuffle_types=True,
+    uniform_size=True,
+    plot_preview=False,
+    savename=None,
 ):
     if palette_name == "TAB":
         palette = PALETTE_TABLEAU
@@ -328,14 +348,16 @@ def generate_marker_set(
     while num_left_to_generate > 0:
         generate_on_current_loop = num_left_to_generate
 
-        if shuffle:
+        if shuffle_colours:
             random.shuffle(palette)
+
+        if shuffle_types:
             random.shuffle(MARKERS)
 
         if num_markers < len(palette):
             colours = palette[0:num_markers]
         else:
-            if shuffle:
+            if shuffle_colours:
                 colours = []
                 for _ in range(num_markers // len(palette)):
                     colours += palette
@@ -347,7 +369,7 @@ def generate_marker_set(
         if num_markers < len(MARKERS):
             markers = MARKERS[0:num_markers]
         else:
-            if shuffle:
+            if shuffle_types:
                 markers = []
                 for _ in range(num_markers // len(MARKERS)):
                     markers += MARKERS
@@ -417,11 +439,22 @@ def create_ref_marker_combinations(psrs, args):
     unique_refs = list(np.unique(np.array(all_refs)))
     num_unique_refs = len(unique_refs)
 
+    shuffle_colours = False
+    shuffle_types = False
+    if args.shuffle:
+        shuffle_colours = True
+        shuffle_types = True
+    elif args.shuffle_colours:
+        shuffle_colours = True
+    elif args.shuffle_types:
+        shuffle_types = True
+
     markers = generate_marker_set(
         num_unique_refs,
         args.marker_size,
         args.palette,
-        args.shuffle,
+        shuffle_colours,
+        shuffle_types,
         args.uniform_size,
         args.plot_preview,
         args.marker_file_savename,
@@ -456,11 +489,22 @@ def main():
             yaml.dump(ref_markers, f, sort_keys=False)
     else:
         if args.generate:
+            shuffle_colours = False
+            shuffle_types = False
+            if args.shuffle:
+                shuffle_colours = True
+                shuffle_types = True
+            elif args.shuffle_colours:
+                shuffle_colours = True
+            elif args.shuffle_types:
+                shuffle_types = True
+
             markers = generate_marker_set(
                 args.num_markers,
                 args.marker_size,
                 args.palette,
-                args.shuffle,
+                shuffle_colours,
+                shuffle_types,
                 args.uniform_size,
                 args.plot_preview,
                 args.marker_file_savename,

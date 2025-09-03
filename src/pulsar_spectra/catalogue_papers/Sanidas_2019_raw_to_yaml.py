@@ -1,4 +1,4 @@
-import json
+import yaml
 import csv
 import psrqpy
 
@@ -142,5 +142,4 @@ for row in lines:
         del pulsar_dict[pulsar]
 
 with open("Sanidas_2019.yaml", "w") as cat_file:
-    cat_file.write(json.dumps(pulsar_dict, indent=1))
-#print(pulsar_dict)
+    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)

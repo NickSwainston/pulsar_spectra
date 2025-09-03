@@ -1,4 +1,4 @@
-import json
+import yaml
 import csv
 from math import log10, floor
 
@@ -47,5 +47,4 @@ for row in lines:
     }
 
 with open("Johnston_2018.yaml", "w") as cat_file:
-    cat_file.write(json.dumps(pulsar_dict, indent=1))
-print(pulsar_dict)
+    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)

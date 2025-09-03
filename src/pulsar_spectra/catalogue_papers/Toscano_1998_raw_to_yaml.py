@@ -1,4 +1,4 @@
-import json
+import yaml
 import psrqpy
 import csv
 
@@ -16,10 +16,7 @@ pulsar_dict = {}
 for row in lines:
     row = [r.strip() for r in row]
 
-    pulsar = row[0].strip().replace("–", "-").replace(" ", "").replace("−", "-")
-    if pulsar.startswith("B"):
-        pid = list(query['PSRB']).index(pulsar)
-        pulsar = query['PSRJ'][pid]
+    pulsar = "J" + row[0].strip().replace("–", "-").replace(" ", "").replace("−", "-")
 
     # Incorrect names
     if pulsar == "J1804-2718":
@@ -58,4 +55,4 @@ for row in lines:
         pulsar_dict[pulsar]["Flux Density error mJy"].append(flux_err)
 
 with open("Toscano_1998.yaml", "w") as cat_file:
-    cat_file.write(json.dumps(pulsar_dict, indent=1))
+    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)

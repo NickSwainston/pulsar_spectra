@@ -1,5 +1,5 @@
 import csv
-import json
+import yaml
 
 import psrqpy
 
@@ -47,4 +47,4 @@ with open("Wang_2024_raw.txt") as file:
         }
 
 with open("Wang_2024.yaml", "w") as cat_file:
-    cat_file.write(json.dumps(pulsar_dict, indent=1))
+    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)

@@ -1,4 +1,4 @@
-import json
+import yaml
 
 with open("Dai_2015_raw.txt", "r") as raw_file:
     lines = raw_file.readlines()
@@ -40,7 +40,5 @@ for row in lines:
         "Flux Density error mJy":flux_errs
     }
 
-json = json.dumps(pulsar_dict, indent=1)
 with open("Dai_2015.yaml", "w") as cat_file:
-    cat_file.write(json)
-print(pulsar_dict)
+    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)
