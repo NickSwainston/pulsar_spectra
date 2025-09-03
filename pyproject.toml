@@ -1,6 +1,6 @@
 [project]
 name = "pulsar-spectra"
-version = "2.2.0"
+version = "2.1.0"
 description = "A simple interface to record pulsar's flux density measurements for a large number of papers and perform fitting of spectral models."
 authors = [
     { name = "Nick Swainston", email = "nickaswainston@gmail.com" },
