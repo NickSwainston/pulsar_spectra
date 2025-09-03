@@ -70,6 +70,8 @@ Integration of the model functions
 ----------------------------------
 In the following subsections, bandwidth integrations are performed directly using the model functions which are detailed in Swainston et al. (2022).
 
+.. _simple_power_law_integrate:
+
 Simple power law
 ~~~~~~~~~~~~~~~~
 The simple power law model is
