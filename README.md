@@ -43,12 +43,12 @@ docker pull nickswainston/pulsar_spectra
 For Publishers
 -----
 
-If you plan to publish your results to a scientific journal, it is important you use a specific version/tag of pulsar_spectra instead of the latest latest and use similar python dependencies as possible.
-To do this we recommend that you either use the `uv` lock file (defines specific python dependency versions) or the docker container (has specific python dependency versions already installed).
+If you plan to publish your results in a scientific journal, it is important that you use a specific version/tag of `pulsar_spectra` and keep the Python dependencies as similar to that version as possible.
+To do this, we recommend that you either use the `uv` lock file (which defines specific Python dependency versions) or the Docker container (which has specific Python dependency versions already installed).
 
-To check what versions are available you can either check the [GitHub release page](https://github.com/NickSwainston/pulsar_spectra/releases) or, in the repository, run the command:
+To check what versions are available, you can either browse the [GitHub release page](https://github.com/NickSwainston/pulsar_spectra/releases) or, in the repository, run the command:
 
-```
+```bash
 git tag
 ```
 
@@ -64,39 +64,27 @@ There is a Docker container that you can install with:
 docker pull nickswainston/pulsar_spectra:<version>
 ```
 
-### Using uv
+### From source
 
-To install the package from source, first clone the repository and move into the repository directory.
-Then to revert the repository to a certain version of the software, run the following command:
+If you are installing the package from source, we recommend first reverting the repository to a specific version.
+This can be done using following command:
 
 ```
 git checkout tags/<version>
 ```
 
-You can then install that version in a virtual environment using `uv`
-We recommend using `uv` to ensure a consistent development environment that uses exact python dependencies.
-To install the package, run:
-
-```bash
-uv sync --locked
-```
-By default, this will install the dependencies in the `dev` group but no other groups. If you
-are developing documentation, then include the `docs` group:
-```bashchange
-uv sync --locked --group docs
-```
-Then activate the virtual environment:
-```bash
-source .venv/bin/activate
-```
+You can then install that version by following the instructions in the "For Developers" section below.
 
 For Developers
 -----
 
-### Using uv
-
 To install the package from source, first clone the repository and move into the repository directory.
-We recommend using `uv` to ensure a consistent development environment. To install the package, run:
+You can then install the package using either `uv` or `pip`, as described below.
+
+### Using uv (Recommended)
+
+The package can be installed in a new virtual environment using `uv`, which will ensure a consistent development environment.
+This can be done with the command:
 ```bash
 uv sync --locked
 ```
