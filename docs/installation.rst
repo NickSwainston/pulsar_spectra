@@ -12,7 +12,7 @@ The latest stable release can be installed from `PyPI <https://pypi.org/project/
 
     pip install pulsar-spectra
 
-or using `uv`:
+or using ``uv``:
 
 .. code-block:: bash
 
@@ -75,7 +75,7 @@ You can then install the package using either ``uv`` or ``pip``, as described be
 
 .. _for_developers_uv:
 
-Using uv (Recommended)
+Using ``uv`` (Recommended)
 ^^^^^^^^^^^^^^^^^^^^^^
 
 The package can be installed in a new virtual environment using ``uv``, which will ensure a consistent development environment.
@@ -98,7 +98,7 @@ Then activate the virtual environment:
 
     source .venv/bin/activate
 
-Using pip
+Using ``pip``
 ^^^^^^^^^
 Alternatively, you can install the package into your working environment using ``pip``. In the repository
 directory, run:
