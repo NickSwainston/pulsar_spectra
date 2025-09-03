@@ -1,0 +1,47 @@
+name: Docker Build & Push
+
+on:
+  pull_request:
+    types:
+      - closed  # Trigger when PRs are closed -> push "latest"
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+' # On tags -> push "version" and "latest"
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build & Push (PR -> latest)
+        if: github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.base_ref == 'main'
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: nickswainston/pulsar_spectra:latest
+
+      - name: Extract version
+        if: startsWith(github.ref, 'refs/tags/')
+        run: echo "VERSION=${GITHUB_REF_NAME}" >> $GITHUB_ENV
+
+      - name: Build & Push (Tag -> version + latest)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            nickswainston/pulsar_spectra:${{ env.VERSION }}
+            nickswainston/pulsar_spectra:latest
