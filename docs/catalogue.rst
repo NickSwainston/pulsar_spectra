@@ -147,7 +147,7 @@ Then move to the scripts subdirectory of the repository and run the command:
 
 .. code-block:: bash
 
-    csv_to_yaml --csv your_paper.csv --ref author_year
+    csv-to-yaml --csv your_paper.csv --ref author_year
 
 This will put a YAML file of the paper in pulsar_spectra/catalogue_papers/.
 You should then reinstall the software (:code:`python setup.py install`) then run a spectral fit to confirm it worked.
