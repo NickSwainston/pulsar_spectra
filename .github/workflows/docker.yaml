@@ -11,6 +11,7 @@ on:
 jobs:
   docker:
     runs-on: ubuntu-latest
+    if: github.repository == 'nickswainston/pulsar_spectra'  # Don't run on forks
     steps:
       - name: Checkout
         uses: actions/checkout@v4
