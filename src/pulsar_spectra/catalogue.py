@@ -176,6 +176,7 @@ ADS_REF = {
     "Wang_2024": "https://ui.adsabs.harvard.edu/abs/2024ApJ...961...48W",
     "Keith_2024": "https://ui.adsabs.harvard.edu/abs/2024MNRAS.530.1581K",
     "Kumar_2025": "https://ui.adsabs.harvard.edu/abs/2025ApJ...982..132K",
+    "Deneva_2024": "https://ui.adsabs.harvard.edu/abs/2024ApJS..271...23D",
 }
 
 
@@ -552,6 +553,7 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
         "Dembska_2015",
         "Wang_2024",
         "Keith_2024",
+        "Deneva_2024",
     ]
     # refs that have different uncertainties than published
     atnf_uncert_refs = [
