@@ -179,6 +179,7 @@ ADS_REF = {
     "Deneva_2024": "https://ui.adsabs.harvard.edu/abs/2024ApJS..271...23D",
     "Parent_2022": "https://ui.adsabs.harvard.edu/abs/2022ApJ...924..135P",
     "Martsen_2022": "https://ui.adsabs.harvard.edu/abs/2022ApJ...941...22M",
+    "Bangale_2024": "https://ui.adsabs.harvard.edu/abs/2024ApJ...966..161B",
 }
 
 
@@ -567,6 +568,7 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
         "Manchester_2001",
         "Morris_2002",
         "Zhang_2019",
+        "Bangale_2024",
     ]
     atnf_other_refs = [
         "Taylor_1993",  # excluding due to duplication of other references
