@@ -180,6 +180,7 @@ ADS_REF = {
     "Parent_2022": "https://ui.adsabs.harvard.edu/abs/2022ApJ...924..135P",
     "Martsen_2022": "https://ui.adsabs.harvard.edu/abs/2022ApJ...941...22M",
     "Bangale_2024": "https://ui.adsabs.harvard.edu/abs/2024ApJ...966..161B",
+    "Fiore_2023": "https://ui.adsabs.harvard.edu/abs/2023ApJ...956...40F",
 }
 
 
