@@ -47,8 +47,20 @@ def test_ref_duplicates_removed():
                 ref_atnf.append(ref[:-5])
             else:
                 ref_ps.append(ref)
+
         for ref in ref_atnf:
-            assert ref not in tuple(ref_ps)
+            indexes = [i for i, word in enumerate(cat_dict[pulsar][4]) if word.startswith(ref)]
+            ref_freqs = [cat_dict[pulsar][0][i] for i in indexes]
+            ref_fluxes = [cat_dict[pulsar][2][i] for i in indexes]
+            ref_flux_errs = [cat_dict[pulsar][3][i] for i in indexes]
+            ref_refs = [cat_dict[pulsar][4][i] for i in indexes]
+        debug_string = (
+            f"\nref_freqs: {ref_freqs}\nref_fluxes: {ref_fluxes}\nref_flux_errs: {ref_flux_errs}\nref_refs: {ref_refs}"
+        )
+        for ref in ref_atnf:
+            assert ref not in tuple(ref_ps), (
+                f"Duplicate reference {ref} found in pulsar {pulsar}. Catalogue values: {debug_string}"
+            )
 
 
 def test_missing_ads_refs():
@@ -56,7 +68,7 @@ def test_missing_ads_refs():
     for cat_file in CAT_YAMLS:
         cat_ref = os.path.basename(cat_file).split(".")[0]
         print(cat_ref)
-        assert cat_ref in ADS_REF
+        assert cat_ref in ADS_REF, f"No ADS reference found for catalogue {cat_ref} in catalogue.py ADS_REF dictionary."
 
 
 def test_catalogue_format():
@@ -69,9 +81,7 @@ def test_catalogue_format():
             cat_dict = yaml.safe_load(stream)
         for pulsar in cat_dict.keys():
             print(pulsar)
-            # Below is a typo in ATNF v1.68
-            if pulsar not in ("J1643-10"):
-                assert pulsar in jnames
+            assert pulsar in jnames, f"Pulsar name {pulsar} not found in ATNF version {ATNF_VER}"
             assert "Frequency MHz" in cat_dict[pulsar].keys()
             assert "Bandwidth MHz" in cat_dict[pulsar].keys()
             assert "Flux Density mJy" in cat_dict[pulsar].keys()

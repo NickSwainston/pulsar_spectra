@@ -176,6 +176,11 @@ ADS_REF = {
     "Wang_2024": "https://ui.adsabs.harvard.edu/abs/2024ApJ...961...48W",
     "Keith_2024": "https://ui.adsabs.harvard.edu/abs/2024MNRAS.530.1581K",
     "Kumar_2025": "https://ui.adsabs.harvard.edu/abs/2025ApJ...982..132K",
+    "Deneva_2024": "https://ui.adsabs.harvard.edu/abs/2024ApJS..271...23D",
+    "Parent_2022": "https://ui.adsabs.harvard.edu/abs/2022ApJ...924..135P",
+    "Martsen_2022": "https://ui.adsabs.harvard.edu/abs/2022ApJ...941...22M",
+    "Bangale_2024": "https://ui.adsabs.harvard.edu/abs/2024ApJ...966..161B",
+    "Fiore_2023": "https://ui.adsabs.harvard.edu/abs/2023ApJ...956...40F",
 }
 
 
@@ -289,6 +294,9 @@ def flux_from_atnf(pulsar, query=None, ref_dict=None, assumed_error=0.5):
     -------
     freq_all : `list`
         All frequencies in Hz with flux values on ATNF.
+    band_all : `list`
+        All frequencies in Hz with flux values on ATNF. Note: since the ATNF catalogue does
+        not currently store bandwidth information, the list will be filled with `None` values.
     flux_all : `list`
         The flux values corresponding to the freq_all list in mJy.
     flux_err_all : `list`
@@ -373,7 +381,7 @@ def all_flux_from_atnf(query=None):
     Returns
     -------
     jname_cat_dict : `dict`
-        Catalgoues dictionary with the keys in the format jname_cat_dict[jname][ref]['Frequency MHz', 'Flux Density mJy', 'Flux Density error mJy']
+        Catalgoues dictionary with the keys in the format jname_cat_dict[jname][ref]['Frequency MHz', 'Bandwidth MHz', 'Flux Density mJy', 'Flux Density error mJy']
 
         ``'jname'`` : `str`
             The pulsar's Jname.
@@ -381,6 +389,8 @@ def all_flux_from_atnf(query=None):
             The reference label.
         ``'Frequency MHz'``
             The observing frequency in MHz.
+        ``'Bandwidth MHz'``
+            The observing bandwidth in MHz.
         ``'Flux Density mJy'``
             The flux density in mJy.
         ``'Flux Density error mJy'``
@@ -436,6 +446,8 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
 
             Frequency MHz : `list`
                 The observing frequency in MHz.
+            Bandwidth MHz : `list`
+                The observing bandwidth in MHz.
             Flux Density mJy : `list`
                 The flux density in mJy.
             Flux Density error mJy : `list`
@@ -552,6 +564,7 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
         "Dembska_2015",
         "Wang_2024",
         "Keith_2024",
+        "Deneva_2024",
     ]
     # refs that have different uncertainties than published
     atnf_uncert_refs = [
@@ -563,6 +576,7 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
         "Manchester_2001",
         "Morris_2002",
         "Zhang_2019",
+        "Bangale_2024",
     ]
     atnf_other_refs = [
         "Taylor_1993",  # excluding due to duplication of other references
