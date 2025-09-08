@@ -54,9 +54,13 @@ def test_ref_duplicates_removed():
             ref_fluxes = [cat_dict[pulsar][2][i] for i in indexes]
             ref_flux_errs = [cat_dict[pulsar][3][i] for i in indexes]
             ref_refs = [cat_dict[pulsar][4][i] for i in indexes]
-        debug_string = f"\nref_freqs: {ref_freqs}\nref_fluxes: {ref_fluxes}\nref_flux_errs: {ref_flux_errs}\nref_refs: {ref_refs}"
+        debug_string = (
+            f"\nref_freqs: {ref_freqs}\nref_fluxes: {ref_fluxes}\nref_flux_errs: {ref_flux_errs}\nref_refs: {ref_refs}"
+        )
         for ref in ref_atnf:
-            assert ref not in tuple(ref_ps), f"Duplicate reference {ref} found in pulsar {pulsar}. Catalogue values: {debug_string}"
+            assert ref not in tuple(ref_ps), (
+                f"Duplicate reference {ref} found in pulsar {pulsar}. Catalogue values: {debug_string}"
+            )
 
 
 def test_missing_ads_refs():
