@@ -294,6 +294,9 @@ def flux_from_atnf(pulsar, query=None, ref_dict=None, assumed_error=0.5):
     -------
     freq_all : `list`
         All frequencies in Hz with flux values on ATNF.
+    band_all : `list`
+        All frequencies in Hz with flux values on ATNF. Note: since the ATNF catalogue does
+        not currently store bandwidth information, the list will be filled with `None` values.
     flux_all : `list`
         The flux values corresponding to the freq_all list in mJy.
     flux_err_all : `list`
@@ -378,7 +381,7 @@ def all_flux_from_atnf(query=None):
     Returns
     -------
     jname_cat_dict : `dict`
-        Catalgoues dictionary with the keys in the format jname_cat_dict[jname][ref]['Frequency MHz', 'Flux Density mJy', 'Flux Density error mJy']
+        Catalgoues dictionary with the keys in the format jname_cat_dict[jname][ref]['Frequency MHz', 'Bandwidth MHz', 'Flux Density mJy', 'Flux Density error mJy']
 
         ``'jname'`` : `str`
             The pulsar's Jname.
@@ -386,6 +389,8 @@ def all_flux_from_atnf(query=None):
             The reference label.
         ``'Frequency MHz'``
             The observing frequency in MHz.
+        ``'Bandwidth MHz'``
+            The observing bandwidth in MHz.
         ``'Flux Density mJy'``
             The flux density in mJy.
         ``'Flux Density error mJy'``
@@ -441,6 +446,8 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
 
             Frequency MHz : `list`
                 The observing frequency in MHz.
+            Bandwidth MHz : `list`
+                The observing bandwidth in MHz.
             Flux Density mJy : `list`
                 The flux density in mJy.
             Flux Density error mJy : `list`

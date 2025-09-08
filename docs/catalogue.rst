@@ -26,44 +26,48 @@ cat_dict will have the format
 .. code-block:: python
 
     cat_dict = {"Pulsar Jname":[["List of frequencies in MHz"],
+                                ["List of bandwidths in MHz"],
                                 ["List of flux densities in mJy"],
                                 ["List of flux density uncertainties in mJy"],
                                 ["The reference label (in the format 'Author_year')"]],
                 "Other pulsar":[["List of frequencies in MHz"],
+                                ["List of bandwidths in MHz"],
                                 ["List of flux densities in mJy"],
                                 ["List of flux density uncertainties in mJy"],
                                 ["The reference label (in the format 'Author_year')"]],
                 }
 
-For example, this is the data for PSR J1453-6413.
+For example, this is the data for PSR J2256-1024.
 
 .. code-block:: python
 
-    print(cat_dict['J1453-6413'])
-    [[950.0, 800.0, 1400, 8400, 728, 1382, 3100, 185.0, 200.0, 154.0, 200, 400, 150, 800],
-     [42.0, 89.0, 14.0, 1.5, 80.0, 18.0, 2.4, 1244.0, 684.0, 630.0, 684.0, 230.0, 630.0, 53.0],
-     [4.2, 26.7, 1.4, 0.75, 10.0, 1.0, 0.5, 20.0, 23.0, 200.0, 23.0, 115.0, 20.0, 3.0],
-     ['van_Ommen_1997', 'van_Ommen_1997', 'Hobbs_2004', 'Johnston_2006', 'Jankowski_2018', 'Jankowski_2018', 'Jankowski_2018', 'Xue_2017', 'Xue_2017', 'Bell_2016', 'Murphy_2017', 'Taylor_1993', 'Bell_2016', 'Jankowski_2019']]
+    print(cat_dict['J2256-1024'])
+    [[350.0, 350, 820, 822, 1392, 1500, 350.0, 350.0],
+     [100.0, 200, 200, 64, 64, 200, 100.0, 100.0],
+     [8.3, 13.0, 1.9, 1.7, 0.73, 1.2, 7.0, 17.8],
+     [4.15, 6.5, 0.9, 0.85, 0.365, 0.6, 3.5, 3.5],
+     ['Bangale_2024', 'Crowter_2020', 'Crowter_2020', 'Crowter_2020', 'Crowter_2020', 'Crowter_2020', 'Hessels_2011', 'McEwen_2020']]
 
 You can add your data like so before fitting the spectra
 
 .. code-block:: python
 
-    freqs, fluxs, flux_errs, refs = cat_dict[pulsar]
+    freqs, bands, fluxs, flux_errs, refs = cat_dict[pulsar]
     freqs += [150.]
+    bands += [30.]
     fluxs += [1000.]
     flux_errs += [100.]
     refs += ["Your Work"]
 
 You can `exclude` papers that you don't trust the results or if you think they're negatively affecting your fit.
-For example, I can create a cat_dict without Sieber et al. 1973 like so
+For example, you can create a `cat_dict` without Sieber et al. (1973) like so
 
 .. code-block:: python
 
     cat_dict = collect_catalogue_fluxes(exclude=["Sieber_1973"])
 
-Inversely if you only what the flux density measurements from a few papers, you can use the `include` argument.
-For example, you can create a cat_dict that only includes data from Murphy et al. 2017 and Xue et al. 2017 like so
+Conversely, if you only what the flux density measurements from a few papers, you can use the `include` argument.
+For example, you can create a `cat_dict` that only includes data from Murphy et al. (2017) and Xue et al. (2017) like so
 
 
 .. code-block:: python
@@ -117,31 +121,31 @@ If you would like to add a new paper to the catalogue, you should first format t
 
 .. code-block:: bash
 
-    Pulsar Jname,Frequency (MHz),Flux Density (mJy),Flux Density Uncertainty (mJy)
-    J0030+0451,150,37.6,4.4
-    J0030+0451,180,32.4,3.2
-    J0034-0534,150,202.8,7.9
-    J0034-0721,150,367.9,10.5
+    Pulsar Jname,Frequency (MHz),Bandwidth (MHz),Flux Density (mJy),Flux Density Uncertainty (mJy)
+    J0030+0451,150,20,37.6,4.4
+    J0030+0451,180,20,32.4,3.2
+    J0034-0534,150,20,202.8,7.9
+    J0034-0721,150,20,367.9,10.5
 
 If the paper does not provide a flux density, then the script will assume a 50\% uncertainty if you do not have to include it in your CSV like so:
 
 .. code-block:: bash
 
-    Pulsar Jname,Frequency (MHz),Flux Density (mJy)
-    J0030+0451,150,37.6
-    J0030+0451,180,32.4
-    J0034-0534,150,202.8
-    J0034-0721,150,367.9
+    Pulsar Jname,Frequency (MHz),Bandwidth (MHz),Flux Density (mJy)
+    J0030+0451,150,20,37.6
+    J0030+0451,180,20,32.4
+    J0034-0534,150,20,202.8
+    J0034-0721,150,20,367.9
 
 If the paper only provides the B name then the script will convert to a J name using `psrqpy` as long as the PSR name starts with a B:
 
 .. code-block:: bash
 
-    Pulsar Jname,Frequency (MHz),Flux Density (mJy)
-    B0037+56,390,3.5
-    B0045+33,390,4.5
-    B0052+51,390,3.6
-    B0053+47,390,5.8
+    Pulsar Jname,Frequency (MHz),Bandwidth (MHz),Flux Density (mJy)
+    B0037+56,390,20,3.5
+    B0045+33,390,20,4.5
+    B0052+51,390,20,3.6
+    B0053+47,390,20,5.8
 
 Then move to the scripts subdirectory of the repository and run the command:
 
@@ -149,8 +153,8 @@ Then move to the scripts subdirectory of the repository and run the command:
 
     csv-to-yaml --csv your_paper.csv --ref author_year
 
-This will put a YAML file of the paper in pulsar_spectra/catalogue_papers/.
-You should then reinstall the software (:code:`python setup.py install`) then run a spectral fit to confirm it worked.
+This will put a YAML file of the paper in `pulsar_spectra/catalogue_papers/`.
+You should then reinstall the software and run a spectral fit to confirm it worked.
 
 
 Catalogue standards for new paper
