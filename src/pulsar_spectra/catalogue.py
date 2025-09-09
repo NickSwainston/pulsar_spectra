@@ -1,5 +1,5 @@
 """
-Loads all the data required by vcstools from the data directory.
+Functions for parsing the pulsar_spectra catalogue.
 """
 
 import glob
