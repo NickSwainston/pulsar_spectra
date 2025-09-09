@@ -89,6 +89,13 @@ def find_best_spectral_fit(
             iminuit_fit_spectral_model,
             iminuit_interpolate_model,
         )
+
+        logger.warning(
+            "Models will be fit by maximising the likelihood with iminuit. "
+            + "For more robust model fits, we recommend using the Bayesian "
+            + "nested sampling method. See the help for "
+            + "pulsar_spectra.spectral_fit.find_best_spectral_fit() for details."
+        )
     elif method == "ns":
         from .fitters.bilby import (
             bilby_compute_maximum_posterior_likelihood,
