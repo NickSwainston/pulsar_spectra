@@ -31,7 +31,7 @@ for row in lines:
     data_bands = [70.0, 400.0, 1000.0]
     data_fluxes = [float(s700), float(s1400), float(s3100)]
     data_flux_errs = [float(s700_err), float(s1400_err), float(s3100_err)]
-    for freq, band, flux, flux_err in zip(data_freqs, data_bands, data_fluxes, data_flux_errs, strict=True):
+    for freq, band, flux, flux_err in zip(data_freqs, data_bands, data_fluxes, data_flux_errs):
         if flux_err / flux > 0.5:
             print(f"Clipping PSR {pulsar} at {freq} MHz: flux_err/flux={flux_err / flux:.2f}")
             flux_err = 0.5 * flux

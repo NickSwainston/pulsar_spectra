@@ -54,7 +54,7 @@ for row in lines[:15]:
         "Flux Density error mJy": [],
     }
 
-    for freq, pair in zip([76.0, 84.0, 92.0, 99.0, 107.0, 115.0, 122.0, 130.0, 143.0], row[3:], strict=False):
+    for freq, pair in zip([76.0, 84.0, 92.0, 99.0, 107.0, 115.0, 122.0, 130.0, 143.0], row[3:]):
         if "<" not in pair:
             # print(pair)
             flux, flux_err = pair.split("±")

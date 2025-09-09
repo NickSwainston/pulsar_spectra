@@ -118,7 +118,7 @@ def make_comparison_plot(
     plot_size = 4
     fig, axes = plt.subplots(nrows, 1, figsize=(plot_size, plot_size * nrows))
 
-    for ax, model_name in zip(axes, plot_dicts.keys(), strict=False):
+    for ax, model_name in zip(axes, plot_dicts.keys()):
         plot_fit(
             freqs_MHz,
             bands_MHz,

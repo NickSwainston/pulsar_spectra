@@ -342,7 +342,7 @@ def iminuit_interpolate_model(
         fit_info.append("Bandwidth: \u2713")
     else:
         fit_info.append("Bandwidth: \u2718")
-    for p, v, e in zip(iminuit_result.parameters, iminuit_result.values, iminuit_result.errors, strict=False):
+    for p, v, e in zip(iminuit_result.parameters, iminuit_result.values, iminuit_result.errors):
         if p.startswith("v"):
             fit_info.append(f"{p} = ${v / 1e6:8.1f} \\pm {e / 1e6:8.1}$ MHz")
         else:
