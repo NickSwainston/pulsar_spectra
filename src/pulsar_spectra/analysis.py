@@ -1,13 +1,20 @@
+"""
+Functions for analysis of spectral fits.
+"""
+
 from math import pi
 
 import numpy as np
 from psrqpy import QueryATNF
 
-from pulsar_spectra.catalogue import ATNF_VER
+from .catalogue import ATNF_VER
+from .fitters.iminuit import propagate_flux_n_err
+from .models import model_settings
 
 
 def calc_log_parabolic_spectrum_max_freq(a, b, v0, u_a, u_b, u_ab):
-    """Calculate the frequency where the flux is at its maximum for the log parabolic model (:py:meth:`pulsar_spectra.models.log_parabolic_spectrum`).
+    """Calculate the frequency where the flux is at its maximum for the log parabolic model
+    (:py:meth:`pulsar_spectra.models.log_parabolic_spectrum`).
 
     Parameters
     ----------
@@ -37,8 +44,10 @@ def calc_log_parabolic_spectrum_max_freq(a, b, v0, u_a, u_b, u_ab):
 
 
 def calc_high_frequency_cutoff_emission_height(psrname, v_c, u_v_c, z_surf=12, u_z_surf=2):
-    """Calculate emission height and magetic field strengths using high-frequency cut-off model (:py:meth:`pulsar_spectra.models.high_frequency_cut_off_power_law`).
-    Details on the calculation procedure can be found in Jankowski et al. (2018) and Lee et al. (2022). The default neutron star radius is based on a canonical
+    """Calculate emission height and magetic field strengths using high-frequency cut-off model
+    (:py:meth:`pulsar_spectra.models.high_frequency_cut_off_power_law`).
+    Details on the calculation procedure can be found in Jankowski et al. (2018) and Lee et al. (2022).
+    The default neutron star radius is based on a canonical
     1.4 solar mass neutron star as per Steiner et al. (2018).
 
     Parameters
@@ -100,3 +109,41 @@ def calc_high_frequency_cutoff_emission_height(psrname, v_c, u_v_c, z_surf=12, u
     u_z_percent = u_z_e * 100 / r_lc
 
     return B_pc, u_B_pc, B_surf, B_lc, r_lc, z_e, u_z_e, z_percent, u_z_percent
+
+
+def estimate_flux_density(est_freq, model_name, iminuit_result):
+    """Estimate a pulsar's flux density using a previous spectra fit.
+
+    Parameters
+    ----------
+    est_freq : `float` or `list`
+        A single or list of frequencies to estimate flux at (in MHz).
+    model_name : `function`
+        The pulsar spectra model name from :py:meth:`pulsar_spectra.models`.
+    m : `iminuit.Minuit`
+        The Minuit class after being fit in :py:meth:`pulsar_spectra.spectral_fit.iminuit_fit_spectral_model`.
+
+    Returns
+    -------
+    fitted_flux : `float` or `list`
+        The estimated flux density  (in mJy) of the pulsar at the input frequencies.
+    fitted_flux_err : `float` or `list`
+        The estimated flux density (in mJy)  errors of the pulsar at the input frequencies.
+    """
+    # make sure est_freq is a numpy array
+    single_value = False
+    if isinstance(est_freq, float) or isinstance(est_freq, int):
+        est_freq = np.array([est_freq])
+        single_value = True
+    elif isinstance(est_freq, list):
+        est_freq = np.array(est_freq)
+
+    model_dict = model_settings()
+    model = model_dict[model_name][0]
+
+    fitted_flux, fitted_flux_err = propagate_flux_n_err(est_freq, model, iminuit_result)
+
+    if single_value:
+        return fitted_flux[0], fitted_flux_err[0]
+    else:
+        return fitted_flux, fitted_flux_err
