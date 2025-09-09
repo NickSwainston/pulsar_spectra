@@ -119,22 +119,25 @@ def test_find_best_spectral_fit(pulsar, exp_model_name, frozen_refs):
     freq_all, band_all, flux_all, flux_err_all, ref_all = cat_list[pulsar]
     for freq, band, flux, flux_err, ref in zip(freq_all, band_all, flux_all, flux_err_all, ref_all):
         print(f"{float(freq):8.1f}{float(band):8.1f}{float(flux):12.4f}{float(flux_err):12.4f} {str(ref):20s}")
-    model_name, iminuit_result, fit_info, p_best, p_category = find_best_spectral_fit(
+    best_fit_model_name, _, fit_results, _, _  = find_best_spectral_fit(
         pulsar,
         freq_all,
         band_all,
         flux_all,
         flux_err_all,
         ref_all,
+        method="ml",
+        likelihood="Huber",
         plot_compare=True,
         ref_markers=ref_markers,
     )
+    iminuit_result = fit_results[best_fit_model_name]
     for p, v, e in zip(iminuit_result.parameters, iminuit_result.values, iminuit_result.errors):
         if p.startswith("v"):
             print(f"{p} = {v / 1e6:8.1f} +/- {e / 1e6:8.1} MHz")
         else:
             print(f"{p} = {v:.5f} +/- {e:.5}")
-    np.testing.assert_string_equal(model_name, exp_model_name)
+    np.testing.assert_string_equal(best_fit_model_name, exp_model_name)
 
 
 def test_plot_methods():
@@ -150,6 +153,8 @@ def test_plot_methods():
         cat_list[pulsar][2],
         cat_list[pulsar][3],
         cat_list[pulsar][4],
+        method="ml",
+        likelihood="Huber",
         plot_compare=True,
     )
     print("Plotting All")
@@ -160,6 +165,8 @@ def test_plot_methods():
         cat_list[pulsar][2],
         cat_list[pulsar][3],
         cat_list[pulsar][4],
+        method="ml",
+        likelihood="Huber",
         plot_all=True,
     )
     print("Plotting Best")
@@ -170,6 +177,8 @@ def test_plot_methods():
         cat_list[pulsar][2],
         cat_list[pulsar][3],
         cat_list[pulsar][4],
+        method="ml",
+        likelihood="Huber",
         plot_best=True,
     )
     print("Plotting Best alternate style and fit range")
@@ -180,6 +189,8 @@ def test_plot_methods():
         cat_list[pulsar][2],
         cat_list[pulsar][3],
         cat_list[pulsar][4],
+        method="ml",
+        likelihood="Huber",
         plot_best=True,
         alternate_style=True,
         fit_range=(10, 1100),
