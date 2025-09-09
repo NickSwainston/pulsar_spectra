@@ -2,11 +2,7 @@
 Functions defining spectral models and model constraints.
 """
 
-import bilby
-import corner
-import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 
 
 def gammainc_up(a, z):
@@ -675,98 +671,60 @@ def model_settings(print_models=False):
     model_dict : `dict`
         Returns a dictionary in the format
 
-        {model_name: [model_function, short_name, start_params, mod_limits]}
+        {
+            model_name: [
+                model_function,
+                short_name,
+                start_params,
+                mod_limits,
+                model_function_integrate,
+                model_priors
+            ]
+        }
     """
-    # Starting values and limits for minimisation approach, and the prior
-    # probability distribution for the Bayesian inference approach.
-    # Where noted, priors are estimated using distributions from Swainston (2023).
-    # See: https://espace.curtin.edu.au/handle/20.500.11937/93846
+    # Starting values and limits for minimisation approach
 
     # --- Gain parameter (y-intercept in logspace) ---
     c_s = 1.0
     c_min = 1e-4
     c_max = 1e4
-    # Fit to ATNF S1400 distribution (Note: this is the natural log)
-    c_mean = -1.07
-    c_std = 1.61
-    c_prior = bilby.core.prior.LogNormal(c_mean, c_std, "c", latex_label="$S_{1400}$", unit="mJy")
 
     # --- Spectral index (gradient in logspace) ---
     a_s = -1.6
     a_min = -8.0
     a_max = 3.0
-    # See Table 6.4 of Swainston (2023)
-    a_mean = -1.61
-    a_std = 0.74
-    a_prior = bilby.core.prior.Normal(a_mean, a_std, "a", latex_label="$\\alpha$")
-    a1_prior = bilby.core.prior.Normal(a_mean, a_std, "a1", latex_label="$\\alpha_1$")
-    a2_prior = bilby.core.prior.Normal(a_mean, a_std, "a2", latex_label="$\\alpha_2$")
-
     # --- The smoothness of the low-frequency turn-over, beta ---
     beta_s = 1.0
     beta_min = 0.1
     beta_max = 2.1
-    beta_prior = bilby.core.prior.Uniform(beta_min, beta_max, "beta", latex_label="$\\beta$")
 
     # --- The frequency of the high-frequency cut-off ---
     vc_s = 4e9
     vc_both = None  # will set based on the data set's frequency range
-    # Estimated based on Figure 6.4 of Swainston (2023)
-    vc_mean = 22.33  # 5 GHz
-    vc_std = 1.0
-    vc_prior = bilby.core.prior.LogNormal(vc_mean, vc_std, "vc", latex_label="$\\nu_\\mathrm{c}$", unit="Hz")
 
     # --- The peak frequency of the low-frequency turn-over ---
     vpeak_s = 100e6
     vpeak_min = 10e6
     vpeak_max = 2e9
-    # Estimated based on the literature
-    vpeak_mean = 18.42  # 100 MHz
-    vpeak_std = 0.7
-    vpeak_prior = bilby.core.prior.LogNormal(
-        vpeak_mean, vpeak_std, "vpeak", latex_label="$\\nu_\\mathrm{peak}$", unit="Hz"
-    )
 
     # --- The break frequency of the broken power-law ---
     vbreak_s = 1e9
     vbreak_min = 50e6
     vbreak_max = 5e9
-    # Estimated based on the literature
-    vbreak_mean = 20.36  # 700 MHz
-    vbreak_std = 1.0
-    vbreak_prior = bilby.core.prior.LogNormal(
-        vbreak_mean, vbreak_std, "vb", latex_label="$\\nu_\\mathrm{b}$", unit="Hz"
-    )
 
-    # Collect the priors for each model into dictionaries
-    simple_power_law_priors = {
-        "a": a_prior,
-        "c": c_prior,
-    }
-    broken_power_law_priors = {
-        "vb": vbreak_prior,
-        "a1": a1_prior,
-        "a2": a2_prior,
-        "c": c_prior,
-    }
-    high_frequency_cut_off_power_law_priors = {
-        "vc": vc_prior,
-        "a": a_prior,
-        "c": c_prior,
-    }
-    low_frequency_turn_over_power_law_priors = {
-        "vpeak": vpeak_prior,
-        "a": a_prior,
-        "c": c_prior,
-        "beta": beta_prior,
-    }
-    double_turn_over_spectrum_priors = {
-        "vc": vc_prior,
-        "vpeak": vpeak_prior,
-        "a": a_prior,
-        "beta": beta_prior,
-        "c": c_prior,
-    }
+    # Priors for the Bayesian approach
+    try:
+        from .fitters.bilby import bilby_get_model_priors
+
+        priors = bilby_get_model_priors()
+    except ImportError:
+        priors = {
+            "simple_power_law": None,
+            "broken_power_law": None,
+            "high_frequency_cut_off_power_law": None,
+            "low_frequency_turn_over_power_law": None,
+            "double_turn_over_spectrum": None,
+        }
 
     # Define a dictionary containing the models and constraints
     model_dict = {
@@ -775,7 +733,8 @@ def model_settings(print_models=False):
         #   short_name,
         #   start_params,
         #   mod_limits,
-        #   model_function_integrate
+        #   model_function_integrate,
+        #   model_priors,
         # ]
         "simple_power_law": [
             simple_power_law,
@@ -783,7 +742,7 @@ def model_settings(print_models=False):
             (a_s, c_s),
             [(a_min, a_max), (c_min, c_max)],
             simple_power_law_integrate,
-            bilby.core.prior.PriorDict(simple_power_law_priors),
+            priors["simple_power_law"],
         ],
         "broken_power_law": [
             broken_power_law,
@@ -791,7 +750,7 @@ def model_settings(print_models=False):
             (vbreak_s, a_s, a_s, c_s),
             [(vbreak_min, vbreak_max), (a_min, a_max), (a_min, a_max), (c_min, c_max)],
             broken_power_law_intergral,
-            bilby.core.prior.PriorDict(broken_power_law_priors),
+            priors["broken_power_law"],
         ],
         "high_frequency_cut_off_power_law": [
             high_frequency_cut_off_power_law,
@@ -799,7 +758,7 @@ def model_settings(print_models=False):
             (vc_s, a_s, c_s),
             [vc_both, (a_min, 0.0), (c_min, c_max)],
             high_frequency_cut_off_power_law_taylor,
-            bilby.core.prior.PriorDict(high_frequency_cut_off_power_law_priors),
+            priors["high_frequency_cut_off_power_law"],
         ],
         "low_frequency_turn_over_power_law": [
             low_frequency_turn_over_power_law,
@@ -807,7 +766,7 @@ def model_settings(print_models=False):
             (vpeak_s, a_s, c_s, beta_s),
             [(vpeak_min, vpeak_max), (a_min, 0.0), (c_min, c_max), (beta_min, beta_max)],
             low_frequency_turn_over_power_law_taylor,
-            bilby.core.prior.PriorDict(low_frequency_turn_over_power_law_priors),
+            priors["low_frequency_turn_over_power_law"],
         ],
         "double_turn_over_spectrum": [
             double_turn_over_spectrum,
@@ -815,7 +774,7 @@ def model_settings(print_models=False):
             (vc_s, vpeak_s, a_s, beta_s, c_s),
             [(vc_both), (vpeak_min, vpeak_max), (a_min, 0.0), (beta_min, beta_max), (c_min, c_max)],
             double_turn_over_spectrum_taylor,
-            bilby.core.prior.PriorDict(double_turn_over_spectrum_priors),
+            priors["double_turn_over_spectrum"],
         ],
         # "log_parabolic_spectrum" : [
         #     log_parabolic_spectrum,
@@ -853,62 +812,3 @@ def model_settings(print_models=False):
             print(f"    priors:                   {mod_priors}")
 
     return model_dict
-
-
-def prior_predictive_check(nsamp=1000):
-    """Perform a prior predictive check by generating nsamp samples from the prior
-    distribution and making spectra and corner plots to visualise the samples.
-
-    Parameters
-    ----------
-    nsamp : `int`, optional
-        The number of samples to generate from the prior distribution. |br| Default: 1000.
-    """
-    model_dict = model_settings()
-
-    freqs_MHz = np.logspace(1, 5, 1000)
-
-    for model_name in model_dict.keys():
-        model_func = model_dict[model_name][0]
-        model_priors = model_dict[model_name][5]
-
-        samples = pd.DataFrame(model_priors.sample(nsamp))
-        axes_scales = []
-        latex_labels = []
-        for param in model_priors.keys():
-            if param.startswith("v") or param == "c":
-                axes_scales.append("log")
-            else:
-                axes_scales.append("linear")
-            latex_labels.append(model_priors[param].latex_label_with_unit)
-
-        fig = corner.corner(samples, axes_scale=axes_scales, labels=latex_labels)
-        plt.savefig(f"prior_corner_{model_name}.png")
-        plt.close()
-
-        model_priors["v0"] = 1400e6
-        samples = pd.DataFrame(model_priors.sample(nsamp))
-        fig, ax = plt.subplots(dpi=300, tight_layout=True)
-        for isamp in range(nsamp):
-            sample_params = dict(samples.iloc[isamp])
-
-            # Convert the frequencies back to MHz
-            for param in sample_params.keys():
-                if param.startswith("v"):
-                    sample_params[param] /= 1e6
-
-            # Interpolate the sample model to the fitted freqs
-            flux_density_mJy = model_func(freqs_MHz, **sample_params) * 1e3
-
-            # Add raytrace to plot
-            ax.plot(freqs_MHz, flux_density_mJy, "k", marker="None", ls="-", lw=0.2, alpha=0.2)
-
-        ax.set_xscale("log")
-        ax.set_yscale("log")
-        ax.set_ylim([1e-1, 1e5])
-        ax.tick_params(which="both", direction="in", top=1, right=1)
-        ax.set_xlabel("Frequency (MHz)")
-        ax.set_ylabel("Flux Density (mJy)")
-
-        fig.savefig(f"prior_predictive_check_{model_name}.png")
-        plt.close()

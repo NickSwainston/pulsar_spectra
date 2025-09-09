@@ -17,7 +17,6 @@ dependencies = [
     "jacobi>=0.2",
     "pyyaml>=3.10",
     "pandas>=1.4,<2",
-    "bilby>=2.3.0",
 ]
 
 [dependency-groups]
@@ -36,6 +35,11 @@ docs = [
 quick-fit = "pulsar_spectra.scripts.quick_fit:main"
 csv-to-yaml = "pulsar_spectra.scripts.csv_to_yaml:main"
 build-plotting-config = "pulsar_spectra.scripts.build_plotting_config:main"
+
+[project.optional-dependencies]
+bayesian = [
+    "bilby>=2.3.0",
+]
 
 [build-system]
 requires = ["setuptools"]

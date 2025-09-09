@@ -1719,8 +1719,6 @@ name = "pulsar-spectra"
 version = "2.1.0"
 source = { editable = "." }
 dependencies = [
-    { name = "bilby", version = "2.3.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
-    { name = "bilby", version = "2.6.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
     { name = "iminuit" },
     { name = "jacobi" },
     { name = "matplotlib", version = "3.9.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
@@ -1729,6 +1727,12 @@ dependencies = [
     { name = "pandas" },
     { name = "psrqpy" },
     { name = "pyyaml" },
+]
+
+[package.optional-dependencies]
+bayesian = [
+    { name = "bilby", version = "2.3.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
+    { name = "bilby", version = "2.6.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
 ]
 
 [package.dev-dependencies]
@@ -1748,7 +1752,7 @@ docs = [
 
 [package.metadata]
 requires-dist = [
-    { name = "bilby", specifier = ">=2.3.0" },
+    { name = "bilby", marker = "extra == 'bayesian'", specifier = ">=2.3.0" },
     { name = "iminuit", specifier = ">=2.9" },
     { name = "jacobi", specifier = ">=0.2" },
     { name = "matplotlib", specifier = ">=3.6" },
@@ -1757,6 +1761,7 @@ requires-dist = [
     { name = "psrqpy", specifier = ">=1.2.9" },
     { name = "pyyaml", specifier = ">=3.10" },
 ]
+provides-extras = ["bayesian"]
 
 [package.metadata.requires-dev]
 dev = [

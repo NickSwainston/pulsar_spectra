@@ -5,11 +5,25 @@ Functions for using Bilby to fit spectral models.
 import inspect
 import logging
 
-import bilby
+import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 
 from ..cost_functions import gaussian_cost_function, huber_cost_function, t_cost_function
 from ..models import model_settings
+
+try:
+    import bilby
+except ModuleNotFoundError as e:
+    MSG = "bilby is not installed. To use this feature, install pulsar_spectra[bayesian]."
+    raise ModuleNotFoundError(MSG) from e
+
+try:
+    import corner
+except ModuleNotFoundError as e:
+    MSG = "corner is not installed. To use this feature, install pulsar_spectra[bayesian]."
+    raise ModuleNotFoundError(MSG) from e
+
 
 logger = logging.getLogger(__name__)
 
@@ -401,3 +415,165 @@ def bilby_interpolate_model(
     }
 
     return plot_dict
+
+
+def bilby_get_model_priors():
+    """Get the default model parameter priors for Bayesian fitting.
+
+    Returns
+    -------
+    priors : `dict`
+        A dictionary with model names as keys, where each item is a PriorDict.
+
+    References
+    ----------
+    Where noted, priors are estimated using distributions from Swainston (2023).
+    See: https://espace.curtin.edu.au/handle/20.500.11937/93846
+    """
+    # NOTE: the Bilby LogNormal priors are the natural log!
+
+    # --- Gain parameter (y-intercept in logspace) ---
+    # Log-normal fit to ATNF catalogue S1400 distribution
+    c_mean = -1.07
+    c_std = 1.61
+    c_prior = bilby.core.prior.LogNormal(c_mean, c_std, "c", latex_label="$S_{1400}$", unit="mJy")
+
+    # --- Spectral index (gradient in logspace) ---
+    # Normal fit to the pulsar population spectral index distribution
+    # See Table 6.4 of Swainston (2023)
+    a_mean = -1.61
+    a_std = 0.74
+    a_prior = bilby.core.prior.Normal(a_mean, a_std, "a", latex_label="$\\alpha$")
+    a1_prior = bilby.core.prior.Normal(a_mean, a_std, "a1", latex_label="$\\alpha_1$")
+    a2_prior = bilby.core.prior.Normal(a_mean, a_std, "a2", latex_label="$\\alpha_2$")
+
+    # --- The smoothness of the low-frequency turn-over, beta ---
+    # Note that beta=2.1 corresponds to the case of free-free absorption
+    beta_min = 0.1
+    beta_max = 2.1
+    beta_prior = bilby.core.prior.Uniform(beta_min, beta_max, "beta", latex_label="$\\beta$")
+
+    # --- The frequency of the high-frequency cut-off ---
+    # Estimated based on the pulsar population HF cutoff distribution
+    # See Figure 6.4 of Swainston (2023)
+    vc_mean = 22.33  # 5 GHz
+    vc_std = 1.0
+    vc_prior = bilby.core.prior.LogNormal(vc_mean, vc_std, "vc", latex_label="$\\nu_\\mathrm{c}$", unit="Hz")
+
+    # --- The peak frequency of the low-frequency turn-over ---
+    # A broad prior based the literature
+    vpeak_mean = 18.42  # 100 MHz
+    vpeak_std = 0.7
+    vpeak_prior = bilby.core.prior.LogNormal(
+        vpeak_mean, vpeak_std, "vpeak", latex_label="$\\nu_\\mathrm{peak}$", unit="Hz"
+    )
+
+    # --- The break frequency of the broken power-law ---
+    # A broad prior based the literature
+    vbreak_mean = 20.36  # 700 MHz
+    vbreak_std = 1.0
+    vbreak_prior = bilby.core.prior.LogNormal(
+        vbreak_mean, vbreak_std, "vb", latex_label="$\\nu_\\mathrm{b}$", unit="Hz"
+    )
+
+    priors = {
+        "simple_power_law": bilby.core.prior.PriorDict(
+            {
+                "a": a_prior,
+                "c": c_prior,
+            }
+        ),
+        "broken_power_law": bilby.core.prior.PriorDict(
+            {
+                "vb": vbreak_prior,
+                "a1": a1_prior,
+                "a2": a2_prior,
+                "c": c_prior,
+            }
+        ),
+        "high_frequency_cut_off_power_law": bilby.core.prior.PriorDict(
+            {
+                "vc": vc_prior,
+                "a": a_prior,
+                "c": c_prior,
+            }
+        ),
+        "low_frequency_turn_over_power_law": bilby.core.prior.PriorDict(
+            {
+                "vpeak": vpeak_prior,
+                "a": a_prior,
+                "c": c_prior,
+                "beta": beta_prior,
+            }
+        ),
+        "double_turn_over_spectrum": bilby.core.prior.PriorDict(
+            {
+                "vc": vc_prior,
+                "vpeak": vpeak_prior,
+                "a": a_prior,
+                "beta": beta_prior,
+                "c": c_prior,
+            }
+        ),
+    }
+
+    return priors
+
+
+def prior_predictive_check(nsamp=1000):
+    """Perform a prior predictive check by generating nsamp samples from the prior
+    distribution and making spectra and corner plots to visualise the samples.
+
+    Parameters
+    ----------
+    nsamp : `int`, optional
+        The number of samples to generate from the prior distribution. |br| Default: 1000.
+    """
+    model_dict = model_settings()
+
+    freqs_MHz = np.logspace(1, 5, 1000)
+
+    for model_name in model_dict.keys():
+        model_func = model_dict[model_name][0]
+        model_priors = model_dict[model_name][5]
+
+        samples = pd.DataFrame(model_priors.sample(nsamp))
+        axes_scales = []
+        latex_labels = []
+        for param in model_priors.keys():
+            if param.startswith("v") or param == "c":
+                axes_scales.append("log")
+            else:
+                axes_scales.append("linear")
+            latex_labels.append(model_priors[param].latex_label_with_unit)
+
+        fig = corner.corner(samples, axes_scale=axes_scales, labels=latex_labels)
+        plt.savefig(f"prior_corner_{model_name}.png")
+        plt.close()
+
+        model_priors["v0"] = 1400e6
+        samples = pd.DataFrame(model_priors.sample(nsamp))
+        fig, ax = plt.subplots(dpi=300, tight_layout=True)
+        for isamp in range(nsamp):
+            sample_params = dict(samples.iloc[isamp])
+
+            # Convert the frequencies back to MHz
+            for param in sample_params.keys():
+                if param.startswith("v"):
+                    sample_params[param] /= 1e6
+
+            # Interpolate the sample model to the fitted freqs
+            flux_density_mJy = model_func(freqs_MHz, **sample_params) * 1e3
+
+            # Add raytrace to plot
+            ax.plot(freqs_MHz, flux_density_mJy, "k", marker="None", ls="-", lw=0.2, alpha=0.2)
+
+        ax.set_xscale("log")
+        ax.set_yscale("log")
+        ax.set_ylim([1e-1, 1e5])
+        ax.tick_params(which="both", direction="in", top=1, right=1)
+        ax.set_xlabel("Frequency (MHz)")
+        ax.set_ylabel("Flux Density (mJy)")
+
+        fig.savefig(f"prior_predictive_check_{model_name}.png")
+        plt.close()

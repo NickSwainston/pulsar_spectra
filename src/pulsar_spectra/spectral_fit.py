@@ -84,25 +84,17 @@ def find_best_spectral_fit(
     """
     # Conditional imports
     if method == "ml":
-        try:
-            from .fitters.iminuit import (
-                iminuit_compute_likelihood,
-                iminuit_fit_spectral_model,
-                iminuit_interpolate_model,
-            )
-        except ImportError as err:
-            logger.error(f"ImportError: {err}")
-            return None, None, None, None, None
+        from .fitters.iminuit import (
+            iminuit_compute_likelihood,
+            iminuit_fit_spectral_model,
+            iminuit_interpolate_model,
+        )
     elif method == "ns":
-        try:
-            from .fitters.bilby import (
-                bilby_compute_maximum_posterior_likelihood,
-                bilby_fit_spectral_model,
-                bilby_interpolate_model,
-            )
-        except ImportError as err:
-            logger.error(f"ImportError: {err}")
-            return None, None, None, None, None
+        from .fitters.bilby import (
+            bilby_compute_maximum_posterior_likelihood,
+            bilby_fit_spectral_model,
+            bilby_interpolate_model,
+        )
     else:
         logger.error(f"Invalid fitting method: {method}.")
         return None, None, None, None, None
