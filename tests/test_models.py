@@ -9,7 +9,6 @@ from pulsar_spectra.models import model_settings
 
 def test_bandwidth_model():
     """Tests if the bandwith correction intergrals are accurate."""
-    # cat_dict = collect_catalogue_fluxes(use_atnf=False)
     c_s = 1.0
     a_s = -1.6
     beta_s = 1.0
@@ -35,7 +34,7 @@ def test_bandwidth_model():
     for model_name in model_dict.keys():
         print(f"\n{model_name}")
         model_function = model_dict[model_name][0]
-        model_function_intergral = model_dict[model_name][-1]
+        model_function_intergral = model_dict[model_name][4]
         fit_vals = pulsar_model[model_name]
 
         # Set test plot
@@ -68,8 +67,8 @@ def test_bandwidth_model():
         ax.set_xlabel("Frequency (MHz)")
         ax.set_ylabel("Flux Density (mJy)")
         ax.grid(visible=True, ls=":", lw=0.6)
-        plt.savefig(f"{model_name}_test.png", bbox_inches="tight", dpi=300)
-        plt.clf()
+        fig.savefig(f"{model_name}_test.png", bbox_inches="tight", dpi=300)
+        plt.close()
 
         # For each flux check if the intergration is accurate
         for freq, band in zip(freq_all, band_all):
