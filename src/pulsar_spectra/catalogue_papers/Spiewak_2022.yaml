@@ -1,1701 +1,909 @@
 J0023+0923:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.73
+  - 0.73
   Flux Density error mJy:
-    - 0.12
-J0030+0451:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 1.09
-  Flux Density error mJy:
-    - 0.03
+  - 0.12
 J0034-0534:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.21
+  - 0.21
   Flux Density error mJy:
-    - 0.05
-J0101-6422:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.156
-  Flux Density error mJy:
-    - 0.011
-J0125-2327:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 2.49
-  Flux Density error mJy:
-    - 0.12
+  - 0.05
 J0154+1833:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.11
+  - 0.11
   Flux Density error mJy:
-    - 0.02
+  - 0.02
 J0348+0432:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.67
+  - 0.67
   Flux Density error mJy:
-    - 0.04
+  - 0.04
 J0407+1607:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.35
+  - 0.35
   Flux Density error mJy:
-    - 0.02
-J0437-4715:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 126.0
-  Flux Density error mJy:
-    - 0.002
+  - 0.02
 J0453+1559:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.33
+  - 0.33
   Flux Density error mJy:
-    - 0.02
+  - 0.02
 J0509+0856:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 1.47
+  - 1.47
   Flux Density error mJy:
-    - 0.03
+  - 0.03
 J0557+1550:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.067
+  - 0.067
   Flux Density error mJy:
-    - 0.005
+  - 0.005
 J0557-2948:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.046
+  - 0.046
   Flux Density error mJy:
-    - 0.002
-J0610-2100:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.65
-  Flux Density error mJy:
-    - 0.02
-J0613-0200:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 2.15
-  Flux Density error mJy:
-    - 0.07
-J0614-3329:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.68
-  Flux Density error mJy:
-    - 0.04
+  - 0.002
 J0621+1002:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 1.72
+  - 1.72
   Flux Density error mJy:
-    - 0.14
+  - 0.14
 J0621+2514:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.079
+  - 0.079
   Flux Density error mJy:
-    - 0.003
-J0636-3044:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 1.51
-  Flux Density error mJy:
-    - 0.14
+  - 0.003
 J0709+0458:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.256
+  - 0.256
   Flux Density error mJy:
-    - 0.007
-J0711-6830:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 2.6
-  Flux Density error mJy:
-    - 0.3
+  - 0.007
 J0721-2038:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.273
+  - 0.273
   Flux Density error mJy:
-    - 0.006
+  - 0.006
 J0732+2314:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.73
+  - 0.73
   Flux Density error mJy:
-    - 0.08
+  - 0.08
 J0737-3039A:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 3.06
+  - 3.06
   Flux Density error mJy:
-    - 0.07
+  - 0.07
 J0751+1807:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 1.35
+  - 1.35
   Flux Density error mJy:
-    - 0.06
+  - 0.06
 J0824+0028:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.51
+  - 0.51
   Flux Density error mJy:
-    - 0.02
-J0900-3144:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 3.84
-  Flux Density error mJy:
-    - 0.03
+  - 0.02
 J0921-5202:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.189
+  - 0.189
   Flux Density error mJy:
-    - 0.007
-J0931-1902:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.52
-  Flux Density error mJy:
-    - 0.04
-J0955-6150:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.639
-  Flux Density error mJy:
-    - 0.012
-J1012-4235:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.258
-  Flux Density error mJy:
-    - 0.006
-J1017-7156:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 1.09
-  Flux Density error mJy:
-    - 0.03
-J1022+1001:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 3.9
-  Flux Density error mJy:
-    - 0.3
-J1024-0719:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 1.5
-  Flux Density error mJy:
-    - 0.08
+  - 0.007
 J1035-6720:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.065
+  - 0.065
   Flux Density error mJy:
-    - 0.002
-J1036-8317:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.45
-  Flux Density error mJy:
-    - 0.02
+  - 0.002
 J1038+0032:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.102
+  - 0.102
   Flux Density error mJy:
-    - 0.012
-J1045-4509:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 2.39
-  Flux Density error mJy:
-    - 0.06
+  - 0.012
 J1056-7117:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.5
+  - 0.5
   Flux Density error mJy:
-    - 0.02
-J1101-6424:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.302
-  Flux Density error mJy:
-    - 0.003
-J1103-5403:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.395
-  Flux Density error mJy:
-    - 0.01
+  - 0.02
 J1120-3618:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.3
+  - 0.3
   Flux Density error mJy:
-    - 0.02
-J1125-5825:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 1.0
-  Flux Density error mJy:
-    - 0.02
-J1125-6014:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 1.32
-  Flux Density error mJy:
-    - 0.02
+  - 0.02
 J1142+0119:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.045
+  - 0.045
   Flux Density error mJy:
-    - 0.005
+  - 0.005
 J1157-5112:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.19
+  - 0.19
   Flux Density error mJy:
-    - 0.02
+  - 0.02
 J1207-5050:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.39
+  - 0.39
   Flux Density error mJy:
-    - 0.03
-J1216-6410:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 1.15
-  Flux Density error mJy:
-    - 0.02
+  - 0.03
 J1227-6208:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.272
+  - 0.272
   Flux Density error mJy:
-    - 0.002
-J1231-1411:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.29
-  Flux Density error mJy:
-    - 0.02
+  - 0.002
 J1300+1240:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.39
+  - 0.39
   Flux Density error mJy:
-    - 0.07
+  - 0.07
 J1302-3258:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.17
+  - 0.17
   Flux Density error mJy:
-    - 0.02
+  - 0.02
 J1312+0051:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.19
+  - 0.19
   Flux Density error mJy:
-    - 0.02
-J1327-0755:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.19
-  Flux Density error mJy:
-    - 0.02
+  - 0.02
 J1337-6423:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.273
+  - 0.273
   Flux Density error mJy:
-    - 0.005
+  - 0.005
 J1400-1431:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.17
+  - 0.17
   Flux Density error mJy:
-    - 0.02
+  - 0.02
 J1405-4656:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.31
+  - 0.31
   Flux Density error mJy:
-    - 0.04
+  - 0.04
 J1420-5625:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.121
+  - 0.121
   Flux Density error mJy:
-    - 0.004
-J1421-4409:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 1.26
-  Flux Density error mJy:
-    - 0.04
+  - 0.004
 J1431-4715:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.67
+  - 0.67
   Flux Density error mJy:
-    - 0.02
-J1431-5740:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.359
-  Flux Density error mJy:
-    - 0.006
-J1435-6100:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.313
-  Flux Density error mJy:
-    - 0.005
+  - 0.02
 J1439-5501:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.38
+  - 0.38
   Flux Density error mJy:
-    - 0.04
-J1446-4701:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.36
-  Flux Density error mJy:
-    - 0.02
+  - 0.04
 J1453+1902:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.16
+  - 0.16
   Flux Density error mJy:
-    - 0.02
+  - 0.02
 J1454-5846:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.299
+  - 0.299
   Flux Density error mJy:
-    - 0.004
-J1455-3330:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.73
-  Flux Density error mJy:
-    - 0.04
+  - 0.004
 J1502-6752:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.87
+  - 0.87
   Flux Density error mJy:
-    - 0.02
-J1513-2550:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.308
-  Flux Density error mJy:
-    - 0.012
-J1514-4946:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.25
-  Flux Density error mJy:
-    - 0.03
-J1525-5545:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.426
-  Flux Density error mJy:
-    - 0.006
+  - 0.02
 J1529-3828:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.27
+  - 0.27
   Flux Density error mJy:
-    - 0.02
+  - 0.02
 J1536-4948:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.087
+  - 0.087
   Flux Density error mJy:
-    - 0.01
+  - 0.01
 J1537+1155:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.46
+  - 0.46
   Flux Density error mJy:
-    - 0.07
+  - 0.07
 J1537-5312:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.32
+  - 0.32
   Flux Density error mJy:
-    - 0.02
-J1543-5149:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.82
-  Flux Density error mJy:
-    - 0.03
-J1545-4550:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 1.07
-  Flux Density error mJy:
-    - 0.03
+  - 0.02
 J1546-5925:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.269
+  - 0.269
   Flux Density error mJy:
-    - 0.012
-J1547-5709:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.343
-  Flux Density error mJy:
-    - 0.009
+  - 0.012
 J1552-4937:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.34
+  - 0.34
   Flux Density error mJy:
-    - 0.02
-J1600-3053:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 2.22
-  Flux Density error mJy:
-    - 0.05
-J1603-7202:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 2.46
-  Flux Density error mJy:
-    - 0.13
-J1614-2230:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 1.14
-  Flux Density error mJy:
-    - 0.04
+  - 0.02
 J1618-3921:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.631
+  - 0.631
   Flux Density error mJy:
-    - 0.006
+  - 0.006
 J1618-4624:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.229
+  - 0.229
   Flux Density error mJy:
-    - 0.008
+  - 0.008
 J1622-6617:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.44
+  - 0.44
   Flux Density error mJy:
-    - 0.04
-J1629-6902:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 1.01
-  Flux Density error mJy:
-    - 0.04
+  - 0.04
 J1640+2224:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.46
+  - 0.46
   Flux Density error mJy:
-    - 0.06
-J1643-1224:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 3.78
-  Flux Density error mJy:
-    - 0.03
-J1652-4838:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.917
-  Flux Density error mJy:
-    - 0.014
-J1653-2054:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.575
-  Flux Density error mJy:
-    - 0.014
-J1658-5324:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.43
-  Flux Density error mJy:
-    - 0.04
-J1705-1903:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.575
-  Flux Density error mJy:
-    - 0.014
-J1708-3506:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 1.45
-  Flux Density error mJy:
-    - 0.02
+  - 0.06
 J1709+2313:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.19
+  - 0.19
   Flux Density error mJy:
-    - 0.02
-J1713+0747:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 8.3
-  Flux Density error mJy:
-    - 0.5
-J1719-1438:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.43
-  Flux Density error mJy:
-    - 0.02
-J1721-2457:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 1.03
-  Flux Density error mJy:
-    - 0.04
+  - 0.02
 J1727-2946:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.265
+  - 0.265
   Flux Density error mJy:
-    - 0.011
-J1730-2304:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 3.5
-  Flux Density error mJy:
-    - 0.2
-J1731-1847:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.38
-  Flux Density error mJy:
-    - 0.02
-J1732-5049:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 2.11
-  Flux Density error mJy:
-    - 0.11
-J1737-0811:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 1.07
-  Flux Density error mJy:
-    - 0.02
+  - 0.011
 J1738+0333:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.34
+  - 0.34
   Flux Density error mJy:
-    - 0.04
+  - 0.04
 J1741+1351:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.29
+  - 0.29
   Flux Density error mJy:
-    - 0.04
-J1744-1134:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 2.6
-  Flux Density error mJy:
-    - 0.2
+  - 0.04
 J1745+1017:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.51
+  - 0.51
   Flux Density error mJy:
-    - 0.04
+  - 0.04
 J1745-0952:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.92
+  - 0.92
   Flux Density error mJy:
-    - 0.05
-J1747-4036:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 1.506
-  Flux Density error mJy:
-    - 0.013
+  - 0.05
 J1750-2536:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.107
+  - 0.107
   Flux Density error mJy:
-    - 0.005
-J1751-2857:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.461
-  Flux Density error mJy:
-    - 0.009
+  - 0.005
 J1754+0032:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.61
+  - 0.61
   Flux Density error mJy:
-    - 0.03
+  - 0.03
 J1755-3716:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.524
+  - 0.524
   Flux Density error mJy:
-    - 0.01
-J1756-2251:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 1.087
-  Flux Density error mJy:
-    - 0.013
+  - 0.01
 J1757-1854:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.142
+  - 0.142
   Flux Density error mJy:
-    - 0.002
-J1757-5322:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 1.76
-  Flux Density error mJy:
-    - 0.05
-J1801-1417:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 1.54
-  Flux Density error mJy:
-    - 0.04
+  - 0.002
 J1801-3210:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.451
+  - 0.451
   Flux Density error mJy:
-    - 0.008
-J1802-2124:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.734
-  Flux Density error mJy:
-    - 0.008
-J1804-2717:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 1.4
-  Flux Density error mJy:
-    - 0.2
-J1804-2858:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.918
-  Flux Density error mJy:
-    - 0.011
+  - 0.008
 J1806+2819:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.09
+  - 0.09
   Flux Density error mJy:
-    - 0.011
+  - 0.011
 J1810-2005:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 1.73
+  - 1.73
   Flux Density error mJy:
-    - 0.04
-J1811-2405:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 1.33
-  Flux Density error mJy:
-    - 0.02
+  - 0.04
 J1813-2621:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.584
+  - 0.584
   Flux Density error mJy:
-    - 0.008
+  - 0.008
 J1821+0155:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.29
+  - 0.29
   Flux Density error mJy:
-    - 0.02
-J1825-0319:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.183
-  Flux Density error mJy:
-    - 0.002
+  - 0.02
 J1826-2415:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.49
+  - 0.49
   Flux Density error mJy:
-    - 0.02
+  - 0.02
 J1828+0625:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.32
+  - 0.32
   Flux Density error mJy:
-    - 0.03
+  - 0.03
 J1829+2456:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.037
+  - 0.037
   Flux Density error mJy:
-    - 0.004
-J1832-0836:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.92
-  Flux Density error mJy:
-    - 0.04
+  - 0.004
 J1835-0114:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.373
+  - 0.373
   Flux Density error mJy:
-    - 0.008
-J1843-1113:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.56
-  Flux Density error mJy:
-    - 0.02
-J1843-1448:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.486
-  Flux Density error mJy:
-    - 0.006
+  - 0.008
 J1844+0115:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.094
+  - 0.094
   Flux Density error mJy:
-    - 0.003
+  - 0.003
 J1850+0124:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.188
+  - 0.188
   Flux Density error mJy:
-    - 0.003
+  - 0.003
 J1853+1303:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.5
+  - 0.5
   Flux Density error mJy:
-    - 0.04
+  - 0.04
 J1855-1436:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.046
+  - 0.046
   Flux Density error mJy:
-    - 0.002
+  - 0.002
 J1857+0943:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 5.0
+  - 5.0
   Flux Density error mJy:
-    - 0.5
+  - 0.5
 J1858-2216:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.057
+  - 0.057
   Flux Density error mJy:
-    - 0.007
+  - 0.007
 J1900+0308:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.14
+  - 0.14
   Flux Density error mJy:
-    - 0.003
+  - 0.003
 J1901+0300:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.135
+  - 0.135
   Flux Density error mJy:
-    - 0.004
-J1902-5105:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 1.01
-  Flux Density error mJy:
-    - 0.02
+  - 0.004
 J1903+0327:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.6
+  - 0.6
   Flux Density error mJy:
-    - 0.011
-J1903-7051:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.96
-  Flux Density error mJy:
-    - 0.05
+  - 0.011
 J1904+0451:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.093
+  - 0.093
   Flux Density error mJy:
-    - 0.003
+  - 0.003
 J1906+0055:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.122
+  - 0.122
   Flux Density error mJy:
-    - 0.004
-J1909-3744:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 1.8
-  Flux Density error mJy:
-    - 0.09
+  - 0.004
 J1910+1256:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.66
+  - 0.66
   Flux Density error mJy:
-    - 0.04
-J1911-1114:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 1.0
-  Flux Density error mJy:
-    - 0.07
+  - 0.04
 J1914+0659:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.41
+  - 0.41
   Flux Density error mJy:
-    - 0.011
-J1918-0642:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 1.7
-  Flux Density error mJy:
-    - 0.05
+  - 0.011
 J1921+0137:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.097
+  - 0.097
   Flux Density error mJy:
-    - 0.003
+  - 0.003
 J1921+1929:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.198
+  - 0.198
   Flux Density error mJy:
-    - 0.01
+  - 0.01
 J1923+2515:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.202
+  - 0.202
   Flux Density error mJy:
-    - 0.014
+  - 0.014
 J1930+2441:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.103
+  - 0.103
   Flux Density error mJy:
-    - 0.002
+  - 0.002
 J1932+1756:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.035
+  - 0.035
   Flux Density error mJy:
-    - 0.002
-J1933-6211:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.95
-  Flux Density error mJy:
-    - 0.07
+  - 0.002
 J1937+1658:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.169
+  - 0.169
   Flux Density error mJy:
-    - 0.009
+  - 0.009
 J1939+2134:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 13.9
+  - 13.9
   Flux Density error mJy:
-    - 0.5
+  - 0.5
 J1944+0907:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 2.1
+  - 2.1
   Flux Density error mJy:
-    - 0.2
+  - 0.2
 J1944+2236:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.11
+  - 0.11
   Flux Density error mJy:
-    - 0.005
-J1946-5403:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.35
-  Flux Density error mJy:
-    - 0.03
+  - 0.005
 J1950+2414:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.163
+  - 0.163
   Flux Density error mJy:
-    - 0.003
+  - 0.003
 J1955+2527:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.229
+  - 0.229
   Flux Density error mJy:
-    - 0.003
+  - 0.003
 J1955+2908:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.98
+  - 0.98
   Flux Density error mJy:
-    - 0.03
+  - 0.03
 J1959+2048:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.29
+  - 0.29
   Flux Density error mJy:
-    - 0.03
+  - 0.03
 J2007+2722:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 2.32
+  - 2.32
   Flux Density error mJy:
-    - 0.04
-J2010-1323:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.7
-  Flux Density error mJy:
-    - 0.02
+  - 0.04
 J2017+0603:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.18
+  - 0.18
   Flux Density error mJy:
-    - 0.02
+  - 0.02
 J2019+2425:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.26
+  - 0.26
   Flux Density error mJy:
-    - 0.03
+  - 0.03
 J2033+1734:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.277
+  - 0.277
   Flux Density error mJy:
-    - 0.009
-J2039-3616:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.5
-  Flux Density error mJy:
-    - 0.04
+  - 0.009
 J2042+0246:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.059
+  - 0.059
   Flux Density error mJy:
-    - 0.007
+  - 0.007
 J2043+1711:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.121
+  - 0.121
   Flux Density error mJy:
-    - 0.014
-J2124-3358:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 4.7
-  Flux Density error mJy:
-    - 0.2
-J2129-5721:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.97
-  Flux Density error mJy:
-    - 0.07
+  - 0.014
 J2144-5237:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 1.4
+  - 1.4
   Flux Density error mJy:
-    - 0.2
-J2145-0750:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 5.5
-  Flux Density error mJy:
-    - 0.3
-J2150-0326:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.48
-  Flux Density error mJy:
-    - 0.03
-J2222-0137:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.9
-  Flux Density error mJy:
-    - 0.05
-J2229+2643:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.8
-  Flux Density error mJy:
-    - 0.07
+  - 0.2
 J2234+0611:
   Frequency MHz:
-    - 1284
+  - 1284.0
   Bandwidth MHz:
-    - 775.75
+  - 775.75
   Flux Density mJy:
-    - 0.46
+  - 0.46
   Flux Density error mJy:
-    - 0.1
-J2234+0944:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 1.9
-  Flux Density error mJy:
-    - 0.2
-J2236-5527:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.34
-  Flux Density error mJy:
-    - 0.05
-J2241-5236:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 1.83
-  Flux Density error mJy:
-    - 0.07
-J2317+1439:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.6
-  Flux Density error mJy:
-    - 0.06
-J2322+2057:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.34
-  Flux Density error mJy:
-    - 0.03
-J2322-2650:
-  Frequency MHz:
-    - 1284
-  Bandwidth MHz:
-    - 775.75
-  Flux Density mJy:
-    - 0.212
-  Flux Density error mJy:
-    - 0.009
+  - 0.1
