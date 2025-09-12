@@ -57,7 +57,7 @@ def test_find_best_spectral_fit():
     }
     pulsars = [
         ("J0415+6954", "simple_power_law"),
-        ("J0437-4715", "broken_power_law"),
+        ("J0543+2329", "broken_power_law"),
         ("J1703-1846", "high_frequency_cut_off_power_law"),
         ("J0024-7204C", "low_frequency_turn_over_power_law"),
         ("J1932+1059", "double_turn_over_spectrum"),
