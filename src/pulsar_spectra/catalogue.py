@@ -182,6 +182,7 @@ ADS_REF = {
     "Bangale_2024": "https://ui.adsabs.harvard.edu/abs/2024ApJ...966..161B",
     "Fiore_2023": "https://ui.adsabs.harvard.edu/abs/2023ApJ...956...40F",
     "Lee_2025": "https://ui.adsabs.harvard.edu/abs/2025arXiv250810330L",
+    "Mantovanini_2025": "https://ui.adsabs.harvard.edu/abs/2025MNRAS.tmp.1383M",
 }
 
 
