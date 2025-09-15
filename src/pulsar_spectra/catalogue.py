@@ -581,6 +581,7 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
     atnf_other_refs = [
         "Taylor_1993",  # excluding due to duplication of other references
         "Ahmad_2024",  # need to add this to the pulsar_spectra catalogue properly
+        "Spiewak_2022",  # delibrately excluded for pulsars with Gitika_2023 data, see Issue #108
     ]
 
     for jname in jnames:
