@@ -358,7 +358,7 @@ def flux_from_atnf(pulsar, query=None, ref_dict=None, assumed_error=0.5):
             else:
                 freq = int(flux_query[1:])
             freq_all.append(freq)
-            band_all.append(None)
+            band_all.append(1.0)
 
             # Grab reference code and convert to "Author Year" format
             # If reference is not found, fallback to ref_code
