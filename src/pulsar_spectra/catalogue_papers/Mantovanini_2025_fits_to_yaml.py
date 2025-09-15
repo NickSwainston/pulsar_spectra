@@ -42,7 +42,7 @@ def main() -> None:
         psr_flux_errs = []
         for freq in freqs:
             psr_flux = float(t[row][f"peak_flux_{freq:03d}MHz"])*1e3
-            psr_flux_err = float(t[row][f"err_peak_flux_{freq:03d}MHz"])*1e3
+            psr_flux_err = abs(float(t[row][f"err_peak_flux_{freq:03d}MHz"]))*1e3
 
             # Fluxes that are negative or have >100% error are due to low S/N and can be
             # considered non-detections or upper limits, so we exclude them
@@ -57,6 +57,10 @@ def main() -> None:
             psr_freqs.append(float(freq))
             psr_fluxes.append(psr_flux)
             psr_flux_errs.append(psr_flux_err)
+
+        if len(psr_freqs) < 1:
+            # No valid data for this pulsar
+            continue
 
         pulsar_dict[psrj] = {
             "Frequency MHz": psr_freqs,
