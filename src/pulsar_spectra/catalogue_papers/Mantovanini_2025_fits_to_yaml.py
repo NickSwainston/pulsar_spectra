@@ -23,7 +23,14 @@ def main() -> None:
 
         if psrj == "J0737-3039B":
             # The flux at this position originates from the A pulsar, so they have been falsely
-            # attributed to the B pulsar, hence we exclude them
+            # attributed to the B pulsar here, hence we exclude them.
+             continue
+        elif psrj in ["J1534-46", "J1708-52"]:
+            # There are multiple GLEAM-X sources associated with these pulsars as they lie on the
+            # Galactic plane, and there is not enough independent spectral data to disambiguate
+            # which of these sources are the pulsar. Therefore, as a precaution (in case these
+            # fluxes have been misassociated) we exclude them.
+            # See Section 5.1 and Figure 6 of Mantovanini et al. (2025).
             continue
         elif psrj == "J1848+0150g":
             psrj = "J1848+0150"
