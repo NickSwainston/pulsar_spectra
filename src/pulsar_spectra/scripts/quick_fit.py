@@ -16,6 +16,10 @@ def quick_fit(pulsars):
         logger.info(f"\nFitting {pulsar}")
         freq_all, band_all, flux_all, flux_err_all, ref_all = cat_list[pulsar]
 
+        if len(freq_all) < 1:
+            logger.error(f"No spectral data available for PSR {pulsar}")
+            continue
+
         for freq, band, flux, flux_err, ref in zip(freq_all, band_all, flux_all, flux_err_all, ref_all):
             if band is None:
                 logger.debug(f"{float(freq):8.1f}    None{float(flux):12.4f}{float(flux_err):12.4f} {str(ref):20s}")
