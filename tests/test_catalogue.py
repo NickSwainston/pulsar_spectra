@@ -92,17 +92,17 @@ def test_catalogue_format():
                 == len(cat_dict[pulsar]["Flux Density mJy"])
                 == len(cat_dict[pulsar]["Flux Density error mJy"])
             )
-            # Check no zeros in cat
+            # Check no zeros or negatives in cat
             for freq, band, flux, flux_err in zip(
                 cat_dict[pulsar]["Frequency MHz"],
                 cat_dict[pulsar]["Bandwidth MHz"],
                 cat_dict[pulsar]["Flux Density mJy"],
                 cat_dict[pulsar]["Flux Density error mJy"],
             ):
-                assert freq != 0.0
-                assert band != 0.0
-                assert flux != 0.0
-                assert flux_err != 0.0
+                assert freq > 0.0
+                assert band > 0.0
+                assert flux > 0.0
+                assert flux_err > 0.0
 
 
 def test_convert_atnf_ref():
