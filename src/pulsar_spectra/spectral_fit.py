@@ -677,6 +677,22 @@ def find_best_spectral_fit(
     p_category : `str`
         Category based on the quality of spectral fit, as defined in Jankowski et al. (2018).
     """
+    # Get a list of unique ATNF refs in ref_all
+    atnf_refs = []
+    for ref in ref_all:
+        if ref.endswith("ATNF"):
+            atnf_refs.append(ref)
+    atnf_refs = list(set(atnf_refs))
+
+    # Notify the user if ATNF data are included in the fit
+    if len(atnf_refs) > 0:
+        logger.warning(
+            f"Including {len(atnf_refs)} ATNF refs in {pulsar} fit: {', '.join(atnf_refs)}. "
+            + "The default bandwidth for all ATNF data is 1 MHz. This may be inaccurate, "
+            + "so we recommend adding these papers to the pulsar_spectra catalogue. See: "
+            + "https://pulsar-spectra.readthedocs.io/en/latest/catalogue.html#adding-to-the-catalogue"
+        )
+
     # Load model settings
     model_dict = model_settings()
 
