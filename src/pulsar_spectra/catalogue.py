@@ -594,6 +594,7 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
         "Spiewak_2022",  # delibrately excluded for pulsars with Gitika_2023 data, see Issue #108
         "Ro.Zko_2018",  # named Rozko_2018 in pulsar_spectra catalogue, so strings don't match
         "Ro.zko_2021",  # named Rozko_2021 in pulsar_spectra catalogue, so strings don't match
+        "Kijak_2021",  # frequencies were rounded to nearest 100 MHz
     ]
 
     for jname in jnames:
