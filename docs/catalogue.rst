@@ -105,12 +105,15 @@ If you see a reference label ending in \_ATNF (see below for an example), those 
 .. image:: figures/atnf_label_example.png
   :width: 800
 
-The ATNF catalogue values often record flux density measurements at the nearest standard
-frequency, which can be inaccurate and should be replaced with the actual value.
-
-The first author and the year in the reference label will help you find the full
-reference on the `ATNF references page <https://www.atnf.csiro.au/research/pulsar/psrcat/psrcat_ref.html>`_.
-The publication can be :ref:`added to the catalogue <adding_papers>`.
+**NOTE:**
+Since the ATNF catalogue does not include bandwidth information, we use a default bandwidth of 1 MHz
+for all imported data. If the data spans a significant fractional bandwidth and/or the centre
+frequency reported in the ATNF catalogue is inaccurate, then this may be a poor assumption. This
+can be the case, for example, since many of the ATNF catalogue flux densities are recorded at the
+nearest standard frequency (e.g. 400 MHz). Therefore, if you are planning on using the spectral fits
+for scientific analysis, then we recommend :ref:`adding the paper to the catalogue <adding_papers>`.
+The first author and the year in the reference label will help you find the full reference on
+the `ATNF references page <https://www.atnf.csiro.au/research/pulsar/psrcat/psrcat_ref.html>`_.
 
 
 .. _adding_papers:

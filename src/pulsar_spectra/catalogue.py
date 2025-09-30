@@ -358,7 +358,13 @@ def flux_from_atnf(pulsar, query=None, ref_dict=None, assumed_error=0.5):
             else:
                 freq = int(flux_query[1:])
             freq_all.append(freq)
-            band_all.append(None)
+
+            # The ATNF catalogue does not include bandwidth information, so we use a default
+            # bandwidth of 1 MHz for all ATNF data. The accuracy of this approximation depends on
+            # the fractional bandwidth of the telescope and the accuracy of the reported centre
+            # frequency in the catalogue. We have therefore included a warning to notify the user
+            # about this in `pulsar_spectra.spectral_fit.find_best_spectral_fit()`.
+            band_all.append(1.0)
 
             # Grab reference code and convert to "Author Year" format
             # If reference is not found, fallback to ref_code
