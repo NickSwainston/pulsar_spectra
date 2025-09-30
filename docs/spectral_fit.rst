@@ -26,7 +26,7 @@ function from the `iminuit <https://github.com/iminuit/iminuit>`_
 Python package is used to find the minimum of the cost function.
 This uses a maximum of 10000 calls to converge with the *Estimated Distance to Minimum* (EDM) criterion.
 We set the `tolerance <https://iminuit.readthedocs.io/en/stable/reference.html#iminuit.Minuit.tol>`_
-so that the EDM must be less than :math:`10^{-8} * \\mathrm{errordef}`.
+so that the EDM must be less than :math:`10^{-8} * \mathrm{errordef}`.
 
 In the rare cases that *migrad* does not find a valid fit, we then try the `simplex <https://iminuit.readthedocs.io/en/stable/reference.html#iminuit.Minuit.simplex>`_
 and `scan <https://iminuit.readthedocs.io/en/stable/reference.html#iminuit.Minuit.scan>`_ minimisation methods.
