@@ -135,7 +135,8 @@ ADS_REF = {
     "Mickaliger_2012": "https://ui.adsabs.harvard.edu/abs/2012ApJ...759..127M",
     "Mikhailov_2016": "https://ui.adsabs.harvard.edu/abs/2016A%26A...593A..21M",
     "Ng_2015": "https://ui.adsabs.harvard.edu/abs/2015MNRAS.450.2922N",
-    "RoZko_2018": "https://ui.adsabs.harvard.edu/abs/2018MNRAS.479.2193R",
+    "Rozko_2018": "https://ui.adsabs.harvard.edu/abs/2018MNRAS.479.2193R",
+    "Rozko_2021": "https://ui.adsabs.harvard.edu/abs/2021ApJ...922..125R",
     "Sayer_1997": "https://ui.adsabs.harvard.edu/abs/1997ApJ...474..426S",
     "Seiradakis_1995": "https://ui.adsabs.harvard.edu/abs/1995A%26AS..111..205S",
     "Shapiro_Albert_2021": "https://ui.adsabs.harvard.edu/abs/2021ApJ...909..219S",
@@ -590,6 +591,8 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
         "Taylor_1993",  # excluding due to duplication of other references
         "Ahmad_2024",  # need to add this to the pulsar_spectra catalogue properly
         "Spiewak_2022",  # delibrately excluded for pulsars with Gitika_2023 data, see Issue #108
+        "Ro.Zko_2018",  # named Rozko_2018 in pulsar_spectra catalogue, so strings don't match
+        "Ro.zko_2021",  # named Rozko_2021 in pulsar_spectra catalogue, so strings don't match
     ]
 
     for jname in jnames:
