@@ -29,24 +29,23 @@ for jname in jnames:
 
 # Add the atnf to the cataogues
 atnf_dict = all_flux_from_atnf()
-all_freq = []
+atnf_freqs = []
 pulsar_count = 0
 pulsar_track = []
 for jname in jnames:
     for ref in atnf_dict[jname].keys():
         if len(atnf_dict[jname][ref]["Frequency MHz"]) > 0:
-            all_freq += atnf_dict[jname][ref]["Frequency MHz"]
             if jname not in pulsar_track:
                 pulsar_count += 1
                 pulsar_track.append(jname)
-
+            atnf_freqs += atnf_dict[jname][ref]["Frequency MHz"]
 
 with open("papers_in_catalogue.csv", "w") as output:
     if paper_format:
-        output.write(f"ATNF pulsar catalogue & {pulsar_count} & {int(min(all_freq))}-{int(max(all_freq))} \\\\\n")
+        output.write(f"ATNF pulsar catalogue & {pulsar_count} & {int(min(atnf_freqs))}-{int(max(atnf_freqs))} \\\\\n")
     else:
         output.write(
-            f'"ATNF pulsar catalogue","{pulsar_count}","{int(min(all_freq))}-{int(max(all_freq))}","`Catalogue website <https://www.atnf.csiro.au/research/pulsar/psrcat/>`_"\n'
+            f'"ATNF pulsar catalogue","{pulsar_count}","{int(min(atnf_freqs))}-{int(max(atnf_freqs))}","`Catalogue website <https://www.atnf.csiro.au/research/pulsar/psrcat/>`_"\n'
         )
 
     # Loop over catalogues and put them into a dictionary
@@ -58,19 +57,23 @@ with open("papers_in_catalogue.csv", "w") as output:
             cat_dict = yaml.safe_load(stream)
         pulsar_count = len(cat_dict.keys())
 
-        all_freq = []
+        min_freqs = []
+        max_freqs = []
         # Find which pulsars in the dictionary
         for jname in jnames:
             if jname in cat_dict.keys():
                 # Update dict
                 jname_cat_dict[jname][cat_label] = cat_dict[jname]
-                # add freq
-                all_freq += cat_dict[jname]["Frequency MHz"]
+                for freq, band in zip(
+                    jname_cat_dict[jname][cat_label]["Frequency MHz"], jname_cat_dict[jname][cat_label]["Bandwidth MHz"]
+                ):
+                    min_freqs.append(freq - band/2)
+                    max_freqs.append(freq + band/2)
 
         # output result
         if paper_format:
             cat_label = cat_label.replace("_", "")
-            output.write(f"\cite{{{cat_label}}} & {pulsar_count} & {int(min(all_freq))}-{int(max(all_freq))} \\\\\n")
+            output.write(f"\cite{{{cat_label}}} & {pulsar_count} & {int(min(min_freqs))}-{int(max(max_freqs))} \\\\\n")
         else:
             ads_link = ADS_REF[cat_label]
             if cat_label == "Sieber_1973":
@@ -80,6 +83,6 @@ with open("papers_in_catalogue.csv", "w") as output:
                 year = cat_label.split("_")[-1]
                 cat_label = f"{author} et al. ({year})"
             output.write(
-                f'"{cat_label}","{pulsar_count}","{int(min(all_freq))}-{int(max(all_freq))}","`ADS <{ads_link}>`__"\n'
+                f'"{cat_label}","{pulsar_count}","{int(min(min_freqs))}-{int(max(max_freqs))}","`ADS <{ads_link}>`__"\n'
             )
         # print(all_freq)
