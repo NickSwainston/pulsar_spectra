@@ -23,11 +23,11 @@ def dump_yaml(pulsar_dict, filename):
         yaml.dump(pulsar_dict, cat_file, sort_keys=False, indent=2, default_flow_style=False, Dumper=ListIndentDumper)
 
 
-def convert_csv_to_yaml(csv_location, ref_label):
+def convert_csv_to_yaml(csv_location, ref_label, obs_span, data_type):
     pulsar_dict = {
         "Paper Metadata": {
-            "Data Type": "Beamforming",
-            "Observation Span": "Single-epoch",
+            "Data Type": data_type,
+            "Observation Span": obs_span,
         }
     }
 
@@ -83,9 +83,11 @@ def main():
     parser = argparse.ArgumentParser(description="Convert a csv file to pulsar_spectra catalogue formated yaml file.")
     parser.add_argument("--csv", type=str, help="The location of the csv file")
     parser.add_argument("--ref", type=str, help='The reference label (in the format "Author_year")')
+    parser.add_argument("--obs_span", type=str, help='The observation span ("Single-epoch", "Multi-epoch" or "Long-term")', default="Single-epoch", choices=["Single-epoch", "Multi-epoch", "Long-term"])
+    parser.add_argument("--data_type", type=str, help='The data type ("Beamforming" or "Imaging")', default="Beamforming", choices=["Beamforming", "Imaging"])
     args = parser.parse_args()
 
-    convert_csv_to_yaml(args.csv, args.ref)
+    convert_csv_to_yaml(args.csv, args.ref, args.obs_span, args.data_type)
 
 
 if __name__ == "__main__":

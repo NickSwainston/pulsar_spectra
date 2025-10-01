@@ -222,13 +222,17 @@ If the paper only provides the B name then the script will convert to a J name u
     B0052+51,390,20,3.6
     B0053+47,390,20,5.8
 
-Then move to the scripts subdirectory of the repository and run the command:
+Then move to the catalogue subdirectory (``src/pulsar_spectra/catalogue_papers``) of the repository and run the command:
 
 .. code-block:: bash
 
-    csv-to-yaml --csv your_paper.csv --ref author_year
+    csv-to-yaml --csv your_paper.csv --ref <author_year> --obs_span <observation_span> --data_type <beamforming_or_imaging>
 
-This will put a YAML file of the paper in `pulsar_spectra/catalogue_papers/`.
+Where ``<author_year>`` is the first author's last name and the year of publication (e.g. Smith_2020),
+``<observation_span>`` is either ``Single-epoch``, ``Several-epoch`` or ``Multi-epoch`` (see :ref:`observation_span` for more details), and
+``<beamforming_or_imaging>`` is either ``Beamforming`` or ``Imaging`` depending on the detection type.
+
+This will put a YAML file of the paper in ``src/pulsar_spectra/catalogue_papers/``.
 You should then reinstall the software and run a spectral fit to confirm it worked.
 
 
@@ -329,17 +333,20 @@ The catalogue is made up of YAML files of each paper. The format of the YAML fil
 
 .. code-block:: yaml
 
+    Paper Metadata:
+      Data Type: Beamforming or Imaging
+      Observation Span: Single-epoch, Several-epoch or Multi-epoch
     Pulsar Jname:
-        Frequency MHz:
+      Frequency MHz:
         - First frequency value in MHz
         - Second frequency value in MHz
-        Bandwidth MHz:
+      Bandwidth MHz:
         - First bandwidth value in MHz
         - Second bandwidth value in MHz
-        Flux Density mJy:
+      Flux Density mJy:
         - First flux density value in mJy
         - Second flux density value in mJy
-        Flux Density error mJy:
+      Flux Density error mJy:
         - First flux density uncertainty value in mJy
         - Second flux density uncertainty value in mJy
 
@@ -347,6 +354,9 @@ For example:
 
 .. code-block:: yaml
 
+    Paper Metadata:
+      Data Type: Beamforming
+      Observation Span: Single-epoch
     J0030+0451:
         Frequency MHz:
         - 150.0
@@ -369,3 +379,6 @@ For example:
         - 7.9
         Flux Density error mJy:
         - 3.95
+
+Where the ``Paper Metadata`` section contains information about the paper as a whole, and each pulsar has its own section with lists of frequencies, bandwidths, flux densities and flux density uncertainties.
+The ``Data Type`` can be either ``Beamforming`` or ``Imaging``, and the ``Observation Span`` can be either ``Single-epoch``, ``Several-epoch`` or ``Multi-epoch`` (for details on the observation span, see the :ref:`observation_span` section).
