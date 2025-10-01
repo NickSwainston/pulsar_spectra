@@ -89,16 +89,17 @@ Papers included in our catalogue
 
 Adjusting the uncertainty of catalogue data
 -------------------------------------------
-In this repository, we follow the method used by `Bilous et al. (2016) <https://ui.adsabs.harvard.edu/abs/2016A%26A...591A.134B>`_ and `Seiber (1973) <https://ui.adsabs.harvard.edu/abs/1973A%26A....28..237S>`_
-to increase the flux density uncertainties observations that do not have sufficient epochs to account for the scintillation variability.
+In this repository, we follow the method used by `Bilous et al. (2016) <https://ui.adsabs.harvard.edu/abs/2016A%26A...591A.134B>`_ and `Sieber (1973) <https://ui.adsabs.harvard.edu/abs/1973A%26A....28..237S>`_
+to increase the flux density uncertainties for observations that do not have a sufficient number of epochs to account for the scintillation variability.
 This is done by classifying the papers as either "Single-epoch", "Several-epoch" or "Multi-epoch".
 
-1. **Single-epoch**: If the paper only reports flux density measurements from a single observation or is unclear about the observing set-up, then we assume that the uncertainty is underestimated
-   due to scintillation and other effects.
-   Therefore, we increase the uncertainty to 50\% of the flux density value if the reported uncertainty is less than this value.
-2. **Several-epoch**: If the paper reports flux density measurements from several observations (\<5) over less than a year, then we assume that the uncertainty is underestimated
-   and increase it to 30\% of the flux density value if the reported uncertainty is less than this value.
-3. **Multi-epoch**: If the paper reports flux density measurements from multiple observations (>=5) over a year, then we assume that the uncertainty is adequately reported and do not make any adjustments.
+1. **Single-epoch**: If the paper only reports flux density measurements from a single observation or is unclear about the number of observations, then we assign a minimum
+   relative uncertainty of 50\% to account for diffractive and refractive interstellar scintillation. It should be noted that some pulsars may exhibit greater changes in
+   flux density than this, in which case the uncertainties may still be underestimated.
+2. **Several-epoch**: If the paper reports flux density measurements from several observations (\<5) over less than a year, then we assume that the refractive scintillation
+   is partially accounted on this timescale, and we assign a minimum relative uncertainty of 30\%.
+3. **Multi-epoch**: If the paper reports flux density measurements from multiple observations (>=5) over a year or more, and the uncertainty has been calculated as the standard
+   deviation of the flux density measurements, then we assume that the refractive scintillation has been fully accounted for, and we do not make any adjustments.
 
 For example, you can see in the `Bates_2011.yaml <https://github.com/NickSwainston/pulsar_spectra/blob/main/src/pulsar_spectra/catalogue_papers/Bates_2011.yaml>`_
 that the paper is classified as "Single-epoch" and the flux density uncertainties are less than 50\% of the flux density value:
@@ -149,7 +150,7 @@ It will output:
 
 Which, as you can see, is different from what is recorded in the YAML file (0.1 and 0.2 mJy, respectively).
 
-If this catalogue could instead record the flux density measurements for each observation epoch, we could make much more accurate adjustments to the uncertainties.
+If data was more widely available in the literature for individual observing epochs, then this feature could be expanded in future to make more accurate adjustments to the uncertainties.
 Based on the DM and local turbulence, we could calculate the expected scintillation variability and then use the time and duration of each observation to adjust the uncertainties accordingly if the variability hasn't been averaged out.
 The data required for this is not available in most papers, but as more automated pulsar monitoring is uploaded to online databases, this may become possible in the future.
 
