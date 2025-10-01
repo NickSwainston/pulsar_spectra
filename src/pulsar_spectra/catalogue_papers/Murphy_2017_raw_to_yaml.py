@@ -4,8 +4,8 @@ from pulsar_spectra.scripts.csv_to_yaml import dump_yaml
 
 pulsar_dict = {
     "Paper Metadata": {
-        "Data Type": "Beamforming",
-        "Observation Span": "Single-epoch",
+        "Data Type": "Imaging",
+        "Observation Span": "Several-epoch",
     }
 }
 
