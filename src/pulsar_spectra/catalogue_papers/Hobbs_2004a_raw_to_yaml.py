@@ -12,7 +12,12 @@ with open("Hobbs_2004a_raw_table_1-4.tsv") as file:
         lines.append(line)
 print(lines)
 
-pulsar_dict = {}
+pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Beamforming",
+        "Observation Span": "Single-epoch",
+    }
+}
 for row in lines:
     row = [r.strip() for r in row]
     if len(row) == 0:

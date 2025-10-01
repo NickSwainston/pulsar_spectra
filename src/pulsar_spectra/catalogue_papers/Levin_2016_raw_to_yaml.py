@@ -8,7 +8,12 @@ all_jnames = list(query["PSRJ"])
 
 # was converted from image to csv using ABBYY FineReader
 with open("Levin_2016_raw.txt") as file:
-    pulsar_dict = {}
+    pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Beamforming",
+        "Observation Span": "Single-epoch",
+    }
+}
 
     spamreader = csv.reader(file, delimiter="\t")
     # Skip the header

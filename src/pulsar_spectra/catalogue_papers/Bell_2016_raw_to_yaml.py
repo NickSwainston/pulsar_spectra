@@ -4,7 +4,12 @@ with open("Bell_2016_raw.txt", "r") as raw_file:
     lines = raw_file.readlines()
     print(lines)
 
-pulsar_dict = {}
+pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Beamforming",
+        "Observation Span": "Single-epoch",
+    }
+}
 for row in lines[1:]:
     row = row.replace(" ± ", "±").split(" ")
     pulsar = row[1].replace("−", "-")

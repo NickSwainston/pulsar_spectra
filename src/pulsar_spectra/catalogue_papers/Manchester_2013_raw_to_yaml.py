@@ -1,7 +1,12 @@
 import yaml
 
 with open("Manchester_2013_raw.txt") as file:
-    pulsar_dict = {}
+    pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Beamforming",
+        "Observation Span": "Single-epoch",
+    }
+}
     lines = file.readlines()
 
 for row in lines:

@@ -8,7 +8,12 @@ with open("Deneva_2024_raw.csv", "r") as raw_file:
     lines = raw_file.readlines()
     print(lines)
 
-pulsar_dict = {}
+pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Beamforming",
+        "Observation Span": "Single-epoch",
+    }
+}
 for row in lines:
     if row.startswith("#") or row.strip() == "":
         continue

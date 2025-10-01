@@ -8,7 +8,12 @@ with open("Zhang_2019_raw.csv") as file:
         lines.append(line)
 
 
-pulsar_dict = {}
+pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Beamforming",
+        "Observation Span": "Single-epoch",
+    }
+}
 pulsar_dict["J0024-7204C"] = {
     "Frequency MHz":[],
     "Bandwidth MHz":[],

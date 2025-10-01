@@ -7,7 +7,12 @@ with open("Kijak_2017_raw.txt", "r") as raw_file:
     lines = raw_file.readlines()
     print(lines)
 
-pulsar_dict = {}
+pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Beamforming",
+        "Observation Span": "Single-epoch",
+    }
+}
 for row in lines[:9]:
     row = row.replace("±", "±").split(" ")
     print(row)

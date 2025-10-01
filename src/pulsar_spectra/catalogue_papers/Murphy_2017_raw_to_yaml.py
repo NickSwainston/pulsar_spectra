@@ -1,6 +1,11 @@
 import yaml
 
-pulsar_dict = {}
+pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Beamforming",
+        "Observation Span": "Single-epoch",
+    }
+}
 
 with open("Murphy_2017_raw_table_1_2.txt", "r") as raw_file:
     lines = raw_file.readlines()

@@ -5,7 +5,12 @@ import csv
 query = psrqpy.QueryATNF(params=['PSRJ', 'NAME', 'PSRB', 'P0']).pandas
 all_jnames = list(query['PSRJ'])
 
-pulsar_dict = {}
+pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Beamforming",
+        "Observation Span": "Single-epoch",
+    }
+}
 
 with open("Fiore_2023_raw.txt") as file:
     tsv_file = csv.reader(file, delimiter=" ")

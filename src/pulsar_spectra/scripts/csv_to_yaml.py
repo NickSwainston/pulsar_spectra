@@ -13,7 +13,12 @@ all_jnames = list(query["PSRJ"])
 
 
 def convert_csv_to_yaml(csv_location, ref_label):
-    pulsar_dict = {}
+    pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Beamforming",
+        "Observation Span": "Single-epoch",
+    }
+}
 
     # Read in the csv
     with open(csv_location, newline="") as csvfile:

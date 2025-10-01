@@ -12,7 +12,12 @@ with open("Kuzmin_2001_raw.csv") as file:
     for line in tsv_file:
         lines.append(line)
 
-pulsar_dict = {}
+pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Beamforming",
+        "Observation Span": "Single-epoch",
+    }
+}
 for i, row in enumerate(lines):
     row = [r.strip() for r in row]
 

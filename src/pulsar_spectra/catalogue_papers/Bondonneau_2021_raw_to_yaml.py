@@ -10,7 +10,12 @@ with open("Bondonneau_2021_raw.csv", "r") as file:
 query = psrqpy.QueryATNF(params=['PSRJ', 'NAME', 'PSRB']).pandas
 all_jnames = list(query['PSRJ'])
 
-pulsar_dict = {}
+pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Beamforming",
+        "Observation Span": "Single-epoch",
+    }
+}
 for row in lines:
     row = [r.strip() for r in row]
     pulsar = row[0].strip().replace("–", "-").replace(" ", "").replace("−", "-").replace("*", "")

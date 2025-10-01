@@ -16,7 +16,12 @@ for i in list(query['PSRB']):
     if isinstance(i, str):
         print(i)
 
-pulsar_dict = {}
+pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Beamforming",
+        "Observation Span": "Single-epoch",
+    }
+}
 for row in lines[2:]:
     row = [r.strip() for r in row]
     if row[0].startswith("#"):

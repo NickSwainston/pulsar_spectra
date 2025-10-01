@@ -7,7 +7,12 @@ all_jnames = list(query['PSRJ'])
 with open("Karastergiou_2005_raw.csv", "r") as raw_file:
     lines = raw_file.readlines()
 
-pulsar_dict = {}
+pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Beamforming",
+        "Observation Span": "Single-epoch",
+    }
+}
 for row in lines:
     row = row.split(",")
     pulsar = row[0].replace("–", "-").replace("—", "-").replace("-", "-").strip()

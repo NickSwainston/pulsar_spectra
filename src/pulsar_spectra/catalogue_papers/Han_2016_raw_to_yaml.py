@@ -3,7 +3,12 @@ import yaml
 
 raw = np.loadtxt("Han_2016_raw.txt", dtype=str)
 
-pulsar_dict = {}
+pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Beamforming",
+        "Observation Span": "Single-epoch",
+    }
+}
 for row in raw[1:]:
     pulsar = row[0]
     freqs = [float(row[2]), float(row[5]), float(row[8]), float(row[11])]

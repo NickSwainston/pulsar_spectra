@@ -19,7 +19,12 @@ pulsars = [
     (2100.0, 12),
 ]
 
-pulsar_dict = {}
+pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Beamforming",
+        "Observation Span": "Single-epoch",
+    }
+}
 for row in lines:
     row = [r.strip() for r in row]
 

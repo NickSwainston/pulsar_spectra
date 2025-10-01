@@ -9,7 +9,12 @@ with open("Johnston_2018_raw.tsv") as file:
         lines.append(line)
 print(lines)
 
-pulsar_dict = {}
+pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Beamforming",
+        "Observation Span": "Single-epoch",
+    }
+}
 for row in lines:
     row = [r.strip() for r in row]
     if len(row) == 0:

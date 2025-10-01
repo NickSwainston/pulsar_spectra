@@ -20,7 +20,12 @@ query = psrqpy.QueryATNF(params=["PSRJ", "NAME", "PSRB"]).pandas
 all_jnames = list(query["PSRJ"])
 # print(query['PSRB'])
 
-pulsar_dict = {}
+pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Beamforming",
+        "Observation Span": "Single-epoch",
+    }
+}
 for row in lines:
     row = [r.strip() for r in row]
     # print(row)

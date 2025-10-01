@@ -5,7 +5,12 @@ with open("Zakharenko_2013_raw.txt", "r") as raw_file:
     lines = raw_file.readlines()
 query = psrqpy.QueryATNF(params=['PSRJ', 'NAME', 'PSRB']).pandas
 
-pulsar_dict = {}
+pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Beamforming",
+        "Observation Span": "Single-epoch",
+    }
+}
 for row in lines[:15]:
     row = row.replace(" ± ", "±").split(" ")
     print(row)

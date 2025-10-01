@@ -17,7 +17,12 @@ def main() -> None:
         if colname.startswith("peak_flux_"):
             freqs.append(int(colname.split("_")[2].split("MHz")[0]))
 
-    pulsar_dict = {}
+    pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Beamforming",
+        "Observation Span": "Single-epoch",
+    }
+}
     for row in range(len(t)):
         psrj = str(t[row]["PSRJ"])
 

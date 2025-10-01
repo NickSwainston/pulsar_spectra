@@ -14,7 +14,12 @@ for filename in glob.iglob(f'*.fluxtable'):
 
 filenames.sort()
 
-pulsar_dict = {}
+pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Beamforming",
+        "Observation Span": "Single-epoch",
+    }
+}
 for filename in filenames:
     psrj = filename.split(".")[0]
 

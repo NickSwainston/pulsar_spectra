@@ -10,7 +10,12 @@ with open("Frail_2016_raw.tsv", "r") as raw_file:
     for line in tsv_file:
         lines.append(line)
 
-pulsar_dict = {}
+pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Beamforming",
+        "Observation Span": "Single-epoch",
+    }
+}
 for row in lines:
     row = [r.strip() for r in row]
     if len(row) == 0:

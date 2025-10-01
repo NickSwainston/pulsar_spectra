@@ -3,7 +3,12 @@ import yaml
 with open("Johnston_2006_raw.txt", "r") as raw_file:
     lines = raw_file.readlines()
 
-pulsar_dict = {}
+pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Beamforming",
+        "Observation Span": "Single-epoch",
+    }
+}
 for row in lines:
     row = row.replace(" ± ", "±").split()
     print(row)

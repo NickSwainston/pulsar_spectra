@@ -11,7 +11,12 @@ query = psrqpy.QueryATNF(params=['PSRJ', 'NAME', 'PSRB']).pandas
 print(lines)
 print(list(query['PSRB']))
 
-pulsar_dict = {}
+pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Beamforming",
+        "Observation Span": "Single-epoch",
+    }
+}
 for row in lines[48:]:
     row = [r.strip() for r in row]
     if row[0].startswith("#"):

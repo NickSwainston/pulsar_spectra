@@ -12,7 +12,12 @@ def replace_zero_err(fluxs, flux_errs):
 with open("Bates_2011_raw.txt", "r") as raw_file:
     lines = raw_file.readlines()
 
-pulsar_dict = {}
+pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Beamforming",
+        "Observation Span": "Single-epoch",
+    }
+}
 
 for row in lines[17:]:
     row = row.split()
