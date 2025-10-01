@@ -426,7 +426,7 @@ def all_flux_from_atnf(query=None):
             # Add Nones so the software can easily tell there are missing bandwidths
             jname_cat[jname][ref]["Bandwidth MHz"] += [band]
             jname_cat[jname][ref]["Flux Density mJy"] += [flux]
-            jname_cat[jname][ref]["Flux Density error mJy"] += [flux_err]
+            jname_cat[jname][ref]["Flux Density error mJy"] += [flux_err if flux_err >= 0.5 * flux else 0.5 * flux]
     return jname_cat
 
 
@@ -469,11 +469,9 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
         query = psrqpy.QueryATNF(version=ATNF_VER).pandas
     # Make a dictionary for each pulsar
     jnames = list(query["PSRJ"])
-    jname_cat_dict = {}
     jname_cat_list = {}
     for jname in jnames:
-        jname_cat_dict[jname] = {}
-        # freq, flux, flux_err, references
+        # freq, band,flux, flux_err, references
         jname_cat_list[jname] = [[], [], [], [], []]
 
     # Work out which yamls/catalogues to use
@@ -506,17 +504,26 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
         # Load in the dict
         with open(cat_file, "r") as stream:
             cat_dict = yaml.safe_load(stream)
+        obs_span = cat_dict["Paper Metadata"]["Observation Span"]
 
         # Find which pulsars in the dictionary
         for jname in jnames:
             if jname in cat_dict.keys():
-                # Update dict
-                jname_cat_dict[jname][cat_label] = cat_dict[jname]
+                # Adjust uncertainties based on observations span
+                fluxes = np.array(cat_dict[jname]["Flux Density mJy"])
+                flux_errs = np.array(cat_dict[jname]["Flux Density error mJy"])
+                if obs_span == "Single-epoch":
+                    # Use 50% flux error if the error is less than this
+                    flux_errs = np.maximum(flux_errs, 0.5 * fluxes)
+                elif obs_span == "Several-epoch":
+                    flux_errs = np.maximum(flux_errs, 0.3 * fluxes)
+                # Do nothing for "Multiple-epoch" as the errors should be accurate
+
                 # Update list
                 jname_cat_list[jname][0] += cat_dict[jname]["Frequency MHz"]
                 jname_cat_list[jname][1] += cat_dict[jname]["Bandwidth MHz"]
                 jname_cat_list[jname][2] += cat_dict[jname]["Flux Density mJy"]
-                jname_cat_list[jname][3] += cat_dict[jname]["Flux Density error mJy"]
+                jname_cat_list[jname][3] += list(flux_errs)
                 jname_cat_list[jname][4] += [cat_label] * len(cat_dict[jname]["Frequency MHz"])
 
     if not use_atnf:
@@ -621,36 +628,23 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
                 # exclude by skipping
                 continue
 
-            if raw_ref in jname_cat_dict[jname].keys():
+            for freq, band, flux, flux_err in zip(
+                atnf_dict[jname][ref]["Frequency MHz"],
+                atnf_dict[jname][ref]["Bandwidth MHz"],
+                atnf_dict[jname][ref]["Flux Density mJy"],
+                atnf_dict[jname][ref]["Flux Density error mJy"],
+            ):
                 # Check for redundant data
-                for freq, band, flux, flux_err in zip(
-                    atnf_dict[jname][ref]["Frequency MHz"],
-                    atnf_dict[jname][ref]["Bandwidth MHz"],
-                    atnf_dict[jname][ref]["Flux Density mJy"],
-                    atnf_dict[jname][ref]["Flux Density error mJy"],
+                if (
+                    flux in jname_cat_list[jname][2]
+                    and flux_err in jname_cat_list[jname][3]
+                    and raw_ref in jname_cat_list[jname][4]
                 ):
-                    if (
-                        flux in jname_cat_dict[jname][raw_ref]["Flux Density mJy"]
-                        and flux_err in jname_cat_dict[jname][raw_ref]["Flux Density error mJy"]
-                    ):
-                        logger.debug(
-                            f"Redundant data  pulsar:{jname}  ref:{raw_ref}  freq:{freq}  flux:{flux}  flux_err:{flux_err}"
-                        )
-                    else:
-                        # Update list
-                        jname_cat_list[jname][0] += [freq]
-                        jname_cat_list[jname][1] += [band]
-                        jname_cat_list[jname][2] += [flux]
-                        jname_cat_list[jname][3] += [flux_err]
-                        jname_cat_list[jname][4] += [ref]
-            else:
-                # Update list
-                for freq, band, flux, flux_err in zip(
-                    atnf_dict[jname][ref]["Frequency MHz"],
-                    atnf_dict[jname][ref]["Bandwidth MHz"],
-                    atnf_dict[jname][ref]["Flux Density mJy"],
-                    atnf_dict[jname][ref]["Flux Density error mJy"],
-                ):
+                    logger.debug(
+                        f"Redundant ATNF data removed:  pulsar:{jname}  ref:{raw_ref}  freq:{freq}  flux:{flux}  flux_err:{flux_err}"
+                    )
+                else:
+                    # Update list
                     jname_cat_list[jname][0] += [freq]
                     jname_cat_list[jname][1] += [band]
                     jname_cat_list[jname][2] += [flux]

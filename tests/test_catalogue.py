@@ -7,11 +7,14 @@ import re
 import pandas as pd
 import psrqpy
 import yaml
+import pytest
 
 from pulsar_spectra.catalogue import (
     ADS_REF,
     ATNF_VER,
+    CAT_DIR,
     CAT_YAMLS,
+    all_flux_from_atnf,
     collect_catalogue_fluxes,
     convert_atnf_ref,
     get_atnf_references,
@@ -148,6 +151,53 @@ def test_yaml_list_indentation():
                     f"List item on line {i+1} in {cat_file} should be indented "
                     f"{expected_indent} spaces (parent key {parent_indent} spaces), but found {spaces}"
                 )
+
+
+cat_files = [
+    "Manchester_2013.yaml", # Example mutli-epoch
+    "Bates_2011.yaml", # Example single-epoch
+]
+@pytest.mark.parametrize("cat_file", cat_files)
+def test_epoch_uncertainty_alteration(cat_file):
+    """Tests if the uncertainty alteration for multi-epoch data is working correctly."""
+    # Raw load the yaml
+    cat_path = os.path.join(CAT_DIR, cat_file)
+    with open(cat_path, "r") as stream:
+        cat_dict = yaml.safe_load(stream)
+    epoch_type = cat_dict["Paper Metadata"]["Observation Span"]
+
+    # Grab the previously altered catalogue
+    altered_cat_dict = collect_catalogue_fluxes(only_use=[cat_file.replace(".yaml", "")])
+
+    print(f"Testing {cat_file} with epoch type {epoch_type}")
+    for pulsar in cat_dict.keys():
+        if pulsar == "Paper Metadata":
+            continue
+        print(f"    {pulsar}")
+        raw_fluxs, raw_flux_errs = cat_dict[pulsar]["Flux Density mJy"], cat_dict[pulsar]["Flux Density error mJy"]
+        _, _, cat_fluxs, cat_flux_errs, _= altered_cat_dict[pulsar]
+        for raw_flux, raw_flux_err, cat_flux, cat_flux_err in zip(raw_fluxs, raw_flux_errs, cat_fluxs, cat_flux_errs):
+            if epoch_type == "Multi-epoch":
+                expected_err = raw_flux_err
+            elif epoch_type == "Several-epoch":
+                expected_err = raw_flux_err if raw_flux_err >= 0.3 * raw_flux else 0.3 * raw_flux
+            else:  # Single-epoch
+                expected_err = raw_flux_err if raw_flux_err >= 0.5 * raw_flux else 0.5 * raw_flux
+
+            assert cat_flux_err == expected_err, f"Flux error {cat_flux_err} does not match expected error {expected_err}"
+
+def test_atnf_uncertanties():
+    """Tests if the ATNF uncertainties are being reduced to 50% correctly."""
+    atnf_dict = all_flux_from_atnf()
+    for jname in atnf_dict.keys():
+        print(jname)
+        for ref in atnf_dict[jname].keys():
+            print(f"    {ref}")
+            for flux, flux_err in zip(
+                atnf_dict[jname][ref]["Flux Density mJy"],
+                atnf_dict[jname][ref]["Flux Density error mJy"],
+            ):
+                assert flux_err >= 0.5 * flux, f"Flux error {flux_err} is not >= 50% of flux {flux}"
 
 
 def test_convert_atnf_ref():
