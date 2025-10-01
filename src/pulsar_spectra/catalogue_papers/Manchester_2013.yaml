@@ -1,6 +1,6 @@
 Paper Metadata:
   Data Type: Beamforming
-  Observation Span: Single-epoch
+  Observation Span: Multi-epoch
 J0437-4715:
   Frequency MHz:
     - 700.0

@@ -84,7 +84,7 @@ def test_catalogue_format():
         assert "Data Type" in cat_dict["Paper Metadata"].keys(), "Data Type key not found"
         assert cat_dict["Paper Metadata"]["Data Type"] in ["Imaging", "Beamforming"], "Data Type is not 'Imaging' or 'Beamforming'"
         assert "Observation Span" in cat_dict["Paper Metadata"].keys(), "Observation Span key not found"
-        assert cat_dict["Paper Metadata"]["Observation Span"] in ["Single-epoch", "Several-epoch", "Multiple-epoch"], "Observation Span is not 'Single-epoch', 'Several-epoch' or 'Multiple-epoch'"
+        assert cat_dict["Paper Metadata"]["Observation Span"] in ["Single-epoch", "Several-epoch", "Multi-epoch"], "Observation Span is not 'Single-epoch', 'Several-epoch' or 'Multi-epoch'"
         # Check the pulsar data is correct
         for pulsar in cat_dict.keys():
             if pulsar == "Paper Metadata":
