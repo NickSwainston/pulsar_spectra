@@ -157,6 +157,7 @@ def test_yaml_list_indentation():
 
 cat_files = [
     "Manchester_2013.yaml",  # Example mutli-epoch
+    "Mantovanini_2025.yaml",  # Example several-epoch
     "Bates_2011.yaml",  # Example single-epoch
 ]
 
