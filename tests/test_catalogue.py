@@ -108,10 +108,46 @@ def test_catalogue_format():
                 cat_dict[pulsar]["Flux Density mJy"],
                 cat_dict[pulsar]["Flux Density error mJy"],
             ):
-                assert freq > 0.0
-                assert band > 0.0
-                assert flux > 0.0
-                assert flux_err > 0.0
+                assert freq > 0.0, f"Frequency {freq} is not positive in pulsar {pulsar}"
+                assert band > 0.0, f"Bandwidth {band} is not positive in pulsar {pulsar}"
+                assert flux > 0.0, f"Flux Density {flux} is not positive in pulsar {pulsar}"
+                assert flux_err > 0.0, f"Flux Density error {flux_err} is not positive in pulsar {pulsar}"
+
+
+def test_yaml_list_indentation():
+    """
+    Check that all lists in the YAML file are indented 2 spaces under their parent key.
+    """
+    key_regex = re.compile(r"^(\s*)([^:\n]+):\s*$")  # matches a YAML key
+    for cat_file in CAT_YAMLS:
+        print(cat_file)
+        with open(cat_file, "r") as f:
+            lines = f.readlines()
+
+        parent_indent = None
+        for i, line in enumerate(lines):
+            # Skip empty lines
+            if not line.strip():
+                continue
+
+            # Check if line is a key
+            key_match = key_regex.match(line)
+            if key_match:
+                parent_indent = len(key_match.group(1))  # leading spaces of key
+                continue
+
+            # Check if line is a list item
+            stripped = line.lstrip()
+            if stripped.startswith("- "):
+                spaces = len(line) - len(stripped)
+                assert parent_indent is not None, (
+                    f"List item on line {i+1} in {cat_file} has no parent key"
+                )
+                expected_indent = parent_indent + 2
+                assert spaces == expected_indent, (
+                    f"List item on line {i+1} in {cat_file} should be indented "
+                    f"{expected_indent} spaces (parent key {parent_indent} spaces), but found {spaces}"
+                )
 
 
 def test_convert_atnf_ref():

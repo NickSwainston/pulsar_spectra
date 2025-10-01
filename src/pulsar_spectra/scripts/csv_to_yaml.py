@@ -11,6 +11,14 @@ from pulsar_spectra.catalogue import ATNF_VER
 query = psrqpy.QueryATNF(version=ATNF_VER, params=["PSRJ", "NAME", "PSRB"]).pandas
 all_jnames = list(query["PSRJ"])
 
+class ListIndentDumper(yaml.Dumper):
+    # Will indent lists properly for more readable yaml files
+    def increase_indent(self, flow=False, indentless=False):
+        return super(ListIndentDumper, self).increase_indent(flow, False)
+
+def dump_yaml(pulsar_dict, filename):
+    with open(filename, "w") as cat_file:
+        yaml.dump(pulsar_dict, cat_file, sort_keys=False, indent=2, default_flow_style=False, Dumper=ListIndentDumper)
 
 def convert_csv_to_yaml(csv_location, ref_label):
     pulsar_dict = {
@@ -62,8 +70,7 @@ def convert_csv_to_yaml(csv_location, ref_label):
                 }
 
     # Dump the dict to the yaml file in the catalogue directory
-    with open(f"{ref_label}.yaml", "w") as cat_file:
-        yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)
+    dump_yaml(pulsar_dict, f"{ref_label}.yaml")
 
     print("\nCatalogue data written:")
     print(yaml.dump(pulsar_dict, sort_keys=False, indent=2))
