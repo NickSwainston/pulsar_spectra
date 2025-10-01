@@ -21,8 +21,8 @@ def main() -> None:
 
     pulsar_dict = {
     "Paper Metadata": {
-        "Data Type": "Beamforming",
-        "Observation Span": "Single-epoch",
+        "Data Type": "Imaging",
+        "Observation Span": "Several-epoch",
     }
 }
     for row in range(len(t)):
