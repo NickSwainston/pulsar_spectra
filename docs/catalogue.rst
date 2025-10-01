@@ -87,6 +87,73 @@ Papers included in our catalogue
     :file: papers_in_catalogue.csv
 
 
+Adjusting the uncertainty of catalogue data
+-------------------------------------------
+In this repository, we follow the method used by `Bilous et al. (2016) <https://ui.adsabs.harvard.edu/abs/2016A%26A...591A.134B>`_ and `Seiber (1973) <https://ui.adsabs.harvard.edu/abs/1973A%26A....28..237S>`_
+to increase the flux density uncertainties observations that do not have sufficient epochs to account for the scintillation variability.
+This is done by classifying the papers as either "Single-epoch", "Several-epoch" or "Multi-epoch".
+
+1. **Single-epoch**: If the paper only reports flux density measurements from a single observation or is unclear about the observing set-up, then we assume that the uncertainty is underestimated
+   due to scintillation and other effects.
+   Therefore, we increase the uncertainty to 50\% of the flux density value if the reported uncertainty is less than this value.
+2. **Several-epoch**: If the paper reports flux density measurements from several observations (\<5) over less than a year, then we assume that the uncertainty is underestimated
+   and increase it to 30\% of the flux density value if the reported uncertainty is less than this value.
+3. **Multi-epoch**: If the paper reports flux density measurements from multiple observations (>=5) over a year, then we assume that the uncertainty is adequately reported and do not make any adjustments.
+
+For example, you can see in the `Bates_2011.yaml <https://github.com/NickSwainston/pulsar_spectra/blob/main/src/pulsar_spectra/catalogue_papers/Bates_2011.yaml>`_
+that the paper is classified as "Single-epoch" and the flux density uncertainties are less than 50\% of the flux density value:
+
+.. code-block:: yaml
+
+    Paper Metadata:
+      Data Type: Beamforming
+      Observation Span: Single-epoch
+    J1316-6232:
+      Frequency MHz:
+        - 6591
+      Bandwidth MHz:
+        - 576
+      Flux Density mJy:
+        - 0.7
+      Flux Density error mJy:
+        - 0.1
+    J1327-6222:
+      Frequency MHz:
+        - 6591
+      Bandwidth MHz:
+        - 576
+      Flux Density mJy:
+        - 0.9
+      Flux Density error mJy:
+        - 0.2
+
+When you use the ``collect_catalogue_fluxes`` function, it will automatically adjust the uncertainties of the flux density measurements based on the observation span of the paper.
+For example, if we run the following code:
+
+.. code-block:: python
+
+    from pulsar_spectra.catalogue import collect_catalogue_fluxes
+    cat_dict = collect_catalogue_fluxes(only_use=["Bates_2011"])
+
+    freq, band, flux, flux_err, ref = cat_dict["J1316-6232"]
+    print(f"J1316-6232 flux: {flux[0]} ± {flux_err[0]} mJy")
+    freq, band, flux, flux_err, ref = cat_dict["J1327-6222"]
+    print(f"J1327-6222 flux: {flux[0]} ± {flux_err[0]} mJy")
+
+It will output:
+
+.. code-block:: text
+
+    J1316-6232 flux: 0.7 ± 0.35 mJy
+    J1327-6222 flux: 0.9 ± 0.45 mJy
+
+Which, as you can see, is different from what is recorded in the YAML file (0.1 and 0.2 mJy, respectively).
+
+If this catalogue could instead record the flux density measurements for each observation epoch, we could make much more accurate adjustments to the uncertainties.
+Based on the DM and local turbulence, we could calculate the expected scintillation variability and then use the time and duration of each observation to adjust the uncertainties accordingly if the variability hasn't been averaged out.
+The data required for this is not available in most papers, but as more automated pulsar monitoring is uploaded to online databases, this may become possible in the future.
+
+
 .. _finding_papers:
 
 Finding more papers to add to the catalogue
