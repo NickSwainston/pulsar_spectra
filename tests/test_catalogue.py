@@ -79,19 +79,28 @@ def test_catalogue_format():
         print(cat_file)
         with open(cat_file, "r") as stream:
             cat_dict = yaml.safe_load(stream)
+        # Check the paper metadata is correct
+        assert "Paper Metadata" == list(cat_dict.keys())[0], "Paper Metadata is not first key"
+        assert "Data Type" in cat_dict["Paper Metadata"].keys(), "Data Type key not found"
+        assert cat_dict["Paper Metadata"]["Data Type"] in ["Imaging", "Beamforming"], "Data Type is not 'Imaging' or 'Beamforming'"
+        assert "Observation Span" in cat_dict["Paper Metadata"].keys(), "Observation Span key not found"
+        assert cat_dict["Paper Metadata"]["Observation Span"] in ["Single-epoch", "Several-epoch", "Multiple-epoch"], "Observation Span is not 'Single-epoch', 'Several-epoch' or 'Multiple-epoch'"
+        # Check the pulsar data is correct
         for pulsar in cat_dict.keys():
-            print(pulsar)
+            if pulsar == "Paper Metadata":
+                continue
+            print(f"    {pulsar}")
             assert pulsar in jnames, f"Pulsar name {pulsar} not found in ATNF version {ATNF_VER}"
-            assert "Frequency MHz" in cat_dict[pulsar].keys()
-            assert "Bandwidth MHz" in cat_dict[pulsar].keys()
-            assert "Flux Density mJy" in cat_dict[pulsar].keys()
-            assert "Flux Density error mJy" in cat_dict[pulsar].keys()
+            assert "Frequency MHz" in cat_dict[pulsar].keys(), "Frequency MHz key not found"
+            assert "Bandwidth MHz" in cat_dict[pulsar].keys(), "Bandwidth MHz key not found"
+            assert "Flux Density mJy" in cat_dict[pulsar].keys(), "Flux Density mJy key not found"
+            assert "Flux Density error mJy" in cat_dict[pulsar].keys(), "Flux Density error mJy key not found"
             assert (
                 len(cat_dict[pulsar]["Frequency MHz"])
                 == len(cat_dict[pulsar]["Bandwidth MHz"])
                 == len(cat_dict[pulsar]["Flux Density mJy"])
                 == len(cat_dict[pulsar]["Flux Density error mJy"])
-            )
+            ), "Data lists are not the same length"
             # Check no zeros or negatives in cat
             for freq, band, flux, flux_err in zip(
                 cat_dict[pulsar]["Frequency MHz"],
