@@ -2,6 +2,8 @@ import yaml
 import csv
 import psrqpy
 
+from pulsar_spectra.scripts.csv_to_yaml import dump_yaml
+
 with open("Sanidas_2019_raw.tsv") as file:
     tsv_file = csv.reader(file, delimiter="\t")
     lines = []
@@ -146,5 +148,4 @@ for row in lines:
     if len(pulsar_dict[pulsar]["Frequency MHz"]) == 0:
         del pulsar_dict[pulsar]
 
-with open("Sanidas_2019.yaml", "w") as cat_file:
-    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)
+dump_yaml(pulsar_dict, "Sanidas_2019.yaml")

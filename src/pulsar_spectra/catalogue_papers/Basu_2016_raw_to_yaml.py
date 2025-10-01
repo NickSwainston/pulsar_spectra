@@ -1,16 +1,24 @@
 import yaml
 
+from pulsar_spectra.scripts.csv_to_yaml import dump_yaml
+
 with open("Basu_2016_raw.txt", "r") as raw_file:
     lines = raw_file.readlines()
     print(lines)
 
 pulsar = "J1803-2137"
-pulsar_dict = {pulsar: {
-    "Frequency MHz":[],
-    "Bandwidth MHz":[],
-    "Flux Density mJy":[],
-    "Flux Density error mJy":[]
-}}
+pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Beamforming",
+        "Observation Span": "Single-epoch",
+    },
+    pulsar: {
+        "Frequency MHz": [],
+        "Bandwidth MHz": [],
+        "Flux Density mJy": [],
+        "Flux Density error mJy": []
+    }
+}
 for row in lines:
     row = row.replace(" ± ", "±").split(" ")
     print(row)
@@ -27,5 +35,9 @@ for row in lines:
         pulsar_dict[pulsar]["Flux Density mJy"] += [float(flux2)]
         pulsar_dict[pulsar]["Flux Density error mJy"] += [float(flux_err2)]
 
-with open("Basu_2016.yaml", "w") as cat_file:
-    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)
+class ListIndentDumper(yaml.Dumper):
+    # Will indent lists properly for more readable yaml files
+    def increase_indent(self, flow=False, indentless=False):
+        return super(ListIndentDumper, self).increase_indent(flow, False)
+
+dump_yaml(pulsar_dict, "Basu_2016.yaml")

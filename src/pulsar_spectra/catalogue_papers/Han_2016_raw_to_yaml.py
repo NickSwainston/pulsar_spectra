@@ -1,6 +1,8 @@
 import numpy as np
 import yaml
 
+from pulsar_spectra.scripts.csv_to_yaml import dump_yaml
+
 raw = np.loadtxt("Han_2016_raw.txt", dtype=str)
 
 pulsar_dict = {
@@ -10,7 +12,7 @@ pulsar_dict = {
     }
 }
 for row in raw[1:]:
-    pulsar = row[0]
+    pulsar = str(row[0])
     freqs = [float(row[2]), float(row[5]), float(row[8]), float(row[11])]
     bands = [64, 64, 64, 64]
     pairs = [row[4], row[7], row[10], row[13]]
@@ -28,5 +30,4 @@ for row in raw[1:]:
         "Flux Density error mJy":flux_errs
     }
 
-with open("Han_2016.yaml", "w") as cat_file:
-    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)
+dump_yaml(pulsar_dict, "Han_2016.yaml")

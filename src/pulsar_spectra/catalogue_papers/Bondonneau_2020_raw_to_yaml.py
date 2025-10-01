@@ -1,5 +1,7 @@
 import yaml
 
+from pulsar_spectra.scripts.csv_to_yaml import dump_yaml
+
 with open("Bondonneau_2020_raw.txt", "r") as raw_file:
     lines = raw_file.readlines()
     print(lines)
@@ -31,5 +33,4 @@ for row in lines:
         "Flux Density error mJy":[float(flux_err[:-1])]
     }
 
-with open("Bondonneau_2020.yaml", "w") as cat_file:
-    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)
+dump_yaml(pulsar_dict, "Bondonneau_2020.yaml")

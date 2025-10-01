@@ -1,6 +1,8 @@
 import yaml
 import psrqpy
 
+from pulsar_spectra.scripts.csv_to_yaml import dump_yaml
+
 with open("Stovall_2015_raw.txt", "r") as raw_file:
     lines = raw_file.readlines()
     print(lines)
@@ -35,5 +37,4 @@ for row in lines:
             "Flux Density error mJy":[float(flux_err[:-1])]
         }
 
-with open("Stovall_2015.yaml", "w") as cat_file:
-    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)
+dump_yaml(pulsar_dict, "Stovall_2015.yaml")

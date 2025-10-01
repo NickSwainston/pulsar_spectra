@@ -2,6 +2,8 @@ import yaml
 import psrqpy
 import csv
 
+from pulsar_spectra.scripts.csv_to_yaml import dump_yaml
+
 query = psrqpy.QueryATNF(params=['PSRJ', 'NAME', 'PSRB', 'P0']).pandas
 all_jnames = list(query['PSRJ'])
 
@@ -48,5 +50,4 @@ for i, row in enumerate(lines):
         pulsar_dict[pulsar]["Flux Density mJy"].append(flux)
         pulsar_dict[pulsar]["Flux Density error mJy"].append(flux_err)
 
-with open("Kuzmin_2001.yaml", "w") as cat_file:
-    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)
+dump_yaml(pulsar_dict, "Kuzmin_2001.yaml")

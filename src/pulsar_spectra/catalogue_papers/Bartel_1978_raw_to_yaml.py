@@ -2,6 +2,8 @@ import yaml
 import psrqpy
 import csv
 
+from pulsar_spectra.scripts.csv_to_yaml import dump_yaml
+
 # was converted from image to csv using ABBYY FineReader
 with open("Bartel_1978_raw.csv") as file:
     tsv_file = csv.reader(file, delimiter=",")
@@ -52,9 +54,8 @@ for row in lines[2:]:
             flux = float(row[2])
             # no error mentioned so I assumed
             flux_err = flux * 0.5
-        pulsar_dict[pulsar]["Flux Density mJy"] += [flux/query['P0'][pid]]
-        pulsar_dict[pulsar]["Flux Density error mJy"] += [round(flux_err/query['P0'][pid], 3)]
-
+        pulsar_dict[pulsar]["Flux Density mJy"] += [round(float(flux/query['P0'][pid]), 3)]
+        pulsar_dict[pulsar]["Flux Density error mJy"] += [round(float(flux_err/query['P0'][pid]), 3)]
     if not "<" in row[6]:
         pulsar_dict[pulsar]["Frequency MHz"] += [22700]
         pulsar_dict[pulsar]["Bandwidth MHz"] += [300]
@@ -67,5 +68,4 @@ for row in lines[2:]:
         pulsar_dict[pulsar]["Flux Density mJy"] += [flux]
         pulsar_dict[pulsar]["Flux Density error mJy"] += [round(flux_err, 3)]
 
-with open("Bartel_1978.yaml", "w") as cat_file:
-    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)
+dump_yaml(pulsar_dict, "Bartel_1978.yaml")

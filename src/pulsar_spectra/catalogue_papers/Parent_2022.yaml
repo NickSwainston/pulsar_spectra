@@ -1,652 +1,651 @@
 Paper Metadata:
   Data Type: Beamforming
   Observation Span: Single-epoch
-# TODO: Also add in the newly discovered pulsars from Parent+2022 once they are in the ATNF
 J0608+1635:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.14
+    - 0.14
   Flux Density error mJy:
-  - 0.04
+    - 0.04
 J1843+0119:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.063
+    - 0.063
   Flux Density error mJy:
-  - 0.016
+    - 0.016
 J1849+0106:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.022
+    - 0.022
   Flux Density error mJy:
-  - 0.006
+    - 0.006
 J1849+0430:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.11
+    - 0.11
   Flux Density error mJy:
-  - 0.03
+    - 0.03
 J1851+0241:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.056
+    - 0.056
   Flux Density error mJy:
-  - 0.014
+    - 0.014
 J1852-0000:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.115
+    - 0.115
   Flux Density error mJy:
-  - 0.019
+    - 0.019
 J1853+0029:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.074
+    - 0.074
   Flux Density error mJy:
-  - 0.019
+    - 0.019
 J1853+0259:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.22
+    - 0.22
   Flux Density error mJy:
-  - 0.04
+    - 0.04
 J1853+0427:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.1
+    - 0.1
   Flux Density error mJy:
-  - 0.03
+    - 0.03
 J1854+0050:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.048
+    - 0.048
   Flux Density error mJy:
-  - 0.008
+    - 0.008
 J1855+0306:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.035
+    - 0.035
   Flux Density error mJy:
-  - 0.006
+    - 0.006
 J1855+0626:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.13
+    - 0.13
   Flux Density error mJy:
-  - 0.03
+    - 0.03
 J1856+0912:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.04
+    - 0.04
   Flux Density error mJy:
-  - 0.011
+    - 0.011
 J1858+0239:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.14
+    - 0.14
   Flux Density error mJy:
-  - 0.04
+    - 0.04
 J1859+0345:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.09
+    - 0.09
   Flux Density error mJy:
-  - 0.02
+    - 0.02
 J1902+0235:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.04
+    - 0.04
   Flux Density error mJy:
-  - 0.011
+    - 0.011
 J1902+1141:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.12
+    - 0.12
   Flux Density error mJy:
-  - 0.03
+    - 0.03
 J1903+0415:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.072
+    - 0.072
   Flux Density error mJy:
-  - 0.012
+    - 0.012
 J1903+0912:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.09
+    - 0.09
   Flux Density error mJy:
-  - 0.02
+    - 0.02
 J1904+0056:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.045
+    - 0.045
   Flux Density error mJy:
-  - 0.012
+    - 0.012
 J1905+1034:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.04
+    - 0.04
   Flux Density error mJy:
-  - 0.011
+    - 0.011
 J1906+0724:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.045
+    - 0.045
   Flux Density error mJy:
-  - 0.011
+    - 0.011
 J1907+0833:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.1
+    - 0.1
   Flux Density error mJy:
-  - 0.017
+    - 0.017
 J1908+0558:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.05
+    - 0.05
   Flux Density error mJy:
-  - 0.013
+    - 0.013
 J1908+1351:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.022
+    - 0.022
   Flux Density error mJy:
-  - 0.006
+    - 0.006
 J1909+1205:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.1
+    - 0.1
   Flux Density error mJy:
-  - 0.03
+    - 0.03
 J1910+0435:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.09
+    - 0.09
   Flux Density error mJy:
-  - 0.02
+    - 0.02
 J1910+0710:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.032
+    - 0.032
   Flux Density error mJy:
-  - 0.005
+    - 0.005
 J1910+1017:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.037
+    - 0.037
   Flux Density error mJy:
-  - 0.009
+    - 0.009
 J1910+1026:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.058
+    - 0.058
   Flux Density error mJy:
-  - 0.015
+    - 0.015
 J1911+0921:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.113
+    - 0.113
   Flux Density error mJy:
-  - 0.018
+    - 0.018
 J1911+0925:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.09
+    - 0.09
   Flux Density error mJy:
-  - 0.02
+    - 0.02
 J1911+1051:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.051
+    - 0.051
   Flux Density error mJy:
-  - 0.013
+    - 0.013
 J1911+1301:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.051
+    - 0.051
   Flux Density error mJy:
-  - 0.013
+    - 0.013
 J1911+1336:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.072
+    - 0.072
   Flux Density error mJy:
-  - 0.019
+    - 0.019
 J1913+0523:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.025
+    - 0.025
   Flux Density error mJy:
-  - 0.007
+    - 0.007
 J1913+11025:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.14
+    - 0.14
   Flux Density error mJy:
-  - 0.04
+    - 0.04
 J1914+0625:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.06
+    - 0.06
   Flux Density error mJy:
-  - 0.016
+    - 0.016
 J1914+0805:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.16
+    - 0.16
   Flux Density error mJy:
-  - 0.04
+    - 0.04
 J1914+0838:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.28
+    - 0.28
   Flux Density error mJy:
-  - 0.05
+    - 0.05
 J1914+1428:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.057
+    - 0.057
   Flux Density error mJy:
-  - 0.015
+    - 0.015
 J1915+0639:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.041
+    - 0.041
   Flux Density error mJy:
-  - 0.011
+    - 0.011
 J1915+1145:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.09
+    - 0.09
   Flux Density error mJy:
-  - 0.02
+    - 0.02
 J1915+1150:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.047
+    - 0.047
   Flux Density error mJy:
-  - 0.012
+    - 0.012
 J1918+1311:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.054
+    - 0.054
   Flux Density error mJy:
-  - 0.014
+    - 0.014
 J1921+0921:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.058
+    - 0.058
   Flux Density error mJy:
-  - 0.015
+    - 0.015
 J1921+1630:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.048
+    - 0.048
   Flux Density error mJy:
-  - 0.013
+    - 0.013
 J1924+1628:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.11
+    - 0.11
   Flux Density error mJy:
-  - 0.03
+    - 0.03
 J1924+1713:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.036
+    - 0.036
   Flux Density error mJy:
-  - 0.006
+    - 0.006
 J1924+1917:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.039
+    - 0.039
   Flux Density error mJy:
-  - 0.011
+    - 0.011
 J1926+1614:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.09
+    - 0.09
   Flux Density error mJy:
-  - 0.02
+    - 0.02
 J1928+1725:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 1.4
+    - 1.4
   Flux Density error mJy:
-  - 0.4
+    - 0.4
 J1930+1408:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.051
+    - 0.051
   Flux Density error mJy:
-  - 0.013
+    - 0.013
 J1930+1722:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.09
+    - 0.09
   Flux Density error mJy:
-  - 0.03
+    - 0.03
 J1931+1817:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.15
+    - 0.15
   Flux Density error mJy:
-  - 0.04
+    - 0.04
 J1934+1926:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.13
+    - 0.13
   Flux Density error mJy:
-  - 0.03
+    - 0.03
 J1935+1829:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.037
+    - 0.037
   Flux Density error mJy:
-  - 0.011
+    - 0.011
 J1936+2042:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.045
+    - 0.045
   Flux Density error mJy:
-  - 0.012
+    - 0.012
 J1938+2659:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.08
+    - 0.08
   Flux Density error mJy:
-  - 0.02
+    - 0.02
 J1939+2609:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.15
+    - 0.15
   Flux Density error mJy:
-  - 0.04
+    - 0.04
 J1948+1808:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.08
+    - 0.08
   Flux Density error mJy:
-  - 0.02
+    - 0.02
 J1948+2819:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.046
+    - 0.046
   Flux Density error mJy:
-  - 0.008
+    - 0.008
 J1950+3001:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.24
+    - 0.24
   Flux Density error mJy:
-  - 0.06
+    - 0.06
 J1952+2513:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.031
+    - 0.031
   Flux Density error mJy:
-  - 0.008
+    - 0.008
 J1952+3021:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.023
+    - 0.023
   Flux Density error mJy:
-  - 0.006
+    - 0.006
 J1953+2819:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.047
+    - 0.047
   Flux Density error mJy:
-  - 0.008
+    - 0.008
 J1954+2529:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.059
+    - 0.059
   Flux Density error mJy:
-  - 0.016
+    - 0.016
 J1955+2930:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.072
+    - 0.072
   Flux Density error mJy:
-  - 0.019
+    - 0.019
 J1958+3033:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.032
+    - 0.032
   Flux Density error mJy:
-  - 0.009
+    - 0.009
 J2000+2920:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.1
+    - 0.1
   Flux Density error mJy:
-  - 0.03
+    - 0.03
 J2003+2916:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.2
+    - 0.2
   Flux Density error mJy:
-  - 0.05
+    - 0.05
 J2008+3139:
   Frequency MHz:
-  - 1375.5
+    - 1375.5
   Bandwidth MHz:
-  - 323.0
+    - 323.0
   Flux Density mJy:
-  - 0.043
+    - 0.043
   Flux Density error mJy:
-  - 0.011
+    - 0.011

@@ -1,5 +1,7 @@
 import yaml
 
+from pulsar_spectra.scripts.csv_to_yaml import dump_yaml
+
 with open("Johnston_2006_raw.txt", "r") as raw_file:
     lines = raw_file.readlines()
 
@@ -25,5 +27,4 @@ for row in lines:
         "Flux Density error mJy":[flux*0.5]
         }
 
-with open("Johnston_2006.yaml", "w") as cat_file:
-    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)
+dump_yaml(pulsar_dict, "Johnston_2006.yaml")
