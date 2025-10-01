@@ -55,7 +55,8 @@ with open("papers_in_catalogue.csv", "w") as output:
         # Load in the dict
         with open(cat_file, "r") as stream:
             cat_dict = yaml.safe_load(stream)
-        pulsar_count = len(cat_dict.keys())
+        # Count pulsars (remove 1 for the metadata entry)
+        pulsar_count = len(cat_dict.keys()) - 1
 
         min_freqs = []
         max_freqs = []
