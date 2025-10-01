@@ -6,8 +6,8 @@ import re
 
 import pandas as pd
 import psrqpy
-import yaml
 import pytest
+import yaml
 
 from pulsar_spectra.catalogue import (
     ADS_REF,
@@ -85,9 +85,13 @@ def test_catalogue_format():
         # Check the paper metadata is correct
         assert "Paper Metadata" == list(cat_dict.keys())[0], "Paper Metadata is not first key"
         assert "Data Type" in cat_dict["Paper Metadata"].keys(), "Data Type key not found"
-        assert cat_dict["Paper Metadata"]["Data Type"] in ["Imaging", "Beamforming"], "Data Type is not 'Imaging' or 'Beamforming'"
+        assert cat_dict["Paper Metadata"]["Data Type"] in ["Imaging", "Beamforming"], (
+            "Data Type is not 'Imaging' or 'Beamforming'"
+        )
         assert "Observation Span" in cat_dict["Paper Metadata"].keys(), "Observation Span key not found"
-        assert cat_dict["Paper Metadata"]["Observation Span"] in ["Single-epoch", "Several-epoch", "Multi-epoch"], "Observation Span is not 'Single-epoch', 'Several-epoch' or 'Multi-epoch'"
+        assert cat_dict["Paper Metadata"]["Observation Span"] in ["Single-epoch", "Several-epoch", "Multi-epoch"], (
+            "Observation Span is not 'Single-epoch', 'Several-epoch' or 'Multi-epoch'"
+        )
         # Check the pulsar data is correct
         for pulsar in cat_dict.keys():
             if pulsar == "Paper Metadata":
@@ -143,20 +147,20 @@ def test_yaml_list_indentation():
             stripped = line.lstrip()
             if stripped.startswith("- "):
                 spaces = len(line) - len(stripped)
-                assert parent_indent is not None, (
-                    f"List item on line {i+1} in {cat_file} has no parent key"
-                )
+                assert parent_indent is not None, f"List item on line {i + 1} in {cat_file} has no parent key"
                 expected_indent = parent_indent + 2
                 assert spaces == expected_indent, (
-                    f"List item on line {i+1} in {cat_file} should be indented "
+                    f"List item on line {i + 1} in {cat_file} should be indented "
                     f"{expected_indent} spaces (parent key {parent_indent} spaces), but found {spaces}"
                 )
 
 
 cat_files = [
-    "Manchester_2013.yaml", # Example mutli-epoch
-    "Bates_2011.yaml", # Example single-epoch
+    "Manchester_2013.yaml",  # Example mutli-epoch
+    "Bates_2011.yaml",  # Example single-epoch
 ]
+
+
 @pytest.mark.parametrize("cat_file", cat_files)
 def test_epoch_uncertainty_alteration(cat_file):
     """Tests if the uncertainty alteration for multi-epoch data is working correctly."""
@@ -175,8 +179,8 @@ def test_epoch_uncertainty_alteration(cat_file):
             continue
         print(f"    {pulsar}")
         raw_fluxs, raw_flux_errs = cat_dict[pulsar]["Flux Density mJy"], cat_dict[pulsar]["Flux Density error mJy"]
-        _, _, cat_fluxs, cat_flux_errs, _= altered_cat_dict[pulsar]
-        for raw_flux, raw_flux_err, cat_flux, cat_flux_err in zip(raw_fluxs, raw_flux_errs, cat_fluxs, cat_flux_errs):
+        _, _, _, cat_flux_errs, _ = altered_cat_dict[pulsar]
+        for raw_flux, raw_flux_err, cat_flux_err in zip(raw_fluxs, raw_flux_errs, cat_flux_errs):
             if epoch_type == "Multi-epoch":
                 expected_err = raw_flux_err
             elif epoch_type == "Several-epoch":
@@ -184,7 +188,10 @@ def test_epoch_uncertainty_alteration(cat_file):
             else:  # Single-epoch
                 expected_err = raw_flux_err if raw_flux_err >= 0.5 * raw_flux else 0.5 * raw_flux
 
-            assert cat_flux_err == expected_err, f"Flux error {cat_flux_err} does not match expected error {expected_err}"
+            assert cat_flux_err == expected_err, (
+                f"Flux error {cat_flux_err} does not match expected error {expected_err}"
+            )
+
 
 def test_atnf_uncertanties():
     """Tests if the ATNF uncertainties are being reduced to 50% correctly."""

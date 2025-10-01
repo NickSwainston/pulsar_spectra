@@ -67,8 +67,8 @@ with open("papers_in_catalogue.csv", "w") as output:
                 for freq, band in zip(
                     jname_cat_dict[jname][cat_label]["Frequency MHz"], jname_cat_dict[jname][cat_label]["Bandwidth MHz"]
                 ):
-                    min_freqs.append(freq - band/2)
-                    max_freqs.append(freq + band/2)
+                    min_freqs.append(freq - band / 2)
+                    max_freqs.append(freq + band / 2)
 
         # output result
         if paper_format:

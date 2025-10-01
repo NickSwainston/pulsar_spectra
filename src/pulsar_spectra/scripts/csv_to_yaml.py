@@ -11,22 +11,25 @@ from pulsar_spectra.catalogue import ATNF_VER
 query = psrqpy.QueryATNF(version=ATNF_VER, params=["PSRJ", "NAME", "PSRB"]).pandas
 all_jnames = list(query["PSRJ"])
 
+
 class ListIndentDumper(yaml.Dumper):
     # Will indent lists properly for more readable yaml files
     def increase_indent(self, flow=False, indentless=False):
         return super(ListIndentDumper, self).increase_indent(flow, False)
 
+
 def dump_yaml(pulsar_dict, filename):
     with open(filename, "w") as cat_file:
         yaml.dump(pulsar_dict, cat_file, sort_keys=False, indent=2, default_flow_style=False, Dumper=ListIndentDumper)
 
+
 def convert_csv_to_yaml(csv_location, ref_label):
     pulsar_dict = {
-    "Paper Metadata": {
-        "Data Type": "Beamforming",
-        "Observation Span": "Single-epoch",
+        "Paper Metadata": {
+            "Data Type": "Beamforming",
+            "Observation Span": "Single-epoch",
+        }
     }
-}
 
     # Read in the csv
     with open(csv_location, newline="") as csvfile:
