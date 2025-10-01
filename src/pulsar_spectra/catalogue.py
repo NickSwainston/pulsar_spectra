@@ -587,6 +587,7 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
         "Morris_2002",
         "Zhang_2019",
         "Bangale_2024",
+        "Martsen_2022",
     ]
     atnf_other_refs = [
         "Taylor_1993",  # excluding due to duplication of other references
