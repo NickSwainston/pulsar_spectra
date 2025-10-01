@@ -87,6 +87,8 @@ Papers included in our catalogue
     :file: papers_in_catalogue.csv
 
 
+.. _observation_span:
+
 Adjusting the uncertainty of catalogue data
 -------------------------------------------
 In this repository, we follow the method used by `Bilous et al. (2016) <https://ui.adsabs.harvard.edu/abs/2016A%26A...591A.134B>`_ and `Sieber (1973) <https://ui.adsabs.harvard.edu/abs/1973A%26A....28..237S>`_
@@ -94,8 +96,8 @@ to increase the flux density uncertainties for observations that do not have a s
 This is done by classifying the papers as either "Single-epoch", "Several-epoch" or "Multi-epoch".
 
 1. **Single-epoch**: If the paper only reports flux density measurements from a single observation or is unclear about the number of observations, then we assign a minimum
-   relative uncertainty of 50\% to account for diffractive and refractive interstellar scintillation. It should be noted that some pulsars may exhibit greater changes in
-   flux density than this, in which case the uncertainties may still be underestimated.
+   relative uncertainty of 50\% to account for diffractive and refractive interstellar scintillation. We assume that all ATNF observations fall into this category.
+   It should be noted that some pulsars may exhibit greater changes in flux density than this, in which case the uncertainties may still be underestimated.
 2. **Several-epoch**: If the paper reports flux density measurements from several observations (\<5) over less than a year, then we assume that the refractive scintillation
    is partially accounted on this timescale, and we assign a minimum relative uncertainty of 30\%.
 3. **Multi-epoch**: If the paper reports flux density measurements from multiple observations (>=5) over a year or more, and the uncertainty has been calculated as the standard
@@ -179,7 +181,8 @@ If you see a reference label ending in \_ATNF (see below for an example), those 
     for all imported data. If the data spans a significant fractional bandwidth and/or the centre
     frequency reported in the ATNF catalogue is inaccurate, then this may be a poor assumption. This
     can be the case, for example, since many of the ATNF catalogue flux densities are recorded at the
-    nearest standard frequency (e.g. 400 MHz). Therefore, if you are planning on using the spectral fits
+    nearest standard frequency (e.g. 400 MHz). We also assume all ATNF observations are single-epoch
+    (see :ref:`observation_span` for more details). Therefore, if you are planning on using the spectral fits
     for scientific analysis, then we recommend :ref:`adding the paper to the catalogue <adding_papers>`.
     The first author and the year in the reference label will help you find the full reference on
     the `ATNF references page <https://www.atnf.csiro.au/research/pulsar/psrcat/psrcat_ref.html>`_.
