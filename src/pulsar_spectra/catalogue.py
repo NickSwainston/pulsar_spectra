@@ -435,7 +435,7 @@ def all_flux_from_atnf(query=None, adjust_errors=True):
     return jname_cat
 
 
-def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=True):
+def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=True, adjust_errors=True):
     """Collect the fluxes from all of the catalogues recorded in this repo.
 
     Parameters
@@ -448,6 +448,8 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
         A previous psrqpy.QueryATNF query. Can be supplied to prevent performing a new query.
     use_atnf: `bool`, optional
         Whether the ATNF values should be included. Default: True.
+    adjust_errors : `bool`, optional
+        Whether to adjust the errors to be at least 50% of the flux value. Default: True.
 
     Returns
     -------
@@ -517,10 +519,10 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
                 # Adjust uncertainties based on observations span
                 fluxes = np.array(cat_dict[jname]["Flux Density mJy"])
                 flux_errs = np.array(cat_dict[jname]["Flux Density error mJy"])
-                if obs_span == "Single-epoch":
+                if obs_span == "Single-epoch" and adjust_errors:
                     # Use 50% flux error if the error is less than this
                     flux_errs = np.maximum(flux_errs, 0.5 * fluxes)
-                elif obs_span == "Several-epoch":
+                elif obs_span == "Several-epoch" and adjust_errors:
                     flux_errs = np.maximum(flux_errs, 0.3 * fluxes)
                 # Do nothing for "Multiple-epoch" as the errors should be accurate
 
@@ -536,7 +538,7 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
         return jname_cat_list
 
     # Add the atnf to the cataogues
-    atnf_dict = all_flux_from_atnf(query=query)
+    atnf_dict = all_flux_from_atnf(query=query, adjust_errors=adjust_errors)
     # refs that have errors that we plan to inform ATNF about
     atnf_incorrect_refs = [
         "Zhao_2019",

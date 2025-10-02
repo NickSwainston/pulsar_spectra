@@ -156,14 +156,15 @@ def test_yaml_list_indentation():
 
 
 cat_files = [
-    "Manchester_2013.yaml",  # Example mutli-epoch
-    "Mantovanini_2025.yaml",  # Example several-epoch
-    "Bates_2011.yaml",  # Example single-epoch
+    ("Manchester_2013.yaml", True),  # Example mutli-epoch
+    ("Mantovanini_2025.yaml", True),  # Example several-epoch
+    ("Bates_2011.yaml", True),  # Example single-epoch
+    ("Bates_2011.yaml", False),  # Don't adjust errors
 ]
 
 
-@pytest.mark.parametrize("cat_file", cat_files)
-def test_epoch_uncertainty_alteration(cat_file):
+@pytest.mark.parametrize("cat_file, adjust_errors", cat_files)
+def test_epoch_uncertainty_alteration(cat_file, adjust_errors):
     """Tests if the uncertainty alteration for multi-epoch data is working correctly."""
     # Raw load the yaml
     cat_path = os.path.join(CAT_DIR, cat_file)
@@ -172,7 +173,7 @@ def test_epoch_uncertainty_alteration(cat_file):
     epoch_type = cat_dict["Paper Metadata"]["Observation Span"]
 
     # Grab the previously altered catalogue
-    altered_cat_dict = collect_catalogue_fluxes(only_use=[cat_file.replace(".yaml", "")])
+    altered_cat_dict = collect_catalogue_fluxes(only_use=[cat_file.replace(".yaml", "")], adjust_errors=adjust_errors)
 
     print(f"Testing {cat_file} with epoch type {epoch_type}")
     for pulsar in cat_dict.keys():
@@ -182,7 +183,7 @@ def test_epoch_uncertainty_alteration(cat_file):
         raw_fluxs, raw_flux_errs = cat_dict[pulsar]["Flux Density mJy"], cat_dict[pulsar]["Flux Density error mJy"]
         _, _, _, cat_flux_errs, _ = altered_cat_dict[pulsar]
         for raw_flux, raw_flux_err, cat_flux_err in zip(raw_fluxs, raw_flux_errs, cat_flux_errs):
-            if epoch_type == "Multi-epoch":
+            if epoch_type == "Multi-epoch" or not adjust_errors:
                 expected_err = raw_flux_err
             elif epoch_type == "Several-epoch":
                 expected_err = raw_flux_err if raw_flux_err >= 0.3 * raw_flux else 0.3 * raw_flux
@@ -216,10 +217,9 @@ def test_atnf_uncertanties(adjust_error):
             assert flux_err >= 0.5 * flux, f"Flux error {flux_err} is not >= 50% of flux {flux}"
     else:
         # At least one error should be < 50% of flux
-        assert any(
-            flux_err < 0.5 * flux
-            for flux, flux_err in zip(all_fluxes, all_flux_errs)
-        ), f"{jname}/{ref}: Expected at least one flux_err < 50% of flux"
+        assert any(flux_err < 0.5 * flux for flux, flux_err in zip(all_fluxes, all_flux_errs)), (
+            f"{jname}/{ref}: Expected at least one flux_err < 50% of flux"
+        )
 
 
 def test_convert_atnf_ref():

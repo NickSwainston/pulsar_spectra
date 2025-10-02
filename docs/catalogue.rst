@@ -152,6 +152,13 @@ It will output:
 
 Which, as you can see, is different from what is recorded in the YAML file (0.1 and 0.2 mJy, respectively).
 
+This is the default behaviour, but you can turn it off by using the ``adjust_errors=False`` argument in ``collect_catalogue_fluxes``.:
+
+.. code-block:: python
+
+    from pulsar_spectra.catalogue import collect_catalogue_fluxes
+    cat_dict = collect_catalogue_fluxes(adjust_errors=False)
+
 If data was more widely available in the literature for individual observing epochs, then this feature could be expanded in future to make more accurate adjustments to the uncertainties.
 Based on the DM and local turbulence, we could calculate the expected scintillation variability and then use the time and duration of each observation to adjust the uncertainties accordingly if the variability hasn't been averaged out.
 The data required for this is not available in most papers, but as more automated pulsar monitoring is uploaded to online databases, this may become possible in the future.
