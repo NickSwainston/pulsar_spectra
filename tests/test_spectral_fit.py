@@ -10,12 +10,67 @@ from pulsar_spectra.catalogue import collect_catalogue_fluxes
 from pulsar_spectra.spectral_fit import find_best_spectral_fit
 
 spectral_fit_tests = [
-    ("J0415+6954", "simple_power_law", ['Bilous_2016', 'Lorimer_1995b', 'Seiradakis_1995', 'Sanidas_2019', 'Dewey_1985', 'McEwen_2020', 'Malofeev_2000']),
-    ("J1327-6222", "broken_power_law", ['Jankowski_2018', 'Johnston_1992', 'Murphy_2017', 'Jankowski_2019', 'Bates_2011', 'Mantovanini_2025', 'Manchester_1978a', 'Hobbs_2004a', 'Johnston_2018', 'Keith_2024', 'van_Ommen_1997']),
-    ("J0125-2327", "high_frequency_cut_off_power_law", ['McEwen_2020', 'Lee_2025', 'Gitika_2023']),
-    ("J0024-7204C", "low_frequency_turn_over_power_law", ['Zhang_2019', 'Robinson_1995']),
-    ("J0304+1932", "double_turn_over_spectrum", ['Kumar_2025', 'Frail_2016', 'Han_1999', 'Seiradakis_1995', 'Bilous_2020', 'Slee_1986', 'Stovall_2015', 'Deneva_2024', 'Keith_2024', 'Kravtsov_2022', 'Kijak_1998', 'Bhat_2023', 'Malofeev_2000', 'Izvekova_1981', 'Hoensbroech_1997', 'Manchester_1978a', 'Johnston_2018', 'Weisberg_1999', 'Bilous_2016', 'Lorimer_1995b']),
+    (
+        "J0415+6954",
+        "simple_power_law",
+        [
+            "Bilous_2016",
+            "Lorimer_1995b",
+            "Seiradakis_1995",
+            "Sanidas_2019",
+            "Dewey_1985",
+            "McEwen_2020",
+            "Malofeev_2000",
+        ],
+    ),
+    (
+        "J1327-6222",
+        "broken_power_law",
+        [
+            "Jankowski_2018",
+            "Johnston_1992",
+            "Murphy_2017",
+            "Jankowski_2019",
+            "Bates_2011",
+            "Mantovanini_2025",
+            "Manchester_1978a",
+            "Hobbs_2004a",
+            "Johnston_2018",
+            "Keith_2024",
+            "van_Ommen_1997",
+        ],
+    ),
+    ("J0125-2327", "high_frequency_cut_off_power_law", ["McEwen_2020", "Lee_2025", "Gitika_2023"]),
+    ("J0024-7204C", "low_frequency_turn_over_power_law", ["Zhang_2019", "Robinson_1995"]),
+    (
+        "J0304+1932",
+        "double_turn_over_spectrum",
+        [
+            "Kumar_2025",
+            "Frail_2016",
+            "Han_1999",
+            "Seiradakis_1995",
+            "Bilous_2020",
+            "Slee_1986",
+            "Stovall_2015",
+            "Deneva_2024",
+            "Keith_2024",
+            "Kravtsov_2022",
+            "Kijak_1998",
+            "Bhat_2023",
+            "Malofeev_2000",
+            "Izvekova_1981",
+            "Hoensbroech_1997",
+            "Manchester_1978a",
+            "Johnston_2018",
+            "Weisberg_1999",
+            "Bilous_2016",
+            "Lorimer_1995b",
+        ],
+    ),
 ]
+
+
 @pytest.mark.parametrize("pulsar, exp_model_name, frozen_refs", spectral_fit_tests)
 def test_find_best_spectral_fit(pulsar, exp_model_name, frozen_refs):
     """Tests the find_best_spectral_fit funtion."""

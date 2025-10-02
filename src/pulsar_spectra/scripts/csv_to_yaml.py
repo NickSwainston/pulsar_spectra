@@ -83,8 +83,20 @@ def main():
     parser = argparse.ArgumentParser(description="Convert a csv file to pulsar_spectra catalogue formated yaml file.")
     parser.add_argument("--csv", type=str, help="The location of the csv file")
     parser.add_argument("--ref", type=str, help='The reference label (in the format "Author_year")')
-    parser.add_argument("--obs_span", type=str, help='The observation span ("Single-epoch", "Multi-epoch" or "Long-term")', default="Single-epoch", choices=["Single-epoch", "Multi-epoch", "Long-term"])
-    parser.add_argument("--data_type", type=str, help='The data type ("Beamforming" or "Imaging")', default="Beamforming", choices=["Beamforming", "Imaging"])
+    parser.add_argument(
+        "--obs_span",
+        type=str,
+        help='The observation span ("Single-epoch", "Multi-epoch" or "Long-term")',
+        default="Single-epoch",
+        choices=["Single-epoch", "Multi-epoch", "Long-term"],
+    )
+    parser.add_argument(
+        "--data_type",
+        type=str,
+        help='The data type ("Beamforming" or "Imaging")',
+        default="Beamforming",
+        choices=["Beamforming", "Imaging"],
+    )
     args = parser.parse_args()
 
     convert_csv_to_yaml(args.csv, args.ref, args.obs_span, args.data_type)
