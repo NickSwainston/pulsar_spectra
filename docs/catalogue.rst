@@ -152,7 +152,7 @@ It will output:
 
 Which, as you can see, is different from what is recorded in the YAML file (0.1 and 0.2 mJy, respectively).
 
-This is the default behaviour, but you can turn it off by using the ``adjust_errors=False`` argument in ``collect_catalogue_fluxes``.:
+This is the default behaviour, but you can turn it off by using the ``adjust_errors=False`` argument in ``collect_catalogue_fluxes``:
 
 .. code-block:: python
 
@@ -366,26 +366,26 @@ For example:
       Observation Span: Single-epoch
     J0030+0451:
         Frequency MHz:
-        - 150.0
-        - 180.0
+          - 150.0
+          - 180.0
         Bandwidth MHz:
-        - 37.6
-        - 32.4
+          - 37.6
+          - 32.4
         Flux Density mJy:
-        - 4.4
-        - 3.2
+          - 4.4
+          - 3.2
         Flux Density error mJy:
-        - 2.2
-        - 1.6
+          - 2.2
+          - 1.6
     J0034-0534:
         Frequency MHz:
-        - 150.0
+          - 150.0
         Bandwidth MHz:
-        - 202.8
+          - 202.8
         Flux Density mJy:
-        - 7.9
+          - 7.9
         Flux Density error mJy:
-        - 3.95
+          - 3.95
 
 Where the ``Paper Metadata`` section contains information about the paper as a whole, and each pulsar has its own section with lists of frequencies, bandwidths, flux densities and flux density uncertainties.
 The ``Data Type`` can be either ``Beamforming`` or ``Imaging``, and the ``Observation Span`` can be either ``Single-epoch``, ``Several-epoch`` or ``Multi-epoch`` (for details on the observation span, see the :ref:`observation_span` section).
