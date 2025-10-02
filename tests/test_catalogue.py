@@ -194,18 +194,32 @@ def test_epoch_uncertainty_alteration(cat_file):
             )
 
 
-def test_atnf_uncertanties():
+adjust_error_bools = [
+    True,  # Increase to 50% of flux
+    False,  # Do not adjust errors
+]
+
+
+@pytest.mark.parametrize("adjust_error", adjust_error_bools)
+def test_atnf_uncertanties(adjust_error):
     """Tests if the ATNF uncertainties are being reduced to 50% correctly."""
-    atnf_dict = all_flux_from_atnf()
+    atnf_dict = all_flux_from_atnf(adjust_errors=adjust_error)
+    all_fluxes = []
+    all_flux_errs = []
     for jname in atnf_dict.keys():
-        print(jname)
         for ref in atnf_dict[jname].keys():
-            print(f"    {ref}")
-            for flux, flux_err in zip(
-                atnf_dict[jname][ref]["Flux Density mJy"],
-                atnf_dict[jname][ref]["Flux Density error mJy"],
-            ):
-                assert flux_err >= 0.5 * flux, f"Flux error {flux_err} is not >= 50% of flux {flux}"
+            all_fluxes += atnf_dict[jname][ref]["Flux Density mJy"]
+            all_flux_errs += atnf_dict[jname][ref]["Flux Density error mJy"]
+    if adjust_error:
+        # Check all errors are at least 50% of the flux
+        for flux, flux_err in zip(all_fluxes, all_flux_errs):
+            assert flux_err >= 0.5 * flux, f"Flux error {flux_err} is not >= 50% of flux {flux}"
+    else:
+        # At least one error should be < 50% of flux
+        assert any(
+            flux_err < 0.5 * flux
+            for flux, flux_err in zip(all_fluxes, all_flux_errs)
+        ), f"{jname}/{ref}: Expected at least one flux_err < 50% of flux"
 
 
 def test_convert_atnf_ref():

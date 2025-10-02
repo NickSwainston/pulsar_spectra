@@ -380,13 +380,15 @@ def flux_from_atnf(pulsar, query=None, ref_dict=None, assumed_error=0.5):
     return freq_all, band_all, flux_all, flux_err_all, references
 
 
-def all_flux_from_atnf(query=None):
+def all_flux_from_atnf(query=None, adjust_errors=True):
     """Queries the ATNF database for flux info for all pulsar at all frequencies.
 
     Parameters
     ----------
     query : psrqpy object, optional
         A previous psrqpy.QueryATNF query. Can be supplied to prevent performing a new query.
+    adjust_errors : `bool`, optional
+        Whether to adjust the errors to be at least 50% of the flux value. Default: True.
 
     Returns
     -------
@@ -426,7 +428,10 @@ def all_flux_from_atnf(query=None):
             # Add Nones so the software can easily tell there are missing bandwidths
             jname_cat[jname][ref]["Bandwidth MHz"] += [band]
             jname_cat[jname][ref]["Flux Density mJy"] += [flux]
-            jname_cat[jname][ref]["Flux Density error mJy"] += [flux_err if flux_err >= 0.5 * flux else 0.5 * flux]
+            if adjust_errors:
+                jname_cat[jname][ref]["Flux Density error mJy"] += [flux_err if flux_err >= 0.5 * flux else 0.5 * flux]
+            else:
+                jname_cat[jname][ref]["Flux Density error mJy"] += [flux_err]
     return jname_cat
 
 
