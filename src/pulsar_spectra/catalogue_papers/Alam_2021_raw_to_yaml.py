@@ -24,7 +24,7 @@ pulsars = [
 pulsar_dict = {
     "Paper Metadata": {
         "Data Type": "Beamforming",
-        "Observation Span": "Single-epoch",
+        "Observation Span": "Multi-epoch",
     }
 }
 for row in lines:

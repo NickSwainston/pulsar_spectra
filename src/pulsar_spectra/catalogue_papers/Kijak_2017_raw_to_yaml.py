@@ -11,7 +11,7 @@ with open("Kijak_2017_raw.txt", "r") as raw_file:
 
 pulsar_dict = {
     "Paper Metadata": {
-        "Data Type": "Beamforming",
+        "Data Type": "Imaging",
         "Observation Span": "Single-epoch",
     }
 }

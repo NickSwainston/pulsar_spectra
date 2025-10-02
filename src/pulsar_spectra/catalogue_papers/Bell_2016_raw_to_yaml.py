@@ -8,8 +8,8 @@ with open("Bell_2016_raw.txt", "r") as raw_file:
 
 pulsar_dict = {
     "Paper Metadata": {
-        "Data Type": "Beamforming",
-        "Observation Span": "Single-epoch",
+        "Data Type": "Imaging",
+        "Observation Span": "Multi-epoch",
     }
 }
 for row in lines[1:]:

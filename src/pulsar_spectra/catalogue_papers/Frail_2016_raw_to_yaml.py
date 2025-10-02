@@ -14,7 +14,7 @@ with open("Frail_2016_raw.tsv", "r") as raw_file:
 
 pulsar_dict = {
     "Paper Metadata": {
-        "Data Type": "Beamforming",
+        "Data Type": "Imaging",
         "Observation Span": "Single-epoch",
     }
 }
