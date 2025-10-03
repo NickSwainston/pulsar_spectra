@@ -2,6 +2,8 @@ import yaml
 import csv
 import psrqpy
 
+from pulsar_spectra.scripts.csv_to_yaml import dump_yaml
+
 query = psrqpy.QueryATNF(params=['PSRJ', 'NAME', 'PSRB']).pandas
 jnames = list(query['PSRJ'])
 
@@ -12,7 +14,12 @@ with open("McEwen_2020_raw.tsv", "r") as raw_file:
         lines.append(line)
     print(lines)
 
-pulsar_dict = {}
+pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Beamforming",
+        "Observation Span": "Single-epoch",
+    }
+}
 for row in lines:
     row = [r.strip() for r in row]
     if len(row) == 0:
@@ -188,5 +195,4 @@ for row in lines:
         "Flux Density error mJy":[flux_err]
     }
 
-with open("McEwen_2020.yaml", "w") as cat_file:
-    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)
+dump_yaml(pulsar_dict, "McEwen_2020.yaml")

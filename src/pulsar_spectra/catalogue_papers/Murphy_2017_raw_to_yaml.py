@@ -1,6 +1,13 @@
 import yaml
 
-pulsar_dict = {}
+from pulsar_spectra.scripts.csv_to_yaml import dump_yaml
+
+pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Imaging",
+        "Observation Span": "Several-epoch",
+    }
+}
 
 with open("Murphy_2017_raw_table_1_2.txt", "r") as raw_file:
     lines = raw_file.readlines()
@@ -85,5 +92,4 @@ for row in lines[16:]:
             pulsar_dict[pulsar]["Flux Density mJy"] += [float(flux)]
             pulsar_dict[pulsar]["Flux Density error mJy"] += [float(flux_err)]
 
-with open("Murphy_2017.yaml", "w") as cat_file:
-    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)
+dump_yaml(pulsar_dict, "Murphy_2017.yaml")

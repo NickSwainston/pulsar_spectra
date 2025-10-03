@@ -1,416 +1,419 @@
+Paper Metadata:
+  Data Type: Beamforming
+  Observation Span: Single-epoch
 J1748-2446A:
   Frequency MHz:
-  - 1500.0
-  - 2000.0
+    - 1500.0
+    - 2000.0
   Bandwidth MHz:
-  - 650.0
-  - 650.0
+    - 650.0
+    - 650.0
   Flux Density mJy:
-  - 2.7
-  - 1.7
+    - 2.7
+    - 1.7
   Flux Density error mJy:
-  - 1.35
-  - 0.85
+    - 1.35
+    - 0.85
 J1748-2446C:
   Frequency MHz:
-  - 1500.0
-  - 2000.0
+    - 1500.0
+    - 2000.0
   Bandwidth MHz:
-  - 650.0
-  - 650.0
+    - 650.0
+    - 650.0
   Flux Density mJy:
-  - 1.1
-  - 0.67
+    - 1.1
+    - 0.67
   Flux Density error mJy:
-  - 0.55
-  - 0.335
+    - 0.55
+    - 0.335
 J1748-2446D:
   Frequency MHz:
-  - 1500.0
-  - 2000.0
+    - 1500.0
+    - 2000.0
   Bandwidth MHz:
-  - 650.0
-  - 650.0
+    - 650.0
+    - 650.0
   Flux Density mJy:
-  - 0.071
-  - 0.045
+    - 0.071
+    - 0.045
   Flux Density error mJy:
-  - 0.0355
-  - 0.0225
+    - 0.0355
+    - 0.0225
 J1748-2446E:
   Frequency MHz:
-  - 1500.0
-  - 2000.0
+    - 1500.0
+    - 2000.0
   Bandwidth MHz:
-  - 650.0
-  - 650.0
+    - 650.0
+    - 650.0
   Flux Density mJy:
-  - 0.17
-  - 0.11
+    - 0.17
+    - 0.11
   Flux Density error mJy:
-  - 0.085
-  - 0.055
+    - 0.085
+    - 0.055
 J1748-2446F:
   Frequency MHz:
-  - 1500.0
-  - 2000.0
+    - 1500.0
+    - 2000.0
   Bandwidth MHz:
-  - 650.0
-  - 650.0
+    - 650.0
+    - 650.0
   Flux Density mJy:
-  - 0.055
-  - 0.035
+    - 0.055
+    - 0.035
   Flux Density error mJy:
-  - 0.0275
-  - 0.0175
+    - 0.0275
+    - 0.0175
 J1748-2446G:
   Frequency MHz:
-  - 1500.0
-  - 2000.0
+    - 1500.0
+    - 2000.0
   Bandwidth MHz:
-  - 650.0
-  - 650.0
+    - 650.0
+    - 650.0
   Flux Density mJy:
-  - 0.024
-  - 0.022
+    - 0.024
+    - 0.022
   Flux Density error mJy:
-  - 0.012
-  - 0.011
+    - 0.012
+    - 0.011
 J1748-2446H:
   Frequency MHz:
-  - 1500.0
-  - 2000.0
+    - 1500.0
+    - 2000.0
   Bandwidth MHz:
-  - 650.0
-  - 650.0
+    - 650.0
+    - 650.0
   Flux Density mJy:
-  - 0.039
-  - 0.024
+    - 0.039
+    - 0.024
   Flux Density error mJy:
-  - 0.0195
-  - 0.012
+    - 0.0195
+    - 0.012
 J1748-2446I:
   Frequency MHz:
-  - 1500.0
-  - 2000.0
+    - 1500.0
+    - 2000.0
   Bandwidth MHz:
-  - 650.0
-  - 650.0
+    - 650.0
+    - 650.0
   Flux Density mJy:
-  - 0.095
-  - 0.055
+    - 0.095
+    - 0.055
   Flux Density error mJy:
-  - 0.0475
-  - 0.0275
+    - 0.0475
+    - 0.0275
 J1748-2446J:
   Frequency MHz:
-  - 1500.0
-  - 2000.0
+    - 1500.0
+    - 2000.0
   Bandwidth MHz:
-  - 650.0
-  - 650.0
+    - 650.0
+    - 650.0
   Flux Density mJy:
-  - 0.058
-  - 0.027
+    - 0.058
+    - 0.027
   Flux Density error mJy:
-  - 0.029
-  - 0.0135
+    - 0.029
+    - 0.0135
 J1748-2446K:
   Frequency MHz:
-  - 1500.0
-  - 2000.0
+    - 1500.0
+    - 2000.0
   Bandwidth MHz:
-  - 650.0
-  - 650.0
+    - 650.0
+    - 650.0
   Flux Density mJy:
-  - 0.066
-  - 0.039
+    - 0.066
+    - 0.039
   Flux Density error mJy:
-  - 0.033
-  - 0.0195
+    - 0.033
+    - 0.0195
 J1748-2446L:
   Frequency MHz:
-  - 1500.0
-  - 2000.0
+    - 1500.0
+    - 2000.0
   Bandwidth MHz:
-  - 650.0
-  - 650.0
+    - 650.0
+    - 650.0
   Flux Density mJy:
-  - 0.096
-  - 0.043
+    - 0.096
+    - 0.043
   Flux Density error mJy:
-  - 0.048
-  - 0.0215
+    - 0.048
+    - 0.0215
 J1748-2446M:
   Frequency MHz:
-  - 1500.0
-  - 2000.0
+    - 1500.0
+    - 2000.0
   Bandwidth MHz:
-  - 650.0
-  - 650.0
+    - 650.0
+    - 650.0
   Flux Density mJy:
-  - 0.14
-  - 0.091
+    - 0.14
+    - 0.091
   Flux Density error mJy:
-  - 0.07
-  - 0.0455
+    - 0.07
+    - 0.0455
 J1748-2446N:
   Frequency MHz:
-  - 1500.0
-  - 2000.0
+    - 1500.0
+    - 2000.0
   Bandwidth MHz:
-  - 650.0
-  - 650.0
+    - 650.0
+    - 650.0
   Flux Density mJy:
-  - 0.15
-  - 0.1
+    - 0.15
+    - 0.1
   Flux Density error mJy:
-  - 0.075
-  - 0.05
+    - 0.075
+    - 0.05
 J1748-2446O:
   Frequency MHz:
-  - 1500.0
-  - 2000.0
+    - 1500.0
+    - 2000.0
   Bandwidth MHz:
-  - 650.0
-  - 650.0
+    - 650.0
+    - 650.0
   Flux Density mJy:
-  - 0.31
-  - 0.16
+    - 0.31
+    - 0.16
   Flux Density error mJy:
-  - 0.155
-  - 0.08
+    - 0.155
+    - 0.08
 J1748-2446Q:
   Frequency MHz:
-  - 1500.0
-  - 2000.0
+    - 1500.0
+    - 2000.0
   Bandwidth MHz:
-  - 650.0
-  - 650.0
+    - 650.0
+    - 650.0
   Flux Density mJy:
-  - 0.056
-  - 0.036
+    - 0.056
+    - 0.036
   Flux Density error mJy:
-  - 0.028
-  - 0.018
+    - 0.028
+    - 0.018
 J1748-2446R:
   Frequency MHz:
-  - 1500.0
-  - 2000.0
+    - 1500.0
+    - 2000.0
   Bandwidth MHz:
-  - 650.0
-  - 650.0
+    - 650.0
+    - 650.0
   Flux Density mJy:
-  - 0.035
-  - 0.017
+    - 0.035
+    - 0.017
   Flux Density error mJy:
-  - 0.0175
-  - 0.0085
+    - 0.0175
+    - 0.0085
 J1748-2446S:
   Frequency MHz:
-  - 1500.0
-  - 2000.0
+    - 1500.0
+    - 2000.0
   Bandwidth MHz:
-  - 650.0
-  - 650.0
+    - 650.0
+    - 650.0
   Flux Density mJy:
-  - 0.02
-  - 0.014
+    - 0.02
+    - 0.014
   Flux Density error mJy:
-  - 0.01
-  - 0.007
+    - 0.01
+    - 0.007
 J1748-2446T:
   Frequency MHz:
-  - 1500.0
-  - 2000.0
+    - 1500.0
+    - 2000.0
   Bandwidth MHz:
-  - 650.0
-  - 650.0
+    - 650.0
+    - 650.0
   Flux Density mJy:
-  - 0.026
-  - 0.015
+    - 0.026
+    - 0.015
   Flux Density error mJy:
-  - 0.013
-  - 0.0075
+    - 0.013
+    - 0.0075
 J1748-2446U:
   Frequency MHz:
-  - 1500.0
-  - 2000.0
+    - 1500.0
+    - 2000.0
   Bandwidth MHz:
-  - 650.0
-  - 650.0
+    - 650.0
+    - 650.0
   Flux Density mJy:
-  - 0.03
-  - 0.012
+    - 0.03
+    - 0.012
   Flux Density error mJy:
-  - 0.015
-  - 0.006
+    - 0.015
+    - 0.006
 J1748-2446V:
   Frequency MHz:
-  - 1500.0
-  - 2000.0
+    - 1500.0
+    - 2000.0
   Bandwidth MHz:
-  - 650.0
-  - 650.0
+    - 650.0
+    - 650.0
   Flux Density mJy:
-  - 0.1
-  - 0.077
+    - 0.1
+    - 0.077
   Flux Density error mJy:
-  - 0.05
-  - 0.0385
+    - 0.05
+    - 0.0385
 J1748-2446W:
   Frequency MHz:
-  - 1500.0
-  - 2000.0
+    - 1500.0
+    - 2000.0
   Bandwidth MHz:
-  - 650.0
-  - 650.0
+    - 650.0
+    - 650.0
   Flux Density mJy:
-  - 0.054
-  - 0.031
+    - 0.054
+    - 0.031
   Flux Density error mJy:
-  - 0.027
-  - 0.0155
+    - 0.027
+    - 0.0155
 J1748-2446X:
   Frequency MHz:
-  - 1500.0
-  - 2000.0
+    - 1500.0
+    - 2000.0
   Bandwidth MHz:
-  - 650.0
-  - 650.0
+    - 650.0
+    - 650.0
   Flux Density mJy:
-  - 0.043
-  - 0.024
+    - 0.043
+    - 0.024
   Flux Density error mJy:
-  - 0.0215
-  - 0.012
+    - 0.0215
+    - 0.012
 J1748-2446Y:
   Frequency MHz:
-  - 1500.0
-  - 2000.0
+    - 1500.0
+    - 2000.0
   Bandwidth MHz:
-  - 650.0
-  - 650.0
+    - 650.0
+    - 650.0
   Flux Density mJy:
-  - 0.037
-  - 0.029
+    - 0.037
+    - 0.029
   Flux Density error mJy:
-  - 0.0185
-  - 0.0145
+    - 0.0185
+    - 0.0145
 J1748-2446Z:
   Frequency MHz:
-  - 1500.0
-  - 2000.0
+    - 1500.0
+    - 2000.0
   Bandwidth MHz:
-  - 650.0
-  - 650.0
+    - 650.0
+    - 650.0
   Flux Density mJy:
-  - 0.03
-  - 0.023
+    - 0.03
+    - 0.023
   Flux Density error mJy:
-  - 0.015
-  - 0.0115
+    - 0.015
+    - 0.0115
 J1748-2446aa:
   Frequency MHz:
-  - 1500.0
-  - 2000.0
+    - 1500.0
+    - 2000.0
   Bandwidth MHz:
-  - 650.0
-  - 650.0
+    - 650.0
+    - 650.0
   Flux Density mJy:
-  - 0.029
-  - 0.02
+    - 0.029
+    - 0.02
   Flux Density error mJy:
-  - 0.0145
-  - 0.01
+    - 0.0145
+    - 0.01
 J1748-2446ab:
   Frequency MHz:
-  - 1500.0
-  - 2000.0
+    - 1500.0
+    - 2000.0
   Bandwidth MHz:
-  - 650.0
-  - 650.0
+    - 650.0
+    - 650.0
   Flux Density mJy:
-  - 0.045
-  - 0.023
+    - 0.045
+    - 0.023
   Flux Density error mJy:
-  - 0.0225
-  - 0.0115
+    - 0.0225
+    - 0.0115
 J1748-2446ac:
   Frequency MHz:
-  - 1500.0
-  - 2000.0
+    - 1500.0
+    - 2000.0
   Bandwidth MHz:
-  - 650.0
-  - 650.0
+    - 650.0
+    - 650.0
   Flux Density mJy:
-  - 0.031
-  - 0.017
+    - 0.031
+    - 0.017
   Flux Density error mJy:
-  - 0.0155
-  - 0.0085
+    - 0.0155
+    - 0.0085
 J1748-2446ae:
   Frequency MHz:
-  - 1500.0
-  - 2000.0
+    - 1500.0
+    - 2000.0
   Bandwidth MHz:
-  - 650.0
-  - 650.0
+    - 650.0
+    - 650.0
   Flux Density mJy:
-  - 0.056
-  - 0.05
+    - 0.056
+    - 0.05
   Flux Density error mJy:
-  - 0.028
-  - 0.025
+    - 0.028
+    - 0.025
 J1748-2446af:
   Frequency MHz:
-  - 1500.0
-  - 2000.0
+    - 1500.0
+    - 2000.0
   Bandwidth MHz:
-  - 650.0
-  - 650.0
+    - 650.0
+    - 650.0
   Flux Density mJy:
-  - 0.033
-  - 0.022
+    - 0.033
+    - 0.022
   Flux Density error mJy:
-  - 0.0165
-  - 0.011
+    - 0.0165
+    - 0.011
 J1748-2446ag:
   Frequency MHz:
-  - 1500.0
-  - 2000.0
+    - 1500.0
+    - 2000.0
   Bandwidth MHz:
-  - 650.0
-  - 650.0
+    - 650.0
+    - 650.0
   Flux Density mJy:
-  - 0.016
-  - 0.0092
+    - 0.016
+    - 0.0092
   Flux Density error mJy:
-  - 0.008
-  - 0.0046
+    - 0.008
+    - 0.0046
 J1748-2446ah:
   Frequency MHz:
-  - 1500.0
-  - 2000.0
+    - 1500.0
+    - 2000.0
   Bandwidth MHz:
-  - 650.0
-  - 650.0
+    - 650.0
+    - 650.0
   Flux Density mJy:
-  - 0.014
-  - 0.0071
+    - 0.014
+    - 0.0071
   Flux Density error mJy:
-  - 0.007
-  - 0.00355
+    - 0.007
+    - 0.0035
 J1748-2446ai:
   Frequency MHz:
-  - 1500.0
-  - 2000.0
+    - 1500.0
+    - 2000.0
   Bandwidth MHz:
-  - 650.0
-  - 650.0
+    - 650.0
+    - 650.0
   Flux Density mJy:
-  - 0.033
-  - 0.028
+    - 0.033
+    - 0.028
   Flux Density error mJy:
-  - 0.0165
-  - 0.014
+    - 0.0165
+    - 0.014

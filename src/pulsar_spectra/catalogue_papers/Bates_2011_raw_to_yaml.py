@@ -1,5 +1,7 @@
 import yaml
 
+from pulsar_spectra.scripts.csv_to_yaml import dump_yaml
+
 def replace_zero_err(fluxs, flux_errs):
     new_flux_errs = []
     for i, flux_err in enumerate(flux_errs):
@@ -12,7 +14,12 @@ def replace_zero_err(fluxs, flux_errs):
 with open("Bates_2011_raw.txt", "r") as raw_file:
     lines = raw_file.readlines()
 
-pulsar_dict = {}
+pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Beamforming",
+        "Observation Span": "Single-epoch",
+    }
+}
 
 for row in lines[17:]:
     row = row.split()
@@ -33,5 +40,4 @@ for row in lines[17:]:
                 "Flux Density error mJy":[round(float(flux_err[:-1]) * 10**(-sig_fig), 4)]
             }
 
-with open("Bates_2011.yaml", "w") as cat_file:
-    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)
+dump_yaml(pulsar_dict, "Bates_2011.yaml")

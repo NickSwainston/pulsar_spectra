@@ -8,6 +8,8 @@
 import yaml
 from astropy.table import Table
 
+from pulsar_spectra.scripts.csv_to_yaml import dump_yaml
+
 
 def main() -> None:
     t = Table.read("Mantovanini_2025_matched_pulsars.fits")
@@ -17,7 +19,12 @@ def main() -> None:
         if colname.startswith("peak_flux_"):
             freqs.append(int(colname.split("_")[2].split("MHz")[0]))
 
-    pulsar_dict = {}
+    pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Imaging",
+        "Observation Span": "Several-epoch",
+    }
+}
     for row in range(len(t)):
         psrj = str(t[row]["PSRJ"])
 
@@ -69,8 +76,7 @@ def main() -> None:
             "Flux Density error mJy": psr_flux_errs,
         }
 
-    with open("Mantovanini_2025.yaml", "w") as cat_file:
-        yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)
+    dump_yaml(pulsar_dict, "Mantovanini_2025.yaml")
 
 
 if __name__ == "__main__":

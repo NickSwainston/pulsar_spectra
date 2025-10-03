@@ -6,12 +6,15 @@ import re
 
 import pandas as pd
 import psrqpy
+import pytest
 import yaml
 
 from pulsar_spectra.catalogue import (
     ADS_REF,
     ATNF_VER,
+    CAT_DIR,
     CAT_YAMLS,
+    all_flux_from_atnf,
     collect_catalogue_fluxes,
     convert_atnf_ref,
     get_atnf_references,
@@ -79,19 +82,32 @@ def test_catalogue_format():
         print(cat_file)
         with open(cat_file, "r") as stream:
             cat_dict = yaml.safe_load(stream)
+        # Check the paper metadata is correct
+        assert "Paper Metadata" == list(cat_dict.keys())[0], "Paper Metadata is not first key"
+        assert "Data Type" in cat_dict["Paper Metadata"].keys(), "Data Type key not found"
+        assert cat_dict["Paper Metadata"]["Data Type"] in ["Imaging", "Beamforming"], (
+            "Data Type is not 'Imaging' or 'Beamforming'"
+        )
+        assert "Observation Span" in cat_dict["Paper Metadata"].keys(), "Observation Span key not found"
+        assert cat_dict["Paper Metadata"]["Observation Span"] in ["Single-epoch", "Several-epoch", "Multi-epoch"], (
+            "Observation Span is not 'Single-epoch', 'Several-epoch' or 'Multi-epoch'"
+        )
+        # Check the pulsar data is correct
         for pulsar in cat_dict.keys():
-            print(pulsar)
+            if pulsar == "Paper Metadata":
+                continue
+            print(f"    {pulsar}")
             assert pulsar in jnames, f"Pulsar name {pulsar} not found in ATNF version {ATNF_VER}"
-            assert "Frequency MHz" in cat_dict[pulsar].keys()
-            assert "Bandwidth MHz" in cat_dict[pulsar].keys()
-            assert "Flux Density mJy" in cat_dict[pulsar].keys()
-            assert "Flux Density error mJy" in cat_dict[pulsar].keys()
+            assert "Frequency MHz" in cat_dict[pulsar].keys(), "Frequency MHz key not found"
+            assert "Bandwidth MHz" in cat_dict[pulsar].keys(), "Bandwidth MHz key not found"
+            assert "Flux Density mJy" in cat_dict[pulsar].keys(), "Flux Density mJy key not found"
+            assert "Flux Density error mJy" in cat_dict[pulsar].keys(), "Flux Density error mJy key not found"
             assert (
                 len(cat_dict[pulsar]["Frequency MHz"])
                 == len(cat_dict[pulsar]["Bandwidth MHz"])
                 == len(cat_dict[pulsar]["Flux Density mJy"])
                 == len(cat_dict[pulsar]["Flux Density error mJy"])
-            )
+            ), "Data lists are not the same length"
             # Check no zeros or negatives in cat
             for freq, band, flux, flux_err in zip(
                 cat_dict[pulsar]["Frequency MHz"],
@@ -99,10 +115,111 @@ def test_catalogue_format():
                 cat_dict[pulsar]["Flux Density mJy"],
                 cat_dict[pulsar]["Flux Density error mJy"],
             ):
-                assert freq > 0.0
-                assert band > 0.0
-                assert flux > 0.0
-                assert flux_err > 0.0
+                assert freq > 0.0, f"Frequency {freq} is not positive in pulsar {pulsar}"
+                assert band > 0.0, f"Bandwidth {band} is not positive in pulsar {pulsar}"
+                assert flux > 0.0, f"Flux Density {flux} is not positive in pulsar {pulsar}"
+                assert flux_err > 0.0, f"Flux Density error {flux_err} is not positive in pulsar {pulsar}"
+
+
+def test_yaml_list_indentation():
+    """
+    Check that all lists in the YAML file are indented 2 spaces under their parent key.
+    """
+    key_regex = re.compile(r"^(\s*)([^:\n]+):\s*$")  # matches a YAML key
+    for cat_file in CAT_YAMLS:
+        print(cat_file)
+        with open(cat_file, "r") as f:
+            lines = f.readlines()
+
+        parent_indent = None
+        for i, line in enumerate(lines):
+            # Skip empty lines
+            if not line.strip():
+                continue
+
+            # Check if line is a key
+            key_match = key_regex.match(line)
+            if key_match:
+                parent_indent = len(key_match.group(1))  # leading spaces of key
+                continue
+
+            # Check if line is a list item
+            stripped = line.lstrip()
+            if stripped.startswith("- "):
+                spaces = len(line) - len(stripped)
+                assert parent_indent is not None, f"List item on line {i + 1} in {cat_file} has no parent key"
+                expected_indent = parent_indent + 2
+                assert spaces == expected_indent, (
+                    f"List item on line {i + 1} in {cat_file} should be indented "
+                    f"{expected_indent} spaces (parent key {parent_indent} spaces), but found {spaces}"
+                )
+
+
+cat_files = [
+    ("Manchester_2013.yaml", True),  # Example mutli-epoch
+    ("Mantovanini_2025.yaml", True),  # Example several-epoch
+    ("Bates_2011.yaml", True),  # Example single-epoch
+    ("Bates_2011.yaml", False),  # Don't adjust errors
+]
+
+
+@pytest.mark.parametrize("cat_file, adjust_errors", cat_files)
+def test_epoch_uncertainty_alteration(cat_file, adjust_errors):
+    """Tests if the uncertainty alteration for multi-epoch data is working correctly."""
+    # Raw load the yaml
+    cat_path = os.path.join(CAT_DIR, cat_file)
+    with open(cat_path, "r") as stream:
+        cat_dict = yaml.safe_load(stream)
+    epoch_type = cat_dict["Paper Metadata"]["Observation Span"]
+
+    # Grab the previously altered catalogue
+    altered_cat_dict = collect_catalogue_fluxes(only_use=[cat_file.replace(".yaml", "")], adjust_errors=adjust_errors)
+
+    print(f"Testing {cat_file} with epoch type {epoch_type}")
+    for pulsar in cat_dict.keys():
+        if pulsar == "Paper Metadata":
+            continue
+        print(f"    {pulsar}")
+        raw_fluxs, raw_flux_errs = cat_dict[pulsar]["Flux Density mJy"], cat_dict[pulsar]["Flux Density error mJy"]
+        _, _, _, cat_flux_errs, _ = altered_cat_dict[pulsar]
+        for raw_flux, raw_flux_err, cat_flux_err in zip(raw_fluxs, raw_flux_errs, cat_flux_errs):
+            if epoch_type == "Multi-epoch" or not adjust_errors:
+                expected_err = raw_flux_err
+            elif epoch_type == "Several-epoch":
+                expected_err = raw_flux_err if raw_flux_err >= 0.3 * raw_flux else 0.3 * raw_flux
+            else:  # Single-epoch
+                expected_err = raw_flux_err if raw_flux_err >= 0.5 * raw_flux else 0.5 * raw_flux
+
+            assert cat_flux_err == expected_err, (
+                f"Flux error {cat_flux_err} does not match expected error {expected_err}"
+            )
+
+
+adjust_error_bools = [
+    True,  # Increase to 50% of flux
+    False,  # Do not adjust errors
+]
+
+
+@pytest.mark.parametrize("adjust_error", adjust_error_bools)
+def test_atnf_uncertanties(adjust_error):
+    """Tests if the ATNF uncertainties are being reduced to 50% correctly."""
+    atnf_dict = all_flux_from_atnf(adjust_errors=adjust_error)
+    all_fluxes = []
+    all_flux_errs = []
+    for jname in atnf_dict.keys():
+        for ref in atnf_dict[jname].keys():
+            all_fluxes += atnf_dict[jname][ref]["Flux Density mJy"]
+            all_flux_errs += atnf_dict[jname][ref]["Flux Density error mJy"]
+    if adjust_error:
+        # Check all errors are at least 50% of the flux
+        for flux, flux_err in zip(all_fluxes, all_flux_errs):
+            assert flux_err >= 0.5 * flux, f"Flux error {flux_err} is not >= 50% of flux {flux}"
+    else:
+        # At least one error should be < 50% of flux
+        assert any(flux_err < 0.5 * flux for flux, flux_err in zip(all_fluxes, all_flux_errs)), (
+            f"{jname}/{ref}: Expected at least one flux_err < 50% of flux"
+        )
 
 
 def test_convert_atnf_ref():

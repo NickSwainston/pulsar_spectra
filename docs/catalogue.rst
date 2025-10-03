@@ -87,6 +87,83 @@ Papers included in our catalogue
     :file: papers_in_catalogue.csv
 
 
+.. _observation_span:
+
+Adjusting the uncertainty of catalogue data
+-------------------------------------------
+In this repository, we follow the method used by `Bilous et al. (2016) <https://ui.adsabs.harvard.edu/abs/2016A%26A...591A.134B>`_ and `Sieber (1973) <https://ui.adsabs.harvard.edu/abs/1973A%26A....28..237S>`_
+to increase the flux density uncertainties for observations that do not have a sufficient number of epochs to account for the scintillation variability.
+This is done by classifying the papers as either "Single-epoch", "Several-epoch" or "Multi-epoch".
+
+1. **Single-epoch**: If the paper only reports flux density measurements from a single observation or is unclear about the number of observations, then we assign a minimum
+   relative uncertainty of 50\% to account for diffractive and refractive interstellar scintillation. We assume that all ATNF observations fall into this category.
+   It should be noted that some pulsars may exhibit greater changes in flux density than this, in which case the uncertainties may still be underestimated.
+2. **Several-epoch**: If the paper reports flux density measurements from several observations (\<5) over less than a year, then we assume that the refractive scintillation
+   is partially accounted on this timescale, and we assign a minimum relative uncertainty of 30\%.
+3. **Multi-epoch**: If the paper reports flux density measurements from multiple observations (>=5) over a year or more, and the uncertainty has been calculated as the standard
+   deviation of the flux density measurements, then we assume that the refractive scintillation has been fully accounted for, and we do not make any adjustments.
+
+For example, you can see in the `Bates_2011.yaml <https://github.com/NickSwainston/pulsar_spectra/blob/main/src/pulsar_spectra/catalogue_papers/Bates_2011.yaml>`_
+that the paper is classified as "Single-epoch" and the flux density uncertainties are less than 50\% of the flux density value:
+
+.. code-block:: yaml
+
+    Paper Metadata:
+      Data Type: Beamforming
+      Observation Span: Single-epoch
+    J1316-6232:
+      Frequency MHz:
+        - 6591
+      Bandwidth MHz:
+        - 576
+      Flux Density mJy:
+        - 0.7
+      Flux Density error mJy:
+        - 0.1
+    J1327-6222:
+      Frequency MHz:
+        - 6591
+      Bandwidth MHz:
+        - 576
+      Flux Density mJy:
+        - 0.9
+      Flux Density error mJy:
+        - 0.2
+
+When you use the ``collect_catalogue_fluxes`` function, it will automatically adjust the uncertainties of the flux density measurements based on the observation span of the paper.
+For example, if we run the following code:
+
+.. code-block:: python
+
+    from pulsar_spectra.catalogue import collect_catalogue_fluxes
+    cat_dict = collect_catalogue_fluxes(only_use=["Bates_2011"])
+
+    freq, band, flux, flux_err, ref = cat_dict["J1316-6232"]
+    print(f"J1316-6232 flux: {flux[0]} ± {flux_err[0]} mJy")
+    freq, band, flux, flux_err, ref = cat_dict["J1327-6222"]
+    print(f"J1327-6222 flux: {flux[0]} ± {flux_err[0]} mJy")
+
+It will output:
+
+.. code-block:: text
+
+    J1316-6232 flux: 0.7 ± 0.35 mJy
+    J1327-6222 flux: 0.9 ± 0.45 mJy
+
+Which, as you can see, is different from what is recorded in the YAML file (0.1 and 0.2 mJy, respectively).
+
+This is the default behaviour, but you can turn it off by using the ``adjust_errors=False`` argument in ``collect_catalogue_fluxes``:
+
+.. code-block:: python
+
+    from pulsar_spectra.catalogue import collect_catalogue_fluxes
+    cat_dict = collect_catalogue_fluxes(adjust_errors=False)
+
+If data was more widely available in the literature for individual observing epochs, then this feature could be expanded in future to make more accurate adjustments to the uncertainties.
+Based on the DM and local turbulence, we could calculate the expected scintillation variability and then use the time and duration of each observation to adjust the uncertainties accordingly if the variability hasn't been averaged out.
+The data required for this is not available in most papers, but as more automated pulsar monitoring is uploaded to online databases, this may become possible in the future.
+
+
 .. _finding_papers:
 
 Finding more papers to add to the catalogue
@@ -105,15 +182,17 @@ If you see a reference label ending in \_ATNF (see below for an example), those 
 .. image:: figures/atnf_label_example.png
   :width: 800
 
-**NOTE:**
-Since the ATNF catalogue does not include bandwidth information, we use a default bandwidth of 1 MHz
-for all imported data. If the data spans a significant fractional bandwidth and/or the centre
-frequency reported in the ATNF catalogue is inaccurate, then this may be a poor assumption. This
-can be the case, for example, since many of the ATNF catalogue flux densities are recorded at the
-nearest standard frequency (e.g. 400 MHz). Therefore, if you are planning on using the spectral fits
-for scientific analysis, then we recommend :ref:`adding the paper to the catalogue <adding_papers>`.
-The first author and the year in the reference label will help you find the full reference on
-the `ATNF references page <https://www.atnf.csiro.au/research/pulsar/psrcat/psrcat_ref.html>`_.
+.. important::
+
+    Since the ATNF catalogue does not include bandwidth information, we use a default bandwidth of 1 MHz
+    for all imported data. If the data spans a significant fractional bandwidth and/or the centre
+    frequency reported in the ATNF catalogue is inaccurate, then this may be a poor assumption. This
+    can be the case, for example, since many of the ATNF catalogue flux densities are recorded at the
+    nearest standard frequency (e.g. 400 MHz). We also assume all ATNF observations are single-epoch
+    (see :ref:`observation_span` for more details). Therefore, if you are planning on using the spectral fits
+    for scientific analysis, then we recommend :ref:`adding the paper to the catalogue <adding_papers>`.
+    The first author and the year in the reference label will help you find the full reference on
+    the `ATNF references page <https://www.atnf.csiro.au/research/pulsar/psrcat/psrcat_ref.html>`_.
 
 
 .. _adding_papers:
@@ -150,13 +229,17 @@ If the paper only provides the B name then the script will convert to a J name u
     B0052+51,390,20,3.6
     B0053+47,390,20,5.8
 
-Then move to the scripts subdirectory of the repository and run the command:
+Then move to the catalogue subdirectory (``src/pulsar_spectra/catalogue_papers``) of the repository and run the command:
 
 .. code-block:: bash
 
-    csv-to-yaml --csv your_paper.csv --ref author_year
+    csv-to-yaml --csv your_paper.csv --ref <author_year> --obs_span <observation_span> --data_type <beamforming_or_imaging>
 
-This will put a YAML file of the paper in `pulsar_spectra/catalogue_papers/`.
+Where ``<author_year>`` is the first author's last name and the year of publication (e.g. Smith_2020),
+``<observation_span>`` is either ``Single-epoch``, ``Several-epoch`` or ``Multi-epoch`` (see :ref:`observation_span` for more details), and
+``<beamforming_or_imaging>`` is either ``Beamforming`` or ``Imaging`` depending on the detection type.
+
+This will put a YAML file of the paper in ``src/pulsar_spectra/catalogue_papers/``.
 You should then reinstall the software and run a spectral fit to confirm it worked.
 
 
@@ -257,17 +340,20 @@ The catalogue is made up of YAML files of each paper. The format of the YAML fil
 
 .. code-block:: yaml
 
+    Paper Metadata:
+      Data Type: Beamforming or Imaging
+      Observation Span: Single-epoch, Several-epoch or Multi-epoch
     Pulsar Jname:
-        Frequency MHz:
+      Frequency MHz:
         - First frequency value in MHz
         - Second frequency value in MHz
-        Bandwidth MHz:
+      Bandwidth MHz:
         - First bandwidth value in MHz
         - Second bandwidth value in MHz
-        Flux Density mJy:
+      Flux Density mJy:
         - First flux density value in mJy
         - Second flux density value in mJy
-        Flux Density error mJy:
+      Flux Density error mJy:
         - First flux density uncertainty value in mJy
         - Second flux density uncertainty value in mJy
 
@@ -275,25 +361,31 @@ For example:
 
 .. code-block:: yaml
 
+    Paper Metadata:
+      Data Type: Beamforming
+      Observation Span: Single-epoch
     J0030+0451:
         Frequency MHz:
-        - 150.0
-        - 180.0
+          - 150.0
+          - 180.0
         Bandwidth MHz:
-        - 37.6
-        - 32.4
+          - 37.6
+          - 32.4
         Flux Density mJy:
-        - 4.4
-        - 3.2
+          - 4.4
+          - 3.2
         Flux Density error mJy:
-        - 2.2
-        - 1.6
+          - 2.2
+          - 1.6
     J0034-0534:
         Frequency MHz:
-        - 150.0
+          - 150.0
         Bandwidth MHz:
-        - 202.8
+          - 202.8
         Flux Density mJy:
-        - 7.9
+          - 7.9
         Flux Density error mJy:
-        - 3.95
+          - 3.95
+
+Where the ``Paper Metadata`` section contains information about the paper as a whole, and each pulsar has its own section with lists of frequencies, bandwidths, flux densities and flux density uncertainties.
+The ``Data Type`` can be either ``Beamforming`` or ``Imaging``, and the ``Observation Span`` can be either ``Single-epoch``, ``Several-epoch`` or ``Multi-epoch`` (for details on the observation span, see the :ref:`observation_span` section).

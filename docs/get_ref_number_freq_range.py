@@ -55,7 +55,8 @@ with open("papers_in_catalogue.csv", "w") as output:
         # Load in the dict
         with open(cat_file, "r") as stream:
             cat_dict = yaml.safe_load(stream)
-        pulsar_count = len(cat_dict.keys())
+        # Count pulsars (remove 1 for the metadata entry)
+        pulsar_count = len(cat_dict.keys()) - 1
 
         min_freqs = []
         max_freqs = []
@@ -67,8 +68,8 @@ with open("papers_in_catalogue.csv", "w") as output:
                 for freq, band in zip(
                     jname_cat_dict[jname][cat_label]["Frequency MHz"], jname_cat_dict[jname][cat_label]["Bandwidth MHz"]
                 ):
-                    min_freqs.append(freq - band/2)
-                    max_freqs.append(freq + band/2)
+                    min_freqs.append(freq - band / 2)
+                    max_freqs.append(freq + band / 2)
 
         # output result
         if paper_format:

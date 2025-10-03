@@ -2,6 +2,8 @@ import yaml
 import psrqpy
 import csv
 
+from pulsar_spectra.scripts.csv_to_yaml import dump_yaml
+
 with open("Lorimer_1995b_raw.tsv") as file:
     tsv_file = csv.reader(file, delimiter="\t")
     lines = []
@@ -11,7 +13,12 @@ query = psrqpy.QueryATNF(params=['PSRJ', 'NAME', 'PSRB']).pandas
 print(lines)
 print(list(query['PSRB']))
 
-pulsar_dict = {}
+pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Beamforming",
+        "Observation Span": "Single-epoch",
+    }
+}
 for row in lines[48:]:
     row = [r.strip() for r in row]
     if row[0].startswith("#"):
@@ -66,5 +73,4 @@ for row in lines[48:]:
         pulsar_dict[pulsar]["Flux Density mJy"] += [float(row[9])]
         pulsar_dict[pulsar]["Flux Density error mJy"] += [float(row[10])]
 
-with open("Lorimer_1995b.yaml", "w") as cat_file:
-    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)
+dump_yaml(pulsar_dict, "Lorimer_1995b.yaml")

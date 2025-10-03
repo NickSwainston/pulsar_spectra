@@ -2,10 +2,17 @@ import yaml
 import psrqpy
 import csv
 
+from pulsar_spectra.scripts.csv_to_yaml import dump_yaml
+
 query = psrqpy.QueryATNF(params=['PSRJ', 'NAME', 'PSRB', 'P0']).pandas
 all_jnames = list(query['PSRJ'])
 
-pulsar_dict = {}
+pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Beamforming",
+        "Observation Span": "Single-epoch",
+    }
+}
 
 with open("Fiore_2023_raw.txt") as file:
     tsv_file = csv.reader(file, delimiter=" ")
@@ -121,5 +128,4 @@ pulsar_dict[pulsar]["Bandwidth MHz"].append(16)
 pulsar_dict[pulsar]["Flux Density mJy"].append(180)
 pulsar_dict[pulsar]["Flux Density error mJy"].append(110)
 
-with open("Fiore_2023.yaml", "w") as cat_file:
-    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)
+dump_yaml(pulsar_dict, "Fiore_2023.yaml")

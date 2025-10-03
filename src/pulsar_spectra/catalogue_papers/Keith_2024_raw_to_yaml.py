@@ -8,13 +8,20 @@ import glob
 import numpy as np
 import yaml
 
+from pulsar_spectra.scripts.csv_to_yaml import dump_yaml
+
 filenames = []
 for filename in glob.iglob(f'*.fluxtable'):
     filenames.append(filename)
 
 filenames.sort()
 
-pulsar_dict = {}
+pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Beamforming",
+        "Observation Span": "Single-epoch",
+    }
+}
 for filename in filenames:
     psrj = filename.split(".")[0]
 
@@ -30,5 +37,4 @@ for filename in filenames:
         "Flux Density error mJy": [float(round(std_flux, 3))],
     }
 
-with open("Keith_2024.yaml", "w") as cat_file:
-    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)
+dump_yaml(pulsar_dict, "Keith_2024.yaml")

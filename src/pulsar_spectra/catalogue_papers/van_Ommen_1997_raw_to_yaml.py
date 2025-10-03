@@ -1,11 +1,18 @@
 import yaml
 import psrqpy
 
+from pulsar_spectra.scripts.csv_to_yaml import dump_yaml
+
 with open("van_Ommen_1997_raw.txt", "r") as raw_file:
     lines = raw_file.readlines()
 query = psrqpy.QueryATNF(params=['PSRJ', 'NAME', 'PSRB']).pandas
 
-pulsar_dict = {}
+pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Beamforming",
+        "Observation Span": "Single-epoch",
+    }
+}
 for row in lines:
     row = row.replace(" + ", "+").split()
     print(row)
@@ -43,5 +50,4 @@ for row in lines:
         pulsar_dict[pulsar]["Flux Density error mJy"] += [round(flux*pe, 4)]
 
 
-with open("van_Ommen_1997.yaml", "w") as cat_file:
-    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)
+dump_yaml(pulsar_dict, "van_Ommen_1997.yaml")

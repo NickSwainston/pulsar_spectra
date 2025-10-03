@@ -3,6 +3,8 @@ import yaml
 
 import psrqpy
 
+from pulsar_spectra.scripts.csv_to_yaml import dump_yaml
+
 query = psrqpy.QueryATNF(params=["PSRJ", "NAME", "PSRB", "P0"]).pandas
 all_jnames = list(query["PSRJ"])
 
@@ -13,7 +15,12 @@ with open("Kramer_1998_raw.csv") as file:
     for line in tsv_file:
         lines.append(line)
 
-pulsar_dict = {}
+pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Beamforming",
+        "Observation Span": "Single-epoch",
+    }
+}
 for row in lines:
     row = [r.strip() for r in row]
 
@@ -39,5 +46,4 @@ for row in lines:
         "Flux Density error mJy": [flux_err],
     }
 
-with open("Kramer_1998.yaml", "w") as cat_file:
-    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)
+dump_yaml(pulsar_dict, "Kramer_1998.yaml")

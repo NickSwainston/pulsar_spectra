@@ -1,13 +1,20 @@
 import yaml
 import psrqpy
 
+from pulsar_spectra.scripts.csv_to_yaml import dump_yaml
+
 query = psrqpy.QueryATNF(params=['PSRJ', 'NAME', 'PSRB']).pandas
 
 with open("Kijak_2017_raw.txt", "r") as raw_file:
     lines = raw_file.readlines()
     print(lines)
 
-pulsar_dict = {}
+pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Imaging",
+        "Observation Span": "Single-epoch",
+    }
+}
 for row in lines[:9]:
     row = row.replace("±", "±").split(" ")
     print(row)
@@ -45,5 +52,4 @@ for row in lines[10:]:
             "Flux Density error mJy":[float(flux_err)]
         }
 
-with open("Kijak_2017.yaml", "w") as cat_file:
-    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)
+dump_yaml(pulsar_dict, "Kijak_2017.yaml")

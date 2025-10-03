@@ -12,8 +12,24 @@ query = psrqpy.QueryATNF(version=ATNF_VER, params=["PSRJ", "NAME", "PSRB"]).pand
 all_jnames = list(query["PSRJ"])
 
 
-def convert_csv_to_yaml(csv_location, ref_label):
-    pulsar_dict = {}
+class ListIndentDumper(yaml.Dumper):
+    # Will indent lists properly for more readable yaml files
+    def increase_indent(self, flow=False, indentless=False):
+        return super(ListIndentDumper, self).increase_indent(flow, False)
+
+
+def dump_yaml(pulsar_dict, filename):
+    with open(filename, "w") as cat_file:
+        yaml.dump(pulsar_dict, cat_file, sort_keys=False, indent=2, default_flow_style=False, Dumper=ListIndentDumper)
+
+
+def convert_csv_to_yaml(csv_location, ref_label, obs_span, data_type):
+    pulsar_dict = {
+        "Paper Metadata": {
+            "Data Type": data_type,
+            "Observation Span": obs_span,
+        }
+    }
 
     # Read in the csv
     with open(csv_location, newline="") as csvfile:
@@ -57,8 +73,7 @@ def convert_csv_to_yaml(csv_location, ref_label):
                 }
 
     # Dump the dict to the yaml file in the catalogue directory
-    with open(f"{ref_label}.yaml", "w") as cat_file:
-        yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)
+    dump_yaml(pulsar_dict, f"{ref_label}.yaml")
 
     print("\nCatalogue data written:")
     print(yaml.dump(pulsar_dict, sort_keys=False, indent=2))
@@ -68,9 +83,23 @@ def main():
     parser = argparse.ArgumentParser(description="Convert a csv file to pulsar_spectra catalogue formated yaml file.")
     parser.add_argument("--csv", type=str, help="The location of the csv file")
     parser.add_argument("--ref", type=str, help='The reference label (in the format "Author_year")')
+    parser.add_argument(
+        "--obs_span",
+        type=str,
+        help='The observation span ("Single-epoch", "Multi-epoch" or "Long-term")',
+        default="Single-epoch",
+        choices=["Single-epoch", "Multi-epoch", "Long-term"],
+    )
+    parser.add_argument(
+        "--data_type",
+        type=str,
+        help='The data type ("Beamforming" or "Imaging")',
+        default="Beamforming",
+        choices=["Beamforming", "Imaging"],
+    )
     args = parser.parse_args()
 
-    convert_csv_to_yaml(args.csv, args.ref)
+    convert_csv_to_yaml(args.csv, args.ref, args.obs_span, args.data_type)
 
 
 if __name__ == "__main__":

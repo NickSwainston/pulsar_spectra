@@ -76,7 +76,7 @@ You can then install the package using either ``uv`` or ``pip``, as described be
 .. _for_developers_uv:
 
 Using ``uv`` (Recommended)
-^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The package can be installed in a new virtual environment using ``uv``, which will ensure a consistent development environment.
 This can be done with the command:
@@ -99,7 +99,7 @@ Then activate the virtual environment:
     source .venv/bin/activate
 
 Using ``pip``
-^^^^^^^^^
+^^^^^^^^^^^^^
 Alternatively, you can install the package into your working environment using ``pip``. In the repository
 directory, run:
 

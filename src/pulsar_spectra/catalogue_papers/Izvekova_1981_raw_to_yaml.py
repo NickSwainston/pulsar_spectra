@@ -4,6 +4,8 @@ import psrqpy
 import csv
 import numpy as np
 
+from pulsar_spectra.scripts.csv_to_yaml import dump_yaml
+
 # was converted from image to csv using ABBYY FineReader
 with open("Izvekova_1981_raw.csv") as file:
     tsv_file = csv.reader(file, delimiter=",")
@@ -16,7 +18,12 @@ for i in list(query['PSRB']):
     if isinstance(i, str):
         print(i)
 
-pulsar_dict = {}
+pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Beamforming",
+        "Observation Span": "Single-epoch",
+    }
+}
 for row in lines[2:]:
     row = [r.strip() for r in row]
     if row[0].startswith("#"):
@@ -79,5 +86,4 @@ for row in lines[2:]:
         pulsar_dict[pulsar]["Flux Density mJy"] += [float(flux)*1e3]
         pulsar_dict[pulsar]["Flux Density error mJy"] += [float(flux_err)*1e3]
 
-with open("Izvekova_1981.yaml", "w") as cat_file:
-    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)
+dump_yaml(pulsar_dict, "Izvekova_1981.yaml")

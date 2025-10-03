@@ -1,6 +1,8 @@
 import yaml
 import csv
 
+from pulsar_spectra.scripts.csv_to_yaml import dump_yaml
+
 with open("Zhang_2019_raw.csv") as file:
     tsv_file = csv.reader(file, delimiter=" ")
     lines = []
@@ -8,7 +10,12 @@ with open("Zhang_2019_raw.csv") as file:
         lines.append(line)
 
 
-pulsar_dict = {}
+pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Beamforming",
+        "Observation Span": "Single-epoch",
+    }
+}
 pulsar_dict["J0024-7204C"] = {
     "Frequency MHz":[],
     "Bandwidth MHz":[],
@@ -48,5 +55,4 @@ for row in lines:
         pulsar_dict[pulsar]["Flux Density mJy"] += [flux]
         pulsar_dict[pulsar]["Flux Density error mJy"] += [flux_err]
 
-with open("Zhang_2019.yaml", "w") as cat_file:
-    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)
+dump_yaml(pulsar_dict, "Zhang_2019.yaml")

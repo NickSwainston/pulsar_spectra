@@ -3,6 +3,8 @@ import yaml
 
 import psrqpy
 
+from pulsar_spectra.scripts.csv_to_yaml import dump_yaml
+
 query = psrqpy.QueryATNF(params=["PSRJ", "NAME", "PSRB", "P0"]).pandas
 all_jnames = list(query["PSRJ"])
 
@@ -19,7 +21,12 @@ pulsars = [
     (2100.0, 12),
 ]
 
-pulsar_dict = {}
+pulsar_dict = {
+    "Paper Metadata": {
+        "Data Type": "Beamforming",
+        "Observation Span": "Multi-epoch",
+    }
+}
 for row in lines:
     row = [r.strip() for r in row]
 
@@ -70,5 +77,4 @@ for row in lines:
         pulsar_dict[pulsar]["Flux Density mJy"] += [round(flux, 2)]
         pulsar_dict[pulsar]["Flux Density error mJy"] += [round(flux * flux_err_rel, 2)]
 
-with open("Alam_2021.yaml", "w") as cat_file:
-    yaml.safe_dump(pulsar_dict, cat_file, sort_keys=False, indent=2)
+dump_yaml(pulsar_dict, "Alam_2021.yaml")
