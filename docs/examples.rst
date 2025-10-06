@@ -1,6 +1,25 @@
 Examples
 ========
 
+The following examples demonstrate common use cases of the ``pulsar_spectra`` package.
+These examples use the defaults for the fitting procedure and catalogue.
+We advise your read the documentation in :ref:`catalogue`, :ref:`spectralfit` and :ref:`bandwidth_integration`
+to understand our methods and if you need to modify them.
+
+The ``quick-fit`` script
+----------------------
+For most publications we recomend using the ``pulsar_spectra`` functions directly,
+but you can use the ``quick-fit`` script to quickly fit a pulsar from the catalogue and produce a plot.
+
+.. code-block:: console
+
+    quick-fit -p J0332+5434
+
+This will produce a plot of J0332+5434 with the default methods.
+See ``quick-fit -h`` for more options.
+For example you can alter the fitting method with ``--method`` and likelihood with ``--likelihood``
+(see :ref:`fitting_method` and :ref:`fitting_likelihood` sections for more information).
+
 Simple example
 --------------
 

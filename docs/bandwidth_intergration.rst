@@ -1,5 +1,7 @@
-Bandwidth Intergration
-======================
+.. _bandwidth_integration:
+
+Bandwidth Integration
+=====================
 
 Pulsar spectral fitting often assumes that the reported average flux densities are currently treated as
 the flux density at one specific (usually central) frequency, whereas in reality, they are averaged over some finite bandwidth.
