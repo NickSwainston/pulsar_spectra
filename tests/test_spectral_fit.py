@@ -103,14 +103,22 @@ spectral_fit_tests = [
 ]
 
 # Make ms and ml copies
-spectral_fit_tests_ms = [pytest.param("ns", pulsar, model, refs, marks=pytest.mark.long) for pulsar, model, refs in spectral_fit_tests]
-spectral_fit_tests_ml = [("ml", pulsar, model, refs) for pulsar, model, refs in spectral_fit_tests]
+spectral_fit_tests_ms = [
+    pytest.param("ns", pulsar, model, refs, "Huber", marks=pytest.mark.long)
+    for pulsar, model, refs in spectral_fit_tests
+]
+spectral_fit_tests_ml_gaussian = [("ml", pulsar, model, refs, "Gaussian") for pulsar, model, refs in spectral_fit_tests]
+spectral_fit_tests_ml_huber = [("ml", pulsar, model, refs, "Huber") for pulsar, model, refs in spectral_fit_tests]
+spectral_fit_tests_ml_t = [("ml", pulsar, model, refs, "t") for pulsar, model, refs in spectral_fit_tests]
 
 # Combine them
-combined_spectral_fit_tests = spectral_fit_tests_ms + spectral_fit_tests_ml
+combined_spectral_fit_tests = (
+    spectral_fit_tests_ms + spectral_fit_tests_ml_gaussian + spectral_fit_tests_ml_huber + spectral_fit_tests_ml_t
+)
 
-@pytest.mark.parametrize("fit_method, pulsar, exp_model_name, frozen_refs", combined_spectral_fit_tests)
-def test_find_best_spectral_fit(fit_method, pulsar, exp_model_name, frozen_refs):
+
+@pytest.mark.parametrize("fit_method, pulsar, exp_model_name, frozen_refs, likelihood", combined_spectral_fit_tests)
+def test_find_best_spectral_fit(fit_method, pulsar, exp_model_name, frozen_refs, likelihood):
     """Tests the find_best_spectral_fit funtion."""
     # limit the input publications to prevent future additions making the tests fail
     cat_list = collect_catalogue_fluxes(only_use=frozen_refs)
@@ -125,7 +133,7 @@ def test_find_best_spectral_fit(fit_method, pulsar, exp_model_name, frozen_refs)
     freq_all, band_all, flux_all, flux_err_all, ref_all = cat_list[pulsar]
     for freq, band, flux, flux_err, ref in zip(freq_all, band_all, flux_all, flux_err_all, ref_all):
         print(f"{float(freq):8.1f}{float(band):8.1f}{float(flux):12.4f}{float(flux_err):12.4f} {str(ref):20s}")
-    best_fit_model_name, _, fit_results, _, _  = find_best_spectral_fit(
+    best_fit_model_name, _, fit_results, _, _ = find_best_spectral_fit(
         pulsar,
         freq_all,
         band_all,
@@ -133,7 +141,7 @@ def test_find_best_spectral_fit(fit_method, pulsar, exp_model_name, frozen_refs)
         flux_err_all,
         ref_all,
         method=fit_method,
-        likelihood="Huber",
+        likelihood=likelihood,
         plot_compare=True,
         ref_markers=ref_markers,
     )

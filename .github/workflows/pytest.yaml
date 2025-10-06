@@ -28,7 +28,7 @@ jobs:
       - name: Install pulsar_spectra
         run: uv sync --locked --all-extras --dev
       - name: Run pytest
-        run: uv run pytest
+        run: uv run pytest -m "not long"  # Skip long tests
 
 
   # Long running Bayesian tests (only after PR approved)
