@@ -29,8 +29,8 @@ def find_best_spectral_fit(
     plot_compare: bool = False,
     plot_bands: bool = True,
     fit_range: tuple[float, float] = None,
-    plot_kwargs: dict[str] = None,
     sampler_kwargs: dict[str] = None,
+    **plot_kwargs,
 ) -> tuple[str, float, dict, dict, dict]:
     """Find the best-fit spectral model for a given pulsar.
 
@@ -66,10 +66,10 @@ def find_best_spectral_fit(
     fit_range : `tuple[float, float]`, optional
         The range of frequencies (in MHz) to plot the model fit. If `None`, then the
         model fit will be plotted over the frequency span of the data. |br| Default: `None`.
-    plot_kwargs : `dict`, optional
-        kwargs to pass to :py:meth:`pulsar_spectra.plotting.plot_fit()`.
     sampler_kwargs : `dict`, optional
         kwargs to pass to :py:meth:`bilby.run_sampler()`.
+    plot_kwargs : `dict`, optional
+        kwargs to pass to :py:meth:`pulsar_spectra.plotting.plot_fit()`.
 
     Returns
     -------
@@ -85,8 +85,6 @@ def find_best_spectral_fit(
     plot_dicts : `dict`
         A dictionary of plot dictionaries organised by model name.
     """
-    if plot_kwargs is None:
-        plot_kwargs = {}
     if sampler_kwargs is None:
         sampler_kwargs = {}
 
