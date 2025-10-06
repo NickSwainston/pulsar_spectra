@@ -158,6 +158,7 @@ def bilby_fit_spectral_model(
     mod_priors=None,
     likelihood="Huber",
     label="unknown_pulsar",
+    **sampler_kwargs,
 ):
     """
     Fit pulsar spectra using Bilby and the Dynesty dynamic nested sampler.
@@ -182,6 +183,8 @@ def bilby_fit_spectral_model(
         The distribution to use for the likelihood ('Gaussian', 'Huber', 't'). |br| Default: 'Huber'.
     label : `string`, optional
         A label to use for the model fit, given to `bilby.run_sampler()`. |br| Default: 'unknown_pulsar'.
+    sampler_kwargs : `dict`, optional
+        kwargs to pass to :py:meth:`bilby.run_sampler()`.
 
     Returns
     -------
@@ -247,6 +250,7 @@ def bilby_fit_spectral_model(
         plot=False,
         check_point_plot=True,
         label=f"{label}_{model_name}",
+        **sampler_kwargs,
     )
 
     # Make a corner plot

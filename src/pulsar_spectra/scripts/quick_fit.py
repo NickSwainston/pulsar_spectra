@@ -10,7 +10,7 @@ from pulsar_spectra.spectral_fit import find_best_spectral_fit
 logger = logging.getLogger(__name__)
 
 
-def quick_fit(pulsars, method="ml", plot_type="best", likelihood="Huber"):
+def quick_fit(pulsars, method="ml", plot_type="best", likelihood="Huber", sampler_kwargs=None):
     cat_list = collect_catalogue_fluxes()
     for pulsar in pulsars:
         logger.info(f"Fitting {pulsar}")
@@ -33,13 +33,13 @@ def quick_fit(pulsars, method="ml", plot_type="best", likelihood="Huber"):
         logger.debug(f"len(flux_err_all): {len(flux_err_all)}")
         logger.debug(ref_all)
 
-        plot_opts = dict()
+        plot_opt = dict()
         if plot_type == "all":
-            plot_opts["plot_all"] = True
+            plot_opt["plot_all"] = True
         elif plot_type == "best":
-            plot_opts["plot_best"] = True
+            plot_opt["plot_best"] = True
         elif plot_type == "compare":
-            plot_opts["plot_compare"] = True
+            plot_opt["plot_compare"] = True
         else:
             logger.warning("No plotting action selected.")
 
@@ -52,7 +52,8 @@ def quick_fit(pulsars, method="ml", plot_type="best", likelihood="Huber"):
             ref_all,
             method=method,
             likelihood=likelihood,
-            **plot_opts,
+            sampler_kwargs=sampler_kwargs,
+            **plot_opt,
         )
 
         logger.info(f"{pulsar} fit: {best_fit_model_name} (p_best={p_best:.3f})")
@@ -126,6 +127,16 @@ def main():
             "'Huber' or 't' for robust least squares."
         ),
     )
+    parser.add_argument(
+        "-n",
+        "--npool",
+        type=int,
+        default=1,
+        help=(
+            "The number of available CPUs to create pool objects for parallelisation. "
+            "This options is only applicable to the nested sampling method."
+        ),
+    )
     args = parser.parse_args()
 
     formatter = logging.Formatter("[%(asctime)s  %(name)s  %(lineno)-4d  %(levelname)-9s] %(message)s")
@@ -142,7 +153,13 @@ def main():
             logging.getLogger(imported_module).addHandler(ch)
             logging.getLogger(imported_module).propagate = False
 
-    quick_fit(args.pulsars, method=args.method, plot_type=args.plot_type, likelihood=args.likelihood)
+    quick_fit(
+        args.pulsars,
+        method=args.method,
+        plot_type=args.plot_type,
+        likelihood=args.likelihood,
+        sampler_kwargs={"npool": args.npool},
+    )
 
 
 if __name__ == "__main__":
