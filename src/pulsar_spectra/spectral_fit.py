@@ -29,8 +29,8 @@ def find_best_spectral_fit(
     plot_compare: bool = False,
     plot_bands: bool = True,
     fit_range: tuple[float, float] = None,
-    plot_kwargs: dict[str] | None = None,
-    sampler_kwargs: dict[str] | None = None,
+    plot_kwargs: dict[str] = None,
+    sampler_kwargs: dict[str] = None,
 ) -> tuple[str, float, dict, dict, dict]:
     """Find the best-fit spectral model for a given pulsar.
 
