@@ -102,9 +102,15 @@ spectral_fit_tests = [
     ),
 ]
 
+# Make ms and ml copies
+spectral_fit_tests_ms = [pytest.param("ns", pulsar, model, refs, marks=pytest.mark.long) for pulsar, model, refs in spectral_fit_tests]
+spectral_fit_tests_ml = [("ml", pulsar, model, refs) for pulsar, model, refs in spectral_fit_tests]
 
-@pytest.mark.parametrize("pulsar, exp_model_name, frozen_refs", spectral_fit_tests)
-def test_find_best_spectral_fit(pulsar, exp_model_name, frozen_refs):
+# Combine them
+combined_spectral_fit_tests = spectral_fit_tests_ms + spectral_fit_tests_ml
+
+@pytest.mark.parametrize("fit_method, pulsar, exp_model_name, frozen_refs", combined_spectral_fit_tests)
+def test_find_best_spectral_fit(fit_method, pulsar, exp_model_name, frozen_refs):
     """Tests the find_best_spectral_fit funtion."""
     # limit the input publications to prevent future additions making the tests fail
     cat_list = collect_catalogue_fluxes(only_use=frozen_refs)
@@ -126,17 +132,18 @@ def test_find_best_spectral_fit(pulsar, exp_model_name, frozen_refs):
         flux_all,
         flux_err_all,
         ref_all,
-        method="ml",
+        method=fit_method,
         likelihood="Huber",
         plot_compare=True,
         ref_markers=ref_markers,
     )
     iminuit_result = fit_results[best_fit_model_name]
-    for p, v, e in zip(iminuit_result.parameters, iminuit_result.values, iminuit_result.errors):
-        if p.startswith("v"):
-            print(f"{p} = {v / 1e6:8.1f} +/- {e / 1e6:8.1} MHz")
-        else:
-            print(f"{p} = {v:.5f} +/- {e:.5}")
+    if fit_method == "ml":
+        for p, v, e in zip(iminuit_result.parameters, iminuit_result.values, iminuit_result.errors):
+            if p.startswith("v"):
+                print(f"{p} = {v / 1e6:8.1f} +/- {e / 1e6:8.1} MHz")
+            else:
+                print(f"{p} = {v:.5f} +/- {e:.5}")
     np.testing.assert_string_equal(best_fit_model_name, exp_model_name)
 
 

@@ -41,6 +41,14 @@ bayesian = [
     "bilby>=2.3.0",
 ]
 
+[pytest]
+markers = [
+    "long",  # marks tests as long-running
+]
+addopts = [
+    '-m "not long"'
+]
+
 [build-system]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
