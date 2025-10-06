@@ -747,8 +747,8 @@ def model_settings(print_models=False):
         "broken_power_law": [
             broken_power_law,
             "broken pl",
-            (vbreak_s, a_s, a_s, c_s),
-            [(vbreak_min, vbreak_max), (a_min, a_max), (a_min, a_max), (c_min, c_max)],
+            (vbreak_s, -a_s, a_s, c_s),
+            [(vbreak_min, vbreak_max), (-a_max, -a_min), (a_min, a_max), (c_min, c_max)],
             broken_power_law_intergral,
             priors["broken_power_law"],
         ],
