@@ -1,3 +1,5 @@
+.. _spectralfit:
+
 Spectral fit
 ============
 
@@ -5,21 +7,19 @@ The pulsar spectral fitting is explained in Swainston et al. 2022 and based on `
 We will summarise how the fitting is done and examples of how to improve your fits.
 
 
-Fitting algorithm
------------------
-To account for underestimated uncertainties on outlier points, we modify the regular least-squared quadratic loss function
-to deviate to linear loss once a certain distance is reached from the model.
-In this way, outlier data are penalised, and bad data is less likely to skew the model fit. We use the Huber loss function, which is defined as
+.. _fitting_method:
 
-.. math::
+Fitting method
+--------------
 
-    \rho =
-    \begin{cases}
-    \frac{1}{2}t^2 & \mathrm{if}\:|t|<k \\
-    k|t|-\frac{1}{2}k^2 & \mathrm{if}\:|t|\geq k
-    \end{cases},
+The two fitting methods available are :ref:`frequentist-maximum-likelihood` and :ref:`bayesian-nested-sampling`.
+Frequentist maximum likelihood is the default method as it is faster and works well for most pulsars.
+The Bayesian nested sampling method is more computationally expensive but can be more robust for pulsars with complex spectra for more indepth analysis.
 
-where :math:`t` is a residual and :math:`k` is a constant (which we set to 1.345) that defines the point at which outlying points are penalised.
+.. _frequentist-maximum-likelihood:
+
+Frequentist maximum likelihood
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The code will use `mingrad <https://iminuit.readthedocs.io/en/stable/reference.html#iminuit.Minuit.migrad>`_
 function from the `iminuit <https://github.com/iminuit/iminuit>`_
@@ -36,6 +36,40 @@ and `scan <https://iminuit.readthedocs.io/en/stable/reference.html#iminuit.Minui
 The uncertainties were computed using *hesse*, an error calculator which computes the covariance matrix for the fitted parameters and determines
 the :math:`1\sigma` uncertainties as the square root of the diagonal elements.
 This is all done within the :py:meth:`pulsar_spectra.spectral_fit.iminuit_fit_spectral_model` function.
+
+.. _bayesian-nested-sampling:
+
+Bayesian nested sampling
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+
+.. _fitting_likelihood:
+
+Fitting likelihood
+------------------
+
+Gaussian
+^^^^^^^^
+
+Huber loss function
+^^^^^^^^^^^^^^^^^^^
+To account for underestimated uncertainties on outlier points, we modify the regular least-squared quadratic loss function
+to deviate to linear loss once a certain distance is reached from the model.
+In this way, outlier data are penalised, and bad data is less likely to skew the model fit. We use the Huber loss function, which is defined as
+
+.. math::
+
+    \rho =
+    \begin{cases}
+    \frac{1}{2}t^2 & \mathrm{if}\:|t|<k \\
+    k|t|-\frac{1}{2}k^2 & \mathrm{if}\:|t|\geq k
+    \end{cases},
+
+where :math:`t` is a residual and :math:`k` is a constant (which we set to 1.345) that defines the point at which outlying points are penalised.
+
+t
+^
 
 Models
 ------
