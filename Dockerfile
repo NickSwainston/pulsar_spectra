@@ -11,7 +11,7 @@ WORKDIR /app
 ADD pyproject.toml uv.lock src /app
 
 # Install pulsar_spectra using uv
-RUN uv sync --frozen
+RUN uv sync --frozen --extra bayesian
 
 # Download the ATNF references so they're cached in the image
 RUN uv run python -c "from pulsar_spectra.catalogue import get_atnf_references; get_atnf_references()"
