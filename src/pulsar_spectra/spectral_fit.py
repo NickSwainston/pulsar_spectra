@@ -232,7 +232,7 @@ def find_best_spectral_fit(
             ref_all,
             best_fit_model_name,
             plot_dicts[best_fit_model_name],
-            save_name=f"{pulsar}_{best_fit_model_name}_fit.png",
+            save_name=f"{pulsar}_{best_fit_model_name}_{method}_{likelihood}_fit.png",
             append_legend=fit_info,
             **plot_kwargs,
         )
@@ -247,7 +247,7 @@ def find_best_spectral_fit(
             plot_dicts,
             aic_dict,
             best_fit_model_name=best_fit_model_name,
-            save_name=f"{pulsar}_comparison_fit.png",
+            save_name=f"{pulsar}_{method}_{likelihood}_comparison_fit.png",
             **plot_kwargs,
         )
     elif plot_all:
@@ -261,7 +261,7 @@ def find_best_spectral_fit(
                 ref_all,
                 model_name,
                 plot_dicts[model_name],
-                save_name=f"{pulsar}_{model_name}_fit.png",
+                save_name=f"{pulsar}_{model_name}_{method}_{likelihood}_fit.png",
                 append_legend=f"\n$\\mathrm{{AICc}}={aic_dict[model_name]:.2f}$",
                 **plot_kwargs,
             )
