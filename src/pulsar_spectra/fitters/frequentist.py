@@ -9,8 +9,8 @@ from iminuit import Minuit
 from iminuit.cost import LeastSquares
 from jacobi import propagate
 
-from pulsar_spectra.cost_functions import huber_loss_function, t_loss_function
-from pulsar_spectra.models import model_settings
+from ..cost_functions import huber_loss_function, t_loss_function
+from ..models import model_settings
 
 logger = logging.getLogger(__name__)
 

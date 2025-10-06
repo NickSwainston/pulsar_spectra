@@ -102,8 +102,8 @@ def make_comparison_plot(
         A list of the reference label (in the format 'Author_year').
     plot_dicts : `dict`
         A dictionary with keys for each model name, containing plot dictionaries
-        as returned by :py:meth:`pulsar_spectra.frequentist.iminuit_interpolate_model()` or
-        :py:meth:`pulsar_spectra.bayesian.bilby_interpolate_model()`.
+        as returned by :py:meth:`pulsar_spectra.fitters.frequentist.iminuit_interpolate_model()` or
+        :py:meth:`pulsar_spectra.fitters.bayesian.bilby_interpolate_model()`.
     aic_dict : `dict`
         A dictionary of AIC values organised by model name.
     best_fit_model_name : `string`, optional
@@ -189,8 +189,8 @@ def plot_fit(
         The model name from :py:meth:`pulsar_spectra.models`.
     plot_dict : `dict`
         A dictionary of data which will be used for plotting, returned by either
-        :py:meth:`pulsar_spectra.frequentist.iminuit_interpolate_model()` or
-        :py:meth:`pulsar_spectra.bayesian.bilby_interpolate_model()`.
+        :py:meth:`pulsar_spectra.fitters.frequentist.iminuit_interpolate_model()` or
+        :py:meth:`pulsar_spectra.fitters.bayesian.bilby_interpolate_model()`.
     save_name : `string`, optional
         The name of the saved plot. |br| Default: "fit.png".
     plot_error : `boolean`, optional

@@ -714,7 +714,7 @@ def model_settings(print_models=False):
 
     # Priors for the Bayesian approach
     try:
-        from .fitters.bilby import bilby_get_model_priors
+        from .fitters.bayesian import bilby_get_model_priors
 
         priors = bilby_get_model_priors()
     except ImportError:

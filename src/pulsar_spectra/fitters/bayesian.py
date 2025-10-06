@@ -186,7 +186,7 @@ def bilby_fit_spectral_model(
     Returns
     -------
     bilby_result : `bilby.core.result.Result`
-        A Result object containing fit information from :py:meth:`pulsar_spectra.bayesian.bilby_fit_spectral_model`.
+        A Result object containing fit information from :py:meth:`pulsar_spectra.fitters.bayesian.bilby_fit_spectral_model`.
     """
     # Reference frequency
     v0_MHz = 1400.0

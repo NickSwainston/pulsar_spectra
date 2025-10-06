@@ -84,7 +84,7 @@ def find_best_spectral_fit(
     """
     # Conditional imports
     if method == "ml":
-        from .fitters.iminuit import (
+        from .fitters.frequentist import (
             iminuit_compute_likelihood,
             iminuit_fit_spectral_model,
             iminuit_interpolate_model,
@@ -97,7 +97,7 @@ def find_best_spectral_fit(
             + "pulsar_spectra.spectral_fit.find_best_spectral_fit() for details."
         )
     elif method == "ns":
-        from .fitters.bilby import (
+        from .fitters.bayesian import (
             bilby_compute_maximum_posterior_likelihood,
             bilby_fit_spectral_model,
             bilby_interpolate_model,

@@ -8,7 +8,7 @@ import numpy as np
 from psrqpy import QueryATNF
 
 from .catalogue import ATNF_VER
-from .fitters.iminuit import propagate_flux_n_err
+from .fitters.frequentist import propagate_flux_n_err
 from .models import model_settings
 
 
