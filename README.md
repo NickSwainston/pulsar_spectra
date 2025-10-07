@@ -32,6 +32,14 @@ or using `uv`:
 ```bash
 uv pip install pulsar-spectra
 ```
+To make use of the Bayesian nested sampling method, select the `bayesian` option with `pip`:
+```bash
+pip install pulsar-spectra[bayesian]
+```
+or with `uv`:
+```bash
+uv pip install --extra bayesian pulsar-spectra
+```
 
 ### From Docker Hub
 There is a Docker container that you can install with:
@@ -88,11 +96,9 @@ This can be done with the command:
 ```bash
 uv sync --locked
 ```
-By default, this will install the dependencies in the `dev` group but no other groups. If you
-are developing documentation, then include the `docs` group:
-```bash
-uv sync --locked --group docs
-```
+To use the Bayesian nested sampling method, add the option `--extra bayesian`.
+The dependencies in the `dev` group will be automatically installed, but other dependency groups will not.
+If you are developing documentation, then you can include the `docs` group with `--group docs`.
 Then activate the virtual environment:
 ```bash
 source .venv/bin/activate
@@ -105,14 +111,11 @@ directory, run:
 ```bash
 pip install .
 ```
-To install the development dependencies, run:
+To use the Bayesian nested sampling method, run:
 ```bash
-pip install --group dev .
+pip install '.[bayesian]'
 ```
-To install the documentation dependencies, run:
-```bash
-pip install --group docs .
-```
+To install the development or documentation dependencies, include the option `--group dev` or `--group docs`.
 
 Help
 =====
