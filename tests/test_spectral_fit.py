@@ -102,8 +102,8 @@ spectral_fit_tests = [
     ),
 ]
 
-# Make ms and ml copies
-spectral_fit_tests_ms = [
+# Make nested sampling (ns) and maximum likelihood (ml) method copies
+spectral_fit_tests_ns = [
     pytest.param("ns", pulsar, model, refs, "Huber", marks=pytest.mark.long)
     for pulsar, model, refs in spectral_fit_tests
 ]
@@ -113,7 +113,7 @@ spectral_fit_tests_ml_t = [("ml", pulsar, model, refs, "t") for pulsar, model, r
 
 # Combine them
 combined_spectral_fit_tests = (
-    spectral_fit_tests_ms + spectral_fit_tests_ml_gaussian + spectral_fit_tests_ml_huber + spectral_fit_tests_ml_t
+    spectral_fit_tests_ns + spectral_fit_tests_ml_gaussian + spectral_fit_tests_ml_huber + spectral_fit_tests_ml_t
 )
 
 
