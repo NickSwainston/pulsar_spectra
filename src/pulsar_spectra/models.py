@@ -668,8 +668,8 @@ def model_settings(print_models=False):
 
     Returns
     -------
-    model_dict : `dict`
-        Returns a dictionary in the format
+    model_dict : `dict[str, Any]`
+        Returns a dictionary with model names as keys in the format:
 
         {
             model_name: [

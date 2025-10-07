@@ -1,5 +1,5 @@
 """
-The top-level function for fitting and selecting spectral models.
+The top-level function for finding the best-fit spectral model.
 """
 
 import logging
@@ -15,61 +15,66 @@ logger = logging.getLogger(__name__)
 
 
 def find_best_spectral_fit(
-    pulsar: str,
-    freqs_MHz: list,
-    bands_MHz: list,
-    fluxs_mJy: list,
-    flux_errs_mJy: list,
-    ref_all: list,
-    method: str = "ml",
-    likelihood: str = "Huber",
-    exclude_models: list = None,
-    plot_all: bool = False,
-    plot_best: bool = False,
-    plot_compare: bool = False,
-    plot_bands: bool = True,
-    fit_range: tuple[float, float] = None,
-    sampler_kwargs: dict[str] = None,
+    pulsar,
+    freqs_MHz,
+    bands_MHz,
+    fluxs_mJy,
+    flux_errs_mJy,
+    ref_all,
+    method="ml",
+    likelihood="Huber",
+    exclude_models=None,
+    plot_all=False,
+    plot_best=False,
+    plot_compare=False,
+    plot_bands=True,
+    fit_range=None,
+    sampler_kwargs=None,
     **plot_kwargs,
-) -> tuple[str, float, dict, dict, dict]:
+):
     """Find the best-fit spectral model for a given pulsar.
 
     Parameters
     ----------
     pulsar : `str`
-        The Jname of the pulsar to be fit (used for labelling).
-    freqs_MHz : `list`
-        A list of the frequencies in MHz.
-    bands_MHz : `list`
-        A list of bandwidths in MHz.
-    fluxs_mJy : `list`
-        A list of the flux densities in mJy.
-    flux_errs_mJy : `list`
-        A list of the uncertainties in the flux densities in mJy.
-    ref_all : `list`
-        A list of the reference labels (in the format 'author_year').
-    method : `string`, optional
-        The fitting method to use. 'ml' for maximum-likelihood fitting using iminuit
-        or 'ns' for Bayesian nested sampling using Bilby/Dynesty. Default: 'ml'.
-    likelihood : `string`, optional
-        The distribution to use for the likelihood ('Gaussian', 'Huber', 't'). |br| Default: 'Huber'.
-    exclude_models : `list`, optional
-        A list of models to exclude from :py:meth:`pulsar_spectra.models.model_settings`. Default: `None`.
+        The name of the pulsar to be fit (used for labelling).
+    freqs_MHz : `array_like`
+        An array of the frequencies in MHz.
+    bands_MHz : `array_like`
+        An array of the bandwidths in MHz.
+    fluxs_mJy : `array_like`
+        An array of the flux densities in mJy.
+    flux_errs_mJy : `array_like`
+        An array of the uncertainties in the flux densities in mJy.
+    ref_all : `array_like`
+        An array of the reference labels (in the format 'author_year').
+    method : `str`, optional
+        The fitting method to use. 'ml' for maximum-likelihood fitting using
+        iminuit. 'ns' for Bayesian nested sampling using Bilby and Dynesty.
+        |br| Default: 'ml'.
+    likelihood : `str`, optional
+        The distribution to use for the likelihood ('Gaussian', 'Huber', 't').
+        |br| Default: 'Huber'.
+    exclude_models : `list[str]`, optional
+        A list of model names to exclude from
+        :py:meth:`pulsar_spectra.models.model_settings`. |br| Default: `None`.
     plot_all : `bool`, optional
         Make a separate plot for each fitted model. |br| Default: `False`.
     plot_best : `bool`, optional
-        Make a plot for the best-fit model. |br| Default: `False`.
+        Make a plot for the best-fit model only. |br| Default: `False`.
     plot_compare : `bool`, optional
         Make a combined plot for all fitted models. |br| Default: `False`.
     plot_bands : `bool`, optional
-        Indicate the bandwidth of each measurement using x-axis error bars. |br| Default: `True`.
+        Indicate the bandwidth of each measurement using x-axis error bars.
+        |br| Default: `True`.
     fit_range : `tuple[float, float]`, optional
-        The range of frequencies (in MHz) to plot the model fit. If `None`, then the
-        model fit will be plotted over the frequency span of the data. |br| Default: `None`.
-    sampler_kwargs : `dict`, optional
-        kwargs to pass to :py:meth:`bilby.run_sampler()`.
-    plot_kwargs : `dict`, optional
-        kwargs to pass to :py:meth:`pulsar_spectra.plotting.plot_fit()`.
+        The range of frequencies (in MHz) to plot the model fit. If `None`, then
+        the model fit will be plotted over the frequency span of the data.
+        |br| Default: `None`.
+    sampler_kwargs : `dict[str, Any]`, optional
+        Extra arguments to pass to `bilby.run_sampler()`.
+    **plot_kwargs
+        Extra arguments to pass to :py:meth:`pulsar_spectra.plotting.plot_fit()`.
 
     Returns
     -------
@@ -78,12 +83,15 @@ def find_best_spectral_fit(
     p_best : `float`
         The probability that the selected model is the best-fitting model out
         of the models compared.
-    fit_results : `dict`
-        A dictionary of fit results organised by model name.
-    aic_dict : `dict`
-        A dictionary of AICc values organised by model name.
-    plot_dicts : `dict`
-        A dictionary of plot dictionaries organised by model name.
+    fit_results : `dict[str, iminuit.Minuit]`
+        A dictionary of fit results with the keys being model names from
+        :py:meth:`pulsar_spectra.models.model_settings`.
+    aic_dict : `dict[str, float]`
+        A dictionary of AICc values with the keys being model names from
+        :py:meth:`pulsar_spectra.models.model_settings`.
+    plot_dicts : `dict[str, dict[str, Any]]`
+        A dictionary of plot dictionaries with the keys being model names from
+        :py:meth:`pulsar_spectra.models.model_settings`.
     """
     if sampler_kwargs is None:
         sampler_kwargs = {}

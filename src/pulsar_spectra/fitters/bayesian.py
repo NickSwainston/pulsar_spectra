@@ -1,5 +1,5 @@
 """
-Functions for using Bilby to fit spectral models.
+Functions for performing Bayesian inference of spectral fits.
 """
 
 import inspect
@@ -15,13 +15,13 @@ from ..models import model_settings
 try:
     import bilby
 except ModuleNotFoundError as e:
-    MSG = "bilby is not installed. To use this feature, install pulsar_spectra[bayesian]."
+    MSG = "bilby is not installed. To use this feature, install pulsar-spectra[bayesian]."
     raise ModuleNotFoundError(MSG) from e
 
 try:
     import corner
 except ModuleNotFoundError as e:
-    MSG = "corner is not installed. To use this feature, install pulsar_spectra[bayesian]."
+    MSG = "corner is not installed. To use this feature, install pulsar-spectra[bayesian]."
     raise ModuleNotFoundError(MSG) from e
 
 
@@ -36,14 +36,14 @@ class GaussianLikelihood(bilby.Likelihood):
 
         Parameters
         ----------
-        min_max_freqs: `tuple` (min_freqs, max_freqs)
+        min_max_freqs : `tuple[array_like, array_like]` (min_freqs, max_freqs)
             Where min_freqs and max_freqs are arrays containing the minimum and
             maximum frequencies for each measurement.
-        fluxs: array_like
+        fluxs : `array_like`
             The flux density for each measurement.
-        flux_errs: array_like
+        flux_errs : `array_like`
             The uncertainty in the flux density for each measurement.
-        function:
+        function : `Callable`
             The model function to fit to the data. The first argument is the
             dependent variable (min/max frequencies), the next arguments
             are the fit parameters and will require a prior, and the last
@@ -76,14 +76,14 @@ class HuberLikelihood(bilby.Likelihood):
 
         Parameters
         ----------
-        min_max_freqs: `tuple` (min_freqs, max_freqs)
+        min_max_freqs : `tuple[array_like, array_like]` (min_freqs, max_freqs)
             Where min_freqs and max_freqs are arrays containing the minimum and
             maximum frequencies for each measurement.
-        fluxs: array_like
+        fluxs : `array_like`
             The flux density for each measurement.
-        flux_errs: array_like
+        flux_errs : `array_like`
             The uncertainty in the flux density for each measurement.
-        function:
+        function : `Callable`
             The model function to fit to the data. The first argument is the
             dependent variable (min/max frequencies), the next arguments
             are the fit parameters and will require a prior, and the last
@@ -110,19 +110,19 @@ class HuberLikelihood(bilby.Likelihood):
 class TLikelihood(bilby.Likelihood):
     def __init__(self, min_max_freqs, fluxs, flux_errs, model_function):
         """
-        A t-distribution likelihood. The parameters are inferred from the arguments
-        of the function.
+        A t-distribution likelihood. The parameters are inferred from the
+        arguments of the function.
 
         Parameters
         ----------
-        min_max_freqs: `tuple` (min_freqs, max_freqs)
+        min_max_freqs : `tuple[array_like, array_like]` (min_freqs, max_freqs)
             Where min_freqs and max_freqs are arrays containing the minimum and
             maximum frequencies for each measurement.
-        fluxs: array_like
+        fluxs : `array_like`
             The flux density for each measurement.
-        flux_errs: array_like
+        flux_errs : `array_like`
             The uncertainty in the flux density for each measurement.
-        function:
+        function : `Callable`
             The model function to fit to the data. The first argument is the
             dependent variable (min/max frequencies), the next arguments
             are the fit parameters and will require a prior, and the last
@@ -157,41 +157,58 @@ def bilby_fit_spectral_model(
     model_name="simple_power_law",
     mod_priors=None,
     likelihood="Huber",
+    sampler="dynamic_dynesty",
+    sample="rwalk_dynesty",
     label="unknown_pulsar",
     **sampler_kwargs,
 ):
     """
-    Fit pulsar spectra using Bilby and the Dynesty dynamic nested sampler.
+    Fit pulsar spectra using the Bilby Bayesian inference library.
 
     Parameters
     ----------
-    freqs_MHz : `list`
-        A list of the frequencies in MHz.
-    bands_MHz : `list`
-        A list of the bandwidths in MHz.
-    fluxs_mJy : `list`
-        A list of the flux densities in mJy.
-    flux_errs_mJy : `list`
-        A list of the uncertainty in the flux densities in mJy.
-    model_name : `function`, optional
-        One of the model names from :py:meth:`pulsar_spectra.models.model_settings`.
-        Default: :py:meth:`pulsar_spectra.models.simple_power_law`.
-    mod_priors : `dict`, optional
-        A dictionary of model priors to pass to Bilby.
-        If none provided, will use the defaults from :py:meth:`pulsar_spectra.models.model_settings`.
-    likelihood : `string`, optional
-        The distribution to use for the likelihood ('Gaussian', 'Huber', 't'). |br| Default: 'Huber'.
-    label : `string`, optional
-        A label to use for the model fit, given to `bilby.run_sampler()`. |br| Default: 'unknown_pulsar'.
-    sampler_kwargs : `dict`, optional
-        kwargs to pass to :py:meth:`bilby.run_sampler()`.
+    freqs_MHz : `array_like`
+        An array of the frequencies in MHz.
+    bands_MHz : `array_like`
+        An array of the bandwidths in MHz.
+    fluxs_mJy : `array_like`
+        An array of the flux densities in mJy.
+    flux_errs_mJy : `array_like`
+        An array of the uncertainty in the flux densities in mJy.
+    model_name : `str`, optional
+        One of the model names from
+        :py:meth:`pulsar_spectra.models.model_settings`.
+        |br| Default: 'simple_power_law'.
+    mod_priors : `dict[str, dict | PriorDict]`, optional
+        A dictionary of priors for the free model parameters.
+        |br| Default: Will use the priors from
+        :py:meth:`pulsar_spectra.models.model_settings`.
+    likelihood : `str`, optional
+        The distribution to use for the likelihood ('Gaussian', 'Huber', 't').
+        |br| Default: 'Huber'.
+    sampler : `str`, optional
+        The name of the sampler to use. See
+        `bilby.sampler.get_implemented_samplers()` for a list of available
+        samplers. |br| Default: 'dynamic_dynesty'.
+    sample : `str`, optional
+        Method used to sample uniformly within the likelihood constraints,
+        conditioned on the provided bounds. Will only use this option if the
+        Dynesty sampler is being used. See `bilby.core.sampler.Dynesty` for
+        additional documentation. |br| Default: 'rwalk_dynesty'.
+    label : `str`, optional
+        A label to use for the output files; passed to `bilby.run_sampler()`.
+        |br| Default: 'unknown_pulsar'.
+    **sampler_kwargs
+        Extra arguments to pass to `bilby.run_sampler()`.
 
     Returns
     -------
     bilby_result : `bilby.core.result.Result`
-        A Result object containing fit information from :py:meth:`pulsar_spectra.fitters.bayesian.bilby_fit_spectral_model`.
+        A Result object containing fit information from
+        :py:meth:`pulsar_spectra.fitters.bayesian.bilby_fit_spectral_model`.
     """
-    # Reference frequency
+    # The reference frequency has been hardcoded so that we can use the known
+    # distribution of flux densities at 1400 MHz as a prior
     v0_MHz = 1400.0
 
     # Convert to SI (Hz and Jy) and load into numpy arrays
@@ -241,12 +258,15 @@ def bilby_fit_spectral_model(
         model_function_integrate,
     )
 
-    # Run the dynamic nested sampler
+    # This option is only applicable to the Dynesty sampler
+    if sampler in ["dynesty", "dynamic_dynesty"]:
+        sampler_kwargs["sample"] = sample
+
+    # Run the sampler
     bilby_result = bilby.run_sampler(
         likelihood=L,
         priors=mod_priors,
-        sampler="dynamic_dynesty",
-        sample="rwalk_dynesty",
+        sampler=sampler,
         plot=False,
         check_point_plot=True,
         label=f"{label}_{model_name}",
@@ -282,18 +302,19 @@ def bilby_compute_maximum_posterior_likelihood(
 
     Parameters
     ----------
-    freqs_MHz : `list`
-        A list of the frequencies in MHz.
-    bands_MHz : `list`
-        A list of the bandwidths in MHz.
-    fluxs_mJy : `list`
-        A list of the flux densities in mJy.
-    flux_errs_mJy : `list`
-        A list of the uncertainty in the flux densities in mJy.
-    bilby_result : `dict`
+    freqs_MHz : `array_like`
+        An array of the frequencies in MHz.
+    bands_MHz : `array_like`
+        An array of the bandwidths in MHz.
+    fluxs_mJy : `array_like`
+        An array of the flux densities in mJy.
+    flux_errs_mJy : `array_like`
+        An array of the uncertainty in the flux densities in mJy.
+    bilby_result : `dict[str, bilby.Result]`
         A dictionary of `bilby.Result` objects organised by model name.
     model_name : `str`
-        One of the model names from :py:meth:`pulsar_spectra.models.model_settings`.
+        One of the model names from
+        :py:meth:`pulsar_spectra.models.model_settings`.
     band_bool : `bool`
         Whether or not the bandwidth fitting method was used.
     cost_function : `Callable`
@@ -347,7 +368,7 @@ def bilby_compute_maximum_posterior_likelihood(
 def bilby_interpolate_model(
     bilby_result,
     model_name,
-    fitted_freq,
+    fitted_freqs_MHz,
     best_fit_params,
     nsamp=200,
 ):
@@ -359,19 +380,22 @@ def bilby_interpolate_model(
     bilby_result : `bilby.core.result.Result`
         A Result object returned by Bilby.
     model_name : `str`
-        One of the model names from :py:meth:`pulsar_spectra.models.model_settings`.
-    fitted_freqs : `list`
-        The frequencies to evaluate the model at.
-    best_fit_params : `dict`
+        One of the model names from
+        :py:meth:`pulsar_spectra.models.model_settings`.
+    fitted_freqs_MHz : `array_like`
+        The frequencies in MHz to evaluate the model at.
+    best_fit_params : `dict[str, float]`
         A point estimate of the parameter values to add to the plot.
     nsamp : `int`, optional
-        The number of posterior samples to plot.
+        The number of posterior samples to plot. |br| Default: 200.
 
     Returns
     -------
-    plot_dict : `dict`
+    plot_dict : `dict[str, Any]`
         A dictionary of data which will be used for plotting.
     """
+    fitted_freqs_MHz = np.array(fitted_freqs_MHz, dtype=float)
+
     model_dict = model_settings()
     model_function = model_dict[model_name][0]
 
@@ -382,18 +406,18 @@ def bilby_interpolate_model(
         # Convert frequencies to MHz
         if param.startswith("v"):
             best_fit_params[param] /= 1e6
-    fitted_flux_best = model_function(fitted_freq, **best_fit_params) * 1e3
+    fitted_flux_best = model_function(fitted_freqs_MHz, **best_fit_params) * 1e3
 
     # Interpolate to nsamp random samples from the posterior
     samples = bilby_result.posterior[param_keys].sample(nsamp)
-    fitted_flux_samples = np.empty(shape=(nsamp, fitted_freq.size))
+    fitted_flux_samples = np.empty(shape=(nsamp, fitted_freqs_MHz.size))
     for isamp in range(nsamp):
         sample_params = dict(samples.iloc[isamp])
         for param in sample_params.keys():
             # Convert frequencies to MHz
             if param.startswith("v"):
                 sample_params[param] /= 1e6
-        fitted_flux_samples[isamp][:] = model_function(fitted_freq, **sample_params) * 1e3
+        fitted_flux_samples[isamp][:] = model_function(fitted_freqs_MHz, **sample_params) * 1e3
 
     # Create string with fit info to put in the legend
     fit_info = [model_name]
@@ -404,7 +428,8 @@ def bilby_interpolate_model(
             fit_info.append(f"{param} = ${param_range.median / 1e6:.2f}$ MHz")
         elif param.startswith("v"):
             fit_info.append(
-                f"{param} = ${param_range.median / 1e6:.2f}^{{+{param_range.plus / 1e6:.2f}}}_{{-{param_range.minus / 1e6:.2f}}}$ MHz"  # noqa: E501
+                f"{param} = ${param_range.median / 1e6:.2f}"
+                + f"^{{+{param_range.plus / 1e6:.2f}}}_{{-{param_range.minus / 1e6:.2f}}}$ MHz"
             )
         else:
             fit_info.append(f"{param} = {param_range.string}")
@@ -412,7 +437,7 @@ def bilby_interpolate_model(
 
     plot_dict = {
         "fit_info": fit_info,
-        "fitted_freqs": fitted_freq,
+        "fitted_freqs": list(fitted_freqs_MHz),
         "fitted_flux": fitted_flux_best,
         "error_type": "raytrace",
         "fitted_flux_samples": fitted_flux_samples,
@@ -426,7 +451,7 @@ def bilby_get_model_priors():
 
     Returns
     -------
-    priors : `dict`
+    priors : `dict[str, PriorDict]`
         A dictionary with model names as keys, where each item is a PriorDict.
 
     References
@@ -525,13 +550,14 @@ def bilby_get_model_priors():
 
 
 def prior_predictive_check(nsamp=1000):
-    """Perform a prior predictive check by generating nsamp samples from the prior
+    """Perform a prior predictive check by generating samples from the prior
     distribution and making spectra and corner plots to visualise the samples.
 
     Parameters
     ----------
     nsamp : `int`, optional
-        The number of samples to generate from the prior distribution. |br| Default: 1000.
+        The number of samples to generate from the prior distribution.
+        |br| Default: 1000.
     """
     model_dict = model_settings()
 

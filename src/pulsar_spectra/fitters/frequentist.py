@@ -1,5 +1,5 @@
 """
-Functions for using iminuit to fit spectral models.
+Functions for performing frequentist inference of spectral fits.
 """
 
 import logging
@@ -15,52 +15,75 @@ from ..models import model_settings
 logger = logging.getLogger(__name__)
 
 
-def propagate_flux_n_err(freqs, model, iminuit_result):
-    """Propagate the flux based on an input model and use the iminuit to calculate errors if possible.
+def propagate_flux_n_err(freqs_MHz, model, iminuit_result):
+    """Propagate the flux based on an input model and use the iminuit to
+    calculate errors if possible.
 
     Parameters
     ----------
-    freqs : `list`
-        List of frequencies in MHz.
-    model : `function`
-        The spectral model function from :py:meth:`pulsar_spectra.models`.
+    freqs_MHz : `array_like`
+        An array of frequencies in MHz.
+    model : `Callable`
+        A spectral model function from :py:meth:`pulsar_spectra.models`.
     iminuit_result : `iminuit.Minuit`
-        The Minuit class after being fit in :py:meth:`pulsar_spectra.spectral_fit.iminuit_fit_spectral_model`.
+        The Minuit class after being fit in
+        :py:meth:`pulsar_spectra.spectral_fit.iminuit_fit_spectral_model`.
 
     Returns
     -------
-    fitted_flux : `list`
+    fitted_flux : `NDArray[float]`
         A list of the fluxes (in mJy) based on the input model and fit results.
-    fitted_flux_err : `list`
+    fitted_flux_err : `NDArray[float]`
         A list of flux errors (in mJy)  if possible or Nones if not possible.
     """
+    # Convert to SI (Hz) and load into a numpy array
+    freqs_Hz = np.array(freqs_MHz, dtype=float) * 1e6
+
     if iminuit_result.valid:
         try:
             fitted_flux, fitted_flux_cov = propagate(
-                lambda p: model(freqs * 1e6, *p) * 1e3, iminuit_result.values, iminuit_result.covariance
+                lambda p: model(freqs_Hz, *p) * 1e3, iminuit_result.values, iminuit_result.covariance
             )
         except ValueError:
-            fitted_flux = model(freqs * 1e6, *iminuit_result.values) * 1e3
-            fitted_flux_err = [None] * len(fitted_flux)
+            fitted_flux = model(freqs_Hz, *iminuit_result.values) * 1e3
+            fitted_flux_err = np.empty(len(fitted_flux), dtype=float)
         else:
             fitted_flux_err = np.diag(fitted_flux_cov) ** 0.5
     else:
         # No convariance values so use old method
-        fitted_flux = model(freqs * 1e6, *iminuit_result.values) * 1e3
-        fitted_flux_err = [None] * len(fitted_flux)
+        fitted_flux = model(freqs_Hz, *iminuit_result.values) * 1e3
+        fitted_flux_err = np.empty(len(fitted_flux), dtype=float)
     return fitted_flux, fitted_flux_err
 
 
-def migrad_simplex_scan(m, mod_limits, model_name):
-    """Find the minimum of least_squares function using the in-built minimisation
-    algorithms in iminuit. If migrad by itself fails, then run the simplex
-    minimiser before migrad. If simplex fails, run a grid scan over parameter
-    space before migrad. Systematically increase the number of calls until
-    a valid minimum is found.
+def migrad_simplex_scan(m, mod_limits, model_name="unknown_model", tol=1e-5, ncall=1e4):
+    """Minimise a Minuit object using the Migrad algorithm in iminuit. If Migrad
+    by itself fails, then run the Simplex algorithm before Migrad. If Simplex
+    also fails, then run a grid scan over the parameter space before Migrad.
+    Systematically increase the number of calls until a valid minimum is found
+    or the call limit has been reached. Lastly, run the Hesse error estimation
+    algorithm.
+
+    Parameters
+    ----------
+    m : `iminuit.Minuit`
+        A Minuit object to minimise.
+    mod_limit : `list[tuple[float, float]]`
+        Constraints on each of the free model parameters. These limits are
+        primarily to assist the scan minimiser.
+    model_name : `str`, optional
+        The model name to use for logging. |br| Default: 'unknown_model'.
+    tol : `float`, optional
+        Access tolerance for convergence with the EDM criterion. For details.
+        see `https://scikit-hep.org/iminuit/reference.html#iminuit.Minuit.tol`.
+        |br| Default: 1e-5.
+    ncall : `int`, optional
+        The number of minimiser calls until the minimisation is abandoned.
+        |br| Default: 1e4.
     """
-    m.tol = 0.00001  # low tolerace improves likelihood of a sensible fit
-    m.limits = mod_limits  # limits are primarily to assist the scan minimiser
-    ncall = 10000  # Calls until we abandon the fit
+    m.tol = tol
+    m.limits = mod_limits
+    ncall = int(ncall)
     m.migrad(ncall=ncall)
     if m.valid:
         logger.debug(f"Found for fit with {model_name} using migrad and {m.nfcn} calls.")
@@ -77,10 +100,9 @@ def migrad_simplex_scan(m, mod_limits, model_name):
     if not m.valid:
         logger.warning(f"No valid minimum found for model {model_name} after {m.nfcn} calls.")
 
-    m.hesse()  # accurately computes uncertainties
+    m.hesse()  # Estimate the uncertainties
     logger.debug(model_name)
     logger.debug(m)
-    return m
 
 
 def iminuit_fit_spectral_model(
@@ -93,35 +115,41 @@ def iminuit_fit_spectral_model(
     mod_limits=None,
     likelihood="Huber",
 ):
-    """Fit pulsar spectra with iminuit.
+    """Fit pulsar spectra using iminuit.
 
     Parameters
     ----------
-    freqs_MHz : `list`
-        A list of the frequencies in MHz.
-    bands_MHz : `list`
-        A list of the bandwidths in MHz.
-    fluxs_mJy : `list`
-        A list of the flux densities in mJy.
-    flux_errs_mJy : `list`
-        A list of the uncertainty in the flux densities in mJy.
-    model_name : `function`, optional
-        One of the model names from :py:meth:`pulsar_spectra.models.model_settings`.
-        Default: :py:meth:`pulsar_spectra.models.simple_power_law`.
+    freqs_MHz : `array_like`
+        An array of the frequencies in MHz.
+    bands_MHz : `array_like`
+        An array of the bandwidths in MHz.
+    fluxs_mJy : `array_like`
+        An array of the flux densities in mJy.
+    flux_errs_mJy : `array_like`
+        An array of the uncertainty in the flux densities in mJy.
+    model_name : `str`, optional
+        One of the model names from
+        :py:meth:`pulsar_spectra.models.model_settings`.
+        |br| Default: 'simple_power_law'.
     start_params : `tuple`, optional
-        A tuple of the starting parameters for each input to the model that iminuit will use as an initial estimate.
-        If none provided, will use the defaults from :py:meth:`pulsar_spectra.models.model_settings`.
-    mod_limits : `list` of `tuple`s, optional
-        A list of tuples where each tuples is the minimum and maximum limits
-        that will be applied to the model by iminuit.
-        If none provided, will use the defaults from :py:meth:`pulsar_spectra.models.model_settings`.
-    likelihood : `string`, optional
-        The distribution to use for the likelihood ('Gaussian', 'Huber', 't'). |br| Default: 'Huber'.
+        A tuple of the starting parameter values for each input to the model
+        that iminuit will use as an initial estimate.
+        |br| Default: Will use the starting parameter values from
+        :py:meth:`pulsar_spectra.models.model_settings`.
+    mod_limits : `list[tuple[float, float]]`, optional
+        Constraints on each of the free model parameters. These limits are
+        primarily to assist the scan minimiser.
+        |br| Default: Will use the model limits from
+        :py:meth:`pulsar_spectra.models.model_settings`.
+    likelihood : `str`, optional
+        The distribution to use for the likelihood ('Gaussian', 'Huber', 't').
+        |br| Default: 'Huber'.
 
     Returns
     -------
     m : `iminuit.Minuit`
-        The Minuit object after being fit in :py:meth:`pulsar_spectra.spectral_fit.iminuit_fit_spectral_model`.
+        The Minuit object after being minimised in
+        :py:meth:`pulsar_spectra.spectral_fit.iminuit_fit_spectral_model`.
     band_bool : `bool`
         True if bandwidth integration fitting was successful; False otherwise.
     """
@@ -188,7 +216,7 @@ def iminuit_fit_spectral_model(
     m.fixed["v0"] = True  # fix the reference frequency
 
     # Perform the minimisation without bandwidth integration
-    m = migrad_simplex_scan(m, mod_limits, model_name)
+    migrad_simplex_scan(m, mod_limits, model_name)
 
     if m.valid and (None not in bands_MHz):
         # Fit model with bandwidth intergration correction
@@ -222,7 +250,7 @@ def iminuit_fit_spectral_model(
 
         # Perform the minimisation with bandwidth integration
         try:
-            m_band = migrad_simplex_scan(m_band, mod_limits, model_name + "_log")
+            migrad_simplex_scan(m_band, mod_limits, model_name + "_log")
         except ValueError as verr:
             logger.warning(f"{model_name}_log Value Error: {verr}")
             m_band = m
@@ -249,20 +277,20 @@ def iminuit_compute_likelihood(
     band_bool,
     cost_function,
 ):
-    """Select the best-fit model using the AICc.
+    """Compute the cost of the best-fit model.
 
     Parameters
     ----------
-    freqs_MHz : `list`
-        A list of the frequencies in MHz.
-    bands_MHz : `list`
-        A list of the bandwidths in MHz.
-    fluxs_mJy : `list`
-        A list of the flux densities in mJy.
-    flux_errs_mJy : `list`
-        A list of the uncertainty in the flux densities in mJy.
-    iminuit_results : `dict`
-        A dictionary of fitted `iminuit.Minuit` objects organised by model name.
+    freqs_MHz : `array_like`
+        An array of the frequencies in MHz.
+    bands_MHz : `array_like`
+        An array of the bandwidths in MHz.
+    fluxs_mJy : `array_like`
+        An array of the flux densities in mJy.
+    flux_errs_mJy : `array_like`
+        An array of the uncertainty in the flux densities in mJy.
+    iminuit_result : `iminuit.Minuit`
+        A minimised Minuit object.
     band_bool : `bool`
         Whether or not the bandwidth fitting method was used.
     cost_function : `Callable`
@@ -270,13 +298,8 @@ def iminuit_compute_likelihood(
 
     Returns
     -------
-    aic_dict : `dict`
-        A dictionary of AICc values organised by model name.
-    best_fit_model_name : `str`
-        The name of the best-fit model from :py:meth:`pulsar_spectra.models`.
-    p_best : `float`
-        The probability that the selected model is the best-fitting model out
-        of the models compared.
+    beta : `float`
+        The beta of the best-fit model.
     """
     model_dict = model_settings()
 
@@ -306,32 +329,35 @@ def iminuit_compute_likelihood(
 def iminuit_interpolate_model(
     iminuit_result,
     model_name,
-    fitted_freqs,
+    fitted_freqs_MHz,
     band_bool,
 ):
-    """Interpolate iminuit fit to a set of frequencies for plotting.
+    """Interpolate the best-fit model to a set of frequencies for plotting.
 
     Parameters
     ----------
     iminuit_result : `iminuit.Minuit`
-        A fitted Minuit object.
+        A minimised Minuit object.
     model_name : `str`
-        One of the model names from :py:meth:`pulsar_spectra.models.model_settings`.
-    fitted_freqs : `list`
-        The frequencies to evaluate the model at.
+        One of the model names from
+        :py:meth:`pulsar_spectra.models.model_settings`.
+    fitted_freqs_MHz : `array_like`
+        The frequencies in MHz to evaluate the model at.
     band_bool : `bool`
         True if bandwidth integration fitting was successful; False otherwise.
 
     Returns
     -------
-    plot_dict : `dict`
+    plot_dict : `dict[str, Any]`
         A dictionary of data which will be used for plotting.
     """
+    fitted_freqs_MHz = np.array(fitted_freqs_MHz, dtype=float)
+
     model_dict = model_settings()
     model_function = model_dict[model_name][0]
 
     fitted_flux, fitted_flux_err = propagate_flux_n_err(
-        fitted_freqs,
+        fitted_freqs_MHz,
         model_function,
         iminuit_result,
     )
@@ -351,7 +377,7 @@ def iminuit_interpolate_model(
 
     plot_dict = {
         "fit_info": fit_info,
-        "fitted_freqs": fitted_freqs,
+        "fitted_freqs": list(fitted_freqs_MHz),
         "fitted_flux": fitted_flux,
         "error_type": "jacobi",
         "fitted_flux_err": fitted_flux_err,
