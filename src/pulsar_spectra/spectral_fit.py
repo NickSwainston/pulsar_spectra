@@ -49,11 +49,22 @@ def find_best_spectral_fit(
     ref_all : `array_like`
         An array of the reference labels (in the format 'author_year').
     method : `str`, optional
-        The fitting method to use. 'ml' for maximum-likelihood fitting using
-        iminuit. 'ns' for Bayesian nested sampling using Bilby and Dynesty.
+        The fitting method to use. The options are as follows:
+
+            'ml' : maximum-likelihood estimation using iminuit.
+
+            'ns' : Bayesian nested sampling using Bilby and Dynesty.
+
         |br| Default: 'ml'.
     likelihood : `str`, optional
-        The distribution to use for the likelihood ('Gaussian', 'Huber', 't').
+        The likelihood distribution to use. The options are as follows:
+
+            'Gaussian' : A Gaussian distribution (i.e. ordinary least-squares).
+
+            'Huber' : A Gaussian distribution with Huber loss.
+
+            't' : A Student-t distribution with 4 degrees of freedom.
+
         |br| Default: 'Huber'.
     exclude_models : `list[str]`, optional
         A list of model names to exclude from
@@ -83,7 +94,7 @@ def find_best_spectral_fit(
     p_best : `float`
         The probability that the selected model is the best-fitting model out
         of the models compared.
-    fit_results : `dict[str, iminuit.Minuit]`
+    fit_results : `dict[str, iminuit.Minuit | bilby.core.result.Result]`
         A dictionary of fit results with the keys being model names from
         :py:meth:`pulsar_spectra.models.model_settings`.
     aic_dict : `dict[str, float]`
