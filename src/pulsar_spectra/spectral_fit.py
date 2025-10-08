@@ -21,7 +21,7 @@ def find_best_spectral_fit(
     fluxs_mJy,
     flux_errs_mJy,
     ref_all,
-    method="ml",
+    method="maximum-likelihood",
     likelihood="Huber",
     exclude_models=None,
     plot_all=False,
@@ -51,11 +51,11 @@ def find_best_spectral_fit(
     method : `str`, optional
         The fitting method to use. The options are as follows:
 
-            'ml' : maximum-likelihood estimation using iminuit.
+            'maximum-likelihood' : maximum-likelihood estimation using iminuit.
 
-            'ns' : Bayesian nested sampling using Bilby and Dynesty.
+            'bayesian-nested-sampling' : Bayesian nested sampling using Bilby and Dynesty.
 
-        |br| Default: 'ml'.
+        |br| Default: 'maximum-likelihood'.
     likelihood : `str`, optional
         The likelihood distribution to use. The options are as follows:
 
@@ -108,7 +108,7 @@ def find_best_spectral_fit(
         sampler_kwargs = {}
 
     # Conditional imports
-    if method == "ml":
+    if method == "maximum-likelihood":
         from .fitters.frequentist import (
             iminuit_compute_likelihood,
             iminuit_fit_spectral_model,
@@ -121,7 +121,7 @@ def find_best_spectral_fit(
             + "nested sampling method. See the help for "
             + "pulsar_spectra.spectral_fit.find_best_spectral_fit() for details."
         )
-    elif method == "ns":
+    elif method == "bayesian-nested-sampling":
         from .fitters.bayesian import (
             bilby_compute_maximum_posterior_likelihood,
             bilby_fit_spectral_model,
@@ -172,7 +172,7 @@ def find_best_spectral_fit(
         if model_name in exclude_models:
             continue
 
-        if method == "ml":
+        if method == "maximum-likelihood":
             fit_result, band_bool = iminuit_fit_spectral_model(
                 freqs_MHz,
                 bands_MHz,
@@ -199,7 +199,7 @@ def find_best_spectral_fit(
                 fitted_freq,
                 band_bool,
             )
-        elif method == "ns":
+        elif method == "bayesian-nested-sampling":
             fit_result = bilby_fit_spectral_model(
                 freqs_MHz,
                 bands_MHz,

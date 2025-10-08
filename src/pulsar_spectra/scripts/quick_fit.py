@@ -10,7 +10,9 @@ from pulsar_spectra.spectral_fit import find_best_spectral_fit
 logger = logging.getLogger(__name__)
 
 
-def quick_fit(pulsars, method="ml", plot_type="best", likelihood="Huber", sampler_kwargs=None):
+def quick_fit(
+    pulsars, method="maximum-likelihood", plot_type="best", likelihood="Huber", sampler_kwargs=None
+):
     cat_list = collect_catalogue_fluxes()
     for pulsar in pulsars:
         logger.info(f"Fitting {pulsar}")
@@ -96,11 +98,11 @@ def main():
         "-m",
         "--method",
         type=str,
-        choices=["ml", "ns"],
-        default="ml",
+        choices=["maximum-likelihood", "bayesian-nested-sampling"],
+        default="maximum-likelihood",
         help=(
-            "Fitting method. 'ml' for maximum-likelihood fitting using iminuit; "
-            "'ns' for Bayesian nested sampling using Bilby/Dynesty."
+            "Fitting method. 'maximum-likelihood' for maximum-likelihood fitting using iminuit; "
+            "'bayesian-nested-sampling' for Bayesian nested sampling using Bilby/Dynesty."
         ),
     )
     parser.add_argument(

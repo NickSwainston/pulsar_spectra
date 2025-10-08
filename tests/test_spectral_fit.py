@@ -117,14 +117,20 @@ spectral_fit_tests = [
     ),
 ]
 
-# Make nested sampling (ns) and maximum likelihood (ml) method copies
+# Make copies for the bayesian-nested-sampling and maximum-likelihood methods
 spectral_fit_tests_ns = [
-    pytest.param("ns", pulsar, model, refs, "Huber", marks=pytest.mark.long)
+    pytest.param("bayesian-nested-sampling", pulsar, model, refs, "Huber", marks=pytest.mark.long)
     for pulsar, model, refs in spectral_fit_tests
 ]
-spectral_fit_tests_ml_gaussian = [("ml", pulsar, model, refs, "Gaussian") for pulsar, model, refs in spectral_fit_tests]
-spectral_fit_tests_ml_huber = [("ml", pulsar, model, refs, "Huber") for pulsar, model, refs in spectral_fit_tests]
-spectral_fit_tests_ml_t = [("ml", pulsar, model, refs, "t") for pulsar, model, refs in spectral_fit_tests]
+spectral_fit_tests_ml_gaussian = [
+    ("maximum-likelihood", pulsar, model, refs, "Gaussian") for pulsar, model, refs in spectral_fit_tests
+]
+spectral_fit_tests_ml_huber = [
+    ("maximum-likelihood", pulsar, model, refs, "Huber") for pulsar, model, refs in spectral_fit_tests
+]
+spectral_fit_tests_ml_t = [
+    ("maximum-likelihood", pulsar, model, refs, "t") for pulsar, model, refs in spectral_fit_tests
+]
 
 # Combine them
 combined_spectral_fit_tests = (
@@ -161,7 +167,7 @@ def test_find_best_spectral_fit(fit_method, pulsar, exp_model_name, frozen_refs,
         ref_markers=ref_markers,
     )
     iminuit_result = fit_results[best_fit_model_name]
-    if fit_method == "ml":
+    if fit_method == "maximum-likelihood":
         for p, v, e in zip(iminuit_result.parameters, iminuit_result.values, iminuit_result.errors):
             if p.startswith("v"):
                 print(f"{p} = {v / 1e6:8.1f} +/- {e / 1e6:8.1} MHz")
@@ -183,7 +189,7 @@ def test_plot_methods():
         cat_list[pulsar][2],
         cat_list[pulsar][3],
         cat_list[pulsar][4],
-        method="ml",
+        method="maximum-likelihood",
         likelihood="Huber",
         plot_compare=True,
     )
@@ -195,7 +201,7 @@ def test_plot_methods():
         cat_list[pulsar][2],
         cat_list[pulsar][3],
         cat_list[pulsar][4],
-        method="ml",
+        method="maximum-likelihood",
         likelihood="Huber",
         plot_all=True,
     )
@@ -207,7 +213,7 @@ def test_plot_methods():
         cat_list[pulsar][2],
         cat_list[pulsar][3],
         cat_list[pulsar][4],
-        method="ml",
+        method="maximum-likelihood",
         likelihood="Huber",
         plot_best=True,
     )
@@ -219,7 +225,7 @@ def test_plot_methods():
         cat_list[pulsar][2],
         cat_list[pulsar][3],
         cat_list[pulsar][4],
-        method="ml",
+        method="maximum-likelihood",
         likelihood="Huber",
         plot_best=True,
         alternate_style=True,
