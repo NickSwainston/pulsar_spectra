@@ -659,28 +659,35 @@ def double_turn_over_spectrum_taylor(vmin_vmax, vc, vpeak, a, beta, c, v0):
 
 
 def model_settings(print_models=False):
-    """Holds metadata about spectral models such as common names and default fit parameters.
+    """Holds metadata about spectral models such as common names and default fit
+    parameters.
 
     Parameters
     ----------
-    print_models : `boolean`, optional
-        If true, will print the models dictionary which is useful for debuging new models. Default False.
+    print_models : `bool`, optional
+        If true, will print the models dictionary which is useful for debuging
+        new models. |br| Default: `False`.
 
     Returns
     -------
-    model_dict : `dict[str, Any]`
-        Returns a dictionary with model names as keys in the format:
+    model_dict : `dict[str, list[Any]]`
+        Returns a dictionary with model names as keys containing a list of model
+        settings. The list contains the following items:
 
-        {
-            model_name: [
-                model_function,
-                short_name,
-                start_params,
-                mod_limits,
-                model_function_integrate,
-                model_priors
-            ]
-        }
+        model_function : `Callable`
+            A function which takes the centre frequency and parameter values
+            and returns the flux density.
+        short_name : `str`
+            A short name for the model to print in the legend.
+        start_params : `tuple`
+            Starting parameter values to assist the minimiser.
+        mod_limits : `list[tuple]`
+            Parameter limits to assist the minimiser.
+        model_function_integrate : `Callable`
+            A function which takes the min/max frequencies and parameter values
+            and returns the flux density.
+        model_priors : `dict | PriorDict`
+            A dictionary of Bayesian priors for each free parameter.
     """
     # Starting values and limits for minimisation approach
 
