@@ -27,7 +27,7 @@ currently implemented:
 
 Maximum-likelihood estimation is extremely fast and usually produces reliable model fits, however
 the error estimation is limited and the minimiser can sometimes converge on a local minimum in the
-parameter space which results in a poor fit the the data. Comparatively, Bayesian nested sampling is
+parameter space which results in a poor fit to the data. Comparatively, Bayesian nested sampling is
 more computationally intensive but explores the full parameter space and produces a posterior
 probability distribution which can be used to interpret the fit results. This makes it better suited
 for complex or poorly-constrained spectra. Futher details on each of the methods are provided below.
@@ -81,18 +81,17 @@ the *prior probability*, :math:`P(\mathbf{D}|M)` is the *evidence*, and :math:`P
 is the *posterior probability*.
 
 Nested sampling is an approach to Bayesian inference that allows for simultaneous estimation of the
-posterior and the evidence. Since we are comparing empirical models, we do not use the Bayesian
-evidence to infer the best-fit model. However, nested sampling has many other benefits including
-being good at sampling multi-model parameter distributions and being easily parallelisable. It is
-therefore a logical option for fitting pulsar spectra, which are often poorly constrained. For more
-details on nested sampling and the specific implementation in `Dynesty <https://dynesty.readthedocs.io/en/v3.0.0/index.html>`_,
+posterior and the evidence. It has many advantages, including being good at sampling multi-model
+parameter distributions and being easily parallelisable. It is therefore a logical option for
+fitting pulsar spectra, which are often poorly constrained. For more details on nested sampling and
+the specific implementation in `Dynesty <https://dynesty.readthedocs.io/en/v3.0.0/index.html>`_,
 we recommend reading the `Dynesty documentation <https://dynesty.readthedocs.io/en/v3.0.0/overview.html>`_.
 
-Since the spectral models that we are fitting are empirical, we cannot derive the model priors from
-theory. Instead, we use population statistics and the results of past spectral fits using
-traditional frequentist fitting methods. For the spectral index and the frequencies of spectral
-features (turnover, break, cutoff), we estimate the prior from the distributions reported in
-Chapter 6 of `Swainston et al. (2023) <https://espace.curtin.edu.au/handle/20.500.11937/93846>`_
+Since the spectral models that we are fitting are empirical, we cannot derive the model parameter
+priors from theory. Instead, we use population statistics and the results of past spectral fits
+using traditional frequentist fitting methods. For the spectral index and the frequencies of
+spectral features (turnover, break, cutoff), we estimate the prior from the distributions reported
+in Chapter 6 of `Swainston et al. (2023) <https://espace.curtin.edu.au/handle/20.500.11937/93846>`_
 and the `all_pulsar_spectra <https://all-pulsar-spectra.readthedocs.io/en/latest/>`_ repository.
 We also fix the reference frequency to :math:`1400\,\mathrm{MHz}` and use the distribution of
 :math:`S_{1400}` measurements from the ATNF pulsar catalogue to set the prior on the reference flux
@@ -101,30 +100,111 @@ density. Lastly, for the smoothness of the spectral turnover, we use a uniform d
 
 .. _fitting_likelihood:
 
-Fitting likelihood
-------------------
+Likelihoods
+-----------
 
-Gaussian
-^^^^^^^^
-
-Huber loss function
-^^^^^^^^^^^^^^^^^^^
-To account for underestimated uncertainties on outlier points, we modify the regular least-squared quadratic loss function
-to deviate to linear loss once a certain distance is reached from the model.
-In this way, outlier data are penalised, and bad data is less likely to skew the model fit. We use the Huber loss function, which is defined as
+Gaussian distribution
+^^^^^^^^^^^^^^^^^^^^^
+The joint Gaussian likelihood of :math:`N` measurements :math:`\{x_i, y_i\pm\sigma_{y,i}\}` where
+:math:`i=1\dots N` is:
 
 .. math::
 
-    \rho =
+    L_\mathrm{Gaussian} = \prod_i^N \frac{1}{\sqrt{2\pi}\sigma_{y,i}} 
+    \exp \left[ - \frac{1}{2} \left( \frac{M(x_i,\mathbf{\Theta})-y_i}{\sigma_{y,i}} \right)^2 \right].
+
+The cost function for the Gaussian likelihood follows a :math:`\chi^2` distribution:
+
+.. math::
+
+    \beta = -\log L_\mathrm{Gaussian} = 
+    \sum_i^N \frac{1}{2} \left( \frac{M(x_i,\mathbf{\Theta})-y_i}{\sigma_{y,i}}  \right)^2 + C,
+
+where the constant :math:`C` can be neglected for the purposes of finding the best-fit model. 
+For this likelihood, minimising :math:`\beta` is equivalent to weighted least-squares fitting.
+
+Gaussian distribution with Huber loss
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The Huber loss function is a robust regression technique in which data that deviate by a set
+distance from the model are penalised. Following `Jankowski et al. (2018) <https://ui.adsabs.harvard.edu/abs/2018MNRAS.473.4436J/abstract>`_,
+we define a *robust cost function* which uses squared-error loss below a distance threshold and
+linear loss above it. Explicitly, this is:
+
+.. math::
+
+    \beta = -\log L_\mathrm{Huber} = \sum_i^N
     \begin{cases}
-    \frac{1}{2}t^2 & \mathrm{if}\:|t|<k \\
-    k|t|-\frac{1}{2}k^2 & \mathrm{if}\:|t|\geq k
-    \end{cases},
+    \frac{1}{2} R_i^2         & \mathrm{if} |R_i| < k \\
+    k |R_i| - \frac{1}{2} k^2 & \mathrm{if} |R_i| \geq k
+    \end{cases}
 
-where :math:`t` is a residual and :math:`k` is a constant (which we set to 1.345) that defines the point at which outlying points are penalised.
+where :math:`R_i=\left[M(x_i, \mathbf{\Theta}) - y_i\right]/\sigma_{y,i}` are the residuals and :math:`k=1.345`
+is the distance threshold. By penalising outliers, data with unaccounted systematic errors will have
+less weight in the fit. This technique will be most effective when there is enough good data points
+to delineate which of the data are outliers.
 
-t
-^
+:math:`t` distribution
+^^^^^^^^^^^^^^^^^^^^^^
+The :math:`t` distribution is a generalisation of the Gaussian distribution with heavier tails. The
+likelihood is defined as
+
+.. math::
+
+    L_t = \prod_i^N
+    \frac{\Gamma \left( \frac{\nu+1}{2} \right)}{\Gamma\left(\frac{\nu}{2}\right) \sqrt{\pi\nu} \sigma_{y,i}}
+    \left[1 + \frac{1}{\nu} \left( \frac{M(x_i,\mathbf{\Theta})-y_i}{\sigma_{y,i}}  \right)^2 \right]^{-(\nu+1)/2},
+
+where :math:`\Gamma` is the gamma function and :math:`\nu` is a parameter which controls how much
+probability mass is in the tails (the number of 'degrees of freedom' of the distribution). To get
+the cost function,
+
+.. math::
+
+    \beta = - \log L_t,
+
+we make use of the ``scipy.stats.t.logpdf`` function in ``SciPy``. Since the :math:`t` distribution
+is continuous everywhere, is can be used to include upper/lower limits in the fit by constructing a
+`Tobit likelihood <https://en.wikipedia.org/wiki/Tobit_model>`_ (i.e. using the CDF rather than the
+PDF of the distribution).
+
+
+Model Selection
+---------------
+When selecting a best-fit model, it is important define what is meant by the 'best fit'. Since we
+are primarily comparing empirical models (i.e. models that are not derived from physical theory), it
+does not make sense to try to find the 'most probably correct' model using Bayesian statistics, as
+there is no clear way to choose sensible priors. Instead, we choose the model which is the best
+*predictor* of the data out of the models being compared. To do this, we use the *Akaike Information
+Criterion* (AIC) modified for small sample sizes:
+
+.. math::
+
+    \mathrm{AICc} = 2 \beta_\mathrm{min} + 2K + \frac{2K(K+1)}{N - K - 1},
+
+where :math:`\beta_\mathrm{min}` is the minimised cost function, :math:`K` is the number of free
+model parameters, and :math:`N` is the number of measurements. This is a technique from information
+theory, and the AICc can be thought of as a second-order estimate of the amount of information
+lost by a model relative to the other models. As such, the AICc itself is arbitrary until it is
+compared between models.
+
+Another factor to consider when selecting a model using the AICc is the sensitivity of the model
+selection. When interpreting the model fit, it is useful to know the probability that the selected
+best-fit model is truely the best-fit model out of those selected, :math:`p_\mathrm{best}`. To do
+this, we calculate the Akaike weight, i.e. the relative likelihood of each model :math:`i` relative
+to the AICc of the best-fit model :math:`\mathrm{AICc}_\mathrm{min}`:
+
+.. math::
+
+    l_i = \exp \left( -\frac{1}{2} \left| \mathrm{AICc}_i - \mathrm{AICc}_\mathrm{min} \right| \right).
+
+We can then calculate :math:`p_\mathrm{best}`:
+
+.. math::
+
+    p_\mathrm{best} = \left( \sum_i^T \right)^{-1},
+
+where :math:`T` is the number of models being considered. This probability is included in the legend
+of each ``pulsar_spectra`` plot to assist with interpreting the fit.
 
 Models
 ------
