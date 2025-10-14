@@ -269,7 +269,7 @@ def bilby_fit_spectral_model(
         sampler=sampler,
         plot=False,
         check_point_plot=True,
-        label=f"{label}_{model_name}",
+        label=f"{label}_{model_name}_{likelihood}",
         **sampler_kwargs,
     )
 
