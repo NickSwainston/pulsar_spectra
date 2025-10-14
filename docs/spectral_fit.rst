@@ -493,7 +493,9 @@ options. For example:
     )
 
 This will produce the following plot, which shows 100 samples from the posterior distribution of the
-best-fit model (grey lines), as well as the sample with the maximum likelihood (black dashed line):
+best-fit model (grey lines), as well as the sample with the maximum likelihood (black dashed line).
+The legend provides the median posterior estimate and the 16% to 84% credible interval for each
+parameter.
 
 .. image:: figures/J1327-6222_broken_power_law_bayesian-nested-sampling_t_fit.png
   :width: 800
@@ -506,4 +508,5 @@ diagnostic plots generated is a corner plot showing the posterior probability di
 
 If you would like more control over the model fitting, the functions are contained in the
 :ref:`fitters module<fitters_module>`. Documentation for these functions can be found in their
-docstrings, and the source code for ``find_best_spectral_fit`` provides an example of their usage.
+docstrings, and the source code for :py:meth:`pulsar_spectra.spectral_fit.find_best_spectral_fit`
+provides an example of their usage.
