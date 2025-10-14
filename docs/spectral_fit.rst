@@ -11,7 +11,7 @@ which uses empirically-informed priors. These methods are described below, but f
 be found in `Swainston et al. (2022) <https://ui.adsabs.harvard.edu/abs/2022PASA...39...56S/abstract>`_
 and Swainston et al. (in preparation).
 
-.. _fitting_method:
+.. _fitting-methods:
 
 Fitting methods
 ---------------
@@ -98,55 +98,62 @@ We also fix the reference frequency to :math:`1400\,\mathrm{MHz}` and use the di
 density. Lastly, for the smoothness of the spectral turnover, we use a uniform distribution between
 0.1 and 2.1, where 2.1 represents the special case of free-free absorpsion.
 
-.. _fitting_likelihood:
+.. _likelihoods:
 
 Likelihoods
 -----------
 
+.. _gaussian-likelihood:
+
 Gaussian distribution
 ^^^^^^^^^^^^^^^^^^^^^
-The joint Gaussian likelihood of :math:`N` measurements :math:`\{x_i, y_i\pm\sigma_{y,i}\}` where
-:math:`i=1\dots N` is:
+The combined Gaussian likelihood, :math:`L_\mathrm{G}`, of :math:`N` measurements :math:`\{x_i, y_i\pm\sigma_{y,i}\}`, where
+:math:`i=1\dots N`, is:
 
 .. math::
 
-    L_\mathrm{Gaussian} = \prod_i^N \frac{1}{\sqrt{2\pi}\sigma_{y,i}} 
+    L_\mathrm{G} = \prod_i^N \frac{1}{\sqrt{2\pi}\sigma_{y,i}} 
     \exp \left[ - \frac{1}{2} \left( \frac{M(x_i,\mathbf{\Theta})-y_i}{\sigma_{y,i}} \right)^2 \right].
 
 The cost function for the Gaussian likelihood follows a :math:`\chi^2` distribution:
 
 .. math::
 
-    \beta = -\log L_\mathrm{Gaussian} = 
+    \beta \equiv \chi^2 = -\log L_\mathrm{G} = 
     \sum_i^N \frac{1}{2} \left( \frac{M(x_i,\mathbf{\Theta})-y_i}{\sigma_{y,i}}  \right)^2 + C,
 
 where the constant :math:`C` can be neglected for the purposes of finding the best-fit model. 
 For this likelihood, minimising :math:`\beta` is equivalent to weighted least-squares fitting.
+
+.. _huber-likelihood:
 
 Gaussian distribution with Huber loss
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 The Huber loss function is a robust regression technique in which data that deviate by a set
 distance from the model are penalised. Following `Jankowski et al. (2018) <https://ui.adsabs.harvard.edu/abs/2018MNRAS.473.4436J/abstract>`_,
 we define a *robust cost function* which uses squared-error loss below a distance threshold and
-linear loss above it. Explicitly, this is:
+linear loss above it:
 
 .. math::
 
-    \beta = -\log L_\mathrm{Huber} = \sum_i^N
+    \beta = -\log L_\mathrm{H} = \sum_i^N
     \begin{cases}
     \frac{1}{2} R_i^2         & \mathrm{if} |R_i| < k \\
     k |R_i| - \frac{1}{2} k^2 & \mathrm{if} |R_i| \geq k
     \end{cases}
 
-where :math:`R_i=\left[M(x_i, \mathbf{\Theta}) - y_i\right]/\sigma_{y,i}` are the residuals and :math:`k=1.345`
+where :math:`L_\mathrm{H}` is a Gaussian likelihood with Huber loss,
+:math:`R_i=\left[M(x_i, \mathbf{\Theta}) - y_i\right]/\sigma_{y,i}` are the residuals and :math:`k=1.345`
 is the distance threshold. By penalising outliers, data with unaccounted systematic errors will have
 less weight in the fit. This technique will be most effective when there is enough good data points
 to delineate which of the data are outliers.
 
+.. _t-likelihood:
+
 :math:`t` distribution
 ^^^^^^^^^^^^^^^^^^^^^^
 The :math:`t` distribution is a generalisation of the Gaussian distribution with heavier tails. The
-likelihood is defined as
+likelihood is:
 
 .. math::
 
@@ -162,11 +169,12 @@ the cost function,
 
     \beta = - \log L_t,
 
-we make use of the ``scipy.stats.t.logpdf`` function in ``SciPy``. Since the :math:`t` distribution
-is continuous everywhere, is can be used to include upper/lower limits in the fit by constructing a
-`Tobit likelihood <https://en.wikipedia.org/wiki/Tobit_model>`_ (i.e. using the CDF rather than the
-PDF of the distribution).
+we make use of the ``scipy.stats.t.logpdf`` function in ``SciPy``. Using the :math:`t` distribution,
+it is straight-forward to include upper/lower limits in the fit by constructing a
+`Tobit likelihood <https://en.wikipedia.org/wiki/Tobit_model>`_, which uses the CDF rather than the
+PDF of the distribution.
 
+.. _model-selection:
 
 Model Selection
 ---------------
@@ -184,14 +192,14 @@ Criterion* (AIC) modified for small sample sizes:
 where :math:`\beta_\mathrm{min}` is the minimised cost function, :math:`K` is the number of free
 model parameters, and :math:`N` is the number of measurements. This is a technique from information
 theory, and the AICc can be thought of as a second-order estimate of the amount of information
-lost by a model relative to the other models. As such, the AICc itself is arbitrary until it is
-compared between models.
+lost by a model relative to the other models being tested. As such, the AICc itself is arbitrary
+until it is compared between models. When comparing models, a lower AICc is better.
 
 Another factor to consider when selecting a model using the AICc is the sensitivity of the model
 selection. When interpreting the model fit, it is useful to know the probability that the selected
-best-fit model is truely the best-fit model out of those selected, :math:`p_\mathrm{best}`. To do
-this, we calculate the Akaike weight, i.e. the relative likelihood of each model :math:`i` relative
-to the AICc of the best-fit model :math:`\mathrm{AICc}_\mathrm{min}`:
+best-fit model is truely the best-fit model out of those tested, :math:`p_\mathrm{best}`. To do
+this, we calculate the *Akaike weight*, i.e. the relative likelihood of a model :math:`i` compared
+with the model with the lowest AICc (:math:`\mathrm{AICc}_\mathrm{min}`):
 
 .. math::
 
@@ -203,12 +211,12 @@ We can then calculate :math:`p_\mathrm{best}`:
 
     p_\mathrm{best} = \left( \sum_i^T \right)^{-1},
 
-where :math:`T` is the number of models being considered. This probability is included in the legend
+where :math:`T` is the number of models being tested. This probability is included in the legend
 of each ``pulsar_spectra`` plot to assist with interpreting the fit.
 
 Models
 ------
-This fit is done for all functions in :ref:`the models module<modelsmodule>` that are included in :py:meth:`pulsar_spectra.models.model_settings`.
+This fit is done for all functions in the :ref:`models module<models_module>` that are included in :py:meth:`pulsar_spectra.models.model_settings`.
 For example, at the time of writing this documentation, the list of models within model settings includes:
 
 .. code-block:: python
@@ -359,7 +367,7 @@ Which will output something like this:
         start_params:             (4000000000.0, 100000000.0, -1.6, 1.0, 1.0)
         mod_limits:               [None, (10000000.0, 2000000000.0), (-8.0, 0.0), (0.1, 2.1), (0.0, None)]
 
-You can find the descriptions of the models in the :ref:`the models module<modelsmodule>`.
+You can find the descriptions of the models in the :ref:`models module<models_module>`.
 
 
 Adding a new model
@@ -367,7 +375,7 @@ Adding a new model
 If you would like to use a new model, you can add a function to the models' module and set up the defaults for its
 initial fit parameters and limits in :py:meth:`pulsar_spectra.models.model_settings`.
 
-For example, here is the function for the simple power law in :ref:`the models module<modelsmodule>`:
+For example, here is the function for the simple power law in the :ref:`models module<models_module>`:
 
 .. code-block:: python
 
@@ -428,20 +436,10 @@ Because some of the models have common parameters (such as spectral index), some
 Make sure you reinstall pulsar_spectra to apply any changes you have made to :py:meth:`pulsar_spectra.models.model_settings`, then you will be ready to fit with your new model.
 
 
-Best fit
---------
-The best fit model is determined using the Akaike information criterion (AIC), which measures how much information the model
-retains about the data without overfitting. It was implemented as
-
-.. math::
-
-    \mathrm{AIC}=2\beta_\mathrm{min} + 2K + \frac{2K(K+1)}{N-K-1},
-
-where :math:`\beta_\mathrm{min}` is the minimised robust cost function, :math:`K` is the number of free parameters, and :math:`N`
-is the number of data points in the fit. The last term is the correction for finite sample sizes, which goes to zero as the sample
-size gets sufficiently large. The model which results in the lowest AIC is the most likely to be the best fitting model.
-
-All of this is done by calling the :py:meth:`pulsar_spectra.spectral_fit.find_best_spectral_fit` function like so:
+Finding the best-fit model
+--------------------------
+To find the best-fit model out of those implemented in ``pulsar_spectra``, you can use the
+:py:meth:`pulsar_spectra.spectral_fit.find_best_spectral_fit` function. As a simple example:
 
 .. code-block:: python
 
@@ -449,57 +447,63 @@ All of this is done by calling the :py:meth:`pulsar_spectra.spectral_fit.find_be
     from pulsar_spectra.spectral_fit import find_best_spectral_fit
 
     cat_dict = collect_catalogue_fluxes()
-    pulsar = 'J1453-6413'
-    freqs, fluxs, flux_errs, refs = cat_dict[pulsar]
-    best_model_name, iminuit_result, fit_info, p_best, p_category = find_best_spectral_fit(pulsar, freqs, fluxs, flux_errs, refs, plot_best=True)
+    pulsar = 'J1327-6222'
+    freqs, bands, fluxs, flux_errs, refs = cat_dict[pulsar]
 
-To confirm that the best model has been found, you can visually inspect the fits of all models using the *plot_compare* option like so
-
-.. script location: example_scripts/plot_compare.py
-.. code-block:: python
-
-    best_model_name, iminuit_result, fit_info, p_best, p_category = find_best_spectral_fit(pulsar, freqs, fluxs, flux_errs, refs, plot_compare=True)
-
-which will produce
-
-.. image:: figures/J1453-6413_comparison_fit.png
-  :width: 800
-
-From this plot, it does look like the power-law with a low-frequency turnover is the best model as the code predicted.
-If this is not the case and wanted to try and improve the broken power-law fit, for example, you can have more control over the
-fit using :py:meth:`pulsar_spectra.spectral_fit.iminuit_fit_spectral_model` function like so.
-
-.. script location: example_scripts/broken_power_law_fit.py
-.. code-block:: python
-
-    from pulsar_spectra.catalogue import collect_catalogue_fluxes
-    from pulsar_spectra.spectral_fit import iminuit_fit_spectral_model
-
-    cat_list = collect_catalogue_fluxes()
-    pulsar = 'J1453-6413'
-    freqs, fluxs, flux_errs, refs = cat_list[pulsar]
-
-    # Broken power law function is in the format
-    # broken_power_law(v, vb, a1, a2, b, v0)
-
-    # start params for (v, vb, a1, a2, b)
-    start_params = (5e8, -1.6, -1.6, 0.1)
-
-    # Fit param limits (min, max) or (v, vb, a1, a2, b)
-    mod_limits = [(None, None), (-10, 10), (-10, 0), (0, None)]
-    # None means there is no limit
-
-    aic, iminuit_result, fit_info = iminuit_fit_spectral_model(
+    best_model_name, p_best, fit_results, aic_dict, plot_dicts = find_best_spectral_fit(
+        pulsar,
         freqs,
+        bands,
         fluxs,
         flux_errs,
         refs,
-        model_name="broken_power_law",
-        start_params=start_params,
-        mod_limits=mod_limits,
-        plot=True,
-        save_name="J1453-6413_broken_power_law.png",
+        plot_best=True,
     )
 
-In this example we are manually handing :py:meth:`pulsar_spectra.spectral_fit.iminuit_fit_spectral_model` the default
-*start_params* and *mod_limits* but you can edit these.
+The parameters returned are: the name of the best-fit model, the :math:`p_\mathrm{best}` of the
+best-fit model, a dictionary of ``iminuit`` or ``Bilby`` results objects, a dictionary of AICc
+values, and a dictionary of data and metadata used to plot the model fits. Here, we have specified
+``plot_best=True``, which will create a plot of the data showing the best-fit spectral model:
+
+.. image:: figures/J1327-6222_broken_power_law_maximum-likelihood_Huber_fit.png
+  :width: 800
+
+If you would instead like to visually compare all of the models that were tested, then you can
+use the option ``plot_compare=True``. This will produce the following comparison plot:
+
+.. image:: figures/J1327-6222_maximum-likelihood_Huber_comparison_fit.png
+  :width: 800
+
+By default, :ref:`maximum-likelihood-estimation` and the :ref:`huber-likelihood` likelihood will be
+used. The fitting method and likelihood can be specified with the ``method`` and ``likelihood``
+options. For example:
+
+.. code-block:: python
+
+    best_model_name, p_best, fit_results, aic_dict, plot_dicts = find_best_spectral_fit(
+        pulsar,
+        freqs,
+        bands,
+        fluxs,
+        flux_errs,
+        refs,
+        plot_best=True,
+        method="bayesian-nested-sampling",
+        likelihood="t",
+    )
+
+This will produce the following plot, which shows 100 samples from the posterior distribution of the
+best-fit model (grey lines), as well as the sample with the maximum likelihood (black dashed line):
+
+.. image:: figures/J1327-6222_broken_power_law_bayesian-nested-sampling_t_fit.png
+  :width: 800
+
+The plots generated by ``Bilby`` and ``Dynesty`` will be written to a subdirectory. One of the
+diagnostic plots generated is a corner plot showing the posterior probability distribution:
+
+.. image:: figures/J1327-6222_broken_power_law_corner.png
+  :width: 800
+
+If you would like more control over the model fitting, the functions are contained in the
+:ref:`fitters module<fitters_module>`. Documentation for these functions can be found in their
+docstrings, and the source code for ``find_best_spectral_fit`` provides an example of their usage.
