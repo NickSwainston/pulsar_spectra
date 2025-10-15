@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
-from pulsar_spectra.spectral_fit import find_best_spectral_fit
+
 from pulsar_spectra.catalogue import collect_catalogue_fluxes
+from pulsar_spectra.spectral_fit import find_best_spectral_fit
 
 # Pulsar, flux, flux_err
 pulsar_flux = [

@@ -1,6 +1,6 @@
+from pulsar_spectra.analysis import estimate_flux_density
 from pulsar_spectra.catalogue import collect_catalogue_fluxes
 from pulsar_spectra.spectral_fit import find_best_spectral_fit
-from pulsar_spectra.analysis import estimate_flux_density
 
 cat_dict = collect_catalogue_fluxes()
 pulsar = "J0820-1350"
