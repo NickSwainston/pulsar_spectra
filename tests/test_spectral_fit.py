@@ -147,7 +147,7 @@ def test_find_best_spectral_fit(fit_method, pulsar, exp_model_name, frozen_refs,
     ref_markers = {
         "Jankowski_2018": ("k", "d", 7),  # black thin diamond
         "Jankowski_2019": ("#b6dbff", "*", 9),  # light blue star
-        "Xue_2017": ("y", "P", 7.5),  # yellow thick plus)
+        "Murphy_2017": ("y", "P", 7.5),  # yellow thick plus
     }
 
     print(f"\nFitting {pulsar}")
@@ -164,7 +164,7 @@ def test_find_best_spectral_fit(fit_method, pulsar, exp_model_name, frozen_refs,
         method=fit_method,
         likelihood=likelihood,
         plot_compare=True,
-        ref_markers=ref_markers,
+        plot_kwargs={"ref_markers": ref_markers},
     )
     iminuit_result = fit_results[best_fit_model_name]
     if fit_method == "maximum-likelihood":
@@ -217,7 +217,7 @@ def test_plot_methods():
         likelihood="Huber",
         plot_best=True,
     )
-    print("Plotting Best alternate style and fit range")
+    print("Plotting Best with compact legend style and custom fit range")
     find_best_spectral_fit(
         pulsar,
         cat_list[pulsar][0],
@@ -228,8 +228,22 @@ def test_plot_methods():
         method="maximum-likelihood",
         likelihood="Huber",
         plot_best=True,
-        alternate_style=True,
         fit_range=(10, 1100),
+        legend_style="compact",
+    )
+    print("Plotting Best with typeset legend style and no bands")
+    find_best_spectral_fit(
+        pulsar,
+        cat_list[pulsar][0],
+        cat_list[pulsar][1],
+        cat_list[pulsar][2],
+        cat_list[pulsar][3],
+        cat_list[pulsar][4],
+        method="maximum-likelihood",
+        likelihood="Huber",
+        plot_best=True,
+        legend_style="typeset",
+        plot_kwargs={"plot_bands": False},
     )
 
 

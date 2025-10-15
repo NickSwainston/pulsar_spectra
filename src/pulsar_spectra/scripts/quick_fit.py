@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 def quick_fit(
-    pulsars, method="maximum-likelihood", plot_type="best", likelihood="Huber", sampler_kwargs=None
+    pulsars, method="maximum-likelihood", plot_type="best", legend_style="raw", likelihood="Huber", sampler_kwargs=None
 ):
     cat_list = collect_catalogue_fluxes()
     for pulsar in pulsars:
@@ -54,6 +54,7 @@ def quick_fit(
             ref_all,
             method=method,
             likelihood=likelihood,
+            legend_style=legend_style,
             sampler_kwargs=sampler_kwargs,
             **plot_opt,
         )
@@ -61,13 +62,13 @@ def quick_fit(
         logger.info(f"{pulsar} fit: {best_fit_model_name} (p_best={p_best:.3f})")
 
         # TODO: implement a package-agnostic method for printing results
-        # if fit_results is None:
-        # continue
-        # for p, v, e in zip(iminuit_result.parameters, iminuit_result.values, iminuit_result.errors):
-        #     if p.startswith("v"):
-        #         logger.info(f"{p} = {v/1e6:8.1f} +/- {e/1e6:8.1} MHz")
-        #     else:
-        #         logger.info(f"{p} = {v:.5f} +/- {e:.5}")
+        if method == "maximum-likelihood" and fit_results is not None:
+            result = fit_results[best_fit_model_name]
+            for p, v, e in zip(result.parameters, result.values, result.errors):
+                if p.startswith("v"):
+                    logger.info(f"{p} = {v / 1e6:8.1f} +/- {e / 1e6:8.1} MHz")
+                else:
+                    logger.info(f"{p} = {v:.5f} +/- {e:.5}")
 
 
 def main():
@@ -119,6 +120,19 @@ def main():
         ),
     )
     parser.add_argument(
+        "-s",
+        "--legend_style",
+        type=str,
+        choices=["raw", "typeset", "compact"],
+        default="raw",
+        help=(
+            "Legend style. "
+            "'raw' for code-like formatting; "
+            "'typeset' for LaTeX typeset formatting; "
+            "'compact' for a simpler legend inside the bbox."
+        ),
+    )
+    parser.add_argument(
         "-l",
         "--likelihood",
         type=str,
@@ -159,6 +173,7 @@ def main():
         args.pulsars,
         method=args.method,
         plot_type=args.plot_type,
+        legend_style=args.legend_style,
         likelihood=args.likelihood,
         sampler_kwargs={"npool": args.npool},
     )

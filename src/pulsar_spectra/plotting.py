@@ -12,7 +12,6 @@ from matplotlib.ticker import FormatStrFormatter
 
 from .catalogue import convert_cat_list_to_dict
 from .load_data import DEFAULT_PLOTTING_CONFIG
-from .models import model_settings
 
 logger = logging.getLogger(__name__)
 
@@ -125,7 +124,6 @@ def make_comparison_plot(
             fluxs_mJy,
             flux_errs_mJy,
             ref_all,
-            model_name,
             plot_dicts[model_name],
             axis=ax,
             append_legend=f"\n$\\mathrm{{AICc}}={aic_dict[model_name]:.2f}$",
@@ -158,11 +156,10 @@ def plot_fit(
     fluxs_mJy,
     flux_errs_mJy,
     ref_all,
-    model_name,
     plot_dict,
     save_name="fit.png",
     plot_error=True,
-    alternate_style=False,
+    legend_inside_bbox=False,
     axis=None,
     secondary_fit=False,
     fit_range=None,
@@ -185,8 +182,6 @@ def plot_fit(
         A list of the uncertainty of the flux density in mJy.
     ref_all : `list`
         A list of the reference label (in the format 'Author_year').
-    model_name : `function`
-        The model name from :py:meth:`pulsar_spectra.models`.
     plot_dict : `dict`
         A dictionary of data which will be used for plotting, returned by either
         :py:meth:`pulsar_spectra.fitters.frequentist.iminuit_interpolate_model()` or
@@ -195,8 +190,8 @@ def plot_fit(
         The name of the saved plot. |br| Default: "fit.png".
     plot_error : `boolean`, optional
         If you want to include the fit error in the plot. |br| Default: True.
-    alternate_style : `boolean`, optional
-        Plot with the alternate plot style based on Jankowski 2018. |br| Default: False.
+    legend_inside_bbox : `boolean`, optional
+        Place the legend inside the bbox. |br| Default: False.
     axis : `Axes`, optional
         The axes with which the spectrum will be plotted. |br| None.
     secondary_fit : `boolean`, optional
@@ -280,17 +275,10 @@ def plot_fit(
         for cap in caps:
             cap.set_markeredgewidth(config["Errorbar linewidth"])
 
-    fit_info = plot_dict["fit_info"]
+    fit_info = plot_dict["fit_info"] + append_legend
     fitted_freqs = plot_dict["fitted_freqs"]
     fitted_flux = plot_dict["fitted_flux"]
     error_type = plot_dict["error_type"]
-
-    if alternate_style:
-        # Use the short model name
-        model_dict = model_settings()
-        fit_info = model_dict[model_name][1]
-    else:
-        fit_info += append_legend
 
     # Plot the fit curve
     if secondary_fit:
@@ -376,12 +364,12 @@ def plot_fit(
     ax.tick_params(which="both", direction="in", top=1, right=1)
     ax.set_xlabel("Frequency (MHz)")
     ax.set_ylabel("Flux Density (mJy)")
-    if alternate_style:
+    if legend_inside_bbox:
         ax.legend(loc="lower left", ncol=2, fontsize=6)
     else:
         ax.legend(loc="center left", bbox_to_anchor=(1.1, 0.5), fontsize=8)
     ax.grid(visible=True, ls=":", lw=0.6)
     if axis is None:
         # Not using axis mode so save figure
-        plt.savefig(save_name, bbox_inches="tight", dpi=config["Resolution"])
+        fig.savefig(save_name, bbox_inches="tight", dpi=config["Resolution"])
         plt.close()

@@ -78,6 +78,7 @@ This can be done using following command:
 
 You can then install that version by following the instructions in the :ref:`for_developers_uv` section below.
 
+.. _for_developers:
 
 For Developers
 --------------

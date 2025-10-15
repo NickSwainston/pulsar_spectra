@@ -4,6 +4,18 @@ Functions defining spectral models and model constraints.
 
 import numpy as np
 
+"""LaTeX math for typesetting the model parameters."""
+latex_params = {
+    "c": "c",
+    "a": "\\alpha",
+    "a1": "\\alpha_1",
+    "a2": "\\alpha_2",
+    "v0": "\\nu_0",
+    "vb": "\\nu_\\mathrm{b}",
+    "vpeak": "\\nu_\\mathrm{peak}",
+    "beta": "\\beta",
+}
+
 
 def gammainc_up(a, z):
     """Vectorised upper incomplete gamma function.

@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 
 from ..cost_functions import gaussian_cost_function, huber_cost_function, t_cost_function
-from ..models import model_settings
+from ..models import latex_params, model_settings
 
 try:
     import bilby
@@ -371,6 +371,7 @@ def bilby_interpolate_model(
     fitted_freqs_MHz,
     best_fit_params,
     nsamp=200,
+    legend_style="raw",
 ):
     """
     Determine best fit and raytraces from Bilby posterior samples.
@@ -388,6 +389,10 @@ def bilby_interpolate_model(
         A point estimate of the parameter values to add to the plot.
     nsamp : `int`, optional
         The number of posterior samples to plot. |br| Default: 200.
+    legend_style : `str`, optional
+        The legend style. Either: 'raw', 'typeset', or 'compact'.
+        See :py:meth:`pulsar_spectra.spectral_fit.find_best_spectral_fit` for
+        further documentation. |br| Default: 'raw'.
 
     Returns
     -------
@@ -398,6 +403,7 @@ def bilby_interpolate_model(
 
     model_dict = model_settings()
     model_function = model_dict[model_name][0]
+    short_model_name = model_dict[model_name][1]
 
     param_keys = bilby_result.search_parameter_keys + bilby_result.fixed_parameter_keys
 
@@ -420,19 +426,63 @@ def bilby_interpolate_model(
         fitted_flux_samples[isamp][:] = model_function(fitted_freqs_MHz, **sample_params) * 1e3
 
     # Create string with fit info to put in the legend
-    fit_info = [model_name]
-    fit_info.append("Bandwidth: \u2713")
-    for param in param_keys:
-        param_range = bilby_result.get_one_dimensional_median_and_error_bar(param)
-        if param == "v0":
-            fit_info.append(f"{param} = ${param_range.median / 1e6:.2f}$ MHz")
-        elif param.startswith("v"):
-            fit_info.append(
-                f"{param} = ${param_range.median / 1e6:.2f}"
-                + f"^{{+{param_range.plus / 1e6:.2f}}}_{{-{param_range.minus / 1e6:.2f}}}$ MHz"
-            )
-        else:
-            fit_info.append(f"{param} = {param_range.string}")
+    fit_info = []
+    if legend_style == "raw":
+        fit_info.append(model_name)
+    elif legend_style == "typeset":
+        model_name = model_name.replace("_", " ")
+        model_name = model_name.replace("power law", "power-law")
+        model_name = model_name.replace("high frequency", "high-frequency")
+        model_name = model_name.replace("low frequency", "low-frequency")
+        model_name = model_name.replace("cut off", "cut-off")
+        model_name = model_name.replace("turn over", "turn-over")
+        model_name = model_name.capitalize()
+        fit_info.append(model_name)
+    elif legend_style == "compact":
+        fit_info.append(short_model_name)
+
+    # The Bayesian method always uses bandwidth fitting
+    if legend_style == "raw":
+        fit_info.append("Bandwidth: \u2713")
+
+    if legend_style in ["raw", "typeset"]:
+        for param in param_keys:
+            param_range = bilby_result.get_one_dimensional_median_and_error_bar(param)
+
+            # Whether to include units
+            if param == "v0":
+                v_med = param_range.median / 1e6
+                v_plus = None
+                v_minus = None
+                units = " MHz"
+            elif param.startswith("v"):
+                v_med = param_range.median / 1e6
+                v_plus = param_range.plus / 1e6
+                v_minus = param_range.minus / 1e6
+                units = " MHz"
+            else:
+                v_med = param_range.median
+                v_plus = param_range.plus
+                v_minus = param_range.minus
+                if param == "c":
+                    units = " mJy"
+                else:
+                    units = ""
+
+            # Whether to typeset parameter names
+            if legend_style == "typeset" and param in latex_params:
+                lhs = f"${latex_params[param]} = "
+            else:
+                lhs = f"{param} = $"
+
+            # Whether to include uncertainties
+            if v_plus is not None and v_minus is not None:
+                unc = f"^{{+{v_plus:.2f}}}_{{-{v_minus:.2f}}}"
+            else:
+                unc = ""
+
+            fit_info.append(f"{lhs}{v_med:.2f}{unc}${units}")
+
     fit_info = "\n".join(fit_info)
 
     plot_dict = {

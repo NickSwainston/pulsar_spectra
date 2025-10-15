@@ -8,9 +8,10 @@ import numpy as np
 from iminuit import Minuit
 from iminuit.cost import LeastSquares
 from jacobi import propagate
+from uncertainties import ufloat
 
 from ..cost_functions import huber_loss_function, t_loss_function
-from ..models import model_settings
+from ..models import latex_params, model_settings
 
 logger = logging.getLogger(__name__)
 
@@ -331,6 +332,7 @@ def iminuit_interpolate_model(
     model_name,
     fitted_freqs_MHz,
     band_bool,
+    legend_style="raw",
 ):
     """Interpolate the best-fit model to a set of frequencies for plotting.
 
@@ -345,6 +347,10 @@ def iminuit_interpolate_model(
         The frequencies in MHz to evaluate the model at.
     band_bool : `bool`
         True if bandwidth integration fitting was successful; False otherwise.
+    legend_style : `str`, optional
+        The legend style. Either: 'raw', 'typeset', or 'compact'.
+        See :py:meth:`pulsar_spectra.spectral_fit.find_best_spectral_fit` for
+        further documentation. |br| Default: 'raw'.
 
     Returns
     -------
@@ -355,6 +361,7 @@ def iminuit_interpolate_model(
 
     model_dict = model_settings()
     model_function = model_dict[model_name][0]
+    short_model_name = model_dict[model_name][1]
 
     fitted_flux, fitted_flux_err = propagate_flux_n_err(
         fitted_freqs_MHz,
@@ -363,16 +370,48 @@ def iminuit_interpolate_model(
     )
 
     # Create string with fit info to put in the legend
-    fit_info = [model_name]
-    if band_bool:
-        fit_info.append("Bandwidth: \u2713")
-    else:
-        fit_info.append("Bandwidth: \u2718")
-    for p, v, e in zip(iminuit_result.parameters, iminuit_result.values, iminuit_result.errors):
-        if p.startswith("v"):
-            fit_info.append(f"{p} = ${v / 1e6:8.1f} \\pm {e / 1e6:8.1}$ MHz")
+    fit_info = []
+    if legend_style == "raw":
+        fit_info.append(model_name)
+    elif legend_style == "typeset":
+        model_name = model_name.replace("_", " ")
+        model_name = model_name.replace("power law", "power-law")
+        model_name = model_name.replace("high frequency", "high-frequency")
+        model_name = model_name.replace("low frequency", "low-frequency")
+        model_name = model_name.replace("cut off", "cut-off")
+        model_name = model_name.replace("turn over", "turn-over")
+        model_name = model_name.capitalize()
+        fit_info.append(model_name)
+    elif legend_style == "compact":
+        fit_info.append(short_model_name)
+
+    if legend_style == "raw":
+        if band_bool:
+            fit_info.append("Bandwidth: \u2713")
         else:
-            fit_info.append(f"{p} = ${v:.5f} \\pm {e:.5}$")
+            fit_info.append("Bandwidth: \u2718")
+
+    if legend_style in ["raw", "typeset"]:
+        for p, v, e in zip(iminuit_result.parameters, iminuit_result.values, iminuit_result.errors):
+            qty = ufloat(v, e)
+
+            # Whether to include units
+            if p.startswith("v"):
+                qty /= 1e6  # Hz -> MHz
+                units = " MHz"
+            elif p == "c":
+                units = " mJy"
+            else:
+                units = ""
+
+            # Whether to typeset the parameter names
+            if legend_style == "typeset" and p in latex_params:
+                lhs = f"${latex_params[p]} = "
+            else:
+                lhs = f"{p} = $"
+
+            fit_info.append(f"{lhs}{qty:L}${units}")
+
     fit_info = "\n".join(fit_info)
 
     plot_dict = {

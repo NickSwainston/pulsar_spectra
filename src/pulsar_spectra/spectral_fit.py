@@ -29,8 +29,9 @@ def find_best_spectral_fit(
     plot_compare=False,
     plot_bands=True,
     fit_range=None,
+    legend_style="raw",
     sampler_kwargs=None,
-    **plot_kwargs,
+    plot_kwargs=None,
 ):
     """Find the best-fit spectral model for a given pulsar.
 
@@ -49,15 +50,16 @@ def find_best_spectral_fit(
     ref_all : `array_like`
         An array of the reference labels (in the format 'author_year').
     method : `str`, optional
-        The fitting method to use. The options are as follows:
+        The fitting method to use. The options are:
 
             'maximum-likelihood' : maximum-likelihood estimation using iminuit.
 
-            'bayesian-nested-sampling' : Bayesian nested sampling using Bilby and Dynesty.
+            'bayesian-nested-sampling' : Bayesian nested sampling using Bilby
+            and Dynesty.
 
         |br| Default: 'maximum-likelihood'.
     likelihood : `str`, optional
-        The likelihood distribution to use. The options are as follows:
+        The likelihood distribution to use. The options are:
 
             'Gaussian' : A Gaussian distribution (i.e. ordinary least-squares).
 
@@ -82,9 +84,26 @@ def find_best_spectral_fit(
         The range of frequencies (in MHz) to plot the model fit. If `None`, then
         the model fit will be plotted over the frequency span of the data.
         |br| Default: `None`.
+    legend_style : `str`, optional
+        The style of the legend in the spectral fit plots. For all legend
+        styles, the AICc will be printed for `plot_all` and `plot_compare`, and
+        :math:`p_\mathrm{best}` will be printed for `plot_best`. The spectral
+        data will always be labelled. The options are:
+
+            'raw' : Print the model and parameters as they are named within the
+            code and indicate whether the bandwidth fitting was used. The legend
+            will be placed outside of the bbox.
+
+            'typeset' : Print the model and parameters typeset using LaTeX. The
+            legend will be placed outside of the bbox.
+
+            'compact' : Print the abbreviated model name. The legend will be
+            placed within the bbox.
+
+        |br| Default: 'raw'
     sampler_kwargs : `dict[str, Any]`, optional
         Extra arguments to pass to `bilby.run_sampler()`.
-    **plot_kwargs
+    plot_kwargs : `dict[str, Any]`, optional
         Extra arguments to pass to :py:meth:`pulsar_spectra.plotting.plot_fit()`.
 
     Returns
@@ -106,6 +125,12 @@ def find_best_spectral_fit(
     """
     if sampler_kwargs is None:
         sampler_kwargs = {}
+
+    if plot_kwargs is None:
+        plot_kwargs = {}
+
+    if legend_style not in ["raw", "typeset", "compact"]:
+        raise ValueError(f"Invalid legend style: '{legend_style}' (valid options: 'raw', 'typeset', 'compact')")
 
     # Conditional imports
     if method == "maximum-likelihood":
@@ -198,6 +223,7 @@ def find_best_spectral_fit(
                 model_name,
                 fitted_freq,
                 band_bool,
+                legend_style=legend_style,
             )
         elif method == "bayesian-nested-sampling":
             fit_result = bilby_fit_spectral_model(
@@ -228,6 +254,7 @@ def find_best_spectral_fit(
                 model_name,
                 fitted_freq,
                 params_beta_min,
+                legend_style=legend_style,
             )
         fit_results[model_name] = fit_result
         plot_dicts[model_name] = plot_dict
@@ -239,20 +266,24 @@ def find_best_spectral_fit(
     # Select the best-fit model out of those fitted
     aic_dict, best_fit_model_name, p_best = select_best_fit_model(beta_mins, len(freqs_MHz))
 
+    if legend_style == "compact":
+        legend_inside_bbox = True
+    else:
+        legend_inside_bbox = False
+
     # Create spectra plot(s)
     if plot_best:
         # Plot just the best-fit model
-        fit_info = f"\n$\\mathrm{{AICc}}={aic_dict[best_fit_model_name]:.2f}$" + f"\n$p_\\mathrm{{best}}={p_best:.3f}$"
         plot_fit(
             freqs_MHz,
             bands_MHz,
             fluxs_mJy,
             flux_errs_mJy,
             ref_all,
-            best_fit_model_name,
             plot_dicts[best_fit_model_name],
-            save_name=f"{pulsar}_{best_fit_model_name}_{method}_{likelihood}_fit.png",
-            append_legend=fit_info,
+            save_name=f"{pulsar}_{best_fit_model_name}_{method}_{likelihood}_best_fit.png",
+            legend_inside_bbox=legend_inside_bbox,
+            append_legend=f"\n$p_\\mathrm{{best}}={p_best:.3f}$",
             **plot_kwargs,
         )
     elif plot_compare:
@@ -278,9 +309,9 @@ def find_best_spectral_fit(
                 fluxs_mJy,
                 flux_errs_mJy,
                 ref_all,
-                model_name,
                 plot_dicts[model_name],
                 save_name=f"{pulsar}_{model_name}_{method}_{likelihood}_fit.png",
+                legend_inside_bbox=legend_inside_bbox,
                 append_legend=f"\n$\\mathrm{{AICc}}={aic_dict[model_name]:.2f}$",
                 **plot_kwargs,
             )
