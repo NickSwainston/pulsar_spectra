@@ -21,7 +21,7 @@ given below:
     from pulsar_spectra.spectral_fit import find_best_spectral_fit
 
     cat_dict = collect_catalogue_fluxes()
-    pulsar = 'J1909-3744'
+    pulsar = "J1909-3744"
     freqs, bands, fluxs, flux_errs, refs = cat_dict[pulsar]
 
     best_model_name, p_best, fit_results, aic_dict, plot_dicts = find_best_spectral_fit(
@@ -62,12 +62,12 @@ using the following code:
 
     custom_markers = {
     #   reference           :   (marker colour, marker type, marker size)
-        "Jankowski_2018"    :   ('magenta', 'h', 5), # orange circle
-        "Jankowski_2019"    :   ('cyan', 'H', 5)  # green diamond
+        "Jankowski_2018"    :   ("magenta", "h", 5), # orange circle
+        "Jankowski_2019"    :   ("cyan", "H", 5)  # green diamond
     }
 
     cat_dict = collect_catalogue_fluxes()
-    pulsar = 'J1909-3744'
+    pulsar = "J1909-3744"
     freqs, bands, fluxs, flux_errs, refs = cat_dict[pulsar]
 
     best_model_name, p_best, fit_results, aic_dict, plot_dicts = find_best_spectral_fit(
@@ -105,7 +105,7 @@ the following code can be used to show the model fit before and after the additi
     from pulsar_spectra.spectral_fit import find_best_spectral_fit
 
     cat_dict = collect_catalogue_fluxes()
-    pulsar = 'J1909-3744'
+    pulsar = "J1909-3744"
     freqs, bands, fluxs, flux_errs, refs = cat_dict[pulsar]
 
     fig, ax = plt.subplots(figsize=(5,4))
@@ -125,7 +125,7 @@ the following code can be used to show the model fit before and after the additi
     bands = [30.] + bands
     fluxs = [6.] + fluxs
     flux_errs = [3.] + flux_errs
-    refs = ['Your Work'] + refs
+    refs = ["Your Work"] + refs
 
     best_model_name, p_best, fit_results, aic_dict, plot_dicts = find_best_spectral_fit(
         pulsar,
@@ -141,7 +141,7 @@ the following code can be used to show the model fit before and after the additi
 
     ax.set_ylim(top=20.)
 
-    fig.savefig(pulsar+'_'+best_model_name+'_fit.png', bbox_inches='tight', dpi=300)
+    fig.savefig(pulsar+"_"+best_model_name+"_fit.png", bbox_inches="tight", dpi=300)
 
 This will produce the following plot:
 
@@ -172,7 +172,7 @@ to ``plotting_config`` in ``find_best_spectral_fit()`` like so:
     from pulsar_spectra.spectral_fit import find_best_spectral_fit
 
     cat_dict = collect_catalogue_fluxes()
-    pulsar = 'J0953+0755'
+    pulsar = "J0953+0755"
     freqs, bands, fluxs, flux_errs, refs = cat_dict[pulsar]
 
     best_model_name, p_best, fit_results, aic_dict, plot_dicts = find_best_spectral_fit(
@@ -268,16 +268,16 @@ You can then import them in a multi-pulsar plot like so:
     from pulsar_spectra.spectral_fit import find_best_spectral_fit
     from pulsar_spectra.catalogue import collect_catalogue_fluxes
 
-    with open('ref_markers.yaml', 'r') as f:
+    with open("ref_markers.yaml", "r") as f:
         ref_markers = yaml.safe_load(f)
 
     pulsars = [
-        'J0820-1350',
-        'J0837+0610',
-        'J1453-6413',
-        'J1456-6843',
-        'J1645-0317',
-        'J2018+2839'
+        "J0820-1350",
+        "J0837+0610",
+        "J1453-6413",
+        "J1456-6843",
+        "J1645-0317",
+        "J2018+2839"
     ]
 
     cols = 2
@@ -298,10 +298,10 @@ You can then import them in a multi-pulsar plot like so:
             legend_style="compact",
             plot_kwargs={"axis": axs[ax_i//cols, ax_i%cols], "ref_markers": ref_markers},
         )
-        axs[ax_i//cols, ax_i%cols].set_title('PSR '+pulsar)
+        axs[ax_i//cols, ax_i%cols].set_title("PSR "+pulsar)
 
     fig.tight_layout(pad=2.5)
-    fig.savefig("multi_pulsar_spectra.png", bbox_inches='tight', dpi=300)
+    fig.savefig("multi_pulsar_spectra.png", bbox_inches="tight", dpi=300)
 
 This will produce `multi_pulsar_spectra.png` with consistent marker types:
 
@@ -313,4 +313,4 @@ for your own data by adding a new entry to the ``ref_markers`` dictionary. For e
 
 .. code-block:: python
 
-    ref_markers["Your Work"] = ['green', 'o', 7]
+    ref_markers["Your Work"] = ["green", "o", 7]

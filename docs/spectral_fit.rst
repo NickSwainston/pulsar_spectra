@@ -372,7 +372,7 @@ You can find the descriptions of the models in the :ref:`models module<models_mo
 
 Adding a new model
 ^^^^^^^^^^^^^^^^^^
-If you would like to use a new model, you can add a function to the models' module and set up the defaults for its
+If you would like to use a new model, you can add a function to the models module and set up the defaults for its
 initial fit parameters and limits in :py:meth:`pulsar_spectra.models.model_settings`.
 
 For example, here is the function for the simple power law in the :ref:`models module<models_module>`:
@@ -441,13 +441,14 @@ Finding the best-fit model
 To find the best-fit model out of those implemented in ``pulsar_spectra``, you can use the
 :py:meth:`pulsar_spectra.spectral_fit.find_best_spectral_fit` function. As a simple example:
 
+.. script location: example_scripts/plot_compare.py
 .. code-block:: python
 
     from pulsar_spectra.catalogue import collect_catalogue_fluxes
     from pulsar_spectra.spectral_fit import find_best_spectral_fit
 
     cat_dict = collect_catalogue_fluxes()
-    pulsar = 'J1327-6222'
+    pulsar = "J1327-6222"
     freqs, bands, fluxs, flux_errs, refs = cat_dict[pulsar]
 
     best_model_name, p_best, fit_results, aic_dict, plot_dicts = find_best_spectral_fit(
@@ -478,6 +479,7 @@ By default, :ref:`maximum-likelihood-estimation` and the :ref:`huber-likelihood`
 used. The fitting method and likelihood can be specified with the ``method`` and ``likelihood``
 options. For example:
 
+.. script location: example_scripts/plot_best_bayesian.py
 .. code-block:: python
 
     best_model_name, p_best, fit_results, aic_dict, plot_dicts = find_best_spectral_fit(

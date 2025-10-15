@@ -1,16 +1,27 @@
-from pulsar_spectra.analysis import calc_high_frequency_cutoff_emission_height
 from pulsar_spectra.catalogue import collect_catalogue_fluxes
 from pulsar_spectra.spectral_fit import find_best_spectral_fit
+from pulsar_spectra.analysis import calc_high_frequency_cutoff_emission_height
 
 cat_dict = collect_catalogue_fluxes()
-pulsar = "J1116-4122"
+pulsar = "J0955-5304"
 freqs, bands, fluxs, flux_errs, refs = cat_dict[pulsar]
-model_name, m, _, _, _ = find_best_spectral_fit(pulsar, freqs, bands, fluxs, flux_errs, refs, plot_best=True)
-if model_name == "high_frequency_cut_off_power_law":
+
+best_model_name, _, fit_results, _, _ = find_best_spectral_fit(
+    pulsar,
+    freqs,
+    bands,
+    fluxs,
+    flux_errs,
+    refs,
+)
+
+if best_model_name == "high_frequency_cut_off_power_law":
+    result = fit_results[best_model_name]
+
     B_pc, u_B_pc, B_surf, B_lc, r_lc, z_e, u_z_e, z_percent, u_z_percent = calc_high_frequency_cutoff_emission_height(
         pulsar,
-        m.values[0],
-        m.errors[0],
+        result.values[0],
+        result.errors[0],
     )
     print(f"B_pc:    ({B_pc / 1e11:.2f} +/- {u_B_pc / 1e11:.2f})x10^11 G")
     print(f"B_surf:  {B_surf / 1e12:.2f}x10^12 G")

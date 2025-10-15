@@ -4,13 +4,16 @@ from pulsar_spectra.spectral_fit import find_best_spectral_fit
 cat_dict = collect_catalogue_fluxes()
 pulsar = "J0332+5434"
 freqs, bands, fluxs, flux_errs, refs = cat_dict[pulsar]
-best_model_name, iminuit_result, fit_info, p_best, p_category = find_best_spectral_fit(
+
+best_model_name, p_best, fit_results, aic_dict, plot_dicts = find_best_spectral_fit(
     pulsar, freqs, bands, fluxs, flux_errs, refs, plot_best=True
 )
 
+result = fit_results[best_model_name]
+
 print(f"Best fit model: {best_model_name}")
-for p, v, e in zip(iminuit_result.parameters, iminuit_result.values, iminuit_result.errors):
+for p, v, e in zip(result.parameters, result.values, result.errors):
     if p.startswith("v"):
-        print(f"{p} = {v / 1e6:8.1f} +/- {e / 1e6:8.1} MHz")
+        print(f"{p} = {v / 1e6:.1f} +/- {e / 1e6:.1f} MHz")
     else:
-        print(f"{p} = {v:.5f} +/- {e:.5}")
+        print(f"{p} = {v:.5f} +/- {e:.5f}")
