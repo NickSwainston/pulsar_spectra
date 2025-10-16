@@ -4,33 +4,67 @@
 
    <br />
 
-**************************************
-pulsar\_spectra modules
-**************************************
+*******
+Modules
+*******
 
 .. _catalogue_module:
 
-catalogue
+Catalogue
 =========
 
 .. automodule:: pulsar_spectra.catalogue
     :members:
 
-.. _modelsmodule:
+.. _models_module:
 
-models
+Models
 ======
 
 .. automodule:: pulsar_spectra.models
     :members:
 
-spectral_fit
+.. _fitters_module:
+
+Fitters
+=======
+
+Frequentist
+^^^^^^^^^^^
+
+.. automodule:: pulsar_spectra.fitters.frequentist
+    :members:
+
+Bayesian
+^^^^^^^^
+
+.. automodule:: pulsar_spectra.fitters.bayesian
+    :members:
+
+Cost functions
+==============
+.. automodule:: pulsar_spectra.cost_functions
+    :members:
+
+Spectral fit
 ============
 
 .. automodule:: pulsar_spectra.spectral_fit
     :members:
 
-analysis
+Model selection
+===============
+
+.. automodule:: pulsar_spectra.model_selection
+    :members:
+
+Plotting
+========
+
+.. automodule:: pulsar_spectra.plotting
+    :members:
+
+Analysis
 ========
 
 .. automodule:: pulsar_spectra.analysis

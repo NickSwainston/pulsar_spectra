@@ -1,8 +1,20 @@
 """
-Spectral models used for fitting
+Functions defining spectral models and model constraints.
 """
 
 import numpy as np
+
+"""LaTeX math for typesetting the model parameters."""
+latex_params = {
+    "c": "c",
+    "a": "\\alpha",
+    "a1": "\\alpha_1",
+    "a2": "\\alpha_2",
+    "v0": "\\nu_0",
+    "vb": "\\nu_\\mathrm{b}",
+    "vpeak": "\\nu_\\mathrm{peak}",
+    "beta": "\\beta",
+}
 
 
 def gammainc_up(a, z):
@@ -218,7 +230,8 @@ def high_frequency_cut_off_power_law(v, vc, a, c, v0):
 
 def high_frequency_cut_off_power_law_intergral(vmin_vmax, vc, a, c, v0):
     """The bandwith intergration correction for the
-    high-frequency cut-off power law using direct intergration (see :ref:`derivation <high_frequency_cut_off_power_law_intergral>` for full equation):
+    high-frequency cut-off power law using direct intergration
+    (see :ref:`derivation <high_frequency_cut_off_power_law_intergral>` for full equation):
 
     Parameters
     ----------
@@ -253,7 +266,8 @@ def high_frequency_cut_off_power_law_intergral(vmin_vmax, vc, a, c, v0):
 
 def high_frequency_cut_off_power_law_taylor(vmin_vmax, vc, a, c, v0):
     """The bandwith intergration correction for the
-    high-frequency cut-off power law using Taylor series expansion (see :ref:`derivation <high_frequency_cut_off_power_law_taylor>` for full equation):
+    high-frequency cut-off power law using Taylor series expansion
+    (see :ref:`derivation <high_frequency_cut_off_power_law_taylor>` for full equation):
 
     Parameters
     ----------
@@ -291,7 +305,8 @@ def low_frequency_turn_over_power_law(v, vpeak, a, c, beta, v0):
     """Low-frequency turn-over power law:
 
     .. math::
-        S_v = c \\left( \\frac{v}{v0} \\right)^{a} \\exp\\left [ \\frac{a}{\\beta} \\left( \\frac{v}{vpeak} \\right)^{-\\beta} \\right ]
+        S_v = c \\left( \\frac{v}{v0} \\right)^{a}
+        \\exp\\left [ \\frac{a}{\\beta} \\left( \\frac{v}{vpeak} \\right)^{-\\beta} \\right ]
 
     Parameters
     ----------
@@ -320,7 +335,8 @@ def low_frequency_turn_over_power_law(v, vpeak, a, c, beta, v0):
 
 def low_frequency_turn_over_power_law_intergral(vmin_vmax, vpeak, a, c, beta, v0):
     """The bandwith intergration correction for the
-    low-frequency turn-over power law using direct intergration (see :ref:`derivation <low_frequency_turn_over_power_law_intergral>` for full equation):
+    low-frequency turn-over power law using direct intergration
+    (see :ref:`derivation <low_frequency_turn_over_power_law_intergral>` for full equation):
 
     Parameters
     ----------
@@ -357,7 +373,8 @@ def low_frequency_turn_over_power_law_intergral(vmin_vmax, vpeak, a, c, beta, v0
 
 def low_frequency_turn_over_power_law_taylor(vmin_vmax, vpeak, a, c, beta, v0):
     """The bandwith intergration correction for the
-    low-frequency turn-over power law using Taylor series expansion (see :ref:`derivation <low_frequency_turn_over_power_law_taylor>` for full equation):
+    low-frequency turn-over power law using Taylor series expansion
+    (see :ref:`derivation <low_frequency_turn_over_power_law_taylor>` for full equation):
 
     Parameters
     ----------
@@ -483,7 +500,8 @@ def double_turn_over_spectrum(v, vc, vpeak, a, beta, c, v0):
     """Double turn-over spectrum (has a low-frequency turn-over and a high-frequency cut-off):
 
     .. math::
-        S_v = c \\left( \\frac{v}{v0} \\right)^{a} \\left ( 1 - \\frac{v}{vc} \\right ) \\exp\\left [ \\frac{a}{\\beta} \\left( \\frac{v}{vpeak} \\right)^{-\\beta} \\right ],\\qquad v < vc
+        S_v = c \\left( \\frac{v}{v0} \\right)^{a} \\left ( 1 - \\frac{v}{vc} \\right )
+        \\exp\\left [ \\frac{a}{\\beta} \\left( \\frac{v}{vpeak} \\right)^{-\\beta} \\right ],\\qquad v < vc
 
     Parameters
     ----------
@@ -653,58 +671,129 @@ def double_turn_over_spectrum_taylor(vmin_vmax, vc, vpeak, a, beta, c, v0):
 
 
 def model_settings(print_models=False):
-    """Holds metadata about spectral models such as common names and default fit parameters.
+    """Holds metadata about spectral models such as common names and default fit
+    parameters.
 
     Parameters
     ----------
-    print_models : `boolean`, optional
-        If true, will print the models dictionary which is useful for debuging new models. Default False.
+    print_models : `bool`, optional
+        If true, will print the models dictionary which is useful for debuging
+        new models. |br| Default: `False`.
 
     Returns
     -------
-    model_dict : `dict`
-        Returns a dictionary in the format
+    model_dict : `dict[str, list[Any]]`
+        Returns a dictionary with model names as keys containing a list of model
+        settings. The list contains the following items:
 
-        {model_name: [model_function, short_name, start_params, mod_limits]}
+        model_function : `Callable`
+            A function which takes the centre frequency and parameter values
+            and returns the flux density.
+        short_name : `str`
+            A short name for the model to print in the legend.
+        start_params : `tuple`
+            Starting parameter values to assist the minimiser.
+        mod_limits : `list[tuple]`
+            Parameter limits to assist the minimiser.
+        model_function_integrate : `Callable`
+            A function which takes the min/max frequencies and parameter values
+            and returns the flux density.
+        model_priors : `dict | PriorDict`
+            A dictionary of Bayesian priors for each free parameter.
     """
-    # fit starting value, min and max
-    # constant
+    # Starting values and limits for minimisation approach
+
+    # --- Gain parameter (y-intercept in logspace) ---
     c_s = 1.0
-    c_min = 0.0
-    c_max = None
-    # spectral index
+    c_min = 1e-4
+    c_max = 1e4
+
+    # --- Spectral index (gradient in logspace) ---
     a_s = -1.6
     a_min = -8.0
     a_max = 3.0
-    # beta, the smoothness of the turn-over
+    # --- The smoothness of the low-frequency turn-over, beta ---
     beta_s = 1.0
     beta_min = 0.1
     beta_max = 2.1
-    # frequency of the high-frequency cut-off
+
+    # --- The frequency of the high-frequency cut-off ---
     vc_s = 4e9
-    vc_both = None  # will set the cut-off frequency based on the data set's frequency range
-    # peak frequency of the low-frequency turn-over
+    vc_both = None  # will set based on the data set's frequency range
+
+    # --- The peak frequency of the low-frequency turn-over ---
     vpeak_s = 100e6
     vpeak_min = 10e6
     vpeak_max = 2e9
 
+    # --- The break frequency of the broken power-law ---
+    vbreak_s = 1e9
+    vbreak_min = 50e6
+    vbreak_max = 5e9
+
+    # Priors for the Bayesian approach
+    try:
+        from .fitters.bayesian import bilby_get_model_priors
+
+        priors = bilby_get_model_priors()
+    except ImportError:
+        priors = {
+            "simple_power_law": None,
+            "broken_power_law": None,
+            "high_frequency_cut_off_power_law": None,
+            "low_frequency_turn_over_power_law": None,
+            "double_turn_over_spectrum": None,
+        }
+
+    # Define a dictionary containing the models and constraints
     model_dict = {
-        # Name: [model_function, short_name, start_params, mod_limits]
+        # "model_name": [
+        #   model_function,
+        #   short_name,
+        #   start_params,
+        #   mod_limits,
+        #   model_function_integrate,
+        #   model_priors,
+        # ]
         "simple_power_law": [
             simple_power_law,
             "simple pl",
-            # (a, c)
             (a_s, c_s),
             [(a_min, a_max), (c_min, c_max)],
             simple_power_law_integrate,
+            priors["simple_power_law"],
         ],
         "broken_power_law": [
             broken_power_law,
             "broken pl",
-            # (vb, a1, a2, c)
-            (1e9, a_s, a_s, c_s),
-            [(50e6, 5e9), (a_min, a_max), (a_min, a_max), (c_min, c_max)],
+            (vbreak_s, -a_s, a_s, c_s),
+            [(vbreak_min, vbreak_max), (-a_max, -a_min), (a_min, a_max), (c_min, c_max)],
             broken_power_law_intergral,
+            priors["broken_power_law"],
+        ],
+        "high_frequency_cut_off_power_law": [
+            high_frequency_cut_off_power_law,
+            "pl hard cut-off",
+            (vc_s, a_s, c_s),
+            [vc_both, (a_min, 0.0), (c_min, c_max)],
+            high_frequency_cut_off_power_law_taylor,
+            priors["high_frequency_cut_off_power_law"],
+        ],
+        "low_frequency_turn_over_power_law": [
+            low_frequency_turn_over_power_law,
+            "pl low turn-over",
+            (vpeak_s, a_s, c_s, beta_s),
+            [(vpeak_min, vpeak_max), (a_min, 0.0), (c_min, c_max), (beta_min, beta_max)],
+            low_frequency_turn_over_power_law_taylor,
+            priors["low_frequency_turn_over_power_law"],
+        ],
+        "double_turn_over_spectrum": [
+            double_turn_over_spectrum,
+            "double turn-over spectrum",
+            (vc_s, vpeak_s, a_s, beta_s, c_s),
+            [(vc_both), (vpeak_min, vpeak_max), (a_min, 0.0), (beta_min, beta_max), (c_min, c_max)],
+            double_turn_over_spectrum_taylor,
+            priors["double_turn_over_spectrum"],
         ],
         # "log_parabolic_spectrum" : [
         #     log_parabolic_spectrum,
@@ -713,30 +802,6 @@ def model_settings(print_models=False):
         #     (-1, -1., c_s),
         #     [(-5, 2), (-5, 2), (None, c_max)],
         # ],
-        "high_frequency_cut_off_power_law": [
-            high_frequency_cut_off_power_law,
-            "pl hard cut-off",
-            # (vc, a, c)
-            (vc_s, a_s, c_s),
-            [vc_both, (a_min, 0.0), (c_min, c_max)],
-            high_frequency_cut_off_power_law_taylor,
-        ],
-        "low_frequency_turn_over_power_law": [
-            low_frequency_turn_over_power_law,
-            "pl low turn-over",
-            # (vpeak, a, c, beta)
-            (vpeak_s, a_s, c_s, beta_s),
-            [(vpeak_min, vpeak_max), (a_min, 0.0), (c_min, c_max), (beta_min, beta_max)],
-            low_frequency_turn_over_power_law_taylor,
-        ],
-        "double_turn_over_spectrum": [
-            double_turn_over_spectrum,
-            "double turn-over spectrum",
-            # (vc, vpeak, a, beta, c)
-            (vc_s, vpeak_s, a_s, beta_s, c_s),
-            [(vc_both), (vpeak_min, vpeak_max), (a_min, 0.0), (beta_min, beta_max), (c_min, c_max)],
-            double_turn_over_spectrum_taylor,
-        ],
         # "double_broken_power_law" : [
         #    double_broken_power_law,
         #    "double bpl",
@@ -749,11 +814,20 @@ def model_settings(print_models=False):
         # Print the models dictionary which is useful for debuging new models
         for mod in model_dict.keys():
             print(f"\n{mod}")
-            model_function, short_name, start_params, mod_limits, model_function_integrate = model_dict[mod]
+            (
+                model_function,
+                short_name,
+                start_params,
+                mod_limits,
+                model_function_integrate,
+                mod_priors,
+            ) = model_dict[mod]
+
             print(f"    model_function:           {model_function.__name__}")
             print(f"    model_function_integrate: {model_function_integrate.__name__}")
             print(f"    short_name:               {short_name}")
             print(f"    start_params:             {start_params}")
             print(f"    mod_limits:               {mod_limits}")
+            print(f"    priors:                   {mod_priors}")
 
     return model_dict

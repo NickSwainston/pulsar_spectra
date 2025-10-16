@@ -18,6 +18,18 @@ or using ``uv``:
 
     uv pip install pulsar-spectra
 
+To make use of the Bayesian nested sampling method, select the ``bayesian`` option with ``pip``:
+
+.. code-block:: bash
+
+    pip install pulsar-spectra[bayesian]
+
+or with ``uv``:
+
+.. code-block:: bash
+
+    uv pip install --extra bayesian pulsar-spectra
+
 From Docker Hub
 ^^^^^^^^^^^^^^^
 There is a Docker container that you can install with:
@@ -66,6 +78,7 @@ This can be done using following command:
 
 You can then install that version by following the instructions in the :ref:`for_developers_uv` section below.
 
+.. _for_developers:
 
 For Developers
 --------------
@@ -85,13 +98,9 @@ This can be done with the command:
 
     uv sync --locked
 
-By default, this will install the dependencies in the ``dev`` group but no other groups. If you
-are developing documentation, then include the ``docs`` group:
-
-.. code-block:: bash
-
-    uv sync --locked --group docs
-
+To use the Bayesian nested sampling method, add the option ``--extra bayesian``.
+The dependencies in the ``dev`` group will be automatically installed, but other dependency groups will not.
+If you are developing documentation, then you can include the ``docs`` group with ``--group docs``.
 Then activate the virtual environment:
 
 .. code-block:: bash
@@ -107,14 +116,10 @@ directory, run:
 
     pip install .
 
-To install the development dependencies, run:
+To use the Bayesian nested sampling method, run:
 
 .. code-block:: bash
 
-    pip install --group dev .
+    pip install '.[bayesian]'
 
-To install the documentation dependencies, run:
-
-.. code-block:: bash
-
-    pip install --group docs .
+To install the development or documentation dependencies, include the option ``--group dev`` or ``--group docs``.

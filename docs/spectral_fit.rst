@@ -1,45 +1,231 @@
-Spectral fit
-============
+.. _spectralfit:
 
-The pulsar spectral fitting is explained in Swainston et al. 2022 and based on `Jankowski et al. 2018 <https://ui.adsabs.harvard.edu/abs/2018MNRAS.473.4436J/abstract>`_.
-We will summarise how the fitting is done and examples of how to improve your fits.
+Spectral fitting
+================
+The spectral fitting methods implemented in ``pulsar_spectra`` were originally based on the robust
+fitting strategy developed by `Jankowski et al. (2018) <https://ui.adsabs.harvard.edu/abs/2018MNRAS.473.4436J/abstract>`_,
+but have since evolved to include several new features including bandwidth integration, upper/lower
+limits, and different likelihoods. We have also implemented a Bayesian approach to model fitting
+which uses empirically-informed priors. These methods are described below, but further details can
+be found in `Swainston et al. (2022) <https://ui.adsabs.harvard.edu/abs/2022PASA...39...56S/abstract>`_
+and Swainston et al. (in preparation).
 
+.. _fitting-methods:
 
-Fitting algorithm
------------------
-To account for underestimated uncertainties on outlier points, we modify the regular least-squared quadratic loss function
-to deviate to linear loss once a certain distance is reached from the model.
-In this way, outlier data are penalised, and bad data is less likely to skew the model fit. We use the Huber loss function, which is defined as
+Fitting methods
+---------------
+To fit the spectral models to the data, we perform linear regression using one of the two methods
+currently implemented:
+
+    1. :ref:`maximum-likelihood-estimation` using the Migrad and Simplex minimisation algorithms
+    implemented in the ``iminuit`` model fitting library.
+
+    2. :ref:`bayesian-nested-sampling` using the ``Bilby`` Bayesian inference library and the
+    ``Dynesty`` dynamic nested sampler.
+
+Maximum-likelihood estimation is extremely fast and usually produces reliable model fits, however
+the error estimation is limited and the minimiser can sometimes converge on a local minimum in the
+parameter space which results in a poor fit to the data. Comparatively, Bayesian nested sampling is
+more computationally intensive but explores the full parameter space and produces a posterior
+probability distribution which can be used to interpret the fit results. This makes it better suited
+for complex or poorly-constrained spectra. Futher details on each of the methods are provided below.
+
+The fitting method can be selected in :py:meth:`pulsar_spectra.spectral_fit.find_best_spectral_fit`
+with the ``method='method-name'`` argument, or in the ``quick-fit`` command with the
+``--method 'method-name'`` option. The methods are named ``'maximum-likelihood'`` and
+``'bayesian-nested-sampling'`` in both cases.
+
+.. _maximum-likelihood-estimation:
+
+Maximum-likelihood estimation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+This approach is similar to least-squares fitting, but allows us to define custom likelihoods for
+robust handling of outliers. For a likelihood :math:`L`, we define the *cost function* as
+:math:`\beta = -\log L`. We then use the `Migrad <https://scikit-hep.org/iminuit/reference.html#iminuit.Minuit.migrad>`_
+minimisation algorithm from `iminuit <https://scikit-hep.org/iminuit/index.html>`_ to minimise :math:`\beta`
+subject to the constraints placed on the free model parameters. The minimiser uses the *Estimated
+Distance to Minimum* (EDM) as the convergence criterion, for which we set the
+`tolerance <https://scikit-hep.org/iminuit/reference.html#iminuit.Minuit.tol>`_ to :math:`10^{-5}`.
+We set the maximum number of calls to :math:`10^4` before the fit is abandoned.
+
+In the rare cases that ``Migrad`` does not find a valid fit, we run the
+`Simplex <https://scikit-hep.org/iminuit/reference.html#iminuit.Minuit.simplex>`_ minimiser before
+``Migrad``, which is slower but can perform better in some instances. If both minimisers fail, then
+we run the brute-force `Scan <https://scikit-hep.org/iminuit/reference.html#iminuit.Minuit.scan>`_
+minimiser before ``Migrad``. The hypercube grid that the scan is performed over is bounded by the
+parameter limits specified in the ``pulsar_spectra`` source code.
+
+The uncertainties are then estimated using `Hesse <https://scikit-hep.org/iminuit/reference.html#iminuit.Minuit.hesse>`_,
+an error calculator which computes the Hessian matrix for the fitted parameters and determines
+the :math:`1\sigma` uncertainties as the square root of the diagonal elements.
+
+For implementation details, see :py:meth:`pulsar_spectra.fitters.frequentist.iminuit_fit_spectral_model`
+and :py:meth:`pulsar_spectra.fitters.frequentist.migrad_simplex_scan`.
+
+.. _bayesian-nested-sampling:
+
+Bayesian nested sampling
+^^^^^^^^^^^^^^^^^^^^^^^^
+In the frequentist methods such as :ref:`maximum-likelihood-estimation`, the goal is to maximise the
+probability of the data :math:`\mathbf{D}` given the model :math:`M` and a set of parameters
+:math:`\mathbf{\Theta}`, i.e. :math:`P(\mathbf{D}|\mathbf{\Theta}, M)`. However, in a scientific
+context, we are often looking for the *inverse probability*, or the probability of a set of
+parameters given the data and model, :math:`P(\mathbf{\Theta}|\mathbf{D}, M)`. The process of
+inverting the probability follows Bayes' Rule:
+
+.. math::
+    
+    P(\mathbf{\Theta}|\mathbf{D}, M) = \frac{P(\mathbf{D}|\mathbf{\Theta}, M)P(\mathbf{\Theta}|M)}{P(\mathbf{D}|M)}
+
+where :math:`P(\mathbf{D}|\mathbf{\Theta}, M)` is the *likelihood*, :math:`P(\mathbf{\Theta}|M)` is
+the *prior probability*, :math:`P(\mathbf{D}|M)` is the *evidence*, and :math:`P(\mathbf{\Theta}|\mathbf{D}, M)`
+is the *posterior probability*.
+
+Nested sampling is an approach to Bayesian inference that allows for simultaneous estimation of the
+posterior and the evidence. It has many advantages, including being good at sampling multi-model
+parameter distributions and being easily parallelisable. It is therefore a logical option for
+fitting pulsar spectra, which are often poorly constrained. For more details on nested sampling and
+the specific implementation in `Dynesty <https://dynesty.readthedocs.io/en/v3.0.0/index.html>`_,
+we recommend reading the `Dynesty documentation <https://dynesty.readthedocs.io/en/v3.0.0/overview.html>`_.
+
+Since the spectral models that we are fitting are empirical, we cannot derive the model parameter
+priors from theory. Instead, we use population statistics and the results of past spectral fits
+using traditional frequentist fitting methods. For the spectral index and the frequencies of
+spectral features (turnover, break, cutoff), we estimate the prior from the distributions reported
+in Chapter 6 of `Swainston et al. (2023) <https://espace.curtin.edu.au/handle/20.500.11937/93846>`_
+and the `all_pulsar_spectra <https://all-pulsar-spectra.readthedocs.io/en/latest/>`_ repository.
+We also fix the reference frequency to :math:`1400\,\mathrm{MHz}` and use the distribution of
+:math:`S_{1400}` measurements from the ATNF pulsar catalogue to set the prior on the reference flux
+density. Lastly, for the smoothness of the spectral turnover, we use a uniform distribution between
+0.1 and 2.1, where 2.1 represents the special case of free-free absorpsion.
+
+.. _likelihoods:
+
+Likelihoods
+-----------
+Both `fitting methods <fitting-methods>` can make use of all of the likelihood distributions
+described in this section. However, the Huber likelihood does not allow for the inclusion of
+upper/lower limits.
+
+The likelihood can be selected in :py:meth:`pulsar_spectra.spectral_fit.find_best_spectral_fit`
+with the ``likelihood='likelihood-name'`` argument, or in the ``quick-fit`` command with the
+``--likelihood 'likelihood-name'`` option. The likelihoods are named ``'Gaussian'``, ``'Huber'``,
+and ``'t'`` in both cases.
+
+.. _gaussian-likelihood:
+
+Gaussian distribution
+^^^^^^^^^^^^^^^^^^^^^
+The combined Gaussian likelihood, :math:`L_\mathrm{G}`, of :math:`N` measurements :math:`\{x_i, y_i\pm\sigma_{y,i}\}`, where
+:math:`i=1\dots N`, is:
 
 .. math::
 
-    \rho =
+    L_\mathrm{G} = \prod_i^N \frac{1}{\sqrt{2\pi}\sigma_{y,i}} 
+    \exp \left[ - \frac{1}{2} \left( \frac{M(x_i,\mathbf{\Theta})-y_i}{\sigma_{y,i}} \right)^2 \right].
+
+The cost function for the Gaussian likelihood follows a :math:`\chi^2` distribution:
+
+.. math::
+
+    \beta \equiv \chi^2 = -\log L_\mathrm{G} = 
+    \sum_i^N \frac{1}{2} \left( \frac{M(x_i,\mathbf{\Theta})-y_i}{\sigma_{y,i}}  \right)^2 + C,
+
+where the constant :math:`C` can be neglected for the purposes of finding the best-fit model. 
+For this likelihood, minimising :math:`\beta` is equivalent to weighted least-squares fitting.
+
+.. _huber-likelihood:
+
+Gaussian distribution with Huber loss
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The Huber loss function is a robust regression technique in which data that deviate by a set
+distance from the model are penalised. Following `Jankowski et al. (2018) <https://ui.adsabs.harvard.edu/abs/2018MNRAS.473.4436J/abstract>`_,
+we define a *robust cost function* which uses squared-error loss below a distance threshold and
+linear loss above it:
+
+.. math::
+
+    \beta = -\log L_\mathrm{H} = \sum_i^N
     \begin{cases}
-    \frac{1}{2}t^2 & \mathrm{if}\:|t|<k \\
-    k|t|-\frac{1}{2}k^2 & \mathrm{if}\:|t|\geq k
-    \end{cases},
+    \frac{1}{2} R_i^2         & \mathrm{if} |R_i| < k \\
+    k |R_i| - \frac{1}{2} k^2 & \mathrm{if} |R_i| \geq k
+    \end{cases}
 
-where :math:`t` is a residual and :math:`k` is a constant (which we set to 1.345) that defines the point at which outlying points are penalised.
+where :math:`L_\mathrm{H}` is a Gaussian likelihood with Huber loss,
+:math:`R_i=\left[M(x_i, \mathbf{\Theta}) - y_i\right]/\sigma_{y,i}` are the residuals and :math:`k=1.345`
+is the distance threshold. By penalising outliers, data with unaccounted systematic errors will have
+less weight in the fit. This technique will be most effective when there is enough good data points
+to delineate which of the data are outliers.
 
-The code will use `mingrad <https://iminuit.readthedocs.io/en/stable/reference.html#iminuit.Minuit.migrad>`_
-function from the `iminuit <https://github.com/iminuit/iminuit>`_
-Python package is used to find the minimum of the cost function.
-This uses a maximum of 10000 calls to converge with the *Estimated Distance to Minimum* (EDM) criterion.
-We set the `tolerance <https://iminuit.readthedocs.io/en/stable/reference.html#iminuit.Minuit.tol>`_
-so that the EDM must be less than :math:`10^{-8} * \mathrm{errordef}`.
+.. _t-likelihood:
 
-In the rare cases that *migrad* does not find a valid fit, we then try the `simplex <https://iminuit.readthedocs.io/en/stable/reference.html#iminuit.Minuit.simplex>`_
-and `scan <https://iminuit.readthedocs.io/en/stable/reference.html#iminuit.Minuit.scan>`_ minimisation methods.
-*Simplex* does not use derivatives, making it slower but can perform better in some instances.
-*Scan* is a brute-force minimisation that uses a grid of possible solutions based on the limits of the input parameters.
+:math:`t` distribution
+^^^^^^^^^^^^^^^^^^^^^^
+The :math:`t` distribution is a generalisation of the Gaussian distribution with heavier tails. The
+likelihood is:
 
-The uncertainties were computed using *hesse*, an error calculator which computes the covariance matrix for the fitted parameters and determines
-the :math:`1\sigma` uncertainties as the square root of the diagonal elements.
-This is all done within the :py:meth:`pulsar_spectra.spectral_fit.iminuit_fit_spectral_model` function.
+.. math::
+
+    L_t = \prod_i^N
+    \frac{\Gamma \left( \frac{\nu+1}{2} \right)}{\Gamma\left(\frac{\nu}{2}\right) \sqrt{\pi\nu} \sigma_{y,i}}
+    \left[1 + \frac{1}{\nu} \left( \frac{M(x_i,\mathbf{\Theta})-y_i}{\sigma_{y,i}}  \right)^2 \right]^{-(\nu+1)/2},
+
+where :math:`\Gamma` is the gamma function and :math:`\nu` is a parameter which controls how much
+probability mass is in the tails (the number of 'degrees of freedom' of the distribution). To get
+the cost function,
+
+.. math::
+
+    \beta = - \log L_t,
+
+we make use of the ``scipy.stats.t.logpdf`` function in ``SciPy``. Using the :math:`t` distribution,
+it is straight-forward to include upper/lower limits in the fit by constructing a
+`Tobit likelihood <https://en.wikipedia.org/wiki/Tobit_model>`_, which uses the CDF rather than the
+PDF of the distribution.
+
+.. _model-selection:
+
+Model Selection
+---------------
+When selecting a best-fit model, it is important define what is meant by the 'best fit'. Since we
+are primarily comparing empirical models (i.e. models that are not derived from physical theory), it
+does not make sense to try to find the 'most probably correct' model using Bayesian statistics, as
+there is no clear way to choose sensible priors. Instead, we choose the model which is the best
+*predictor* of the data out of the models being compared. To do this, we use the *Akaike Information
+Criterion* (AIC) modified for small sample sizes:
+
+.. math::
+
+    \mathrm{AICc} = 2 \beta_\mathrm{min} + 2K + \frac{2K(K+1)}{N - K - 1},
+
+where :math:`\beta_\mathrm{min}` is the minimised cost function, :math:`K` is the number of free
+model parameters, and :math:`N` is the number of measurements. This is a technique from information
+theory, and the AICc can be thought of as a second-order estimate of the amount of information
+lost by a model relative to the other models being tested. As such, the AICc itself is arbitrary
+until it is compared between models. When comparing models, a lower AICc is better.
+
+Another factor to consider when selecting a model using the AICc is the sensitivity of the model
+selection. When interpreting the model fit, it is useful to know the probability that the selected
+best-fit model is truely the best-fit model out of those tested, :math:`p_\mathrm{best}`. To do
+this, we calculate the *Akaike weight*, i.e. the relative likelihood of a model :math:`i` compared
+with the model with the lowest AICc (:math:`\mathrm{AICc}_\mathrm{min}`):
+
+.. math::
+
+    l_i = \exp \left( -\frac{1}{2} \left| \mathrm{AICc}_i - \mathrm{AICc}_\mathrm{min} \right| \right).
+
+We can then calculate :math:`p_\mathrm{best}`:
+
+.. math::
+
+    p_\mathrm{best} = \left( \sum_i^T \right)^{-1},
+
+where :math:`T` is the number of models being tested. This probability is included in the legend
+of each ``pulsar_spectra`` plot to assist with interpreting the fit.
 
 Models
 ------
-This fit is done for all functions in :ref:`the models module<modelsmodule>` that are included in :py:meth:`pulsar_spectra.models.model_settings`.
+This fit is done for all functions in the :ref:`models module<models_module>` that are included in :py:meth:`pulsar_spectra.models.model_settings`.
 For example, at the time of writing this documentation, the list of models within model settings includes:
 
 .. code-block:: python
@@ -190,15 +376,15 @@ Which will output something like this:
         start_params:             (4000000000.0, 100000000.0, -1.6, 1.0, 1.0)
         mod_limits:               [None, (10000000.0, 2000000000.0), (-8.0, 0.0), (0.1, 2.1), (0.0, None)]
 
-You can find the descriptions of the models in the :ref:`the models module<modelsmodule>`.
+You can find the descriptions of the models in the :ref:`models module<models_module>`.
 
 
 Adding a new model
 ^^^^^^^^^^^^^^^^^^
-If you would like to use a new model, you can add a function to the models' module and set up the defaults for its
+If you would like to use a new model, you can add a function to the models module and set up the defaults for its
 initial fit parameters and limits in :py:meth:`pulsar_spectra.models.model_settings`.
 
-For example, here is the function for the simple power law in :ref:`the models module<modelsmodule>`:
+For example, here is the function for the simple power law in the :ref:`models module<models_module>`:
 
 .. code-block:: python
 
@@ -259,78 +445,91 @@ Because some of the models have common parameters (such as spectral index), some
 Make sure you reinstall pulsar_spectra to apply any changes you have made to :py:meth:`pulsar_spectra.models.model_settings`, then you will be ready to fit with your new model.
 
 
-Best fit
---------
-The best fit model is determined using the Akaike information criterion (AIC), which measures how much information the model
-retains about the data without overfitting. It was implemented as
+Finding the best-fit model
+--------------------------
+To find the best-fit model out of those implemented in ``pulsar_spectra``, you can use the
+:py:meth:`pulsar_spectra.spectral_fit.find_best_spectral_fit` function. As a simple example:
 
-.. math::
-
-    \mathrm{AIC}=2\beta_\mathrm{min} + 2K + \frac{2K(K+1)}{N-K-1},
-
-where :math:`\beta_\mathrm{min}` is the minimised robust cost function, :math:`K` is the number of free parameters, and :math:`N`
-is the number of data points in the fit. The last term is the correction for finite sample sizes, which goes to zero as the sample
-size gets sufficiently large. The model which results in the lowest AIC is the most likely to be the best fitting model.
-
-All of this is done by calling the :py:meth:`pulsar_spectra.spectral_fit.find_best_spectral_fit` function like so:
-
+.. script location: example_scripts/plot_compare.py
 .. code-block:: python
 
     from pulsar_spectra.catalogue import collect_catalogue_fluxes
     from pulsar_spectra.spectral_fit import find_best_spectral_fit
 
     cat_dict = collect_catalogue_fluxes()
-    pulsar = 'J1453-6413'
-    freqs, fluxs, flux_errs, refs = cat_dict[pulsar]
-    best_model_name, iminuit_result, fit_info, p_best, p_category = find_best_spectral_fit(pulsar, freqs, fluxs, flux_errs, refs, plot_best=True)
+    pulsar = "J1327-6222"
+    freqs, bands, fluxs, flux_errs, refs = cat_dict[pulsar]
 
-To confirm that the best model has been found, you can visually inspect the fits of all models using the *plot_compare* option like so
-
-.. script location: example_scripts/plot_compare.py
-.. code-block:: python
-
-    best_model_name, iminuit_result, fit_info, p_best, p_category = find_best_spectral_fit(pulsar, freqs, fluxs, flux_errs, refs, plot_compare=True)
-
-which will produce
-
-.. image:: figures/J1453-6413_comparison_fit.png
-  :width: 800
-
-From this plot, it does look like the power-law with a low-frequency turnover is the best model as the code predicted.
-If this is not the case and wanted to try and improve the broken power-law fit, for example, you can have more control over the
-fit using :py:meth:`pulsar_spectra.spectral_fit.iminuit_fit_spectral_model` function like so.
-
-.. script location: example_scripts/broken_power_law_fit.py
-.. code-block:: python
-
-    from pulsar_spectra.catalogue import collect_catalogue_fluxes
-    from pulsar_spectra.spectral_fit import iminuit_fit_spectral_model
-
-    cat_list = collect_catalogue_fluxes()
-    pulsar = 'J1453-6413'
-    freqs, fluxs, flux_errs, refs = cat_list[pulsar]
-
-    # Broken power law function is in the format
-    # broken_power_law(v, vb, a1, a2, b, v0)
-
-    # start params for (v, vb, a1, a2, b)
-    start_params = (5e8, -1.6, -1.6, 0.1)
-
-    # Fit param limits (min, max) or (v, vb, a1, a2, b)
-    mod_limits = [(None, None), (-10, 10), (-10, 0), (0, None)]
-    # None means there is no limit
-
-    aic, iminuit_result, fit_info = iminuit_fit_spectral_model(
+    best_model_name, p_best, fit_results, aic_dict, plot_dicts = find_best_spectral_fit(
+        pulsar,
         freqs,
+        bands,
         fluxs,
         flux_errs,
         refs,
-        model_name="broken_power_law",
-        start_params=start_params,
-        mod_limits=mod_limits,
-        plot=True,
-        save_name="J1453-6413_broken_power_law.png",
+        plot_best=True,
     )
 
-In this example we are manually handing :py:meth:`pulsar_spectra.spectral_fit.iminuit_fit_spectral_model` the default
-*start_params* and *mod_limits* but you can edit these.
+The parameters returned are: the name of the best-fit model, the :math:`p_\mathrm{best}` of the
+best-fit model, a dictionary of ``iminuit`` or ``Bilby`` results objects, a dictionary of AICc
+values, and a dictionary of data and metadata used to plot the model fits. Here, we have specified
+``plot_best=True``, which will create a plot of the data showing the best-fit spectral model:
+
+.. image:: figures/J1327-6222_broken_power_law_maximum-likelihood_Huber_fit.png
+  :width: 800
+
+If you would instead like to visually compare all of the models that were tested, then you can
+use the option ``plot_compare=True``. This will produce the following comparison plot:
+
+.. image:: figures/J1327-6222_maximum-likelihood_Huber_comparison_fit.png
+  :width: 800
+
+By default, :ref:`maximum-likelihood-estimation` and the :ref:`huber-likelihood` likelihood will be
+used. The fitting method and likelihood can be specified with the ``method`` and ``likelihood``
+options. For example:
+
+.. script location: example_scripts/plot_best_bayesian.py
+.. code-block:: python
+
+    best_model_name, p_best, fit_results, aic_dict, plot_dicts = find_best_spectral_fit(
+        pulsar,
+        freqs,
+        bands,
+        fluxs,
+        flux_errs,
+        refs,
+        plot_best=True,
+        method="bayesian-nested-sampling",
+        likelihood="t",
+    )
+
+This will produce the following plot, which shows samples from the posterior distribution of the
+best-fit model (grey lines), as well as the sample with the maximum likelihood (black dashed line).
+
+.. image:: figures/J1327-6222_example_raw_max-std.png
+  :width: 800
+
+The legend provides a point estimate of the posterior distribution. By default, the maximum
+likelihood estimate is reported and the uncertainty is the standard deviation of the posterior
+samples. This is equivalent to providing the ``legend_point_estimate='max-std'`` option to
+:py:meth:`pulsar_spectra.spectral_fit.find_best_spectral_fit`. If you would instead like the legend
+to report the median and 68% credible interval, use ``legend_point_estimate='med-ci'``. This will
+produce the following plot:
+
+.. image:: figures/J1327-6222_example_raw_med-ci.png
+  :width: 800
+
+The plots generated by ``Bilby`` and ``Dynesty`` will be written to a subdirectory named ``outdir``
+within your current working directory. The posterior samples will also be cached in ``pickle`` and
+``json`` format. If you re-run the fitting code on the same pulsar with the same likelihood and
+within the same directory, then the nested sampling will be resumed or may be skipped entirely if
+it was already completed. One of the diagnostic plots generated is a corner plot showing the
+posterior probability distribution:
+
+.. image:: figures/J1327-6222_broken_power_law_corner.png
+  :width: 800
+
+If you would like more control over the model fitting, the functions are contained in the
+:ref:`fitters module<fitters_module>`. Documentation for these functions can be found in their
+docstrings, and the source code for :py:meth:`pulsar_spectra.spectral_fit.find_best_spectral_fit`
+provides an example of their usage.

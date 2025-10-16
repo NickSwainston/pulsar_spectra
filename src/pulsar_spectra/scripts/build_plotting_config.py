@@ -436,7 +436,7 @@ def create_ref_marker_combinations(psrs, args):
     for psr in psrs:
         _, _, _, _, refs = cat_dict[psr]
         all_refs += refs
-    unique_refs = list(np.unique(np.array(all_refs)))
+    unique_refs = [str(item) for item in np.unique(np.array(all_refs))]
     num_unique_refs = len(unique_refs)
 
     shuffle_colours = False

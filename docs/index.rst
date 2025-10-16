@@ -17,5 +17,5 @@ Welcome to pulsar_spectra's documentation!
    spectral_fit
    plotting
    bandwidth_intergration
-   modules
    faq
+   modules
