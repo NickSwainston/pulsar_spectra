@@ -66,8 +66,6 @@ def quick_fit(
             **plot_opt,
         )
 
-        print(fit_results[best_fit_model_name])
-
         logger.info(f"{pulsar} fit: {best_fit_model_name} (p_best={p_best:.3f})")
 
         # TODO: implement a package-agnostic method for printing results
