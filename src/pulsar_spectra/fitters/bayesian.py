@@ -8,6 +8,7 @@ import logging
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from format_multiple_errors import format_multiple_errors
 
 from ..cost_functions import gaussian_cost_function, huber_cost_function, t_cost_function
 from ..models import latex_params, model_settings
@@ -345,7 +346,7 @@ def bilby_compute_maximum_posterior_likelihood(
     # Get list of all model parameters
     param_keys = bilby_result.search_parameter_keys + bilby_result.fixed_parameter_keys
 
-    # Get nsamp samples from the posterior
+    # Get all samples from the posterior
     samples = bilby_result.posterior[param_keys]
 
     # Compute the minimised negative log likelihood for each sample
@@ -372,6 +373,7 @@ def bilby_interpolate_model(
     best_fit_params,
     nsamp=200,
     legend_style="raw",
+    legend_point_estimate="max-std",
 ):
     """
     Determine best fit and raytraces from Bilby posterior samples.
@@ -393,6 +395,17 @@ def bilby_interpolate_model(
         The legend style. Either: 'raw', 'typeset', or 'compact'.
         See :py:meth:`pulsar_spectra.spectral_fit.find_best_spectral_fit` for
         further documentation. |br| Default: 'raw'.
+    legend_point_estimate : `str`, optional
+        The point estimate of the posterior distribution reported in the legend.
+        The options are:
+
+            'max-std' : The maximum of each marginal distribution with
+            uncertainties equal to 1 standard deviation.
+
+            'med-ci' : The median of each marginal distribution with
+            uncertainties calculated from the 68% credible interval.
+
+        |br| Default: 'max-std'.
 
     Returns
     -------
@@ -408,11 +421,14 @@ def bilby_interpolate_model(
     param_keys = bilby_result.search_parameter_keys + bilby_result.fixed_parameter_keys
 
     # Interpolate the best-fit model to the fitted freqs
+    best_fit_params_MHz = {}
     for param in best_fit_params.keys():
         # Convert frequencies to MHz
         if param.startswith("v"):
-            best_fit_params[param] /= 1e6
-    fitted_flux_best = model_function(fitted_freqs_MHz, **best_fit_params) * 1e3
+            best_fit_params_MHz[param] = best_fit_params[param] / 1e6
+        else:
+            best_fit_params_MHz[param] = best_fit_params[param]
+    fitted_flux_best = model_function(fitted_freqs_MHz, **best_fit_params_MHz) * 1e3
 
     # Interpolate to nsamp random samples from the posterior
     samples = bilby_result.posterior[param_keys].sample(nsamp)
@@ -446,42 +462,55 @@ def bilby_interpolate_model(
         fit_info.append("Bandwidth: \u2713")
 
     if legend_style in ["raw", "typeset"]:
+        params_std = bilby_result.posterior[param_keys].std()
         for param in param_keys:
-            param_range = bilby_result.get_one_dimensional_median_and_error_bar(param)
+            # Get point estimates
+            p_plus = None
+            p_minus = None
+            if legend_point_estimate == "max-std":
+                # Maximum +- standard deviation
+                p_est = best_fit_params[param]
+                if param != "v0":
+                    p_plus = params_std[param]
+                    p_minus = params_std[param]
+            elif legend_point_estimate == "med-ci":
+                # Median + (68%-50%) - (50%-16%)
+                param_range = bilby_result.get_one_dimensional_median_and_error_bar(param)
+                p_est = param_range.median
+                if param != "v0":
+                    p_plus = param_range.plus
+                    p_minus = param_range.minus
 
-            # Whether to include units
-            if param == "v0":
-                v_med = param_range.median / 1e6
-                v_plus = None
-                v_minus = None
-                units = " MHz"
-            elif param.startswith("v"):
-                v_med = param_range.median / 1e6
-                v_plus = param_range.plus / 1e6
-                v_minus = param_range.minus / 1e6
-                units = " MHz"
+            # Convert to MHz
+            if param.startswith("v"):
+                p_est /= 1e6
+                if param != "v0":
+                    p_plus /= 1e6
+                    p_minus /= 1e6
+
+            # Get units
+            if param.startswith("v"):
+                units_str = " MHz"
+            elif param == "c":
+                units_str = " mJy"
             else:
-                v_med = param_range.median
-                v_plus = param_range.plus
-                v_minus = param_range.minus
-                if param == "c":
-                    units = " mJy"
-                else:
-                    units = ""
+                units_str = ""
 
             # Whether to typeset parameter names
             if legend_style == "typeset" and param in latex_params:
-                lhs = f"${latex_params[param]} = "
+                lhs_str = f"${latex_params[param]} = "
             else:
-                lhs = f"{param} = $"
+                lhs_str = f"{param} = $"
 
-            # Whether to include uncertainties
-            if v_plus is not None and v_minus is not None:
-                unc = f"^{{+{v_plus:.2f}}}_{{-{v_minus:.2f}}}"
+            if p_plus is not None and p_minus is not None:
+                if np.isclose(p_plus, p_minus, atol=0.0, rtol=0.01):
+                    qty_str = format_multiple_errors(p_est, np.mean([p_plus, p_minus]), latex=True)
+                else:
+                    qty_str = format_multiple_errors(p_est, (p_plus, p_minus), latex=True)
             else:
-                unc = ""
+                qty_str = f"{p_est:.0f}"
 
-            fit_info.append(f"{lhs}{v_med:.2f}{unc}${units}")
+            fit_info.append(f"{lhs_str}{qty_str}${units_str}")
 
     fit_info = "\n".join(fit_info)
 

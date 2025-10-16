@@ -21,9 +21,9 @@ simplest use case is as follows:
 This will produce a plot of the best-fit spectrum for J0332+5434 with the default fitting method.
 You can select the :ref:`fitting method <fitting-methods>` with ``--method`` and the 
 :ref:`likelihood function <likelihoods>` with ``--likelihood``. The output plots can be customised
-with ``--plot_type`` and ``--legend_style``. Lastly, for the nested sampling method, you will likely
-want to make use of parallelisation. The number of CPUs used can be selected with ``--npool``. See
-the help menu (``quick-fit -h``) for more details.
+with ``--plot_type``, ``--legend_style``, and ``--point_estimate``. Lastly, for the nested sampling
+method, you will likely want to make use of parallelisation. The number of CPUs used can be selected
+with ``--npool``. See the help menu (``quick-fit -h``) for more details.
 
 Simple example
 --------------

@@ -11,7 +11,13 @@ logger = logging.getLogger(__name__)
 
 
 def quick_fit(
-    pulsars, method="maximum-likelihood", plot_type="best", legend_style="raw", likelihood="Huber", sampler_kwargs=None
+    pulsars,
+    method="maximum-likelihood",
+    plot_type="best",
+    legend_style="raw",
+    point_estimate="max-std",
+    likelihood="Huber",
+    sampler_kwargs=None,
 ):
     cat_list = collect_catalogue_fluxes()
     for pulsar in pulsars:
@@ -55,9 +61,12 @@ def quick_fit(
             method=method,
             likelihood=likelihood,
             legend_style=legend_style,
+            legend_point_estimate=point_estimate,
             sampler_kwargs=sampler_kwargs,
             **plot_opt,
         )
+
+        print(fit_results[best_fit_model_name])
 
         logger.info(f"{pulsar} fit: {best_fit_model_name} (p_best={p_best:.3f})")
 
@@ -133,6 +142,19 @@ def main():
         ),
     )
     parser.add_argument(
+        "-e",
+        "--point_estimate",
+        type=str,
+        choices=["max-std", "med-ci"],
+        default="max-std",
+        help=(
+            "The point estimate reported in the legend (only applies to the "
+            "nested sampling method). "
+            "'max-std' for the maximum +/- 1 standard deviation; "
+            "'med-ci' for the median and the 68%% credible interval."
+        ),
+    )
+    parser.add_argument(
         "-l",
         "--likelihood",
         type=str,
@@ -174,6 +196,7 @@ def main():
         method=args.method,
         plot_type=args.plot_type,
         legend_style=args.legend_style,
+        point_estimate=args.point_estimate,
         likelihood=args.likelihood,
         sampler_kwargs={"npool": args.npool},
     )

@@ -30,6 +30,7 @@ def find_best_spectral_fit(
     plot_bands=True,
     fit_range=None,
     legend_style="raw",
+    legend_point_estimate="max-std",
     sampler_kwargs=None,
     plot_kwargs=None,
 ):
@@ -101,6 +102,17 @@ def find_best_spectral_fit(
             placed within the bbox.
 
         |br| Default: 'raw'
+    legend_point_estimate : `str`, optional
+        The point estimate of the posterior distribution reported in the legend.
+        The options are:
+
+            'max-std' : The maximum of each marginal distribution with
+            uncertainties equal to 1 standard deviation.
+
+            'med-ci' : The median of each marginal distribution with
+            uncertainties calculated from the 68% credible interval.
+
+        |br| Default: 'max-std'.
     sampler_kwargs : `dict[str, Any]`, optional
         Extra arguments to pass to `bilby.run_sampler()`.
     plot_kwargs : `dict[str, Any]`, optional
@@ -131,6 +143,11 @@ def find_best_spectral_fit(
 
     if legend_style not in ["raw", "typeset", "compact"]:
         raise ValueError(f"Invalid legend style: '{legend_style}' (valid options: 'raw', 'typeset', 'compact')")
+
+    if legend_point_estimate not in ["max-std", "med-ci"]:
+        raise ValueError(
+            f"Invalid legend point estimate: '{legend_point_estimate}' (valid options: 'max-std', 'med-ci')"
+        )
 
     # Conditional imports
     if method == "maximum-likelihood":
@@ -255,6 +272,7 @@ def find_best_spectral_fit(
                 fitted_freq,
                 params_beta_min,
                 legend_style=legend_style,
+                legend_point_estimate=legend_point_estimate,
             )
         fit_results[model_name] = fit_result
         plot_dicts[model_name] = plot_dict

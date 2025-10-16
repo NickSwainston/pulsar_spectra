@@ -770,6 +770,15 @@ wheels = [
 ]
 
 [[package]]
+name = "format-multiple-errors"
+version = "0.0.3"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/41/84/baf3e37edd4fc84ff1099d63795ac82181762df767a36048e842a0207e50/format_multiple_errors-0.0.3.tar.gz", hash = "sha256:73ef13a700d3c4cecdea7c82bbfa27c0d14f7d48999616909a3050484be4082b", size = 17936, upload-time = "2024-09-22T13:36:04.519Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/00/c9/7029d5038a8cebe1c2176b953677c4cd29869247b2c9bbd1673845ab752b/format_multiple_errors-0.0.3-py3-none-any.whl", hash = "sha256:5825b9750df53ab1fecf7de28ce1799384de90563f9357d7f238cbe13114a5b5", size = 13560, upload-time = "2024-09-22T13:36:02.616Z" },
+]
+
+[[package]]
 name = "h5py"
 version = "3.14.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1719,6 +1728,7 @@ name = "pulsar-spectra"
 version = "2.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "format-multiple-errors" },
     { name = "iminuit" },
     { name = "jacobi" },
     { name = "matplotlib", version = "3.9.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
@@ -1727,7 +1737,6 @@ dependencies = [
     { name = "pandas" },
     { name = "psrqpy" },
     { name = "pyyaml" },
-    { name = "uncertainties" },
 ]
 
 [package.optional-dependencies]
@@ -1754,6 +1763,7 @@ docs = [
 [package.metadata]
 requires-dist = [
     { name = "bilby", marker = "extra == 'bayesian'", specifier = ">=2.3.0" },
+    { name = "format-multiple-errors", specifier = ">=0.0.3" },
     { name = "iminuit", specifier = ">=2.9" },
     { name = "jacobi", specifier = ">=0.2" },
     { name = "matplotlib", specifier = ">=3.6" },
@@ -1761,7 +1771,6 @@ requires-dist = [
     { name = "pandas", specifier = ">=1.4,<2" },
     { name = "psrqpy", specifier = ">=1.2.9" },
     { name = "pyyaml", specifier = ">=3.10" },
-    { name = "uncertainties", specifier = ">=3.2.3" },
 ]
 provides-extras = ["bayesian"]
 
@@ -2386,15 +2395,6 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/72/94/1a15dd82efb362ac84269196e94cf00f187f7ed21c242792a923cdb1c61f/typing_extensions-4.15.0.tar.gz", hash = "sha256:0cea48d173cc12fa28ecabc3b837ea3cf6f38c6d1136f85cbaaf598984861466", size = 109391, upload-time = "2025-08-25T13:49:26.313Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/18/67/36e9267722cc04a6b9f15c7f3441c2363321a3ea07da7ae0c0707beb2a9c/typing_extensions-4.15.0-py3-none-any.whl", hash = "sha256:f0fa19c6845758ab08074a0cfa8b7aecb71c999ca73d62883bc25cc018c4e548", size = 44614, upload-time = "2025-08-25T13:49:24.86Z" },
-]
-
-[[package]]
-name = "uncertainties"
-version = "3.2.3"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/fe/0c/cb09f33b26955399c675ab378e4063ed7e48422d3d49f96219ab0be5eba9/uncertainties-3.2.3.tar.gz", hash = "sha256:76a5653e686f617a42922d546a239e9efce72e6b35411b7750a1d12dcba03031", size = 160492, upload-time = "2025-04-21T19:58:28.63Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/8f/5e/f1e1dd319e35e962a4e00b33150a8868b6329cc1d19fd533436ba5488f09/uncertainties-3.2.3-py3-none-any.whl", hash = "sha256:313353900d8f88b283c9bad81e7d2b2d3d4bcc330cbace35403faaed7e78890a", size = 60118, upload-time = "2025-04-21T19:58:26.864Z" },
 ]
 
 [[package]]

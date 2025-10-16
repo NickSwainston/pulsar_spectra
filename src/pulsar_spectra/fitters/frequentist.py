@@ -5,10 +5,10 @@ Functions for performing frequentist inference of spectral fits.
 import logging
 
 import numpy as np
+from format_multiple_errors import format_multiple_errors
 from iminuit import Minuit
 from iminuit.cost import LeastSquares
 from jacobi import propagate
-from uncertainties import ufloat
 
 from ..cost_functions import huber_loss_function, t_loss_function
 from ..models import latex_params, model_settings
@@ -393,24 +393,25 @@ def iminuit_interpolate_model(
 
     if legend_style in ["raw", "typeset"]:
         for p, v, e in zip(iminuit_result.parameters, iminuit_result.values, iminuit_result.errors):
-            qty = ufloat(v, e)
-
             # Whether to include units
             if p.startswith("v"):
-                qty /= 1e6  # Hz -> MHz
-                units = " MHz"
+                v /= 1e6  # Hz -> MHz
+                e /= 1e6  # Hz -> MHz
+                units_str = " MHz"
             elif p == "c":
-                units = " mJy"
+                units_str = " mJy"
             else:
-                units = ""
+                units_str = ""
 
             # Whether to typeset the parameter names
             if legend_style == "typeset" and p in latex_params:
-                lhs = f"${latex_params[p]} = "
+                lhs_str = f"${latex_params[p]} = "
             else:
-                lhs = f"{p} = $"
+                lhs_str = f"{p} = $"
 
-            fit_info.append(f"{lhs}{qty:L}${units}")
+            qty_str = format_multiple_errors(v, e, latex=True)
+
+            fit_info.append(f"{lhs_str}{qty_str}${units_str}")
 
     fit_info = "\n".join(fit_info)
 

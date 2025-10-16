@@ -37,7 +37,17 @@ given below:
 
 This will produce the following plot:
 
-.. image:: figures/example_alternate_style.png
+.. image:: figures/J1909-3744_example_legend_compact.png
+  :width: 800
+
+Alternately, using ``legend_style='raw'`` (the default):
+
+.. image:: figures/J1909-3744_example_legend_raw.png
+  :width: 800
+
+And lastly with ``legend_style='typeset'``:
+
+.. image:: figures/J1909-3744_example_legend_typeset.png
   :width: 800
 
 The some of the additional plotting options can be found in the docstring for

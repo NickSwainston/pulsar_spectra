@@ -17,7 +17,7 @@ dependencies = [
     "jacobi>=0.2",
     "pyyaml>=3.10",
     "pandas>=1.4,<2",
-    "uncertainties>=3.2.3",
+    "format-multiple-errors>=0.0.3",
 ]
 
 [dependency-groups]
