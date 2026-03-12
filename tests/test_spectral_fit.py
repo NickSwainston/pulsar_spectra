@@ -247,6 +247,201 @@ def test_plot_methods():
     )
 
 
+def test_spl_iminuit_upper_limits():
+
+    # Make fake data
+    freqs = [1, 10, 100, 1000]
+    bands = [0.1, 1, 10, 100]
+    fluxes = [1000, 100, 10, 1]
+    flux_errs = [500, 50, 5, 0.5]
+    refs = ["Fake data"] * 4
+    limit_signs = [0] * 4
+    min_freqs_MHz = 0.09 # np.min(np.array(freqs) - np.array(bands) / 2)
+    max_freqs_MHz = np.max(np.array(freqs) + np.array(bands) / 2)
+    fitted_freq = np.logspace(np.log10(min_freqs_MHz), np.log10(max_freqs_MHz), 100)
+
+    # Do a simple fit with normal data to assert fitting without upper limits still works
+    best_fit_model_name, _, fit_results, _, _ = find_best_spectral_fit(
+        "test_pulsar",
+        freqs,
+        bands,
+        fluxes,
+        flux_errs,
+        limit_signs,
+        refs,
+        method="maximum-likelihood",
+        likelihood="Huber",
+        plot_best=True,
+    )
+    npt.assert_almost_equal(fit_result.values["a"], -1.00, decimal=2)
+
+    # And a lower data point
+    freqs.append(0.1)
+    bands.append(0.01)
+    fluxes.append(1000)
+    flux_errs.append(500)
+    refs.append("Fake data")
+    limit_signs.append(0)
+    print(refs, limit_signs)
+    best_fit_model_name, _, fit_results, _, _ = find_best_spectral_fit(
+        "test_pulsar",
+        freqs,
+        bands,
+        fluxes,
+        flux_errs,
+        limit_signs,
+        refs,
+        method="maximum-likelihood",
+        likelihood="Huber",
+        plot_best=True,
+    )
+
+    plot_dict = iminuit_interpolate_model(
+        fit_result,
+        "simple_power_law",
+        fitted_freq,
+        band_bool,
+    )
+
+    plot_fit(
+        freqs,
+        bands,
+        fluxes,
+        flux_errs,
+        limit_signs,
+        refs,
+        "simple_power_law",
+        plot_dict,
+        {"simple_power_law": {"AIC":1}},
+        save_name="spl_iminuit_no_upper_limits.png",
+    )
+
+    # Add upper limits to the data and check spectral index is shallower
+    refs.append("Fake upper limit")
+    refs = ["Fake data"] * 4 + ["Fake upper limit"]
+    limit_signs = [0] * 4 + [1]
+    print(refs, limit_signs)
+    ul_fit_result, band_bool = iminuit_fit_spectral_model(
+        freqs,
+        bands,
+        fluxes,
+        flux_errs,
+        limit_signs,
+        model_name="simple_power_law",
+        likelihood="Huber",
+    )
+    assert fit_result.values["a"] > -1.00
+
+    plot_dict = iminuit_interpolate_model(
+        ul_fit_result,
+        "simple_power_law",
+        fitted_freq,
+        band_bool,
+    )
+
+    plot_fit(
+        freqs,
+        bands,
+        fluxes,
+        flux_errs,
+        limit_signs,
+        refs,
+        "simple_power_law",
+        plot_dict,
+        {"simple_power_law": {"AIC":1}},
+        save_name="spl_iminuit_upper_limits.png",
+    )
+    # Assert there is a flatter spectrum with an upper limit
+    assert ul_fit_result.values["a"] > fit_result.values["a"]
+
+
+
+
+def test_lfto_iminuit_upper_limits():
+
+    # Make fake data
+    freqs = [10, 10, 100, 500, 1000, 10000]
+    bands = [1, 1, 10, 50, 100, 1000]
+    fluxes = [100, 100, 10, 5, 1, 0.1]
+    flux_errs = [50, 50, 5, 0.5, 0.5, 0.05]
+    refs = ["Fake data"] * 6
+    limit_signs = [0] * 6
+    min_freqs_MHz = 0.09 # np.min(np.array(freqs) - np.array(bands) / 2)
+    max_freqs_MHz = np.max(np.array(freqs) + np.array(bands) / 2)
+    fitted_freq = np.logspace(np.log10(min_freqs_MHz), np.log10(max_freqs_MHz), 100)
+
+    # And a lower data point
+    fit_result, band_bool = iminuit_fit_spectral_model(
+        freqs,
+        bands,
+        fluxes,
+        flux_errs,
+        limit_signs,
+        model_name="low_frequency_turn_over_power_law",
+        likelihood="Huber",
+    )
+
+    plot_dict = iminuit_interpolate_model(
+        fit_result,
+        "low_frequency_turn_over_power_law",
+        fitted_freq,
+        band_bool,
+    )
+
+    plot_fit(
+        freqs,
+        bands,
+        fluxes,
+        flux_errs,
+        limit_signs,
+        refs,
+        "low_frequency_turn_over_power_law",
+        plot_dict,
+        {"low_frequency_turn_over_power_law": {"AIC":1}},
+        save_name="lfto_iminuit_no_upper_limits.png",
+    )
+
+    # Add upper limits to the data and check spectral index is shallower
+    refs.append("Fake upper limit")
+    refs = ["Fake data"] * 5 + ["Fake upper limit"]
+    limit_signs = [0] * 5 + [-1]
+    print(refs, limit_signs)
+    ul_fit_result, band_bool = iminuit_fit_spectral_model(
+        freqs,
+        bands,
+        fluxes,
+        flux_errs,
+        limit_signs,
+        model_name="low_frequency_turn_over_power_law",
+        likelihood="Huber",
+    )
+    # assert fit_result.values["a"] < -1.00
+
+    plot_dict = iminuit_interpolate_model(
+        ul_fit_result,
+        "low_frequency_turn_over_power_law",
+        fitted_freq,
+        band_bool,
+    )
+
+    plot_fit(
+        freqs,
+        bands,
+        fluxes,
+        flux_errs,
+        limit_signs,
+        refs,
+        "low_frequency_turn_over_power_law",
+        plot_dict,
+        {"low_frequency_turn_over_power_law": {"AIC":1}},
+        save_name="lfto_iminuit_upper_limits.png",
+    )
+    # assert ul_fit_result.values["a"] < fit_result.values["a"]
+    print(ul_fit_result.values)
+    print(fit_result.values)
+    exit(1)
+
+
 if __name__ == "__main__":
     """
     Tests the relevant functions in spectral_fit.py

@@ -7,7 +7,7 @@ import logging
 import numpy as np
 from format_multiple_errors import format_multiple_errors
 from iminuit import Minuit
-from iminuit.cost import LeastSquares
+from iminuit.cost import LeastSquares, UnbinnedNLL
 from jacobi import propagate
 
 from ..cost_functions import huber_loss_function, t_loss_function
@@ -111,6 +111,7 @@ def iminuit_fit_spectral_model(
     bands_MHz,
     fluxs_mJy,
     flux_errs_mJy,
+    limit_signs,
     model_name="simple_power_law",
     start_params=None,
     mod_limits=None,
@@ -159,10 +160,10 @@ def iminuit_fit_spectral_model(
 
     # Convert to SI (Hz and Jy) and load into numpy arrays
     v0_Hz = v0_MHz * 1e6
-    freqs_Hz = np.array(freqs_MHz, dtype=np.float128) * 1e6
-    bands_Hz = np.array(bands_MHz, dtype=np.float128) * 1e6
-    fluxs_Jy = np.array(fluxs_mJy, dtype=np.float128) / 1e3
-    flux_errs_Jy = np.array(flux_errs_mJy, dtype=np.float128) / 1e3
+    freqs_Hz = np.array(freqs_MHz, dtype=np.float64) * 1e6
+    bands_Hz = np.array(bands_MHz, dtype=np.float64) * 1e6
+    fluxs_Jy = np.array(fluxs_mJy, dtype=np.float64) / 1e3
+    flux_errs_Jy = np.array(flux_errs_mJy, dtype=np.float64) / 1e3
 
     # Compute the frequency ranges from the centre frequencies and bandwidths
     min_freqs_Hz = freqs_Hz - bands_Hz / 2
@@ -201,7 +202,7 @@ def iminuit_fit_spectral_model(
         start_params = tuple(temp_params)
 
     # Define a loss function
-    least_squares = LeastSquares(freqs_Hz, fluxs_Jy, flux_errs_Jy, model_function)
+    least_squares = LeastSquares(freqs_Hz, fluxs_Jy, flux_errs_Jy, model_function.__wrapped__)
     if likelihood == "Gaussian":
         least_squares.loss = "linear"  # Ordinary least squares
     elif likelihood == "Huber":
@@ -211,9 +212,16 @@ def iminuit_fit_spectral_model(
     else:
         logger.error(f"Invalid likelihood specified: {likelihood}.")
         return None, None
+    print(least_squares)
+    custom_cost = UnbinnedNLL(
+        (freqs_Hz, fluxs_Jy, flux_errs_Jy, limit_signs),
+        model_function,
+        log=True,
+    )
 
     # Load into Minuit object
-    m = Minuit(least_squares, *start_params)
+    m = Minuit(custom_cost, *start_params)
+    print(m)
     m.fixed["v0"] = True  # fix the reference frequency
 
     # Perform the minimisation without bandwidth integration
@@ -273,6 +281,7 @@ def iminuit_compute_likelihood(
     bands_MHz,
     fluxs_mJy,
     flux_errs_mJy,
+    limit_signs,
     iminuit_result,
     model_name,
     band_bool,
@@ -305,10 +314,10 @@ def iminuit_compute_likelihood(
     model_dict = model_settings()
 
     # Convert to SI (Hz and Jy) and load into numpy arrays
-    freqs_Hz = np.array(freqs_MHz, dtype=np.float128) * 1e6
-    bands_Hz = np.array(bands_MHz, dtype=np.float128) * 1e6
-    fluxs_Jy = np.array(fluxs_mJy, dtype=np.float128) / 1e3
-    flux_errs_Jy = np.array(flux_errs_mJy, dtype=np.float128) / 1e3
+    freqs_Hz = np.array(freqs_MHz, dtype=np.float64) * 1e6
+    bands_Hz = np.array(bands_MHz, dtype=np.float64) * 1e6
+    fluxs_Jy = np.array(fluxs_mJy, dtype=np.float64) / 1e3
+    flux_errs_Jy = np.array(flux_errs_mJy, dtype=np.float64) / 1e3
 
     if band_bool:
         model_function = model_dict[model_name][4]
@@ -317,9 +326,13 @@ def iminuit_compute_likelihood(
         model_function = model_dict[model_name][0]
         freqs_input_Hz = freqs_Hz
 
+    print(f"{model_function=}")
+    print(f"{iminuit_result.values=}")
+    print(f"{freqs_input_Hz=}")
+    print(model_function((freqs_input_Hz, fluxs_Jy, flux_errs_Jy, limit_signs), *iminuit_result.values))
     # Compute the negative log likelihood
     beta = cost_function(
-        model_function(freqs_input_Hz, *iminuit_result.values),
+        model_function((freqs_input_Hz, fluxs_Jy, flux_errs_Jy, limit_signs), *iminuit_result.values),
         fluxs_Jy,
         flux_errs_Jy,
     )

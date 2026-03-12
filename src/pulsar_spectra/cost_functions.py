@@ -4,6 +4,7 @@ Cost functions (i.e. negative log-likelihoods) used for model fitting.
 
 import numpy as np
 import scipy.stats as st
+from functools import wraps
 
 
 def array_data_type_check(x):
@@ -236,3 +237,77 @@ def tobit_t_cost_function(f_y, y_L, sigma_y_L, df=4, invert=False):
         sign = 1.0
     resi = sign * (y_L - f_y) / sigma_y_L
     return -1.0 * np.sum(st.t.logcdf(resi, df))
+
+
+def tobit_limit_wrapper(model_fn):
+    """
+    Decorator that wraps a model(data, *params) function to produce a
+    tobit_log_likelihood(data, model_fn, *params) function.
+    """
+    @wraps(model_fn)
+    def wrapper(data, *params):
+        return tobit_log_likelihood(data, model_fn, *params)
+    return wrapper
+
+
+def tobit_log_likelihood(
+        data,
+        spectra_model,
+        *model_params,
+        loss="gaussian",
+        df=4,
+    ):
+    """Compute the log likelihood of an input spectral model using the Tobit model to handle upper and lower limits.
+
+    Parameters
+    ----------
+    data : `tuple`
+        A tuple of the input data (freqs_Hz, fluxs_Jy, flux_errs_Jy, limit_signs).
+        freqs_Hz : `list`
+            Frequency in Hz. May also be a tuple (v_min, v_max) for integrated models.
+        fluxs_Jy : `list`
+            Flux density in Jy.
+        flux_errs_Jy : `list`
+            Uncertainty in the flux density in Jy.
+        limit_signs : `list`
+            List of ints where +1 is for a lower limit, -1 is for a upper limit and 0 is for standard data.
+    spectra_model : `function`
+        The spectral model function to fit.
+    *model_params : *`float`
+        The model parameters to fit.
+    loss : `string`, optional
+        The loss function to use ('gaussian', 't'). |br| Default: 'gaussian'.
+    df : `int`, optional
+        The number of degrees of freedom for the t-distribution. |br| Default: 4.
+
+    Returns
+    -------
+    log_likelihood : `np.ndarray`
+        The log likelihood of the model fit.
+    """
+    # Unpack data (freqs may be in the (v_min, v_max) format for integrate models)
+    freqs_Hz, fluxs_Jy, flux_errs_Jy, limit_signs = data
+
+    model_fluxes = spectra_model(freqs_Hz, *model_params)
+    residuals = (fluxs_Jy - model_fluxes) / flux_errs_Jy
+
+    if loss == "gaussian":
+        log_likelihood = np.where(
+            # Use limit_signs as a condition
+            np.array(limit_signs, dtype=bool),
+            # If +1 for lower limit or -1 for upper limit
+            st.norm.logcdf(-1*limit_signs*residuals),
+            # Else use Gaussian likelihood
+            st.norm.logpdf(residuals)
+        )
+    elif loss == "t":
+        log_likelihood = np.where(
+            # Use limit_signs as a condition
+            np.array(limit_signs, dtype=bool),
+            # If +1 for lower limit or -1 for upper limit
+            st.t.logcdf(-1*limit_signs*residuals, df),
+            # Else use t-distribution likelihood
+            st.t.logpdf(residuals, df)
+        )
+    else:
+        raise ValueError(f"Unknown loss function: {loss}")

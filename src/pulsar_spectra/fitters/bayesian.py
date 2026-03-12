@@ -155,6 +155,7 @@ def bilby_fit_spectral_model(
     bands_MHz,
     fluxs_mJy,
     flux_errs_mJy,
+    limit_signs,
     model_name="simple_power_law",
     mod_priors=None,
     likelihood="Huber",
@@ -293,6 +294,7 @@ def bilby_compute_maximum_posterior_likelihood(
     bands_MHz,
     fluxs_mJy,
     flux_errs_mJy,
+    limit_signs,
     bilby_result,
     model_name,
     band_bool,
@@ -331,10 +333,10 @@ def bilby_compute_maximum_posterior_likelihood(
     model_dict = model_settings()
 
     # Convert to SI (Hz and Jy) and load into numpy arrays
-    freqs_Hz = np.array(freqs_MHz, dtype=np.float128) * 1e6
-    bands_Hz = np.array(bands_MHz, dtype=np.float128) * 1e6
-    fluxs_Jy = np.array(fluxs_mJy, dtype=np.float128) / 1e3
-    flux_errs_Jy = np.array(flux_errs_mJy, dtype=np.float128) / 1e3
+    freqs_Hz = np.array(freqs_MHz, dtype=np.float64) * 1e6
+    bands_Hz = np.array(bands_MHz, dtype=np.float64) * 1e6
+    fluxs_Jy = np.array(fluxs_mJy, dtype=np.float64) / 1e3
+    flux_errs_Jy = np.array(flux_errs_mJy, dtype=np.float64) / 1e3
 
     if band_bool:
         model_function = model_dict[model_name][4]
