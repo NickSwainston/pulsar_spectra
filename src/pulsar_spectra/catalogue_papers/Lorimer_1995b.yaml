@@ -2737,11 +2737,6 @@ J1833-0827:
     - 0.6
     - 0.6
     - 0.4
-J1834-0010:
-  Frequency MHz: []
-  Bandwidth MHz: []
-  Flux Density mJy: []
-  Flux Density error mJy: []
 J1833-0338:
   Frequency MHz:
     - 408
@@ -3864,11 +3859,6 @@ J1932+2220:
     - 0.6
     - 0.1
     - 0.3
-J1933+2421:
-  Frequency MHz: []
-  Bandwidth MHz: []
-  Flux Density mJy: []
-  Flux Density error mJy: []
 J1935+1616:
   Frequency MHz:
     - 408

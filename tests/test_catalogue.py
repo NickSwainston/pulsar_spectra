@@ -108,6 +108,7 @@ def test_catalogue_format():
                 == len(cat_dict[pulsar]["Flux Density mJy"])
                 == len(cat_dict[pulsar]["Flux Density error mJy"])
             ), "Data lists are not the same length"
+            assert len(cat_dict[pulsar]["Frequency MHz"]) != 0, f"Pulsar {pulsar} has no data points"
             # Check no zeros or negatives in cat
             for freq, band, flux, flux_err in zip(
                 cat_dict[pulsar]["Frequency MHz"],

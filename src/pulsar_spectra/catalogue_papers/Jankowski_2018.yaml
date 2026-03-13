@@ -250,11 +250,6 @@ J0729-1836:
     - 1.0
     - 0.5
     - 0.2
-J0737-3039B:
-  Frequency MHz: []
-  Bandwidth MHz: []
-  Flux Density mJy: []
-  Flux Density error mJy: []
 J0742-2822:
   Frequency MHz:
     - 728
@@ -289,11 +284,6 @@ J0745-5353:
     - 0.7
     - 0.2
     - 0.07
-J0751+1807:
-  Frequency MHz: []
-  Bandwidth MHz: []
-  Flux Density mJy: []
-  Flux Density error mJy: []
 J0758-1528:
   Frequency MHz:
     - 728
@@ -1163,11 +1153,6 @@ J1019-5749:
   Flux Density error mJy:
     - 0.2
     - 0.1
-J1020-5921:
-  Frequency MHz: []
-  Bandwidth MHz: []
-  Flux Density mJy: []
-  Flux Density error mJy: []
 J1020-6026:
   Frequency MHz:
     - 1382
@@ -1771,11 +1756,6 @@ J1141-6545:
     - 4.0
     - 0.7
     - 0.08
-J1144-6146:
-  Frequency MHz: []
-  Bandwidth MHz: []
-  Flux Density mJy: []
-  Flux Density error mJy: []
 J1146-6030:
   Frequency MHz:
     - 728
@@ -1810,11 +1790,6 @@ J1156-5707:
     - 0.1
     - 0.02
     - 0.01
-J1156-5909:
-  Frequency MHz: []
-  Bandwidth MHz: []
-  Flux Density mJy: []
-  Flux Density error mJy: []
 J1157-6224:
   Frequency MHz:
     - 728
@@ -1905,11 +1880,6 @@ J1224-6407:
     - 2.0
     - 0.5
     - 0.4
-J1227-6208:
-  Frequency MHz: []
-  Bandwidth MHz: []
-  Flux Density mJy: []
-  Flux Density error mJy: []
 J1231-6303:
   Frequency MHz:
     - 728
@@ -1923,11 +1893,6 @@ J1231-6303:
   Flux Density error mJy:
     - 2.0
     - 0.1
-J1235-54:
-  Frequency MHz: []
-  Bandwidth MHz: []
-  Flux Density mJy: []
-  Flux Density error mJy: []
 J1239-6832:
   Frequency MHz:
     - 728
@@ -2296,16 +2261,6 @@ J1349-6130:
   Flux Density error mJy:
     - 0.04
     - 0.02
-J1355-5153:
-  Frequency MHz: []
-  Bandwidth MHz: []
-  Flux Density mJy: []
-  Flux Density error mJy: []
-J1356-5521:
-  Frequency MHz: []
-  Bandwidth MHz: []
-  Flux Density mJy: []
-  Flux Density error mJy: []
 J1357-62:
   Frequency MHz:
     - 728
@@ -2449,11 +2404,6 @@ J1415-6621:
     - 1.3
   Flux Density error mJy:
     - 0.2
-J1420-5416:
-  Frequency MHz: []
-  Bandwidth MHz: []
-  Flux Density mJy: []
-  Flux Density error mJy: []
 J1420-6048:
   Frequency MHz:
     - 1382
@@ -2531,11 +2481,6 @@ J1453-6413:
     - 10.0
     - 1.0
     - 0.5
-J1507-6640:
-  Frequency MHz: []
-  Bandwidth MHz: []
-  Flux Density mJy: []
-  Flux Density error mJy: []
 J1509-5850:
   Frequency MHz:
     - 1382
@@ -2665,11 +2610,6 @@ J1524-5706:
     - 0.04
     - 0.02
     - 0.02
-J1527-5552:
-  Frequency MHz: []
-  Bandwidth MHz: []
-  Flux Density mJy: []
-  Flux Density error mJy: []
 J1530-5327:
   Frequency MHz:
     - 728
@@ -3306,11 +3246,6 @@ J1648-4611:
   Flux Density error mJy:
     - 0.03
     - 0.03
-J1649-4349:
-  Frequency MHz: []
-  Bandwidth MHz: []
-  Flux Density mJy: []
-  Flux Density error mJy: []
 J1649-4653:
   Frequency MHz:
     - 1382
@@ -3533,11 +3468,6 @@ J1703-4851:
     - 5.0
   Flux Density error mJy:
     - 1.0
-J1704-6016:
-  Frequency MHz: []
-  Bandwidth MHz: []
-  Flux Density mJy: []
-  Flux Density error mJy: []
 J1705-3423:
   Frequency MHz:
     - 728
@@ -4137,11 +4067,6 @@ J1752-2806:
   Flux Density error mJy:
     - 50.0
     - 2.0
-J1755-2521:
-  Frequency MHz: []
-  Bandwidth MHz: []
-  Flux Density mJy: []
-  Flux Density error mJy: []
 J1756-2435:
   Frequency MHz:
     - 728
@@ -4177,11 +4102,6 @@ J1757-2421:
   Flux Density error mJy:
     - 0.4
     - 0.3
-J1758-2630:
-  Frequency MHz: []
-  Bandwidth MHz: []
-  Flux Density mJy: []
-  Flux Density error mJy: []
 J1759-1956:
   Frequency MHz:
     - 728
@@ -4269,11 +4189,6 @@ J1801-2920:
   Flux Density error mJy:
     - 1.0
     - 0.08
-J1803-1857:
-  Frequency MHz: []
-  Bandwidth MHz: []
-  Flux Density mJy: []
-  Flux Density error mJy: []
 J1803-2137:
   Frequency MHz:
     - 1382
@@ -4510,11 +4425,6 @@ J1817-3837:
   Flux Density error mJy:
     - 4.0
     - 0.1
-J1818-1519:
-  Frequency MHz: []
-  Bandwidth MHz: []
-  Flux Density mJy: []
-  Flux Density error mJy: []
 J1820-1529:
   Frequency MHz:
     - 1382
@@ -5215,11 +5125,6 @@ J1847-0438:
     - 0.15
   Flux Density error mJy:
     - 0.03
-J1847-0605:
-  Frequency MHz: []
-  Bandwidth MHz: []
-  Flux Density mJy: []
-  Flux Density error mJy: []
 J1848-0123:
   Frequency MHz:
     - 728
@@ -5338,11 +5243,6 @@ J1855+0307:
   Flux Density error mJy:
     - 0.2
     - 0.05
-J1856+0404:
-  Frequency MHz: []
-  Bandwidth MHz: []
-  Flux Density mJy: []
-  Flux Density error mJy: []
 J1857+0212:
   Frequency MHz:
     - 728
@@ -5557,11 +5457,6 @@ J1916+1312:
     - 0.5
   Flux Density error mJy:
     - 0.1
-J1920+1040:
-  Frequency MHz: []
-  Bandwidth MHz: []
-  Flux Density mJy: []
-  Flux Density error mJy: []
 J1932-3655:
   Frequency MHz:
     - 728
@@ -5610,11 +5505,6 @@ J1946-2913:
     - 3.0
   Flux Density error mJy:
     - 1.0
-J1947-4215:
-  Frequency MHz: []
-  Bandwidth MHz: []
-  Flux Density mJy: []
-  Flux Density error mJy: []
 J2006-0807:
   Frequency MHz:
     - 728
@@ -5725,8 +5615,3 @@ J2222-0137:
   Flux Density error mJy:
     - 1.0
     - 0.7
-J2317+1439:
-  Frequency MHz: []
-  Bandwidth MHz: []
-  Flux Density mJy: []
-  Flux Density error mJy: []

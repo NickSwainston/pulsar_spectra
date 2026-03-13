@@ -73,4 +73,15 @@ for row in lines[48:]:
         pulsar_dict[pulsar]["Flux Density mJy"] += [float(row[9])]
         pulsar_dict[pulsar]["Flux Density error mJy"] += [float(row[10])]
 
+# Check for pulsars with no valid data and remove them
+to_delete = [
+    pulsar for pulsar in pulsar_dict
+    if pulsar != "Paper Metadata"
+    and len(pulsar_dict[pulsar]["Frequency MHz"]) == 0
+]
+
+for pulsar in to_delete:
+    print(f"Warning: No valid data for pulsar {pulsar}, skipping.")
+    del pulsar_dict[pulsar]
+
 dump_yaml(pulsar_dict, "Lorimer_1995b.yaml")

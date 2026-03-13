@@ -1,5 +1,4 @@
 import yaml
-from astroquery.vizier import Vizier
 
 from pulsar_spectra.scripts.csv_to_yaml import dump_yaml
 
@@ -47,5 +46,8 @@ for row in lines[3:]:
         "Flux Density mJy":fluxs,
         "Flux Density error mJy":flux_errs
         }
+    if len(freqs) == 0:
+        print(f"Warning: No valid data for pulsar {pulsar}, skipping.")
+        del pulsar_dict[pulsar]
 
 dump_yaml(pulsar_dict, "Jankowski_2018.yaml")
