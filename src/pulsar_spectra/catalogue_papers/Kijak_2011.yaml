@@ -14,6 +14,9 @@ J1740+1000:
   Flux Density error mJy:
     - 2.7
     - 0.3
+  Limit index:
+    - 0
+    - 0
 J1803-2137:
   Frequency MHz:
     - 2640.0
@@ -23,6 +26,8 @@ J1803-2137:
     - 7.6
   Flux Density error mJy:
     - 0.5
+  Limit index:
+    - 0
 J1806-2125:
   Frequency MHz:
     - 1170.0
@@ -32,6 +37,8 @@ J1806-2125:
     - 1.5
   Flux Density error mJy:
     - 0.5
+  Limit index:
+    - 0
 J1809-1917:
   Frequency MHz:
     - 1170.0
@@ -49,6 +56,10 @@ J1809-1917:
     - 0.3
     - 0.3
     - 0.1
+  Limit index:
+    - 0
+    - 0
+    - 0
 J1822-1400:
   Frequency MHz:
     - 2640.0
@@ -58,6 +69,8 @@ J1822-1400:
     - 0.26
   Flux Density error mJy:
     - 0.09
+  Limit index:
+    - 0
 J1825-1446:
   Frequency MHz:
     - 610.0
@@ -67,6 +80,8 @@ J1825-1446:
     - 2.0
   Flux Density error mJy:
     - 0.3
+  Limit index:
+    - 0
 J1826-1334:
   Frequency MHz:
     - 2640.0
@@ -76,6 +91,8 @@ J1826-1334:
     - 3.6
   Flux Density error mJy:
     - 0.1
+  Limit index:
+    - 0
 J1828-1101:
   Frequency MHz:
     - 2640.0
@@ -89,6 +106,9 @@ J1828-1101:
   Flux Density error mJy:
     - 0.2
     - 0.05
+  Limit index:
+    - 0
+    - 0
 J1830-1059:
   Frequency MHz:
     - 610.0
@@ -106,6 +126,10 @@ J1830-1059:
     - 0.2
     - 0.1
     - 0.01
+  Limit index:
+    - 0
+    - 0
+    - 0
 J1835-0643:
   Frequency MHz:
     - 1170.0
@@ -123,6 +147,10 @@ J1835-0643:
     - 0.6
     - 0.1
     - 0.05
+  Limit index:
+    - 0
+    - 0
+    - 0
 J1835-1020:
   Frequency MHz:
     - 610.0
@@ -144,6 +172,11 @@ J1835-1020:
     - 0.4
     - 0.09
     - 0.08
+  Limit index:
+    - 0
+    - 0
+    - 0
+    - 0
 J1852+0031:
   Frequency MHz:
     - 610.0
@@ -157,6 +190,9 @@ J1852+0031:
   Flux Density error mJy:
     - 1.5
     - 0.15
+  Limit index:
+    - 0
+    - 0
 J1857+0143:
   Frequency MHz:
     - 1170.0
@@ -174,6 +210,10 @@ J1857+0143:
     - 0.2
     - 0.06
     - 0.02
+  Limit index:
+    - 0
+    - 0
+    - 0
 J1905+0616:
   Frequency MHz:
     - 610.0
@@ -187,6 +227,9 @@ J1905+0616:
   Flux Density error mJy:
     - 0.6
     - 0.1
+  Limit index:
+    - 0
+    - 0
 J1907+0918:
   Frequency MHz:
     - 610.0
@@ -204,3 +247,7 @@ J1907+0918:
     - 0.2
     - 0.06
     - 0.02
+  Limit index:
+    - 0
+    - 0
+    - 0

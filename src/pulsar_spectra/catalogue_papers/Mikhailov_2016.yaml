@@ -10,6 +10,8 @@ J0332+5434:
     - 8800.0
   Flux Density error mJy:
     - 4400.0
+  Limit index:
+    - 0
 J0953+0755:
   Frequency MHz:
     - 146.0
@@ -19,3 +21,5 @@ J0953+0755:
     - 2300.0
   Flux Density error mJy:
     - 1150.0
+  Limit index:
+    - 0

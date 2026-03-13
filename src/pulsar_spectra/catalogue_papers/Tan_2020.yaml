@@ -14,6 +14,9 @@ J0100+8023:
   Flux Density error mJy:
     - 0.7
     - 0.4
+  Limit index:
+    - 0
+    - 0
 J0107+1322:
   Frequency MHz:
     - 128
@@ -35,6 +38,11 @@ J0107+1322:
     - 0.7
     - 0.09
     - 0.03
+  Limit index:
+    - 0
+    - 0
+    - 0
+    - 0
 J0210+5845:
   Frequency MHz:
     - 128
@@ -52,6 +60,10 @@ J0210+5845:
     - 0.8
     - 0.6
     - 0.2
+  Limit index:
+    - 0
+    - 0
+    - 0
 J0421+3255:
   Frequency MHz:
     - 128
@@ -65,6 +77,9 @@ J0421+3255:
   Flux Density error mJy:
     - 6.0
     - 4.0
+  Limit index:
+    - 0
+    - 0
 J0454+4529:
   Frequency MHz:
     - 128
@@ -82,6 +97,10 @@ J0454+4529:
     - 1.7
     - 0.7
     - 0.09
+  Limit index:
+    - 0
+    - 0
+    - 0
 J1017+3011:
   Frequency MHz:
     - 128
@@ -99,6 +118,10 @@ J1017+3011:
     - 0.5
     - 0.4
     - 0.06
+  Limit index:
+    - 0
+    - 0
+    - 0
 J1624+5850:
   Frequency MHz:
     - 128
@@ -112,6 +135,9 @@ J1624+5850:
   Flux Density error mJy:
     - 0.5
     - 0.3
+  Limit index:
+    - 0
+    - 0
 J1638+4005:
   Frequency MHz:
     - 128
@@ -129,6 +155,10 @@ J1638+4005:
     - 0.5
     - 0.3
     - 0.07
+  Limit index:
+    - 0
+    - 0
+    - 0
 J1643+1338:
   Frequency MHz:
     - 128
@@ -150,6 +180,11 @@ J1643+1338:
     - 3.0
     - 0.5
     - 0.03
+  Limit index:
+    - 0
+    - 0
+    - 0
+    - 0
 J1656+6203:
   Frequency MHz:
     - 128
@@ -163,6 +198,9 @@ J1656+6203:
   Flux Density error mJy:
     - 0.5
     - 0.3
+  Limit index:
+    - 0
+    - 0
 J1713+7810:
   Frequency MHz:
     - 128
@@ -176,6 +214,9 @@ J1713+7810:
   Flux Density error mJy:
     - 0.6
     - 0.3
+  Limit index:
+    - 0
+    - 0
 J1741+3855:
   Frequency MHz:
     - 128
@@ -189,6 +230,9 @@ J1741+3855:
   Flux Density error mJy:
     - 0.7
     - 0.5
+  Limit index:
+    - 0
+    - 0
 J1745+1252:
   Frequency MHz:
     - 128
@@ -206,6 +250,10 @@ J1745+1252:
     - 1.6
     - 1.5
     - 0.4
+  Limit index:
+    - 0
+    - 0
+    - 0
 J1749+5952:
   Frequency MHz:
     - 128
@@ -227,6 +275,11 @@ J1749+5952:
     - 1.4
     - 0.5
     - 0.07
+  Limit index:
+    - 0
+    - 0
+    - 0
+    - 0
 J1810+0705:
   Frequency MHz:
     - 128
@@ -248,6 +301,11 @@ J1810+0705:
     - 3.0
     - 0.5
     - 0.06
+  Limit index:
+    - 0
+    - 0
+    - 0
+    - 0
 J1916+3224:
   Frequency MHz:
     - 128
@@ -269,6 +327,11 @@ J1916+3224:
     - 0.6
     - 0.3
     - 0.03
+  Limit index:
+    - 0
+    - 0
+    - 0
+    - 0
 J1957-0002:
   Frequency MHz:
     - 128
@@ -282,6 +345,9 @@ J1957-0002:
   Flux Density error mJy:
     - 1.5
     - 0.7
+  Limit index:
+    - 0
+    - 0
 J2036+6646:
   Frequency MHz:
     - 128
@@ -295,6 +361,9 @@ J2036+6646:
   Flux Density error mJy:
     - 1.0
     - 0.6
+  Limit index:
+    - 0
+    - 0
 J2122+2426:
   Frequency MHz:
     - 128
@@ -312,6 +381,10 @@ J2122+2426:
     - 1.2
     - 0.9
     - 0.02
+  Limit index:
+    - 0
+    - 0
+    - 0
 J1658+3630:
   Frequency MHz:
     - 118.8
@@ -337,3 +410,9 @@ J1658+3630:
     - 4.0
     - 2.0
     - 0.3
+  Limit index:
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0

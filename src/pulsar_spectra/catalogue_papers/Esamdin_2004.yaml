@@ -10,6 +10,8 @@ J0332+5434:
     - 1230.0
   Flux Density error mJy:
     - 38.0
+  Limit index:
+    - 0
 J1509+5531:
   Frequency MHz:
     - 327.0
@@ -19,3 +21,5 @@ J1509+5531:
     - 60.0
   Flux Density error mJy:
     - 2.0
+  Limit index:
+    - 0

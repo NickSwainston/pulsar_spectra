@@ -10,6 +10,8 @@ J0034-0534:
     - 16.0
   Flux Density error mJy:
     - 8.0
+  Limit index:
+    - 0
 J1045-4509:
   Frequency MHz:
     - 436.0
@@ -19,6 +21,8 @@ J1045-4509:
     - 20.0
   Flux Density error mJy:
     - 10.0
+  Limit index:
+    - 0
 J2145-0750:
   Frequency MHz:
     - 436.0
@@ -28,3 +32,5 @@ J2145-0750:
     - 50.0
   Flux Density error mJy:
     - 25.0
+  Limit index:
+    - 0

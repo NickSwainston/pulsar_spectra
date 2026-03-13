@@ -10,6 +10,8 @@ J0045-7319:
     - 1.0
   Flux Density error mJy:
     - 0.2
+  Limit index:
+    - 0
 J0455-6951:
   Frequency MHz:
     - 610
@@ -19,6 +21,8 @@ J0455-6951:
     - 1.0
   Flux Density error mJy:
     - 0.5
+  Limit index:
+    - 0
 J0502-6617:
   Frequency MHz:
     - 610
@@ -28,6 +32,8 @@ J0502-6617:
     - 0.7
   Flux Density error mJy:
     - 0.4
+  Limit index:
+    - 0
 J0529-6652:
   Frequency MHz:
     - 610
@@ -37,3 +43,5 @@ J0529-6652:
     - 1.8
   Flux Density error mJy:
     - 0.8
+  Limit index:
+    - 0

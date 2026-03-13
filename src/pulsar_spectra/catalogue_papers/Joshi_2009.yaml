@@ -14,6 +14,9 @@ J0026+6320:
   Flux Density error mJy:
     - 0.2
     - 0.3
+  Limit index:
+    - 0
+    - 0
 J2208+5500:
   Frequency MHz:
     - 626
@@ -27,6 +30,9 @@ J2208+5500:
   Flux Density error mJy:
     - 0.2
     - 0.08
+  Limit index:
+    - 0
+    - 0
 J2217+5733:
   Frequency MHz:
     - 626
@@ -40,3 +46,6 @@ J2217+5733:
   Flux Density error mJy:
     - 0.4
     - 0.08
+  Limit index:
+    - 0
+    - 0

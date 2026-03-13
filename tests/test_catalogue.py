@@ -102,11 +102,13 @@ def test_catalogue_format():
             assert "Bandwidth MHz" in cat_dict[pulsar].keys(), "Bandwidth MHz key not found"
             assert "Flux Density mJy" in cat_dict[pulsar].keys(), "Flux Density mJy key not found"
             assert "Flux Density error mJy" in cat_dict[pulsar].keys(), "Flux Density error mJy key not found"
+            assert "Limit index" in cat_dict[pulsar].keys(), "Limit index key not found"
             assert (
                 len(cat_dict[pulsar]["Frequency MHz"])
                 == len(cat_dict[pulsar]["Bandwidth MHz"])
                 == len(cat_dict[pulsar]["Flux Density mJy"])
                 == len(cat_dict[pulsar]["Flux Density error mJy"])
+                == len(cat_dict[pulsar]["Limit index"])
             ), "Data lists are not the same length"
             assert len(cat_dict[pulsar]["Frequency MHz"]) != 0, f"Pulsar {pulsar} has no data points"
             # Check no zeros or negatives in cat
@@ -120,6 +122,8 @@ def test_catalogue_format():
                 assert band > 0.0, f"Bandwidth {band} is not positive in pulsar {pulsar}"
                 assert flux > 0.0, f"Flux Density {flux} is not positive in pulsar {pulsar}"
                 assert flux_err > 0.0, f"Flux Density error {flux_err} is not positive in pulsar {pulsar}"
+            for limit in cat_dict[pulsar]["Limit index"]:
+                assert limit in [-1, 0, 1], f"Limit index {limit} is not -1, 0, or 1 in pulsar {pulsar}"
 
 
 def test_yaml_list_indentation():

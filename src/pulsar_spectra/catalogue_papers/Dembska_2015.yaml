@@ -10,6 +10,8 @@ J1753-2501:
     - 3.9
   Flux Density error mJy:
     - 0.3
+  Limit index:
+    - 0
 J1818-1422:
   Frequency MHz:
     - 610.0
@@ -19,6 +21,8 @@ J1818-1422:
     - 25.1
   Flux Density error mJy:
     - 1.6
+  Limit index:
+    - 0
 J1852+0031:
   Frequency MHz:
     - 610.0
@@ -28,6 +32,8 @@ J1852+0031:
     - 15.39
   Flux Density error mJy:
     - 0.95
+  Limit index:
+    - 0
 J1803-2137:
   Frequency MHz:
     - 610.0
@@ -37,6 +43,8 @@ J1803-2137:
     - 7.4
   Flux Density error mJy:
     - 0.9
+  Limit index:
+    - 0
 J1825-1446:
   Frequency MHz:
     - 610.0
@@ -46,6 +54,8 @@ J1825-1446:
     - 3.5
   Flux Density error mJy:
     - 0.6
+  Limit index:
+    - 0
 J1826-1334:
   Frequency MHz:
     - 610.0
@@ -55,3 +65,5 @@ J1826-1334:
     - 3.5
   Flux Density error mJy:
     - 0.2
+  Limit index:
+    - 0

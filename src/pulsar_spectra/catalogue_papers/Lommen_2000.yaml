@@ -14,6 +14,9 @@ J0030+0451:
   Flux Density error mJy:
     - 0.2
     - 0.2
+  Limit index:
+    - 0
+    - 0
 J0711+0931:
   Frequency MHz:
     - 430
@@ -27,6 +30,9 @@ J0711+0931:
   Flux Density error mJy:
     - 0.1
     - 0.01
+  Limit index:
+    - 0
+    - 0
 J1313+0931:
   Frequency MHz:
     - 430
@@ -40,3 +46,6 @@ J1313+0931:
   Flux Density error mJy:
     - 0.1
     - 0.01
+  Limit index:
+    - 0
+    - 0

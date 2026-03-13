@@ -10,6 +10,8 @@ J1022+1001:
     - 0.197
   Flux Density error mJy:
     - 0.057
+  Limit index:
+    - 0
 J1518+4904:
   Frequency MHz:
     - 8350.0
@@ -19,6 +21,8 @@ J1518+4904:
     - 0.078
   Flux Density error mJy:
     - 0.018
+  Limit index:
+    - 0
 J1713+0747:
   Frequency MHz:
     - 8350.0
@@ -28,6 +32,8 @@ J1713+0747:
     - 0.096
   Flux Density error mJy:
     - 0.014
+  Limit index:
+    - 0
 J1939+2134:
   Frequency MHz:
     - 8350.0
@@ -37,6 +43,8 @@ J1939+2134:
     - 0.039
   Flux Density error mJy:
     - 0.015
+  Limit index:
+    - 0
 J2145-0750:
   Frequency MHz:
     - 8350.0
@@ -46,3 +54,5 @@ J2145-0750:
     - 0.08
   Flux Density error mJy:
     - 0.037
+  Limit index:
+    - 0

@@ -10,6 +10,8 @@ J0922+0638:
     - 5.7
   Flux Density error mJy:
     - 0.1
+  Limit index:
+    - 0
 J1239+2453:
   Frequency MHz:
     - 1452.4
@@ -19,6 +21,8 @@ J1239+2453:
     - 4.6
   Flux Density error mJy:
     - 0.2
+  Limit index:
+    - 0
 J1941-2602:
   Frequency MHz:
     - 1452.4
@@ -28,3 +32,5 @@ J1941-2602:
     - 1.0
   Flux Density error mJy:
     - 0.2
+  Limit index:
+    - 0
