@@ -192,7 +192,8 @@ for row in lines:
         "Frequency MHz":[350.],
         "Bandwidth MHz":[100.],
         "Flux Density mJy":[flux],
-        "Flux Density error mJy":[flux_err]
+        "Flux Density error mJy":[flux_err],
+        "Limit index":[0]
     }
 
 dump_yaml(pulsar_dict, "McEwen_2020.yaml")

@@ -29,7 +29,8 @@ for row in lines:
         "Frequency MHz":[],
         "Bandwidth MHz":[],
         "Flux Density mJy":[],
-        "Flux Density error mJy":[]
+        "Flux Density error mJy":[],
+        "Limit index":[]
     }
     for freq, band, pair in zip(freqs, bands, row[1:]):
         if "±" in pair:
@@ -39,5 +40,6 @@ for row in lines:
             pulsar_dict[pulsar]["Bandwidth MHz"] += [float(band)]
             pulsar_dict[pulsar]["Flux Density mJy"] += [float(flux)]
             pulsar_dict[pulsar]["Flux Density error mJy"] += [float(flux_err)]
+            pulsar_dict[pulsar]["Limit index"] += [0]
 
 dump_yaml(pulsar_dict, "Kijak_2011.yaml")

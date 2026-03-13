@@ -30,7 +30,8 @@ for row in lines:
         "Frequency MHz":[freq],
         "Bandwidth MHz":[band],
         "Flux Density mJy":[float(flux)],
-        "Flux Density error mJy":[float(flux_err[:-1])]
+        "Flux Density error mJy":[float(flux_err[:-1])],
+        "Limit index":[0]
     }
 
 dump_yaml(pulsar_dict, "Bondonneau_2020.yaml")

@@ -34,7 +34,8 @@ for row in lines:
         "Frequency MHz":[],
         "Bandwidth MHz":[],
         "Flux Density mJy":[],
-        "Flux Density error mJy":[]
+        "Flux Density error mJy":[],
+        "Limit index":[]
     }
 
     flux = float(row[4]) / 1000  # mJy
@@ -45,6 +46,7 @@ for row in lines:
     pulsar_dict[pulsar]["Bandwidth MHz"].append(650.0)
     pulsar_dict[pulsar]["Flux Density mJy"].append(round(flux, 4))
     pulsar_dict[pulsar]["Flux Density error mJy"].append(round(flux_err, 4))
+    pulsar_dict[pulsar]["Limit index"].append(0)
 
     flux = float(row[5]) / 1000  # mJy
     # flux_err = flux * 0.2  # 20% error
@@ -53,5 +55,6 @@ for row in lines:
     pulsar_dict[pulsar]["Bandwidth MHz"].append(650.0)
     pulsar_dict[pulsar]["Flux Density mJy"].append(round(flux, 4))
     pulsar_dict[pulsar]["Flux Density error mJy"].append(round(flux_err, 4))
+    pulsar_dict[pulsar]["Limit index"].append(0)
 
 dump_yaml(pulsar_dict, "Martsen_2022.yaml")

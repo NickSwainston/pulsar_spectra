@@ -42,7 +42,8 @@ for row in lines:
         "Frequency MHz":[147.5],
         "Bandwidth MHz":[16.7],
         "Flux Density mJy":[flux],
-        "Flux Density error mJy":[flux_err]
+        "Flux Density error mJy":[flux_err],
+        "Limit index":[0]
     }
 
 dump_yaml(pulsar_dict, "Frail_2016.yaml")

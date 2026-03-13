@@ -46,7 +46,8 @@ for row in lines:
         "Frequency MHz":[24.75],
         "Bandwidth MHz":[16.5],
         "Flux Density mJy":[flux],
-        "Flux Density error mJy":[flux_err]
+        "Flux Density error mJy":[flux_err],
+        "Limit index":[0]
     }
 
 dump_yaml(pulsar_dict, "Kravtsov_2022.yaml")

@@ -37,24 +37,28 @@ with open("Slee_1986_raw.csv") as file:
         bands = []
         fluxes = []
         flux_errs = []
+        limits = []
 
         if S80 != "":
             freqs.append(80.0)
             bands.append(0.88)
             fluxes.append(float(S80))
             flux_errs.append(float(S80) * 0.5)
+            limits.append(0)
 
         if S160 != "":
             freqs.append(160.0)
             bands.append(0.88)
             fluxes.append(float(S160))
             flux_errs.append(float(S160) * 0.5)
+            limits.append(0)
 
         pulsar_dict[pulsar] = {
             "Frequency MHz": freqs,
             "Bandwidth MHz": bands,
             "Flux Density mJy": fluxes,
             "Flux Density error mJy": flux_errs,
+            "Limit index": limits,
         }
 
 dump_yaml(pulsar_dict, "Slee_1986.yaml")

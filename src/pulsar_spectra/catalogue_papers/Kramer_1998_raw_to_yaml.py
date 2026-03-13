@@ -44,6 +44,7 @@ for row in lines:
         "Bandwidth MHz": [40.0],
         "Flux Density mJy": [flux],
         "Flux Density error mJy": [flux_err],
+        "Limit index": [0],
     }
 
 dump_yaml(pulsar_dict, "Kramer_1998.yaml")

@@ -29,12 +29,14 @@ for row in lines:
         pulsar_dict[pulsar]["Bandwidth MHz"] += [19.6]
         pulsar_dict[pulsar]["Flux Density mJy"] += [float(flux)]
         pulsar_dict[pulsar]["Flux Density error mJy"] += [float(flux_err[:-1])]
+        pulsar_dict[pulsar]["Limit index"] += [0]
     else:
         pulsar_dict[pulsar] = {
             "Frequency MHz":[float(row[1])],
             "Bandwidth MHz":[19.6],
             "Flux Density mJy":[float(flux)],
-            "Flux Density error mJy":[float(flux_err[:-1])]
+            "Flux Density error mJy":[float(flux_err[:-1])],
+            "Limit index":[0]
         }
 
 dump_yaml(pulsar_dict, "Stovall_2015.yaml")

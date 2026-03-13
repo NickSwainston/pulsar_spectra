@@ -28,6 +28,7 @@ for row in lines:
         "Bandwidth MHz":[60],
         "Flux Density mJy":[float(row[3])],
         "Flux Density error mJy":[float(row[4])],
+        "Limit index":[0],
     }
 
 

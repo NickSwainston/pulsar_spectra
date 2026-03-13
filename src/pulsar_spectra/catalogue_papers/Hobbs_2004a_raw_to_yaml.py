@@ -38,7 +38,8 @@ for row in lines:
         "Frequency MHz":[1400],
         "Bandwidth MHz":[100],
         "Flux Density mJy":[float(row[1])],
-        "Flux Density error mJy":[float(row[2])]
+        "Flux Density error mJy":[float(row[2])],
+        "Limit index":[0]
     }
 
 with open("Hobbs_2004a_raw_table_7.tsv") as file:
@@ -93,7 +94,8 @@ for row in lines:
         "Frequency MHz":[1400],
         "Bandwidth MHz":[100],
         "Flux Density mJy":[float(row[1])],
-        "Flux Density error mJy":[float(row[2])]
+        "Flux Density error mJy":[float(row[2])],
+        "Limit index":[0]
     }
 
 

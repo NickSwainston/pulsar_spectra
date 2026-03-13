@@ -51,6 +51,7 @@ with open("Wang_2024_raw.txt") as file:
             "Bandwidth MHz": [100.0, 800.0],
             "Flux Density mJy": [Sflux, Xflux],
             "Flux Density error mJy": [Sflux_err, Xflux_err],
+            "Limit index": [0, 0],
         }
 
 dump_yaml(pulsar_dict, "Wang_2024.yaml")

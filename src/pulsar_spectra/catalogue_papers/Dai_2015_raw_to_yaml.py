@@ -9,7 +9,7 @@ with open("Dai_2015_raw.txt", "r") as raw_file:
 pulsar_dict = {
     "Paper Metadata": {
         "Data Type": "Beamforming",
-        "Observation Span": "Single-epoch",
+        "Observation Span": "Multi-epoch",
     }
 }
 for row in lines:
@@ -21,30 +21,35 @@ for row in lines:
     bands = []
     fluxs = []
     flux_errs = []
+    limits = []
     if len(row) == 9:
         flux, flux_err = row[1].split("±")
         freqs.append(730)
         bands.append(64)
         fluxs.append(float(flux))
         flux_errs.append(float(flux_err))
+        limits.append(0)
 
     flux, flux_err = row[-6].split("±")
     freqs.append(1400)
     bands.append(256)
     fluxs.append(float(flux))
     flux_errs.append(float(flux_err))
+    limits.append(0)
 
     flux, flux_err = row[-4].split("±")
     freqs.append(3100)
     bands.append(1024)
     fluxs.append(float(flux))
     flux_errs.append(float(flux_err))
+    limits.append(0)
 
     pulsar_dict[pulsar] = {
         "Frequency MHz":freqs,
         "Bandwidth MHz":bands,
         "Flux Density mJy":fluxs,
-        "Flux Density error mJy":flux_errs
+        "Flux Density error mJy":flux_errs,
+        "Limit index":limits
     }
 
 dump_yaml(pulsar_dict, "Dai_2015.yaml")

@@ -48,6 +48,7 @@ for row in lines:
         "Bandwidth MHz": [],
         "Flux Density mJy": [],
         "Flux Density error mJy": [],
+        "Limit index": [],
     }
     for freq, row_id in pulsars:
         if "L" in row[row_id]:
@@ -76,5 +77,6 @@ for row in lines:
         pulsar_dict[pulsar]["Bandwidth MHz"] += [64.0]
         pulsar_dict[pulsar]["Flux Density mJy"] += [round(flux, 2)]
         pulsar_dict[pulsar]["Flux Density error mJy"] += [round(flux * flux_err_rel, 2)]
+        pulsar_dict[pulsar]["Limit index"] += [0]
 
 dump_yaml(pulsar_dict, "Alam_2021.yaml")

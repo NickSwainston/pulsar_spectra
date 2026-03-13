@@ -27,6 +27,7 @@ for row in lines:
         "Bandwidth MHz": [159.0],
         "Flux Density mJy": [float(flux)],
         "Flux Density error mJy": [float(flux_err)],
+        "Limit index": [0],
     }
 
 with open("Murphy_2017_raw_table_4.txt", "r") as raw_file:
@@ -52,6 +53,7 @@ for row in lines[:15]:
         "Bandwidth MHz": [],
         "Flux Density mJy": [],
         "Flux Density error mJy": [],
+        "Limit index": [],
     }
 
     for freq, pair in zip([76.0, 84.0, 92.0, 99.0, 107.0, 115.0, 122.0, 130.0, 143.0], row[3:]):
@@ -62,6 +64,7 @@ for row in lines[:15]:
             pulsar_dict[pulsar]["Bandwidth MHz"] += [7.68]
             pulsar_dict[pulsar]["Flux Density mJy"] += [float(flux)]
             pulsar_dict[pulsar]["Flux Density error mJy"] += [float(flux_err)]
+            pulsar_dict[pulsar]["Limit index"] += [0]
 for row in lines[16:]:
     row = (
         row.replace(" ± ", "±")
@@ -91,5 +94,6 @@ for row in lines[16:]:
             pulsar_dict[pulsar]["Bandwidth MHz"] += [7.68]
             pulsar_dict[pulsar]["Flux Density mJy"] += [float(flux)]
             pulsar_dict[pulsar]["Flux Density error mJy"] += [float(flux_err)]
+            pulsar_dict[pulsar]["Limit index"] += [0]
 
 dump_yaml(pulsar_dict, "Murphy_2017.yaml")

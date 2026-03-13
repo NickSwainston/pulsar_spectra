@@ -64,6 +64,7 @@ for row in lines:
         "Bandwidth MHz": [0.64],
         "Flux Density mJy": [flux],
         "Flux Density error mJy": [flux_err],
+        "Limit index": [0],
     }
 
 

@@ -37,7 +37,8 @@ for row in lines:
         "Frequency MHz":[],
         "Bandwidth MHz":[],
         "Flux Density mJy":[],
-        "Flux Density error mJy":[]
+        "Flux Density error mJy":[],
+        "Limit index":[]
     }
 
     freq_band_row = [
@@ -60,5 +61,6 @@ for row in lines:
         pulsar_dict[pulsar]["Bandwidth MHz"].append(band)
         pulsar_dict[pulsar]["Flux Density mJy"].append(flux)
         pulsar_dict[pulsar]["Flux Density error mJy"].append(flux_err)
+        pulsar_dict[pulsar]["Limit index"].append(0)
 
 dump_yaml(pulsar_dict, "Toscano_1998.yaml")

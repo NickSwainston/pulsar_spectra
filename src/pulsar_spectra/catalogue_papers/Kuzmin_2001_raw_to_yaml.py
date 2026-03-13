@@ -39,7 +39,8 @@ for i, row in enumerate(lines):
             "Frequency MHz":[],
             "Bandwidth MHz":[],
             "Flux Density mJy":[],
-            "Flux Density error mJy":[]
+            "Flux Density error mJy":[],
+            "Limit index":[]
         }
         freq = float(row[4])
         pulsar_dict[pulsar]["Frequency MHz"].append(freq)
@@ -49,5 +50,6 @@ for i, row in enumerate(lines):
         flux_err = float(row[2])
         pulsar_dict[pulsar]["Flux Density mJy"].append(flux)
         pulsar_dict[pulsar]["Flux Density error mJy"].append(flux_err)
+        pulsar_dict[pulsar]["Limit index"].append(0)
 
 dump_yaml(pulsar_dict, "Kuzmin_2001.yaml")

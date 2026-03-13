@@ -40,7 +40,8 @@ for row in lines[48:]:
         "Frequency MHz":[],
         "Bandwidth MHz":[],
         "Flux Density mJy":[],
-        "Flux Density error mJy":[]
+        "Flux Density error mJy":[],
+        "Limit index":[]
     }
 
     if row[1] != "" and row[2] != "":
@@ -48,30 +49,35 @@ for row in lines[48:]:
         pulsar_dict[pulsar]["Bandwidth MHz"] += [0.125]
         pulsar_dict[pulsar]["Flux Density mJy"] += [float(row[1])]
         pulsar_dict[pulsar]["Flux Density error mJy"] += [float(row[2])]
+        pulsar_dict[pulsar]["Limit index"] += [0]
 
     if row[3] != "" and row[4] != "":
         pulsar_dict[pulsar]["Frequency MHz"] += [606]
         pulsar_dict[pulsar]["Bandwidth MHz"] += [0.250]
         pulsar_dict[pulsar]["Flux Density mJy"] += [float(row[3])]
         pulsar_dict[pulsar]["Flux Density error mJy"] += [float(row[4])]
+        pulsar_dict[pulsar]["Limit index"] += [0]
 
     if row[5] != "" and row[6] != "":
         pulsar_dict[pulsar]["Frequency MHz"] += [925]
         pulsar_dict[pulsar]["Bandwidth MHz"] += [0.250]
         pulsar_dict[pulsar]["Flux Density mJy"] += [float(row[5])]
         pulsar_dict[pulsar]["Flux Density error mJy"] += [float(row[6])]
+        pulsar_dict[pulsar]["Limit index"] += [0]
 
     if row[7] != "" and row[8] != "":
         pulsar_dict[pulsar]["Frequency MHz"] += [1408]
         pulsar_dict[pulsar]["Bandwidth MHz"] += [1]
         pulsar_dict[pulsar]["Flux Density mJy"] += [float(row[7])]
         pulsar_dict[pulsar]["Flux Density error mJy"] += [float(row[8])]
+        pulsar_dict[pulsar]["Limit index"] += [0]
 
     if row[9] != "" and row[10] != "":
         pulsar_dict[pulsar]["Frequency MHz"] += [1606]
         pulsar_dict[pulsar]["Bandwidth MHz"] += [1]
         pulsar_dict[pulsar]["Flux Density mJy"] += [float(row[9])]
         pulsar_dict[pulsar]["Flux Density error mJy"] += [float(row[10])]
+        pulsar_dict[pulsar]["Limit index"] += [0]
 
 # Check for pulsars with no valid data and remove them
 to_delete = [

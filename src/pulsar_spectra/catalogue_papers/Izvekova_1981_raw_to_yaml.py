@@ -62,7 +62,8 @@ for row in lines[2:]:
                 "Frequency MHz":[],
                 "Bandwidth MHz":[],
                 "Flux Density mJy":[],
-                "Flux Density error mJy":[]
+                "Flux Density error mJy":[],
+                "Limit index":[]
             }
 
     if not ("^" in row[3] or "<" in row[3]):
@@ -85,6 +86,7 @@ for row in lines[2:]:
         # 10^-29Jm^-2Hz^-1 = mJys
         pulsar_dict[pulsar]["Flux Density mJy"] += [float(flux)*1e3]
         pulsar_dict[pulsar]["Flux Density error mJy"] += [float(flux_err)*1e3]
+        pulsar_dict[pulsar]["Limit index"] += [0]
 
 # Check for pulsars with no valid data and remove them
 to_delete = [

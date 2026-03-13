@@ -39,7 +39,8 @@ for i, row in enumerate(lines):
             "Frequency MHz":[],
             "Bandwidth MHz":[],
             "Flux Density mJy":[],
-            "Flux Density error mJy":[]
+            "Flux Density error mJy":[],
+            "Limit index":[]
         }
         freq = float(row[1])
     else:
@@ -54,5 +55,6 @@ for i, row in enumerate(lines):
     pulsar_dict[pulsar]["Bandwidth MHz"].append(band)
     pulsar_dict[pulsar]["Flux Density mJy"].append(flux)
     pulsar_dict[pulsar]["Flux Density error mJy"].append(flux_err)
+    pulsar_dict[pulsar]["Limit index"].append(0)
 
 dump_yaml(pulsar_dict, "Stairs_1999.yaml")

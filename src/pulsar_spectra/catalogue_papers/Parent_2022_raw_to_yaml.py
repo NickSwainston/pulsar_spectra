@@ -37,7 +37,8 @@ for row in lines:
         "Frequency MHz":[],
         "Bandwidth MHz":[],
         "Flux Density mJy":[],
-        "Flux Density error mJy":[]
+        "Flux Density error mJy":[],
+        "Limit index":[]
     }
 
     flux, flux_err = row[6].split("(")
@@ -51,5 +52,6 @@ for row in lines:
     pulsar_dict[pulsar]["Bandwidth MHz"].append(323.0)
     pulsar_dict[pulsar]["Flux Density mJy"].append(flux/1000)  # Convert from uJy to mJy
     pulsar_dict[pulsar]["Flux Density error mJy"].append(flux_err/1000)  # Convert from uJy to mJy
+    pulsar_dict[pulsar]["Limit index"].append(0)
 
 dump_yaml(pulsar_dict, "Parent_2022.yaml")

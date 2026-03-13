@@ -35,7 +35,8 @@ for row in lines:
         "Frequency MHz":[],
         "Bandwidth MHz":[],
         "Flux Density mJy":[],
-        "Flux Density error mJy":[]
+        "Flux Density error mJy":[],
+        "Limit index":[]
     }
 
     flux, flux_err = row[2].split("(")
@@ -53,6 +54,7 @@ for row in lines:
     else:
         pulsar_dict[pulsar]["Flux Density mJy"].append(flux)
     pulsar_dict[pulsar]["Flux Density error mJy"].append(flux_err)
+    pulsar_dict[pulsar]["Limit index"].append(0)
 
     if "L" not in row[4]:
         flux, flux_err = row[4].split("(")
@@ -66,6 +68,7 @@ for row in lines:
         pulsar_dict[pulsar]["Bandwidth MHz"].append(100.0)
         pulsar_dict[pulsar]["Flux Density mJy"].append(flux)
         pulsar_dict[pulsar]["Flux Density error mJy"].append(flux_err)
+        pulsar_dict[pulsar]["Limit index"].append(0)
 
     flux, flux_err = row[6].split("(")
     if "." in flux:
@@ -78,6 +81,7 @@ for row in lines:
     pulsar_dict[pulsar]["Bandwidth MHz"].append(100.0)
     pulsar_dict[pulsar]["Flux Density mJy"].append(flux)
     pulsar_dict[pulsar]["Flux Density error mJy"].append(flux_err)
+    pulsar_dict[pulsar]["Limit index"].append(0)
 
     if "L" not in row[8]:
         flux, flux_err = row[8].split("(")
@@ -91,6 +95,7 @@ for row in lines:
         pulsar_dict[pulsar]["Bandwidth MHz"].append(100.0)
         pulsar_dict[pulsar]["Flux Density mJy"].append(flux)
         pulsar_dict[pulsar]["Flux Density error mJy"].append(flux_err)
+        pulsar_dict[pulsar]["Limit index"].append(0)
 
     if "L" not in row[10]:
         flux, flux_err = row[10].split("(")
@@ -104,6 +109,7 @@ for row in lines:
         pulsar_dict[pulsar]["Bandwidth MHz"].append(100.0)
         pulsar_dict[pulsar]["Flux Density mJy"].append(flux)
         pulsar_dict[pulsar]["Flux Density error mJy"].append(flux_err)
+        pulsar_dict[pulsar]["Limit index"].append(0)
 
 # Add extra J1327+3423 values
 pulsar = "J1327+3423"
@@ -112,20 +118,24 @@ pulsar_dict[pulsar]["Frequency MHz"].append(35.1)
 pulsar_dict[pulsar]["Bandwidth MHz"].append(16)
 pulsar_dict[pulsar]["Flux Density mJy"].append(80)
 pulsar_dict[pulsar]["Flux Density error mJy"].append(50)
+pulsar_dict[pulsar]["Limit index"].append(0)
 
 pulsar_dict[pulsar]["Frequency MHz"].append(49.8)
 pulsar_dict[pulsar]["Bandwidth MHz"].append(16)
 pulsar_dict[pulsar]["Flux Density mJy"].append(210)
 pulsar_dict[pulsar]["Flux Density error mJy"].append(130)
+pulsar_dict[pulsar]["Limit index"].append(0)
 
 pulsar_dict[pulsar]["Frequency MHz"].append(64.5)
 pulsar_dict[pulsar]["Bandwidth MHz"].append(16)
 pulsar_dict[pulsar]["Flux Density mJy"].append(200)
 pulsar_dict[pulsar]["Flux Density error mJy"].append(130)
+pulsar_dict[pulsar]["Limit index"].append(0)
 
 pulsar_dict[pulsar]["Frequency MHz"].append(79.2)
 pulsar_dict[pulsar]["Bandwidth MHz"].append(16)
 pulsar_dict[pulsar]["Flux Density mJy"].append(180)
 pulsar_dict[pulsar]["Flux Density error mJy"].append(110)
+pulsar_dict[pulsar]["Limit index"].append(0)
 
 dump_yaml(pulsar_dict, "Fiore_2023.yaml")

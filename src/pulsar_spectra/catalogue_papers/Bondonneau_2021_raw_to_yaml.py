@@ -38,7 +38,8 @@ for row in lines:
         "Frequency MHz":[50],
         "Bandwidth MHz":[75],
         "Flux Density mJy":[flux],
-        "Flux Density error mJy":[flux_err]
+        "Flux Density error mJy":[flux_err],
+        "Limit index":[0]
     }
 
 dump_yaml(pulsar_dict, "Bondonneau_2021.yaml")

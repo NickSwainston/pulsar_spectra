@@ -31,7 +31,8 @@ for row in lines[:9]:
             "Frequency MHz":[325],
             "Bandwidth MHz":[33],
             "Flux Density mJy":[float(flux)],
-            "Flux Density error mJy":[float(flux_err)]
+            "Flux Density error mJy":[float(flux_err)],
+            "Limit index":[0]
         }
 for row in lines[10:]:
     row = row.replace("±", "±").split(" ")
@@ -49,7 +50,8 @@ for row in lines[10:]:
             "Frequency MHz":[610],
             "Bandwidth MHz":[33],
             "Flux Density mJy":[float(flux)],
-            "Flux Density error mJy":[float(flux_err)]
+            "Flux Density error mJy":[float(flux_err)],
+            "Limit index":[0]
         }
 
 dump_yaml(pulsar_dict, "Kijak_2017.yaml")

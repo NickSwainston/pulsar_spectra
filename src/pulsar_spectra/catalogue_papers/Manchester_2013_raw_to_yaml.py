@@ -6,7 +6,7 @@ with open("Manchester_2013_raw.txt") as file:
     pulsar_dict = {
     "Paper Metadata": {
         "Data Type": "Beamforming",
-        "Observation Span": "Single-epoch",
+        "Observation Span": "Multi-epoch",
     }
 }
     lines = file.readlines()
@@ -45,6 +45,7 @@ for row in lines:
         "Bandwidth MHz": bands,
         "Flux Density mJy": fluxes,
         "Flux Density error mJy": flux_errs,
+        "Limit index": [0] * len(freqs),
     }
 
 dump_yaml(pulsar_dict, "Manchester_2013.yaml")

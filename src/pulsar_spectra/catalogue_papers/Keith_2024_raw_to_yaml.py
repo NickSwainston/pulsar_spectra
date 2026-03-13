@@ -35,6 +35,7 @@ for filename in filenames:
         "Bandwidth MHz": [775.0],
         "Flux Density mJy": [float(round(avg_flux, 3))],
         "Flux Density error mJy": [float(round(std_flux, 3))],
+        "Limit index": [0],
     }
 
 dump_yaml(pulsar_dict, "Keith_2024.yaml")

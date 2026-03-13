@@ -45,6 +45,7 @@ for row in lines:
         "Bandwidth MHz": [],
         "Flux Density mJy": [],
         "Flux Density error mJy": [],
+        "Limit index": [],
     }
 
     if row[4] == "^":
@@ -54,6 +55,7 @@ for row in lines:
         pulsar_dict[pulsar]["Bandwidth MHz"].append(80.0)
         pulsar_dict[pulsar]["Flux Density mJy"].append(flux)
         pulsar_dict[pulsar]["Flux Density error mJy"].append(flux_err)
+        pulsar_dict[pulsar]["Limit index"].append(0)
 
     if row[7] == "^":
         flux = float(row[6])
@@ -62,6 +64,7 @@ for row in lines:
         pulsar_dict[pulsar]["Bandwidth MHz"].append(80.0)
         pulsar_dict[pulsar]["Flux Density mJy"].append(flux)
         pulsar_dict[pulsar]["Flux Density error mJy"].append(flux_err)
+        pulsar_dict[pulsar]["Limit index"].append(0)
 
 
 dump_yaml(pulsar_dict, "Kramer_1999.yaml")

@@ -37,7 +37,8 @@ for row in lines[17:]:
                 "Frequency MHz":[6591],
                 "Bandwidth MHz":[576],
                 "Flux Density mJy":[float(flux)],
-                "Flux Density error mJy":[round(float(flux_err[:-1]) * 10**(-sig_fig), 4)]
+                "Flux Density error mJy":[round(float(flux_err[:-1]) * 10**(-sig_fig), 4)],
+                "Limit index":[0]
             }
 
 dump_yaml(pulsar_dict, "Bates_2011.yaml")

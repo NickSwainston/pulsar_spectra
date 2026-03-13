@@ -20,7 +20,8 @@ for row in lines[:16]:
             "Frequency MHz":[],
             "Bandwidth MHz":[],
             "Flux Density mJy":[],
-            "Flux Density error mJy":[]
+            "Flux Density error mJy":[],
+            "Limit index":[]
         }
     freq = float(row[-9])*1e3
     flux = float(row[-7])
@@ -29,5 +30,6 @@ for row in lines[:16]:
     pulsar_dict[pulsar]["Flux Density mJy"] += [flux]
     # Text says assume %20 uncertainty
     pulsar_dict[pulsar]["Flux Density error mJy"] += [round(flux*.2, 4)]
+    pulsar_dict[pulsar]["Limit index"] += [0]
 
 dump_yaml(pulsar_dict, "Keith_2011.yaml")

@@ -16,7 +16,8 @@ pulsar_dict = {
         "Frequency MHz": [],
         "Bandwidth MHz": [],
         "Flux Density mJy": [],
-        "Flux Density error mJy": []
+        "Flux Density error mJy": [],
+        "Limit index": []
     }
 }
 for row in lines:
@@ -28,12 +29,14 @@ for row in lines:
     pulsar_dict[pulsar]["Bandwidth MHz"] += [33]
     pulsar_dict[pulsar]["Flux Density mJy"] += [float(flux1)]
     pulsar_dict[pulsar]["Flux Density error mJy"] += [float(flux_err1)]
+    pulsar_dict[pulsar]["Limit index"] += [0]
     if "±" in row[-1]:
         flux2, flux_err2 = row[-1].split("±")
         pulsar_dict[pulsar]["Frequency MHz"] += [freq]
         pulsar_dict[pulsar]["Bandwidth MHz"] += [33]
         pulsar_dict[pulsar]["Flux Density mJy"] += [float(flux2)]
         pulsar_dict[pulsar]["Flux Density error mJy"] += [float(flux_err2)]
+        pulsar_dict[pulsar]["Limit index"] += [0]
 
 class ListIndentDumper(yaml.Dumper):
     # Will indent lists properly for more readable yaml files

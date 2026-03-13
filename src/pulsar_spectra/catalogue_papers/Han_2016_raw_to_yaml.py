@@ -27,7 +27,8 @@ for row in raw[1:]:
         "Frequency MHz":freqs,
         "Bandwidth MHz":bands,
         "Flux Density mJy":fluxs,
-        "Flux Density error mJy":flux_errs
+        "Flux Density error mJy":flux_errs,
+        "Limit index":[0] * len(freqs)
     }
 
 dump_yaml(pulsar_dict, "Han_2016.yaml")

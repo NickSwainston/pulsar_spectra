@@ -137,7 +137,8 @@ for row in lines:
         "Frequency MHz":[],
         "Bandwidth MHz":[],
         "Flux Density mJy":[],
-        "Flux Density error mJy":[]
+        "Flux Density error mJy":[],
+        "Limit index":[]
     }
 
     if row[1] != '':
@@ -145,6 +146,7 @@ for row in lines:
         pulsar_dict[pulsar]["Bandwidth MHz"] += [31.64]
         pulsar_dict[pulsar]["Flux Density mJy"] += [float(row[1])]
         pulsar_dict[pulsar]["Flux Density error mJy"] += [float(row[1])*0.5]
+        pulsar_dict[pulsar]["Limit index"] += [0]
     if len(pulsar_dict[pulsar]["Frequency MHz"]) == 0:
         del pulsar_dict[pulsar]
 

@@ -47,7 +47,8 @@ for row in lines:
         "Frequency MHz":[freq],
         "Bandwidth MHz":[band],
         "Flux Density mJy":[flux],
-        "Flux Density error mJy":[flux_err]
+        "Flux Density error mJy":[flux_err],
+        "Limit index":[0]
     }
 
 dump_yaml(pulsar_dict, "Bilous_2020.yaml")

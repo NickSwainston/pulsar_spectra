@@ -38,18 +38,21 @@ with open("Levin_2016_raw.txt") as file:
         bands = []
         fluxes = []
         flux_errs = []
+        limits = []
 
         if S1400 != "":
             freqs.append(1500.0)
             bands.append(800.0)
             fluxes.append(float(S1400))
             flux_errs.append(float(S1400) * 0.5)
+            limits.append(0)
 
         pulsar_dict[pulsar] = {
             "Frequency MHz": freqs,
             "Bandwidth MHz": bands,
             "Flux Density mJy": fluxes,
             "Flux Density error mJy": flux_errs,
+            "Limit index": limits,
         }
 
 dump_yaml(pulsar_dict, "Levin_2016.yaml")

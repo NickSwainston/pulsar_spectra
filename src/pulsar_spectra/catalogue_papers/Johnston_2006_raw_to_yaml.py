@@ -24,7 +24,8 @@ for row in lines:
         "Bandwidth MHz":[512],
         "Flux Density mJy":[flux],
         # Text doesn't mention uncertainty so assuming 50%
-        "Flux Density error mJy":[flux*0.5]
+        "Flux Density error mJy":[flux*0.5],
+        "Limit index":[0]
         }
 
 dump_yaml(pulsar_dict, "Johnston_2006.yaml")

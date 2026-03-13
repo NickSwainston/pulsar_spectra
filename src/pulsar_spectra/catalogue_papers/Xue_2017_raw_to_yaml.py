@@ -32,7 +32,8 @@ for row in lines[7:]:
             "Frequency MHz":freqs,
             "Bandwidth MHz":bands,
             "Flux Density mJy":fluxs,
-            "Flux Density error mJy":flux_errs
+            "Flux Density error mJy":flux_errs,
+            "Limit index":[0] * len(freqs)
         }
 
 dump_yaml(pulsar_dict, "Xue_2017.yaml")

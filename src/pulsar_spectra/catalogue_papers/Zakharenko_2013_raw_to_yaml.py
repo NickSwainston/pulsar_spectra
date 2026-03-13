@@ -24,7 +24,8 @@ for row in lines[:15]:
         "Frequency MHz":[20, 25],
         "Bandwidth MHz":[4, 4],
         "Flux Density mJy":[float(row[2]), float(row[3])],
-        "Flux Density error mJy":[float(row[7][1:]), float(row[8][1:])]
+        "Flux Density error mJy":[float(row[7][1:]), float(row[8][1:])],
+        "Limit index":[0, 0]
     }
 
 for row in lines[16:]:
@@ -47,7 +48,8 @@ for row in lines[16:]:
         "Frequency MHz":[25],
         "Bandwidth MHz":[4],
         "Flux Density mJy":[float(flux)],
-        "Flux Density error mJy":[float(flux_err)]
+        "Flux Density error mJy":[float(flux_err)],
+        "Limit index":[0]
     }
 
 dump_yaml(pulsar_dict, "Zakharenko_2013.yaml")

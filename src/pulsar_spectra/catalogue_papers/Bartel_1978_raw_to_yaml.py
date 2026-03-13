@@ -35,7 +35,8 @@ for row in lines[2:]:
                 "Frequency MHz":[],
                 "Bandwidth MHz":[],
                 "Flux Density mJy":[],
-                "Flux Density error mJy":[]
+                "Flux Density error mJy":[],
+                "Limit index":[]
             }
 
     if not "<" in row[2]:
@@ -56,6 +57,7 @@ for row in lines[2:]:
             flux_err = flux * 0.5
         pulsar_dict[pulsar]["Flux Density mJy"] += [round(float(flux/query['P0'][pid]), 3)]
         pulsar_dict[pulsar]["Flux Density error mJy"] += [round(float(flux_err/query['P0'][pid]), 3)]
+        pulsar_dict[pulsar]["Limit index"] += [0]
     if not "<" in row[6]:
         pulsar_dict[pulsar]["Frequency MHz"] += [22700]
         pulsar_dict[pulsar]["Bandwidth MHz"] += [300]
@@ -67,5 +69,6 @@ for row in lines[2:]:
             flux_err = float(flux_err)
         pulsar_dict[pulsar]["Flux Density mJy"] += [flux]
         pulsar_dict[pulsar]["Flux Density error mJy"] += [round(flux_err, 3)]
+        pulsar_dict[pulsar]["Limit index"] += [0]
 
 dump_yaml(pulsar_dict, "Bartel_1978.yaml")

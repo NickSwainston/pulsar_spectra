@@ -74,6 +74,7 @@ def main() -> None:
             "Bandwidth MHz": [7.68] * len(psr_freqs),
             "Flux Density mJy": psr_fluxes,
             "Flux Density error mJy": psr_flux_errs,
+            "Limit index": [0] * len(psr_freqs),
         }
 
     dump_yaml(pulsar_dict, "Mantovanini_2025.yaml")

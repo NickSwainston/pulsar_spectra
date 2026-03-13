@@ -39,7 +39,8 @@ for row in lines:
         "Frequency MHz": [327.0],
         "Bandwidth MHz": [68.75],
         "Flux Density mJy": [float(row[2].strip())],
-        "Flux Density error mJy": [float(row[3].strip())]
+        "Flux Density error mJy": [float(row[3].strip())],
+        "Limit index": [0]
     }
 
 dump_yaml(pulsar_dict, "Deneva_2024.yaml")

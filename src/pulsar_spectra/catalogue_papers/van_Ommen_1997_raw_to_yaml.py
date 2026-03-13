@@ -33,7 +33,8 @@ for row in lines:
             "Frequency MHz":[float(row[-11])],
             "Bandwidth MHz":[float(row[-10])],
             "Flux Density mJy":[flux],
-            "Flux Density error mJy":[round(flux*pe, 4)]
+            "Flux Density error mJy":[round(flux*pe, 4)],
+            "Limit index":[0]
         }
     else:
         obs_period = row[0]
@@ -48,6 +49,7 @@ for row in lines:
         pulsar_dict[pulsar]["Bandwidth MHz"] += [float(row[2])]
         pulsar_dict[pulsar]["Flux Density mJy"] += [flux]
         pulsar_dict[pulsar]["Flux Density error mJy"] += [round(flux*pe, 4)]
+        pulsar_dict[pulsar]["Limit index"] += [0]
 
 
 dump_yaml(pulsar_dict, "van_Ommen_1997.yaml")

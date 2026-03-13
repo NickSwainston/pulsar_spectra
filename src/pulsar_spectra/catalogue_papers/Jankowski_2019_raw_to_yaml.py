@@ -30,6 +30,7 @@ for row in lines:
         "Frequency MHz":[843],
         "Bandwidth MHz":[31.25],
         "Flux Density mJy":[float(row[1])],
-        "Flux Density error mJy":[float(row[2])]}
+        "Flux Density error mJy":[float(row[2])],
+        "Limit index":[0]}
 
 dump_yaml(pulsar_dict, "Jankowski_2019.yaml")

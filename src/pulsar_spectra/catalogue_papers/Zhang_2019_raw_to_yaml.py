@@ -20,19 +20,22 @@ pulsar_dict["J0024-7204C"] = {
     "Frequency MHz":[],
     "Bandwidth MHz":[],
     "Flux Density mJy":[],
-    "Flux Density error mJy":[]
+    "Flux Density error mJy":[],
+    "Limit index":[]
 }
 pulsar_dict["J0024-7204D"] = {
     "Frequency MHz":[],
     "Bandwidth MHz":[],
     "Flux Density mJy":[],
-    "Flux Density error mJy":[]
+    "Flux Density error mJy":[],
+    "Limit index":[]
 }
 pulsar_dict["J0024-7204J"] = {
     "Frequency MHz":[],
     "Bandwidth MHz":[],
     "Flux Density mJy":[],
-    "Flux Density error mJy":[]
+    "Flux Density error mJy":[],
+    "Limit index":[]
 }
 
 pulsars = [
@@ -54,5 +57,6 @@ for row in lines:
         pulsar_dict[pulsar]["Bandwidth MHz"] += [128]
         pulsar_dict[pulsar]["Flux Density mJy"] += [flux]
         pulsar_dict[pulsar]["Flux Density error mJy"] += [flux_err]
+        pulsar_dict[pulsar]["Limit index"] += [0]
 
 dump_yaml(pulsar_dict, "Zhang_2019.yaml")

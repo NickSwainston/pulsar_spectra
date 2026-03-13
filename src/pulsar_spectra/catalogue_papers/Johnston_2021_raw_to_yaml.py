@@ -22,7 +22,8 @@ for row in lines[1:]:
         "Frequency MHz":[1369],
         "Bandwidth MHz":[256],
         "Flux Density mJy":[flux],
-        "Flux Density error mJy":[flux_err]
+        "Flux Density error mJy":[flux_err],
+        "Limit index":[0]
     }
 
 dump_yaml(pulsar_dict, "Johnston_2021.yaml")
