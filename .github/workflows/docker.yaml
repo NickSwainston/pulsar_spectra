@@ -14,7 +14,7 @@ jobs:
     if: github.repository == 'nickswainston/pulsar_spectra'  # Don't run on forks
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
