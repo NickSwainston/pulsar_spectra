@@ -16,7 +16,7 @@ dependencies = [
     "iminuit>=2.9",
     "jacobi>=0.2",
     "pyyaml>=3.10",
-    "pandas>=1.4,<2",
+    "pandas>=2,<3",
 ]
 
 [dependency-groups]
