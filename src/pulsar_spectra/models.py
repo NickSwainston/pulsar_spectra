@@ -4,8 +4,6 @@ Functions defining spectral models and model constraints.
 
 import numpy as np
 
-from .cost_functions import tobit_limit_wrapper
-
 """LaTeX math for typesetting the model parameters."""
 latex_params = {
     "c": "c",
@@ -28,7 +26,6 @@ def gammainc_up(a, z):
     return np.asarray([gammainc(a, zi, regularized=False) for zi in z]).astype(float)
 
 
-@tobit_limit_wrapper
 def simple_power_law(v, a, c, v0):
     """Simple power law:
 
@@ -54,7 +51,6 @@ def simple_power_law(v, a, c, v0):
     return c * (v / v0) ** a
 
 
-@tobit_limit_wrapper
 def simple_power_law_integrate(vmin_vmax, a, c, v0):
     """The bandwith intergration correction for the
     simple power law using direct intergration (:ref:`derivation <simple_power_law_integrate>`):
@@ -83,7 +79,6 @@ def simple_power_law_integrate(vmin_vmax, a, c, v0):
     return c * (vmax ** (a + 1) - vmin ** (a + 1)) / ((vmax - vmin) * v0**a * (a + 1))
 
 
-@tobit_limit_wrapper
 def broken_power_law(v, vb, a1, a2, c, v0):
     """Broken power law:
 
@@ -121,7 +116,6 @@ def broken_power_law(v, vb, a1, a2, c, v0):
     return np.where(x <= xb, y1, y2)
 
 
-@tobit_limit_wrapper
 def broken_power_law_intergral(vmin_vmax, vb, a1, a2, c, v0):
     """The bandwith intergration correction for the
     broken power law using direct intergration (see :ref:`derivation <broken_power_law_intergral>` for full equation):
@@ -159,7 +153,6 @@ def broken_power_law_intergral(vmin_vmax, vb, a1, a2, c, v0):
     )
 
 
-@tobit_limit_wrapper
 def double_broken_power_law(v, vb1, vb2, a1, a2, a3, c, v0):
     x = v / v0
     xb1 = vb1 / v0
@@ -175,7 +168,6 @@ def double_broken_power_law(v, vb1, vb2, a1, a2, a3, c, v0):
     )
 
 
-@tobit_limit_wrapper
 def log_parabolic_spectrum(v, a, b, c, v0):
     """Log-parabolic spectrum:
 
@@ -205,7 +197,6 @@ def log_parabolic_spectrum(v, a, b, c, v0):
     return 10 ** (a * x**2 + b * x + c)
 
 
-@tobit_limit_wrapper
 def high_frequency_cut_off_power_law(v, vc, a, c, v0):
     """High-frequency cut-off power law:
 
@@ -237,7 +228,6 @@ def high_frequency_cut_off_power_law(v, vc, a, c, v0):
     return np.where(x < xc, y1, y2)
 
 
-@tobit_limit_wrapper
 def high_frequency_cut_off_power_law_intergral(vmin_vmax, vc, a, c, v0):
     """The bandwith intergration correction for the
     high-frequency cut-off power law using direct intergration
@@ -274,7 +264,6 @@ def high_frequency_cut_off_power_law_intergral(vmin_vmax, vc, a, c, v0):
     return np.where(v < vc, y1, y2)
 
 
-@tobit_limit_wrapper
 def high_frequency_cut_off_power_law_taylor(vmin_vmax, vc, a, c, v0):
     """The bandwith intergration correction for the
     high-frequency cut-off power law using Taylor series expansion
@@ -312,7 +301,6 @@ def high_frequency_cut_off_power_law_taylor(vmin_vmax, vc, a, c, v0):
     return np.where(v < vc, sv, 0)
 
 
-@tobit_limit_wrapper
 def low_frequency_turn_over_power_law(v, vpeak, a, c, beta, v0):
     """Low-frequency turn-over power law:
 
@@ -345,7 +333,6 @@ def low_frequency_turn_over_power_law(v, vpeak, a, c, beta, v0):
     return c * x**a * np.exp(a / beta * xpeak ** (-beta))
 
 
-@tobit_limit_wrapper
 def low_frequency_turn_over_power_law_intergral(vmin_vmax, vpeak, a, c, beta, v0):
     """The bandwith intergration correction for the
     low-frequency turn-over power law using direct intergration
@@ -384,7 +371,6 @@ def low_frequency_turn_over_power_law_intergral(vmin_vmax, vpeak, a, c, beta, v0
     )
 
 
-@tobit_limit_wrapper
 def low_frequency_turn_over_power_law_taylor(vmin_vmax, vpeak, a, c, beta, v0):
     """The bandwith intergration correction for the
     low-frequency turn-over power law using Taylor series expansion
@@ -510,7 +496,6 @@ def low_frequency_turn_over_power_law_taylor(vmin_vmax, vpeak, a, c, beta, v0):
     return s0 + (s2 * BW**2) / 12 + (s4 * BW**4) / 80 + (s6 * BW**6) / 448
 
 
-@tobit_limit_wrapper
 def double_turn_over_spectrum(v, vc, vpeak, a, beta, c, v0):
     """Double turn-over spectrum (has a low-frequency turn-over and a high-frequency cut-off):
 
@@ -548,7 +533,6 @@ def double_turn_over_spectrum(v, vc, vpeak, a, beta, c, v0):
     return np.where(x < xc, y1, y2)
 
 
-@tobit_limit_wrapper
 def double_turn_over_spectrum_intergral(vmin_vmax, vc, vpeak, a, beta, c, v0):
     """The bandwith intergration correction for the
     double turn-over spectrum (has a low-frequency turn-over and a high-frequency cut-off)
@@ -597,7 +581,6 @@ def double_turn_over_spectrum_intergral(vmin_vmax, vc, vpeak, a, beta, c, v0):
     return np.where(v < vc, y1, y2)
 
 
-@tobit_limit_wrapper
 def double_turn_over_spectrum_taylor(vmin_vmax, vc, vpeak, a, beta, c, v0):
     """The bandwith intergration correction for the
     double turn-over spectrum (has a low-frequency turn-over and a high-frequency cut-off)

@@ -3,7 +3,8 @@ Cost functions (i.e. negative log-likelihoods) used for model fitting.
 """
 
 import numpy as np
-import scipy.stats as st
+from scipy.stats import norm, t
+from scipy.special import huber
 from functools import wraps
 
 
@@ -46,7 +47,7 @@ def huber_loss_function(sq_resi, k=1.345):
     Returns
     -------
     rho : `float` or `np.ndarray`
-       The modified squared residuals.
+        The modified squared residuals.
     """
     sq_resi, single_value = array_data_type_check(sq_resi)
     rho = np.empty_like(sq_resi)
@@ -78,13 +79,13 @@ def t_loss_function(sq_resi, df=4):
     Returns
     -------
     rho : `float` or `np.ndarray`
-       The modified squared residuals.
+        The modified squared residuals.
     """
     sq_resi, single_value = array_data_type_check(sq_resi)
     resi = np.sqrt(np.abs(sq_resi))
 
     # Evaluate the negative log likelihood
-    rho = -1.0 * st.t.logpdf(resi, df)
+    rho = -1.0 * t.logpdf(resi, df)
 
     if single_value:
         return rho[0]
@@ -113,7 +114,7 @@ def gaussian_cost_function(f_y, y, sigma_y):
     f_y, _ = array_data_type_check(f_y)
     y, _ = array_data_type_check(y)
     sigma_y, _ = array_data_type_check(sigma_y)
-    return -1.0 * np.sum(st.norm.logpdf(y, f_y, sigma_y))
+    return -1.0 * np.sum(norm.logpdf(y, f_y, sigma_y))
 
 
 def tobit_gaussian_cost_function(f_y, y_L, sigma_y_L, invert=False):
@@ -146,7 +147,7 @@ def tobit_gaussian_cost_function(f_y, y_L, sigma_y_L, invert=False):
         # Lower limit
         sign = 1.0
     resi = sign * (y_L - f_y) / sigma_y_L
-    return -1.0 * np.sum(st.norm.logcdf(resi))
+    return -1.0 * np.sum(norm.logcdf(resi))
 
 
 def huber_cost_function(f_y, y, sigma_y, k=1.345):
@@ -201,7 +202,7 @@ def t_cost_function(f_y, y, sigma_y, df=4):
     f_y, _ = array_data_type_check(f_y)
     y, _ = array_data_type_check(y)
     sigma_y, _ = array_data_type_check(sigma_y)
-    return -1.0 * np.sum(st.t.logpdf(y, df, f_y, sigma_y))
+    return -1.0 * np.sum(t.logpdf(y, df, f_y, sigma_y))
 
 
 def tobit_t_cost_function(f_y, y_L, sigma_y_L, df=4, invert=False):
@@ -236,7 +237,7 @@ def tobit_t_cost_function(f_y, y_L, sigma_y_L, df=4, invert=False):
         # Lower limit
         sign = 1.0
     resi = sign * (y_L - f_y) / sigma_y_L
-    return -1.0 * np.sum(st.t.logcdf(resi, df))
+    return -1.0 * np.sum(t.logcdf(resi, df))
 
 
 def tobit_limit_wrapper(model_fn):
@@ -251,32 +252,30 @@ def tobit_limit_wrapper(model_fn):
 
 
 def tobit_log_likelihood(
-        data,
-        spectra_model,
-        *model_params,
-        loss="gaussian",
+        squared_residuals,
+        model_fluxs_Jy=None,
+        fluxs_Jy=None,
+        flux_errs_Jy=None,
+        limit_signs=None,
+        loss="Gaussian",
         df=4,
     ):
-    """Compute the log likelihood of an input spectral model using the Tobit model to handle upper and lower limits.
+    """Compute the log likelihood of an input residuals using the
+    Tobit model to handle upper and lower limits.
+    This function does the math while the other functions in this module wrap it.
 
     Parameters
     ----------
-    data : `tuple`
-        A tuple of the input data (freqs_Hz, fluxs_Jy, flux_errs_Jy, limit_signs).
-        freqs_Hz : `list`
-            Frequency in Hz. May also be a tuple (v_min, v_max) for integrated models.
-        fluxs_Jy : `list`
-            Flux density in Jy.
-        flux_errs_Jy : `list`
-            Uncertainty in the flux density in Jy.
-        limit_signs : `list`
-            List of ints where +1 is for a lower limit, -1 is for a upper limit and 0 is for standard data.
-    spectra_model : `function`
-        The spectral model function to fit.
-    *model_params : *`float`
-        The model parameters to fit.
+    squared_residuals : `float` or `list` or `np.ndarray`
+        A single or array of the squared residuals.
+    model_fluxs_Jy : `list`
+        A list of predicted values according to the model.
+    fluxs_Jy : `list`
+        A list of measured values at the same frequencies as the model values.
+    flux_errs_Jy : `list`
+        A list of 1-sigma uncertainties corresponding to the measured values y.
     loss : `string`, optional
-        The loss function to use ('gaussian', 't'). |br| Default: 'gaussian'.
+        The loss function to use ('Gaussian', 'Huber', 't'). |br| Default: 'Gaussian'.
     df : `int`, optional
         The number of degrees of freedom for the t-distribution. |br| Default: 4.
 
@@ -285,29 +284,101 @@ def tobit_log_likelihood(
     log_likelihood : `np.ndarray`
         The log likelihood of the model fit.
     """
-    # Unpack data (freqs may be in the (v_min, v_max) format for integrate models)
-    freqs_Hz, fluxs_Jy, flux_errs_Jy, limit_signs = data
+    if squared_residuals is None:
+        squared_residuals, _ = array_data_type_check(squared_residuals)
+        residuals = np.sqrt(np.abs(squared_residuals))
+    else:
+        fluxs_Jy, _ = array_data_type_check(fluxs_Jy)
+        model_fluxs_Jy, _ = array_data_type_check(model_fluxs_Jy)
+        flux_errs_Jy, _ = array_data_type_check(flux_errs_Jy)
+        residuals = (fluxs_Jy - model_fluxs_Jy) / flux_errs_Jy
 
-    model_fluxes = spectra_model(freqs_Hz, *model_params)
-    residuals = (fluxs_Jy - model_fluxes) / flux_errs_Jy
-
-    if loss == "gaussian":
-        log_likelihood = np.where(
+    if loss == "Gaussian":
+        return np.where(
             # Use limit_signs as a condition
             np.array(limit_signs, dtype=bool),
             # If +1 for lower limit or -1 for upper limit
-            st.norm.logcdf(-1*limit_signs*residuals),
+            norm.logcdf(-1*limit_signs*residuals),
             # Else use Gaussian likelihood
-            st.norm.logpdf(residuals)
+            norm.logpdf(residuals)
+        )
+    elif loss == "Huber":
+        return np.where(
+            # Use limit_signs as a condition
+            np.array(limit_signs, dtype=bool),
+            # If +1 for lower limit or -1 for upper limit
+            # For Huber loss, use the Gaussian CDF because huber is not a distribution
+            norm.logcdf(-1*limit_signs*residuals),
+            # Else negative of the huber loss function (since we want a log likelihood)
+            -1 * huber(residuals, df)
         )
     elif loss == "t":
-        log_likelihood = np.where(
+        return np.where(
             # Use limit_signs as a condition
             np.array(limit_signs, dtype=bool),
             # If +1 for lower limit or -1 for upper limit
-            st.t.logcdf(-1*limit_signs*residuals, df),
+            t.logcdf(-1*limit_signs*residuals, df),
             # Else use t-distribution likelihood
-            st.t.logpdf(residuals, df)
+            t.logpdf(residuals, df)
         )
     else:
         raise ValueError(f"Unknown loss function: {loss}")
+
+
+# Loss functions which are the negative log likelihoods for each data point,
+# which can be summed to get the total cost for a model fit.
+
+def loss_function_gaussian(squared_residuals):
+    """Compute the loss of a Gaussian normal PDF likelihood for a model given
+    the squared residuals.
+
+    Parameters
+    ----------
+    squared_residuals : `float` or `list` or `np.ndarray`
+        A single or array of the squared residuals.
+
+    Returns
+    -------
+    beta : `float` or `np.ndarray`
+        The cost of the model fit.
+    """
+    return -1.0 * tobit_log_likelihood(squared_residuals, loss="Gaussian")
+
+
+def loss_function_huber(squared_residuals, k=1.345):
+    """Compute the loss of a Huber loss function for a model given the squared
+    residuals.
+
+    Parameters
+    ----------
+    squared_residuals : `float` or `list` or `np.ndarray`
+        A single or array of the squared residuals.
+    k : `float`, optional
+        A constant that defines at which distance the loss function starts to
+        penalize outliers. |br| Default: 1.345.
+
+    Returns
+    -------
+    beta : `float` or `np.ndarray`
+        The cost of the model fit.
+    """
+    return -1.0 * tobit_log_likelihood(squared_residuals, loss="Huber", df=k)
+
+
+def loss_function_t(squared_residuals, df=4):
+    """Compute the loss of a t-distribution PDF likelihood with df degrees of
+    freedom for a model given the squared residuals.
+
+    Parameters
+    ----------
+    squared_residuals : `float` or `list` or `np.ndarray`
+        A single or array of the squared residuals.
+    df : `int`, optional
+        The number of degrees of freedom. |br| Default: 4.
+
+    Returns
+    -------
+    beta : `float` or `np.ndarray`
+        The cost of the model fit.
+    """
+    return -1.0 * tobit_log_likelihood(squared_residuals, loss="t", df=df)

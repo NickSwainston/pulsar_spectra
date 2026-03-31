@@ -10,8 +10,8 @@ from iminuit import Minuit
 from iminuit.cost import LeastSquares, UnbinnedNLL
 from jacobi import propagate
 
-from ..cost_functions import huber_loss_function, t_loss_function
-from ..models import latex_params, model_settings
+from pulsar_spectra.likelihood_functions import loss_function_gaussian, loss_function_huber, loss_function_t
+from pulsar_spectra.models import latex_params, model_settings
 
 logger = logging.getLogger(__name__)
 
@@ -204,11 +204,11 @@ def iminuit_fit_spectral_model(
     # Define a loss function
     least_squares = LeastSquares(freqs_Hz, fluxs_Jy, flux_errs_Jy, model_function.__wrapped__)
     if likelihood == "Gaussian":
-        least_squares.loss = "linear"  # Ordinary least squares
+        least_squares.loss = loss_function_gaussian
     elif likelihood == "Huber":
-        least_squares.loss = huber_loss_function
+        least_squares.loss = loss_function_huber
     elif likelihood == "t":
-        least_squares.loss = t_loss_function
+        least_squares.loss = loss_function_t
     else:
         logger.error(f"Invalid likelihood specified: {likelihood}.")
         return None, None
@@ -238,11 +238,11 @@ def iminuit_fit_spectral_model(
         # Define a loss function
         least_squares = LeastSquares((min_freqs_Hz, max_freqs_Hz), fluxs_Jy, flux_errs_Jy, model_function_integrate)
         if likelihood == "Gaussian":
-            least_squares.loss = "linear"  # Ordinary least squares
+            least_squares.loss = loss_function_gaussian
         elif likelihood == "Huber":
-            least_squares.loss = huber_loss_function
+            least_squares.loss = loss_function_huber
         elif likelihood == "t":
-            least_squares.loss = t_loss_function
+            least_squares.loss = loss_function_t
         else:
             logger.error(f"Invalid likelihood specified: {likelihood}.")
             return None, None

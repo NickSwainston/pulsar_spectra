@@ -4,9 +4,12 @@ Tests the spectral_fit.py script
 """
 
 import numpy as np
+import numpy.testing as npt
 import pytest
 
 from pulsar_spectra.catalogue import collect_catalogue_fluxes
+from pulsar_spectra.fitters.frequentist import iminuit_fit_spectral_model, iminuit_interpolate_model
+from pulsar_spectra.plotting import plot_fit
 from pulsar_spectra.spectral_fit import find_best_spectral_fit
 
 spectral_fit_tests = [
@@ -160,6 +163,7 @@ def test_find_best_spectral_fit(fit_method, pulsar, exp_model_name, frozen_refs,
         band_all,
         flux_all,
         flux_err_all,
+        limit_signs,
         ref_all,
         method=fit_method,
         likelihood=likelihood,
@@ -273,7 +277,7 @@ def test_spl_iminuit_upper_limits():
         likelihood="Huber",
         plot_best=True,
     )
-    npt.assert_almost_equal(fit_result.values["a"], -1.00, decimal=2)
+    npt.assert_almost_equal(fit_results.values["a"], -1.00, decimal=2)
 
     # And a lower data point
     freqs.append(0.1)
@@ -395,9 +399,7 @@ def test_lfto_iminuit_upper_limits():
         flux_errs,
         limit_signs,
         refs,
-        "low_frequency_turn_over_power_law",
         plot_dict,
-        {"low_frequency_turn_over_power_law": {"AIC":1}},
         save_name="lfto_iminuit_no_upper_limits.png",
     )
 
@@ -431,9 +433,7 @@ def test_lfto_iminuit_upper_limits():
         flux_errs,
         limit_signs,
         refs,
-        "low_frequency_turn_over_power_law",
         plot_dict,
-        {"low_frequency_turn_over_power_law": {"AIC":1}},
         save_name="lfto_iminuit_upper_limits.png",
     )
     # assert ul_fit_result.values["a"] < fit_result.values["a"]
