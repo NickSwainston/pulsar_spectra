@@ -6,10 +6,12 @@ Tests the spectral_fit.py script
 import numpy as np
 import numpy.testing as npt
 import pytest
+from scipy.special import huber
+from scipy.stats import norm
+from scipy.stats import t as t_dist
 
 from pulsar_spectra.catalogue import collect_catalogue_fluxes
-from pulsar_spectra.fitters.frequentist import iminuit_fit_spectral_model, iminuit_interpolate_model
-from pulsar_spectra.plotting import plot_fit
+from pulsar_spectra.likelihood_functions import tobit_log_likelihood
 from pulsar_spectra.spectral_fit import find_best_spectral_fit
 
 spectral_fit_tests = [
@@ -154,7 +156,7 @@ def test_find_best_spectral_fit(fit_method, pulsar, exp_model_name, frozen_refs,
     }
 
     print(f"\nFitting {pulsar}")
-    freq_all, band_all, flux_all, flux_err_all, ref_all = cat_list[pulsar]
+    freq_all, band_all, flux_all, flux_err_all, limit_signs, ref_all = cat_list[pulsar]
     for freq, band, flux, flux_err, ref in zip(freq_all, band_all, flux_all, flux_err_all, ref_all):
         print(f"{float(freq):8.1f}{float(band):8.1f}{float(flux):12.4f}{float(flux_err):12.4f} {str(ref):20s}")
     best_fit_model_name, _, fit_results, _, _ = find_best_spectral_fit(
@@ -193,6 +195,7 @@ def test_plot_methods():
         cat_list[pulsar][2],
         cat_list[pulsar][3],
         cat_list[pulsar][4],
+        cat_list[pulsar][5],
         method="maximum-likelihood",
         likelihood="Huber",
         plot_compare=True,
@@ -205,6 +208,7 @@ def test_plot_methods():
         cat_list[pulsar][2],
         cat_list[pulsar][3],
         cat_list[pulsar][4],
+        cat_list[pulsar][5],
         method="maximum-likelihood",
         likelihood="Huber",
         plot_all=True,
@@ -217,6 +221,7 @@ def test_plot_methods():
         cat_list[pulsar][2],
         cat_list[pulsar][3],
         cat_list[pulsar][4],
+        cat_list[pulsar][5],
         method="maximum-likelihood",
         likelihood="Huber",
         plot_best=True,
@@ -229,6 +234,7 @@ def test_plot_methods():
         cat_list[pulsar][2],
         cat_list[pulsar][3],
         cat_list[pulsar][4],
+        cat_list[pulsar][5],
         method="maximum-likelihood",
         likelihood="Huber",
         plot_best=True,
@@ -243,6 +249,7 @@ def test_plot_methods():
         cat_list[pulsar][2],
         cat_list[pulsar][3],
         cat_list[pulsar][4],
+        cat_list[pulsar][5],
         method="maximum-likelihood",
         likelihood="Huber",
         plot_best=True,
@@ -251,203 +258,157 @@ def test_plot_methods():
     )
 
 
-def test_spl_iminuit_upper_limits():
+@pytest.mark.parametrize("loss", ["Gaussian", "Huber", "t"])
+def test_iminuit_upper_limits(loss):
+    """Upper limits above the true flux must not bias the spectral fit;
+    treating the same point as a detection must bias it.
 
-    # Make fake data
-    freqs = [1, 10, 100, 1000]
-    bands = [0.1, 1, 10, 100]
-    fluxes = [1000, 100, 10, 1]
-    flux_errs = [500, 50, 5, 0.5]
-    refs = ["Fake data"] * 4
-    limit_signs = [0] * 4
-    min_freqs_MHz = 0.09 # np.min(np.array(freqs) - np.array(bands) / 2)
-    max_freqs_MHz = np.max(np.array(freqs) + np.array(bands) / 2)
-    fitted_freq = np.logspace(np.log10(min_freqs_MHz), np.log10(max_freqs_MHz), 100)
+    Setup:
+      True model: simple power law, alpha=-1.6, c=1000 mJy at 1000 MHz.
+      4 exact (noiseless) detections at [100, 300, 3000, 10000] MHz, 10% errors.
+      Extra point at 30000 MHz: observed = 5x the true power-law flux (8-sigma outlier).
 
-    # Do a simple fit with normal data to assert fitting without upper limits still works
-    best_fit_model_name, _, fit_results, _, _ = find_best_spectral_fit(
-        "test_pulsar",
-        freqs,
-        bands,
-        fluxes,
-        flux_errs,
-        limit_signs,
-        refs,
-        method="maximum-likelihood",
-        likelihood="Huber",
-        plot_best=True,
-    )
-    npt.assert_almost_equal(fit_results.values["a"], -1.00, decimal=2)
-
-    # And a lower data point
-    freqs.append(0.1)
-    bands.append(0.01)
-    fluxes.append(1000)
-    flux_errs.append(500)
-    refs.append("Fake data")
-    limit_signs.append(0)
-    print(refs, limit_signs)
-    best_fit_model_name, _, fit_results, _, _ = find_best_spectral_fit(
-        "test_pulsar",
-        freqs,
-        bands,
-        fluxes,
-        flux_errs,
-        limit_signs,
-        refs,
-        method="maximum-likelihood",
-        likelihood="Huber",
-        plot_best=True,
-    )
-
-    plot_dict = iminuit_interpolate_model(
-        fit_result,
-        "simple_power_law",
-        fitted_freq,
-        band_bool,
-    )
-
-    plot_fit(
-        freqs,
-        bands,
-        fluxes,
-        flux_errs,
-        limit_signs,
-        refs,
-        "simple_power_law",
-        plot_dict,
-        {"simple_power_law": {"AIC":1}},
-        save_name="spl_iminuit_no_upper_limits.png",
-    )
-
-    # Add upper limits to the data and check spectral index is shallower
-    refs.append("Fake upper limit")
-    refs = ["Fake data"] * 4 + ["Fake upper limit"]
-    limit_signs = [0] * 4 + [1]
-    print(refs, limit_signs)
-    ul_fit_result, band_bool = iminuit_fit_spectral_model(
-        freqs,
-        bands,
-        fluxes,
-        flux_errs,
-        limit_signs,
-        model_name="simple_power_law",
-        likelihood="Huber",
-    )
-    assert fit_result.values["a"] > -1.00
-
-    plot_dict = iminuit_interpolate_model(
-        ul_fit_result,
-        "simple_power_law",
-        fitted_freq,
-        band_bool,
-    )
-
-    plot_fit(
-        freqs,
-        bands,
-        fluxes,
-        flux_errs,
-        limit_signs,
-        refs,
-        "simple_power_law",
-        plot_dict,
-        {"simple_power_law": {"AIC":1}},
-        save_name="spl_iminuit_upper_limits.png",
-    )
-    # Assert there is a flatter spectrum with an upper limit
-    assert ul_fit_result.values["a"] > fit_result.values["a"]
-
-
-
-
-def test_lfto_iminuit_upper_limits():
-
-    # Make fake data
-    freqs = [10, 10, 100, 500, 1000, 10000]
-    bands = [1, 1, 10, 50, 100, 1000]
-    fluxes = [100, 100, 10, 5, 1, 0.1]
-    flux_errs = [50, 50, 5, 0.5, 0.5, 0.05]
-    refs = ["Fake data"] * 6
-    limit_signs = [0] * 6
-    min_freqs_MHz = 0.09 # np.min(np.array(freqs) - np.array(bands) / 2)
-    max_freqs_MHz = np.max(np.array(freqs) + np.array(bands) / 2)
-    fitted_freq = np.logspace(np.log10(min_freqs_MHz), np.log10(max_freqs_MHz), 100)
-
-    # And a lower data point
-    fit_result, band_bool = iminuit_fit_spectral_model(
-        freqs,
-        bands,
-        fluxes,
-        flux_errs,
-        limit_signs,
-        model_name="low_frequency_turn_over_power_law",
-        likelihood="Huber",
-    )
-
-    plot_dict = iminuit_interpolate_model(
-        fit_result,
-        "low_frequency_turn_over_power_law",
-        fitted_freq,
-        band_bool,
-    )
-
-    plot_fit(
-        freqs,
-        bands,
-        fluxes,
-        flux_errs,
-        limit_signs,
-        refs,
-        plot_dict,
-        save_name="lfto_iminuit_no_upper_limits.png",
-    )
-
-    # Add upper limits to the data and check spectral index is shallower
-    refs.append("Fake upper limit")
-    refs = ["Fake data"] * 5 + ["Fake upper limit"]
-    limit_signs = [0] * 5 + [-1]
-    print(refs, limit_signs)
-    ul_fit_result, band_bool = iminuit_fit_spectral_model(
-        freqs,
-        bands,
-        fluxes,
-        flux_errs,
-        limit_signs,
-        model_name="low_frequency_turn_over_power_law",
-        likelihood="Huber",
-    )
-    # assert fit_result.values["a"] < -1.00
-
-    plot_dict = iminuit_interpolate_model(
-        ul_fit_result,
-        "low_frequency_turn_over_power_law",
-        fitted_freq,
-        band_bool,
-    )
-
-    plot_fit(
-        freqs,
-        bands,
-        fluxes,
-        flux_errs,
-        limit_signs,
-        refs,
-        plot_dict,
-        save_name="lfto_iminuit_upper_limits.png",
-    )
-    # assert ul_fit_result.values["a"] < fit_result.values["a"]
-    print(ul_fit_result.values)
-    print(fit_result.values)
-    exit(1)
-
-
-if __name__ == "__main__":
+    As a detection the outlier biases alpha shallower by ~0.02.
+    As an upper limit: true flux << limit → Tobit CDF ≈ 0 → alpha matches the baseline exactly.
     """
-    Tests the relevant functions in spectral_fit.py
+    alpha_true = -1.6
+    v_pivot_MHz = 1000.0
+    c_true_mJy = 1000.0
+
+    # 4 exact detections — data lies exactly on the power law
+    freqs_det = np.array([100.0, 300.0, 3000.0, 10000.0])
+    bands_det = freqs_det / 10.0
+    fluxes_det = c_true_mJy * (freqs_det / v_pivot_MHz) ** alpha_true
+    flux_errs_det = 0.1 * fluxes_det
+
+    # Extra point: 5x the true power-law flux, 10% proportional error
+    freq_extra = 30000.0
+    band_extra = freq_extra / 10.0
+    true_flux_extra = c_true_mJy * (freq_extra / v_pivot_MHz) ** alpha_true
+    obs_flux_extra = 5.0 * true_flux_extra
+    obs_err_extra = 0.1 * obs_flux_extra
+
+    freqs_all = np.append(freqs_det, freq_extra)
+    bands_all = np.append(bands_det, band_extra)
+    fluxes_all = np.append(fluxes_det, obs_flux_extra)
+    flux_errs_all = np.append(flux_errs_det, obs_err_extra)
+
+    # Fit 1: baseline — 4 exact detections only
+    _, _, fit_results_base, _, _ = find_best_spectral_fit(
+        "baseline_no_upper_limits",
+        freqs_det, bands_det, fluxes_det, flux_errs_det,
+        [0] * 4, ["Fake data"] * 4,
+        method="maximum-likelihood",
+        likelihood=loss,
+        plot_compare=True,
+    )
+
+    # Fit 2: 5 detections including the outlier
+    _, _, fit_results_detect, _, _ = find_best_spectral_fit(
+        "no_upper_limits",
+        freqs_all, bands_all, fluxes_all, flux_errs_all,
+        [0] * 5, ["Fake data"] * 5,
+        method="maximum-likelihood",
+        likelihood=loss,
+        plot_compare=True,
+    )
+
+    # Fit 3: outlier treated as an upper limit
+    _, _, fit_results_upper, _, _ = find_best_spectral_fit(
+        "upper_limits",
+        freqs_all, bands_all, fluxes_all, flux_errs_all,
+        [0, 0, 0, 0, -1], ["Fake data"] * 4 + ["Fake upper limit"],
+        method="maximum-likelihood",
+        likelihood=loss,
+        plot_compare=True,
+    )
+
+    alpha_base = fit_results_base["simple_power_law"].values["a"]
+    alpha_detect = fit_results_detect["simple_power_law"].values["a"]
+    alpha_upper = fit_results_upper["simple_power_law"].values["a"]
+
+    print(f"alpha_base   = {alpha_base:.4f}")
+    print(f"alpha_detect = {alpha_detect:.4f}  shift={alpha_detect - alpha_base:+.4f}")
+    print(f"alpha_upper  = {alpha_upper:.4f}  shift={alpha_upper - alpha_base:+.4f}")
+
+    # 1. Baseline exactly recovers the true alpha (noiseless data, MLE is exact)
+    npt.assert_allclose(alpha_base, alpha_true, atol=1e-3,
+                        err_msg=f"Baseline should recover alpha_true={alpha_true}, got {alpha_base:.4f}")
+
+    # 2. Outlier treated as detection measurably biases alpha shallower
+    assert alpha_detect > alpha_base + 0.002, (
+        f"Detection outlier should bias alpha shallower: "
+        f"alpha_detect={alpha_detect:.4f}, alpha_base={alpha_base:.4f}"
+    )
+
+    # 3. Outlier treated as upper limit gives the exact baseline result
+    npt.assert_allclose(alpha_upper, alpha_base, atol=1e-3,
+                        err_msg=f"Upper limit fit should match baseline; got alpha_upper={alpha_upper:.4f}")
+
+    # 4. Upper limit is at least 5x closer to ground truth than the biased detection
+    assert abs(alpha_upper - alpha_true) < abs(alpha_detect - alpha_true) / 5, (
+        f"Upper limit (alpha={alpha_upper:.4f}) should be much closer to alpha_true={alpha_true} "
+        f"than detection (alpha={alpha_detect:.4f})"
+    )
+
+
+@pytest.mark.parametrize("loss", ["Gaussian", "Huber", "t"])
+def test_tobit_log_likelihood_properties(loss):
+    """Directly test the Tobit log-likelihood for correct mathematical properties.
+
+    For an upper limit (limit_sign=-1), the residual is (flux_limit - model_flux)/err:
+      - residual >> 0  model far below limit → non-constraining → likelihood ≈ 0
+      - residual = 0   model exactly at limit → likelihood = log(0.5) exactly
+      - residual << 0  model far above limit → penalised → likelihood negative
+
+    The log(0.5) boundary is universal across all three loss types.  The argument
+    is purely one of symmetry: all CDFs used (norm for Gaussian/Huber, t for t-loss)
+    are symmetric distributions, so CDF(0) = 0.5 → logCDF(0) = log(0.5) always.
+
+    Gaussian and Huber limits are identical — both use norm.logcdf.  Only detections
+    differ between them (Huber uses the Huber pseudo-logpdf; Gaussian uses norm.logpdf).
+    The t-loss uses t.logcdf for limits, which has heavier tails: violated limits are
+    penalised less harshly and satisfied limits lose slightly more likelihood than
+    Gaussian/Huber.
+
+    For a lower limit (limit_sign=+1) the monotonicity is reversed.
     """
-    # introspect and run all the functions starting with 'test'
-    for f in dir():
-        if f.startswith("test"):
-            print(f)
-            globals()[f]()
+    residuals = np.array([-3.0, -1.0, 0.0, 1.0, 3.0])
+
+    # --- Upper limits (limit_sign = -1) ---
+    ll_upper = tobit_log_likelihood(residuals, np.full(5, -1), loss=loss)
+    # Likelihood must be strictly monotonically increasing as model drops below the limit
+    assert np.all(np.diff(ll_upper) > 0), (
+        "Upper-limit log-likelihood must increase monotonically as model moves below the limit"
+    )
+    # logCDF(0) = log(0.5) for ALL loss types: all CDFs used are symmetric around 0,
+    # so CDF(0) = 0.5 exactly regardless of whether the distribution is Gaussian or t.
+    npt.assert_allclose(ll_upper[2], np.log(0.5), atol=1e-10)
+    # Model far below limit: likelihood approaches 0 (non-constraining).
+    # The t-distribution has heavier tails so this converges more slowly: use -0.05.
+    assert ll_upper[-1] > -0.05, "Non-constraining upper limit should give likelihood near 0"
+    # Model far above limit: penalised.
+    # t-distribution penalises less harshly than Gaussian (heavier tails): use -3.0.
+    assert ll_upper[0] < -3.0, "Violated upper limit should give negative likelihood"
+
+    # --- Lower limits (limit_sign = +1) — exactly opposite monotonicity ---
+    ll_lower = tobit_log_likelihood(residuals, np.full(5, 1), loss=loss)
+    assert np.all(np.diff(ll_lower) < 0), (
+        "Lower-limit log-likelihood must decrease monotonically as model moves above the limit"
+    )
+    npt.assert_allclose(ll_lower[2], np.log(0.5), atol=1e-10)
+
+    # --- Symmetry: upper and lower limits are mirror images ---
+    # Holds for all loss types because all CDFs used are symmetric around 0.
+    npt.assert_allclose(ll_upper, ll_lower[::-1], atol=1e-10)
+
+    # --- Detections (limit_sign = 0): must match the per-loss detection function ---
+    ll_detect = tobit_log_likelihood(residuals, np.zeros(5, dtype=int), loss=loss)
+    if loss == "Gaussian":
+        expected = norm.logpdf(residuals)
+    elif loss == "Huber":
+        # Huber pseudo-logpdf with delta=df=4 (the default in tobit_log_likelihood)
+        expected = -huber(4, np.abs(residuals))
+    else:  # t
+        expected = t_dist.logpdf(residuals, df=4)
+    npt.assert_allclose(ll_detect, expected, atol=1e-12)

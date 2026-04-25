@@ -116,7 +116,8 @@ def make_comparison_plot(
     # Setup figure
     nrows = len(plot_dicts)
     plot_size = 4
-    fig, axes = plt.subplots(nrows, 1, figsize=(plot_size, plot_size * nrows))
+    fig, axes = plt.subplots(nrows, 1, figsize=(plot_size, plot_size * nrows), squeeze=False)
+    axes = axes[:, 0]
 
     for ax, model_name in zip(axes, plot_dicts.keys()):
         plot_fit(

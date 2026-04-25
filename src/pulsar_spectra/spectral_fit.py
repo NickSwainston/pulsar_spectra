@@ -6,10 +6,10 @@ import logging
 
 import numpy as np
 
-from .cost_functions import gaussian_cost_function, huber_cost_function, t_cost_function
-from .model_selection import select_best_fit_model
-from .models import model_settings
-from .plotting import make_comparison_plot, plot_fit
+from pulsar_spectra.likelihood_functions import gaussian_cost_function, huber_cost_function, t_cost_function
+from pulsar_spectra.model_selection import select_best_fit_model
+from pulsar_spectra.models import model_settings
+from pulsar_spectra.plotting import make_comparison_plot, plot_fit
 
 logger = logging.getLogger(__name__)
 

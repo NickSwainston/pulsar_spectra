@@ -2,18 +2,67 @@
 Functions for performing frequentist inference of spectral fits.
 """
 
+import inspect
 import logging
 
 import numpy as np
 from format_multiple_errors import format_multiple_errors
 from iminuit import Minuit
-from iminuit.cost import LeastSquares, UnbinnedNLL
+from iminuit.cost import UnbinnedNLL
 from jacobi import propagate
 
-from pulsar_spectra.likelihood_functions import loss_function_gaussian, loss_function_huber, loss_function_t
+from pulsar_spectra.likelihood_functions import tobit_log_likelihood
 from pulsar_spectra.models import latex_params, model_settings
 
 logger = logging.getLogger(__name__)
+
+
+def make_tobit_cost(data, spectral_model, loss="Gaussian"):
+    """Create an UnbinnedNLL cost function using the Tobit model.
+
+    The returned cost function handles both detected flux measurements and
+    upper/lower limits via the Tobit model.
+
+    Parameters
+    ----------
+    data : `tuple`
+        (freqs, fluxs_Jy, flux_errs_Jy, limit_signs). For bandwidth
+        integration, freqs should be (min_freqs_Hz, max_freqs_Hz).
+    spectral_model : `callable`
+        Spectral model function with signature f(freqs, *params).
+    loss : `str`, optional
+        Distribution to use ('Gaussian', 'Huber', 't'). |br| Default: 'Gaussian'.
+
+    Returns
+    -------
+    cost : `iminuit.cost.UnbinnedNLL`
+        Cost function ready to pass to Minuit.
+    """
+    param_names = list(inspect.signature(spectral_model).parameters.keys())[1:]
+    freqs, fluxs, flux_errs, limits = data
+
+    if isinstance(freqs, tuple):
+        # Bandwidth case: freqs = (min_freqs, max_freqs).
+        # Flatten into a homogeneous (5, N) tuple so UnbinnedNLL can convert it.
+        min_freqs, max_freqs = freqs
+        nll_data = (min_freqs, max_freqs, fluxs, flux_errs, limits)
+
+        def logpdf(data, *params):
+            min_f, max_f, f, fe, lim = data
+            model_fluxs = spectral_model((min_f, max_f), *params)
+            residuals = (f - model_fluxs) / fe
+            return tobit_log_likelihood(residuals, lim, loss=loss)
+    else:
+        # Point case: freqs is a single 1D array → (4, N) tuple.
+        nll_data = (freqs, fluxs, flux_errs, limits)
+
+        def logpdf(data, *params):
+            f, flux, fe, lim = data
+            model_fluxs = spectral_model(f, *params)
+            residuals = (flux - model_fluxs) / fe
+            return tobit_log_likelihood(residuals, lim, loss=loss)
+
+    return UnbinnedNLL(nll_data, logpdf, log=True, name=param_names)
 
 
 def propagate_flux_n_err(freqs_MHz, model, iminuit_result):
@@ -164,6 +213,7 @@ def iminuit_fit_spectral_model(
     bands_Hz = np.array(bands_MHz, dtype=np.float64) * 1e6
     fluxs_Jy = np.array(fluxs_mJy, dtype=np.float64) / 1e3
     flux_errs_Jy = np.array(flux_errs_mJy, dtype=np.float64) / 1e3
+    limit_signs = np.array(limit_signs, dtype=int)
 
     # Compute the frequency ranges from the centre frequencies and bandwidths
     min_freqs_Hz = freqs_Hz - bands_Hz / 2
@@ -201,27 +251,13 @@ def iminuit_fit_spectral_model(
         temp_params[0] = max(freqs_Hz)
         start_params = tuple(temp_params)
 
-    # Define a loss function
-    least_squares = LeastSquares(freqs_Hz, fluxs_Jy, flux_errs_Jy, model_function.__wrapped__)
-    if likelihood == "Gaussian":
-        least_squares.loss = loss_function_gaussian
-    elif likelihood == "Huber":
-        least_squares.loss = loss_function_huber
-    elif likelihood == "t":
-        least_squares.loss = loss_function_t
-    else:
-        logger.error(f"Invalid likelihood specified: {likelihood}.")
-        return None, None
-    print(least_squares)
-    custom_cost = UnbinnedNLL(
+    # Define cost function and load into Minuit
+    cost = make_tobit_cost(
         (freqs_Hz, fluxs_Jy, flux_errs_Jy, limit_signs),
         model_function,
-        log=True,
+        loss=likelihood,
     )
-
-    # Load into Minuit object
-    m = Minuit(custom_cost, *start_params)
-    print(m)
+    m = Minuit(cost, *start_params)
     m.fixed["v0"] = True  # fix the reference frequency
 
     # Perform the minimisation without bandwidth integration
@@ -235,17 +271,12 @@ def iminuit_fit_spectral_model(
         except ValueError:
             return None, None
 
-        # Define a loss function
-        least_squares = LeastSquares((min_freqs_Hz, max_freqs_Hz), fluxs_Jy, flux_errs_Jy, model_function_integrate)
-        if likelihood == "Gaussian":
-            least_squares.loss = loss_function_gaussian
-        elif likelihood == "Huber":
-            least_squares.loss = loss_function_huber
-        elif likelihood == "t":
-            least_squares.loss = loss_function_t
-        else:
-            logger.error(f"Invalid likelihood specified: {likelihood}.")
-            return None, None
+        # Define cost function and load into Minuit
+        cost_band = make_tobit_cost(
+            ((min_freqs_Hz, max_freqs_Hz), fluxs_Jy, flux_errs_Jy, np.array(limit_signs, dtype=float)),
+            model_function_integrate,
+            loss=likelihood,
+        )
 
         # Set start params as results from first fit
         past_params = ()
@@ -254,7 +285,7 @@ def iminuit_fit_spectral_model(
         logger.debug(f"Bandwidth fit params: {past_params}")
 
         # Load into Minuit object
-        m_band = Minuit(least_squares, *past_params)
+        m_band = Minuit(cost_band, *past_params)
         m_band.fixed["v0"] = True  # fix the reference frequency
 
         # Perform the minimisation with bandwidth integration
@@ -326,16 +357,9 @@ def iminuit_compute_likelihood(
         model_function = model_dict[model_name][0]
         freqs_input_Hz = freqs_Hz
 
-    print(f"{model_function=}")
-    print(f"{iminuit_result.values=}")
-    print(f"{freqs_input_Hz=}")
-    print(model_function((freqs_input_Hz, fluxs_Jy, flux_errs_Jy, limit_signs), *iminuit_result.values))
     # Compute the negative log likelihood
-    beta = cost_function(
-        model_function((freqs_input_Hz, fluxs_Jy, flux_errs_Jy, limit_signs), *iminuit_result.values),
-        fluxs_Jy,
-        flux_errs_Jy,
-    )
+    model_fluxs_Jy = model_function(freqs_input_Hz, *iminuit_result.values)
+    beta = cost_function(model_fluxs_Jy, fluxs_Jy, flux_errs_Jy)
 
     return beta
 
