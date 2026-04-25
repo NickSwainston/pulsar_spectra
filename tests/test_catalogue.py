@@ -45,18 +45,18 @@ def test_ref_duplicates_removed():
         print(pulsar)
         ref_ps = []
         ref_atnf = []
-        for ref in cat_dict[pulsar][4]:
+        for ref in cat_dict[pulsar][5]:
             if "ATNF" in ref:
                 ref_atnf.append(ref[:-5])
             else:
                 ref_ps.append(ref)
 
         for ref in ref_atnf:
-            indexes = [i for i, word in enumerate(cat_dict[pulsar][4]) if word.startswith(ref)]
+            indexes = [i for i, word in enumerate(cat_dict[pulsar][5]) if word.startswith(ref)]
             ref_freqs = [cat_dict[pulsar][0][i] for i in indexes]
             ref_fluxes = [cat_dict[pulsar][2][i] for i in indexes]
             ref_flux_errs = [cat_dict[pulsar][3][i] for i in indexes]
-            ref_refs = [cat_dict[pulsar][4][i] for i in indexes]
+            ref_refs = [cat_dict[pulsar][5][i] for i in indexes]
         debug_string = (
             f"\nref_freqs: {ref_freqs}\nref_fluxes: {ref_fluxes}\nref_flux_errs: {ref_flux_errs}\nref_refs: {ref_refs}"
         )
@@ -186,7 +186,7 @@ def test_epoch_uncertainty_alteration(cat_file, adjust_errors):
             continue
         print(f"    {pulsar}")
         raw_fluxs, raw_flux_errs = cat_dict[pulsar]["Flux Density mJy"], cat_dict[pulsar]["Flux Density error mJy"]
-        _, _, _, cat_flux_errs, _ = altered_cat_dict[pulsar]
+        _, _, _, cat_flux_errs, _, _ = altered_cat_dict[pulsar]
         for raw_flux, raw_flux_err, cat_flux_err in zip(raw_fluxs, raw_flux_errs, cat_flux_errs):
             if epoch_type == "Multi-epoch" or not adjust_errors:
                 expected_err = raw_flux_err

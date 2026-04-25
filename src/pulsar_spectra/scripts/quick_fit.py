@@ -69,7 +69,7 @@ def quick_fit(
     cat_list = collect_catalogue_fluxes()
     for pulsar in pulsars:
         logger.info(f"Fitting {pulsar}")
-        freq_all, band_all, flux_all, flux_err_all, ref_all = cat_list[pulsar]
+        freq_all, band_all, flux_all, flux_err_all, limit_signs, ref_all = cat_list[pulsar]
 
         if len(freq_all) < 1:
             logger.error(f"No spectral data available for PSR {pulsar}")
@@ -104,6 +104,7 @@ def quick_fit(
             band_all,
             flux_all,
             flux_err_all,
+            limit_signs,
             ref_all,
             method=method,
             likelihood=likelihood,

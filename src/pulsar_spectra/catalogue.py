@@ -469,6 +469,8 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
                 The flux density in mJy.
             Flux Density error mJy : `list`
                 The error of the flux density in mJy.
+            Limit signs : `list`
+                Per-point limit flags: +1 lower limit, -1 upper limit, 0 detection.
             ref : `list`
                 The reference label (in the format 'Author_year').
     """
@@ -478,8 +480,8 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
     jnames = list(query["PSRJ"])
     jname_cat_list = {}
     for jname in jnames:
-        # freq, band,flux, flux_err, references
-        jname_cat_list[jname] = [[], [], [], [], []]
+        # freq, band, flux, flux_err, limit_signs, references
+        jname_cat_list[jname] = [[], [], [], [], [], []]
 
     # Work out which yamls/catalogues to use
     if only_use is None:
@@ -526,12 +528,16 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
                     flux_errs = np.maximum(flux_errs, 0.3 * fluxes)
                 # Do nothing for "Multiple-epoch" as the errors should be accurate
 
+                n_points = len(cat_dict[jname]["Frequency MHz"])
+                limit_signs = cat_dict[jname].get("Limit index", [0] * n_points)
+
                 # Update list
                 jname_cat_list[jname][0] += cat_dict[jname]["Frequency MHz"]
                 jname_cat_list[jname][1] += cat_dict[jname]["Bandwidth MHz"]
                 jname_cat_list[jname][2] += cat_dict[jname]["Flux Density mJy"]
                 jname_cat_list[jname][3] += list(flux_errs)
-                jname_cat_list[jname][4] += [cat_label] * len(cat_dict[jname]["Frequency MHz"])
+                jname_cat_list[jname][4] += limit_signs
+                jname_cat_list[jname][5] += [cat_label] * n_points
 
     if not use_atnf:
         # return before including atnf
@@ -645,7 +651,7 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
                 if (
                     flux in jname_cat_list[jname][2]
                     and flux_err in jname_cat_list[jname][3]
-                    and raw_ref in jname_cat_list[jname][4]
+                    and raw_ref in jname_cat_list[jname][5]
                 ):
                     logger.debug(
                         f"Redundant ATNF data removed:  pulsar:{jname}  ref:{raw_ref}  freq:{freq}  flux:{flux}  flux_err:{flux_err}"
@@ -656,7 +662,8 @@ def collect_catalogue_fluxes(only_use=None, exclude=None, query=None, use_atnf=T
                     jname_cat_list[jname][1] += [band]
                     jname_cat_list[jname][2] += [flux]
                     jname_cat_list[jname][3] += [flux_err]
-                    jname_cat_list[jname][4] += [ref]
+                    jname_cat_list[jname][4] += [0]
+                    jname_cat_list[jname][5] += [ref]
 
     return jname_cat_list
 
@@ -681,17 +688,18 @@ def convert_cat_list_to_dict(jname_cat_list):
     """
     jname_cat_dict = {}
     for jname in jname_cat_list.keys():
-        freqs, bands, fluxs, flux_errs, refs = jname_cat_list[jname]
+        freqs, bands, fluxs, flux_errs, limit_signs, refs = jname_cat_list[jname]
         jname_cat_dict[jname] = {}
 
         # Loop over and put references into the same dict
-        for freq, band, flux, flux_err, ref in zip(freqs, bands, fluxs, flux_errs, refs):
+        for freq, band, flux, flux_err, limit_sign, ref in zip(freqs, bands, fluxs, flux_errs, limit_signs, refs):
             if ref in jname_cat_dict[jname].keys():
                 # Update
                 jname_cat_dict[jname][ref]["Frequency MHz"] += [freq]
                 jname_cat_dict[jname][ref]["Bandwidth MHz"] += [band]
                 jname_cat_dict[jname][ref]["Flux Density mJy"] += [flux]
                 jname_cat_dict[jname][ref]["Flux Density error mJy"] += [flux_err]
+                jname_cat_dict[jname][ref]["Limit index"] += [limit_sign]
             else:
                 # Make new
                 jname_cat_dict[jname][ref] = {}
@@ -699,4 +707,5 @@ def convert_cat_list_to_dict(jname_cat_list):
                 jname_cat_dict[jname][ref]["Bandwidth MHz"] = [band]
                 jname_cat_dict[jname][ref]["Flux Density mJy"] = [flux]
                 jname_cat_dict[jname][ref]["Flux Density error mJy"] = [flux_err]
+                jname_cat_dict[jname][ref]["Limit index"] = [limit_sign]
     return jname_cat_dict

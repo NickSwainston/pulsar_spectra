@@ -234,9 +234,9 @@ def plot_fit(
     ax.set_prop_cycle(custom_cycler)
 
     # Add data
-    data_dict = convert_cat_list_to_dict({"dummy_pulsar": [freqs_MHz, bands_MHz, fluxs_mJy, flux_errs_mJy, ref_all]})[
-        "dummy_pulsar"
-    ]
+    data_dict = convert_cat_list_to_dict(
+        {"dummy_pulsar": [freqs_MHz, bands_MHz, fluxs_mJy, flux_errs_mJy, limit_signs, ref_all]}
+    )["dummy_pulsar"]
     for ref in data_dict.keys():
         if ref in ref_markers.keys():
             # Ref in user defined markers so use theirs
@@ -278,7 +278,7 @@ def plot_fit(
         for cap in caps:
             cap.set_markeredgewidth(config["Errorbar linewidth"])
 
-    fit_info = plot_dict["fit_info"] + append_legend
+    fit_info = plot_dict["fit_info"] + (append_legend or "")
     fitted_freqs = plot_dict["fitted_freqs"]
     fitted_flux = plot_dict["fitted_flux"]
     error_type = plot_dict["error_type"]
