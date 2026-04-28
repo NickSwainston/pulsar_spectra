@@ -6,7 +6,6 @@ import logging
 
 import numpy as np
 
-from pulsar_spectra.likelihood_functions import gaussian_cost_function, huber_cost_function, t_cost_function
 from pulsar_spectra.model_selection import select_best_fit_model
 from pulsar_spectra.models import model_settings
 from pulsar_spectra.plotting import make_comparison_plot, plot_fit
@@ -165,7 +164,7 @@ def find_best_spectral_fit(
             + "pulsar_spectra.spectral_fit.find_best_spectral_fit() for details."
         )
     elif method == "bayesian-nested-sampling":
-        from .fitters.bayesian import (
+        from pulsar_spectra.fitters.bayesian import (
             bilby_compute_maximum_posterior_likelihood,
             bilby_fit_spectral_model,
             bilby_interpolate_model,
@@ -174,14 +173,7 @@ def find_best_spectral_fit(
         logger.error(f"Invalid fitting method: {method}.")
         return None, None, None, None, None
 
-    # Cost function (i.e. negative log-likelihood)
-    if likelihood == "Gaussian":
-        cost_function = gaussian_cost_function
-    elif likelihood == "Huber":
-        cost_function = huber_cost_function
-    elif likelihood == "t":
-        cost_function = t_cost_function
-    else:
+    if likelihood not in ("Gaussian", "Huber", "t"):
         logger.error(f"Invalid likelihood: {likelihood}.")
         return None, None, None, None, None
 
@@ -236,7 +228,7 @@ def find_best_spectral_fit(
                 fit_result,
                 model_name,
                 band_bool,
-                cost_function,
+                likelihood=likelihood,
             )
             plot_dict = iminuit_interpolate_model(
                 fit_result,
@@ -269,7 +261,7 @@ def find_best_spectral_fit(
                 fit_result,
                 model_name,
                 band_bool,
-                cost_function,
+                likelihood=likelihood,
             )
             plot_dict = bilby_interpolate_model(
                 fit_result,

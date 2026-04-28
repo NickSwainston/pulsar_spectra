@@ -257,9 +257,16 @@ def test_plot_methods():
         plot_kwargs={"plot_bands": False},
     )
 
-
-@pytest.mark.parametrize("loss", ["Gaussian", "Huber", "t"])
-def test_iminuit_upper_limits(loss):
+@pytest.mark.parametrize(
+    "fit_method, loss",
+    [
+        pytest.param("bayesian-nested-sampling", "Huber", marks=pytest.mark.long),
+        ("maximum-likelihood", "Gaussian"),
+        ("maximum-likelihood", "Huber"),
+        ("maximum-likelihood", "t")
+    ]
+)
+def test_iminuit_upper_limits(fit_method, loss):
     """Upper limits above the true flux must not bias the spectral fit;
     treating the same point as a detection must bias it.
 
@@ -298,7 +305,7 @@ def test_iminuit_upper_limits(loss):
         "baseline_no_upper_limits",
         freqs_det, bands_det, fluxes_det, flux_errs_det,
         [0] * 4, ["Fake data"] * 4,
-        method="maximum-likelihood",
+        method=fit_method,
         likelihood=loss,
         plot_compare=True,
     )
@@ -308,7 +315,7 @@ def test_iminuit_upper_limits(loss):
         "no_upper_limits",
         freqs_all, bands_all, fluxes_all, flux_errs_all,
         [0] * 5, ["Fake data"] * 5,
-        method="maximum-likelihood",
+        method=fit_method,
         likelihood=loss,
         plot_compare=True,
     )
@@ -318,7 +325,7 @@ def test_iminuit_upper_limits(loss):
         "upper_limits",
         freqs_all, bands_all, fluxes_all, flux_errs_all,
         [0, 0, 0, 0, -1], ["Fake data"] * 4 + ["Fake upper limit"],
-        method="maximum-likelihood",
+        method=fit_method,
         likelihood=loss,
         plot_compare=True,
     )

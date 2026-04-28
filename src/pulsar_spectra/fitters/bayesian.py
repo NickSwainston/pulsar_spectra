@@ -10,8 +10,8 @@ import numpy as np
 import pandas as pd
 from format_multiple_errors import format_multiple_errors
 
-from ..cost_functions import gaussian_cost_function, huber_cost_function, t_cost_function
-from ..models import latex_params, model_settings
+from pulsar_spectra.likelihood_functions import tobit_log_likelihood
+from pulsar_spectra.models import latex_params, model_settings
 
 try:
     import bilby
@@ -29,11 +29,12 @@ except ModuleNotFoundError as e:
 logger = logging.getLogger(__name__)
 
 
-class GaussianLikelihood(bilby.Likelihood):
-    def __init__(self, min_max_freqs, fluxs, flux_errs, model_function):
+class TobitLikelihood(bilby.Likelihood):
+    def __init__(self, min_max_freqs, fluxs, flux_errs, limit_signs, model_function, loss="Huber"):
         """
-        A Gaussian likelihood. The parameters are inferred from the arguments
-        of the function.
+        A Tobit likelihood supporting detections and upper/lower limits.
+        For detections the standard PDF is used; for limits the CDF is used.
+        The parameters are inferred from the arguments of the model function.
 
         Parameters
         ----------
@@ -44,16 +45,22 @@ class GaussianLikelihood(bilby.Likelihood):
             The flux density for each measurement.
         flux_errs : `array_like`
             The uncertainty in the flux density for each measurement.
-        function : `Callable`
+        limit_signs : `array_like`
+            Per-point limit flags: +1 lower limit, -1 upper limit, 0 detection.
+        model_function : `Callable`
             The model function to fit to the data. The first argument is the
             dependent variable (min/max frequencies), the next arguments
             are the fit parameters and will require a prior, and the last
             argument is the reference frequency.
+        loss : `str`, optional
+            Distribution to use ('Gaussian', 'Huber', 't'). |br| Default: 'Huber'.
         """
         self.min_max_freqs = min_max_freqs
         self.fluxs = fluxs
         self.flux_errs = flux_errs
+        self.limit_signs = np.asarray(limit_signs, dtype=int)
         self.model_function = model_function
+        self.loss = loss
 
         # Infer the parameters from the provided function
         parameters = inspect.getfullargspec(model_function).args
@@ -65,89 +72,8 @@ class GaussianLikelihood(bilby.Likelihood):
     def log_likelihood(self):
         model_parameters = {k: self.parameters[k] for k in self.function_keys}
         model_fluxs = self.model_function(self.min_max_freqs, **model_parameters)
-        return -1.0 * gaussian_cost_function(model_fluxs, self.fluxs, self.flux_errs)
-
-
-class HuberLikelihood(bilby.Likelihood):
-    def __init__(self, min_max_freqs, fluxs, flux_errs, model_function):
-        """
-        A modified Gaussian likelihood which transitions to linear loss at a set
-        deviation from the model. The parameters are inferred from the arguments
-        of the function.
-
-        Parameters
-        ----------
-        min_max_freqs : `tuple[array_like, array_like]` (min_freqs, max_freqs)
-            Where min_freqs and max_freqs are arrays containing the minimum and
-            maximum frequencies for each measurement.
-        fluxs : `array_like`
-            The flux density for each measurement.
-        flux_errs : `array_like`
-            The uncertainty in the flux density for each measurement.
-        function : `Callable`
-            The model function to fit to the data. The first argument is the
-            dependent variable (min/max frequencies), the next arguments
-            are the fit parameters and will require a prior, and the last
-            argument is the reference frequency.
-        """
-        self.min_max_freqs = min_max_freqs
-        self.fluxs = fluxs
-        self.flux_errs = flux_errs
-        self.model_function = model_function
-
-        # Infer the parameters from the provided function
-        parameters = inspect.getfullargspec(model_function).args
-        del parameters[0]
-        super().__init__(parameters=dict.fromkeys(parameters))
-        self.parameters = dict.fromkeys(parameters)
-        self.function_keys = self.parameters.keys()
-
-    def log_likelihood(self):
-        model_parameters = {k: self.parameters[k] for k in self.function_keys}
-        model_fluxs = self.model_function(self.min_max_freqs, **model_parameters)
-        return -1.0 * huber_cost_function(model_fluxs, self.fluxs, self.flux_errs)
-
-
-class TLikelihood(bilby.Likelihood):
-    def __init__(self, min_max_freqs, fluxs, flux_errs, model_function):
-        """
-        A t-distribution likelihood. The parameters are inferred from the
-        arguments of the function.
-
-        Parameters
-        ----------
-        min_max_freqs : `tuple[array_like, array_like]` (min_freqs, max_freqs)
-            Where min_freqs and max_freqs are arrays containing the minimum and
-            maximum frequencies for each measurement.
-        fluxs : `array_like`
-            The flux density for each measurement.
-        flux_errs : `array_like`
-            The uncertainty in the flux density for each measurement.
-        function : `Callable`
-            The model function to fit to the data. The first argument is the
-            dependent variable (min/max frequencies), the next arguments
-            are the fit parameters and will require a prior, and the last
-            argument is the reference frequency.
-        """
-        self.min_max_freqs = min_max_freqs
-        self.fluxs = fluxs
-        self.flux_errs = flux_errs
-        self.model_function = model_function
-
-        # Infer the parameters from the provided function
-        parameters = inspect.getfullargspec(model_function).args
-        del parameters[0]
-        super().__init__(parameters=dict.fromkeys(parameters))
-        self.parameters = dict.fromkeys(parameters)
-        self.function_keys = self.parameters.keys()
-
-        # Degrees of freedom
-        self.df = 4
-
-    def log_likelihood(self):
-        model_parameters = {k: self.parameters[k] for k in self.function_keys}
-        model_fluxs = self.model_function(self.min_max_freqs, **model_parameters)
-        return -1.0 * t_cost_function(model_fluxs, self.fluxs, self.flux_errs, self.df)
+        residuals = (self.fluxs - model_fluxs) / self.flux_errs
+        return np.sum(tobit_log_likelihood(residuals, self.limit_signs, loss=self.loss))
 
 
 def bilby_fit_spectral_model(
@@ -241,23 +167,19 @@ def bilby_fit_spectral_model(
         logger.warning(f"Only {len(freqs_MHz)} supplied for {model_name} model fit. This is not enough so skipping")
         return None
 
-    # Choose the likelihood class
-    if likelihood == "Gaussian":
-        Likelihood = GaussianLikelihood
-    elif likelihood == "Huber":
-        Likelihood = HuberLikelihood
-    elif likelihood == "t":
-        Likelihood = TLikelihood
-    else:
+    if likelihood not in ("Gaussian", "Huber", "t"):
         logger.error(f"Invalid likelihood specified: {likelihood}.")
         return None
 
-    # Define the likelihood
-    L = Likelihood(
+    limit_signs = np.asarray(limit_signs, dtype=int)
+
+    L = TobitLikelihood(
         (min_freqs_Hz, max_freqs_Hz),
         fluxs_Jy,
         flux_errs_Jy,
+        limit_signs,
         model_function_integrate,
+        loss=likelihood,
     )
 
     # This option is only applicable to the Dynesty sampler
@@ -298,10 +220,10 @@ def bilby_compute_maximum_posterior_likelihood(
     bilby_result,
     model_name,
     band_bool,
-    cost_function,
+    likelihood="Huber",
 ):
-    """Compute the cost of each posterior sample and find the sample with the
-    minimum cost (i.e. maximum log-likelihood).
+    """Compute the negative log-likelihood of each posterior sample and find
+    the sample with the minimum (i.e. maximum log-likelihood).
 
     Parameters
     ----------
@@ -313,6 +235,8 @@ def bilby_compute_maximum_posterior_likelihood(
         An array of the flux densities in mJy.
     flux_errs_mJy : `array_like`
         An array of the uncertainty in the flux densities in mJy.
+    limit_signs : `array_like`
+        Per-point limit flags: +1 lower limit, -1 upper limit, 0 detection.
     bilby_result : `dict[str, bilby.Result]`
         A dictionary of `bilby.Result` objects organised by model name.
     model_name : `str`
@@ -320,8 +244,8 @@ def bilby_compute_maximum_posterior_likelihood(
         :py:meth:`pulsar_spectra.models.model_settings`.
     band_bool : `bool`
         Whether or not the bandwidth fitting method was used.
-    cost_function : `Callable`
-        A cost function from :py:meth:`pulsar_spectra.cost_functions`.
+    likelihood : `str`, optional
+        Distribution to use ('Gaussian', 'Huber', 't'). |br| Default: 'Huber'.
 
     Returns
     -------
@@ -337,6 +261,7 @@ def bilby_compute_maximum_posterior_likelihood(
     bands_Hz = np.array(bands_MHz, dtype=np.float64) * 1e6
     fluxs_Jy = np.array(fluxs_mJy, dtype=np.float64) / 1e3
     flux_errs_Jy = np.array(flux_errs_mJy, dtype=np.float64) / 1e3
+    limit_signs = np.asarray(limit_signs, dtype=int)
 
     if band_bool:
         model_function = model_dict[model_name][4]
@@ -351,15 +276,13 @@ def bilby_compute_maximum_posterior_likelihood(
     # Get all samples from the posterior
     samples = bilby_result.posterior[param_keys]
 
-    # Compute the minimised negative log likelihood for each sample
+    # Compute the negative log-likelihood for each sample (Tobit-aware)
     beta_samples = np.empty(samples.shape[0], dtype=np.float64)
     for isamp in range(samples.shape[0]):
         sample_params = dict(samples.iloc[isamp])
-        beta_samples[isamp] = cost_function(
-            model_function(freqs_input_Hz, **sample_params),
-            fluxs_Jy,
-            flux_errs_Jy,
-        )
+        model_fluxs = model_function(freqs_input_Hz, **sample_params)
+        residuals = (fluxs_Jy - model_fluxs) / flux_errs_Jy
+        beta_samples[isamp] = -np.sum(tobit_log_likelihood(residuals, limit_signs, loss=likelihood))
     beta_min = np.min(beta_samples)
 
     # Get the parameter values for the minimised beta

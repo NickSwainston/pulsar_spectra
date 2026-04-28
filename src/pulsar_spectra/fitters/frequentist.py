@@ -316,9 +316,9 @@ def iminuit_compute_likelihood(
     iminuit_result,
     model_name,
     band_bool,
-    cost_function,
+    likelihood="Huber",
 ):
-    """Compute the cost of the best-fit model.
+    """Compute the negative log-likelihood of the best-fit model.
 
     Parameters
     ----------
@@ -330,17 +330,19 @@ def iminuit_compute_likelihood(
         An array of the flux densities in mJy.
     flux_errs_mJy : `array_like`
         An array of the uncertainty in the flux densities in mJy.
+    limit_signs : `array_like`
+        Per-point limit flags: +1 lower limit, -1 upper limit, 0 detection.
     iminuit_result : `iminuit.Minuit`
         A minimised Minuit object.
     band_bool : `bool`
         Whether or not the bandwidth fitting method was used.
-    cost_function : `Callable`
-        A cost function from :py:meth:`pulsar_spectra.cost_functions`.
+    likelihood : `str`, optional
+        Distribution to use ('Gaussian', 'Huber', 't'). |br| Default: 'Huber'.
 
     Returns
     -------
     beta : `float`
-        The beta of the best-fit model.
+        The negative log-likelihood of the best-fit model.
     """
     model_dict = model_settings()
 
@@ -349,6 +351,7 @@ def iminuit_compute_likelihood(
     bands_Hz = np.array(bands_MHz, dtype=np.float64) * 1e6
     fluxs_Jy = np.array(fluxs_mJy, dtype=np.float64) / 1e3
     flux_errs_Jy = np.array(flux_errs_mJy, dtype=np.float64) / 1e3
+    limit_signs = np.array(limit_signs, dtype=int)
 
     if band_bool:
         model_function = model_dict[model_name][4]
@@ -357,9 +360,10 @@ def iminuit_compute_likelihood(
         model_function = model_dict[model_name][0]
         freqs_input_Hz = freqs_Hz
 
-    # Compute the negative log likelihood
+    # Compute the negative log-likelihood (Tobit-aware)
     model_fluxs_Jy = model_function(freqs_input_Hz, *iminuit_result.values)
-    beta = cost_function(model_fluxs_Jy, fluxs_Jy, flux_errs_Jy)
+    residuals = (fluxs_Jy - model_fluxs_Jy) / flux_errs_Jy
+    beta = -np.sum(tobit_log_likelihood(residuals, limit_signs, loss=likelihood))
 
     return beta
 
