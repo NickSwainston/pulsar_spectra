@@ -101,7 +101,7 @@ def find_best_spectral_fit(
             'compact' : Print the abbreviated model name. The legend will be
             placed within the bbox.
 
-        |br| Default: 'raw'
+        |br| Default: 'raw'.
     legend_point_estimate : `str`, optional
         The point estimate of the posterior distribution reported in the legend.
         The options are:

@@ -2,12 +2,59 @@
 
 import argparse
 import logging
-import sys
 
 from pulsar_spectra.catalogue import collect_catalogue_fluxes
 from pulsar_spectra.spectral_fit import find_best_spectral_fit
 
 logger = logging.getLogger(__name__)
+
+LOG_LEVELS = dict(
+    DEBUG=logging.DEBUG, INFO=logging.INFO, WARNING=logging.WARNING, ERROR=logging.ERROR, CRITICAL=logging.CRITICAL
+)
+
+
+def setup_logger(name: str | None = None, log_level: str | int = "INFO") -> None:
+    """Clear all previous handlers and add a new custom stream handler.
+
+    Parameters
+    ----------
+    name : `str`, optional
+        The name of the logger. Note that `None` returns the root logger.
+        |br| Default: `None`.
+    log_level : `str` or `int`, optional
+        The name of the logging level or the effective logging level.
+        |br| Default: 'INFO'.
+    """
+    # If a string was provided, map it to the effective level
+    if isinstance(log_level, str):
+        log_level = LOG_LEVELS[log_level.upper()]
+
+    # Get the logger
+    logger = logging.getLogger(name)
+
+    # Remove any previous handlers
+    logger.handlers.clear()
+
+    # Set the verbosity level of the logger
+    logger.setLevel(log_level)
+
+    # Get channel handler
+    ch = logging.StreamHandler()
+
+    # Set the verbosity level of ch
+    ch.setLevel(log_level)
+
+    # Set the formatter of ch
+    formatter = logging.Formatter(
+        fmt="[%(asctime)s %(name)s %(lineno)-4d %(levelname)-8s] %(message)s", datefmt="%Y-%m-%d %H:%M:%S"
+    )
+    ch.setFormatter(formatter)
+
+    # Add ch to logger
+    logger.addHandler(ch)
+
+    # Do not propagate to other packages
+    logger.propagate = False
 
 
 def quick_fit(
@@ -79,9 +126,6 @@ def quick_fit(
 
 
 def main():
-    # Dictionary for choosing log-levels
-    loglevels = dict(DEBUG=logging.DEBUG, INFO=logging.INFO, WARNING=logging.WARNING)
-
     parser = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
         description="Perform a spectral fit on the input pulsars.",
@@ -98,7 +142,7 @@ def main():
         "-L",
         "--loglvl",
         type=str,
-        choices=loglevels,
+        choices=LOG_LEVELS,
         default="INFO",
         help="Logger verbosity level.",
     )
@@ -175,19 +219,12 @@ def main():
     )
     args = parser.parse_args()
 
-    formatter = logging.Formatter("[%(asctime)s  %(name)s  %(lineno)-4d  %(levelname)-9s] %(message)s")
-    ch = logging.StreamHandler()
-    ch.setFormatter(formatter)
-    # Set up local logger
-    logger.setLevel(loglevels[args.loglvl])
-    logger.addHandler(ch)
-    logger.propagate = False
-    # Loop over imported vcstools modules and set up their loggers
-    for imported_module in sys.modules.keys():
-        if imported_module.startswith("pulsar_spectra"):
-            logging.getLogger(imported_module).setLevel(loglevels[args.loglvl])
-            logging.getLogger(imported_module).addHandler(ch)
-            logging.getLogger(imported_module).propagate = False
+    setup_logger("pulsar_spectra", log_level=args.loglvl)
+    if args.method == "bayesian-nested-sampling":
+        # bilby needs to be imported to initialise the logger
+        from pulsar_spectra.fitters import bayesian  # noqa: F401
+
+        setup_logger("bilby", log_level=args.loglvl)
 
     quick_fit(
         args.pulsars,
