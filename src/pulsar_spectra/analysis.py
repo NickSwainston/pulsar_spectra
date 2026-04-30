@@ -7,9 +7,9 @@ from math import pi
 import numpy as np
 from psrqpy import QueryATNF
 
-from .catalogue import ATNF_VER
-from .fitters.frequentist import propagate_flux_n_err
-from .models import model_settings
+from pulsar_spectra.catalogue import ATNF_VER
+from pulsar_spectra.fitters.frequentist import propagate_flux_n_err
+from pulsar_spectra.models import model_settings
 
 
 def calc_log_parabolic_spectrum_max_freq(a, b, v0, u_a, u_b, u_ab):

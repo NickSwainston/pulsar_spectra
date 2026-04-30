@@ -151,7 +151,7 @@ def find_best_spectral_fit(
 
     # Conditional imports
     if method == "maximum-likelihood":
-        from .fitters.frequentist import (
+        from pulsar_spectra.fitters.frequentist import (
             iminuit_compute_likelihood,
             iminuit_fit_spectral_model,
             iminuit_interpolate_model,

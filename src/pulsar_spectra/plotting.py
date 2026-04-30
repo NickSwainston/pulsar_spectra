@@ -10,8 +10,8 @@ import yaml
 from cycler import cycler
 from matplotlib.ticker import FormatStrFormatter
 
-from .catalogue import convert_cat_list_to_dict
-from .load_data import DEFAULT_PLOTTING_CONFIG
+from pulsar_spectra.catalogue import convert_cat_list_to_dict
+from pulsar_spectra.load_data import DEFAULT_PLOTTING_CONFIG
 
 logger = logging.getLogger(__name__)
 

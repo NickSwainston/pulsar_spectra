@@ -4,7 +4,7 @@ Functions for selecting the best-fit model.
 
 import numpy as np
 
-from .models import model_settings
+from pulsar_spectra.models import model_settings
 
 
 def compute_aicc(beta: float, k: int, n: int) -> float:
