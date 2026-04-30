@@ -39,7 +39,7 @@ build-plotting-config = "pulsar_spectra.scripts.build_plotting_config:main"
 
 [project.optional-dependencies]
 bayesian = [
-    "bilby>=2.3.0",
+    "bilby>=2.3,<2.7",
 ]
 
 [pytest]

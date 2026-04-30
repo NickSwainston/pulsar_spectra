@@ -262,7 +262,8 @@ name = "bilby"
 version = "2.6.0"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.11'",
+    "python_full_version >= '3.12'",
+    "python_full_version == '3.11.*'",
     "python_full_version == '3.10.*'",
 ]
 dependencies = [
@@ -306,6 +307,10 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/b2/6b/04b2603b7dcb568b58b405a22a4968f34d3160ba1c88999ce6d7a978d4d4/bilby.cython-0.5.3-cp39-cp39-macosx_12_0_x86_64.whl", hash = "sha256:fe54b36fdbad53ce9bb0214c96f2f146ec5d963f2eb00aadb1e2df21215772c8", size = 352560, upload-time = "2024-08-23T15:22:11.804Z" },
     { url = "https://files.pythonhosted.org/packages/4f/23/663c80a2b36627ac502838a24d0391bd0fd89ec45d1c8e13a6ae977762d9/bilby.cython-0.5.3-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:54f48f2fc55c01a278c2ffcfcc0c9169792976d87425dbc891580751e5f00932", size = 942157, upload-time = "2024-08-23T15:22:13.343Z" },
     { url = "https://files.pythonhosted.org/packages/d8/79/ed3a5880bb840a37b2ba0212a637c3d1b5e93e1d85d9a3abb9824440e681/bilby.cython-0.5.3-cp39-cp39-win_amd64.whl", hash = "sha256:387b8ec60009fa37999383c516e08bd39899c4f64f63415201b2b3918f38086c", size = 360243, upload-time = "2024-08-23T15:54:22.102Z" },
+    { url = "https://files.pythonhosted.org/packages/73/b9/e8a78c082d8708ea4cc9c65b53dfed9d1d6bc9b3a44d712811b9e55022ee/bilby_cython-0.5.3-cp311-cp311-win_amd64.whl", hash = "sha256:d39ad43c8962a32b7c561ee07f0f9fb9e656a7847b30176695007b31426d2474", size = 363731, upload-time = "2026-02-23T16:52:49.722Z" },
+    { url = "https://files.pythonhosted.org/packages/7b/a2/6a8e2a8a0721b758745e2a35f91c5ff380cf0f795408bc74b9aa8c589f0a/bilby_cython-0.5.3-cp312-cp312-win_amd64.whl", hash = "sha256:9aabbcce359c63c78cf1c1bf4d714c438a2936ddd4e061fe90b3320415dd12f6", size = 361366, upload-time = "2026-02-23T16:52:50.964Z" },
+    { url = "https://files.pythonhosted.org/packages/d0/6d/4941b4a82e118eb2b1c10ae0794e96b3424d33b688e65e20d914216d62a9/bilby_cython-0.5.3-cp313-cp313-win_amd64.whl", hash = "sha256:e5353bd484052af682b4ed70439266f56ca59d8feb5f2a613f68e3675bce8c04", size = 360744, upload-time = "2026-02-23T16:52:52.185Z" },
+    { url = "https://files.pythonhosted.org/packages/7a/03/9b5f922630a44a597ed476fdd021093c465ac261de2328f4bcfa2b65703d/bilby_cython-0.5.3-cp314-cp314-win_amd64.whl", hash = "sha256:5fbb68841c6599d7de2d738dff80de37d6a93ea66452277b1589b83e3ebd13e8", size = 364767, upload-time = "2026-02-23T16:52:53.49Z" },
 ]
 
 [[package]]
@@ -1806,7 +1811,7 @@ docs = [
 
 [package.metadata]
 requires-dist = [
-    { name = "bilby", marker = "extra == 'bayesian'", specifier = ">=2.3.0" },
+    { name = "bilby", marker = "extra == 'bayesian'", specifier = ">=2.3,<2.7" },
     { name = "format-multiple-errors", specifier = ">=0.0.3" },
     { name = "iminuit", specifier = ">=2.9" },
     { name = "jacobi", specifier = ">=0.2" },
