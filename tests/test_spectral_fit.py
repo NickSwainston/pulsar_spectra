@@ -257,14 +257,15 @@ def test_plot_methods():
         plot_kwargs={"plot_bands": False},
     )
 
+
 @pytest.mark.parametrize(
     "fit_method, loss",
     [
         pytest.param("bayesian-nested-sampling", "Huber", marks=pytest.mark.long),
         ("maximum-likelihood", "Gaussian"),
         ("maximum-likelihood", "Huber"),
-        ("maximum-likelihood", "t")
-    ]
+        ("maximum-likelihood", "t"),
+    ],
 )
 def test_iminuit_upper_limits(fit_method, loss):
     """Upper limits above the true flux must not bias the spectral fit;
@@ -303,8 +304,12 @@ def test_iminuit_upper_limits(fit_method, loss):
     # Fit 1: baseline — 4 exact detections only
     _, _, fit_results_base, _, _ = find_best_spectral_fit(
         "baseline_no_upper_limits",
-        freqs_det, bands_det, fluxes_det, flux_errs_det,
-        [0] * 4, ["Fake data"] * 4,
+        freqs_det,
+        bands_det,
+        fluxes_det,
+        flux_errs_det,
+        [0] * 4,
+        ["Fake data"] * 4,
         method=fit_method,
         likelihood=loss,
         plot_compare=True,
@@ -313,8 +318,12 @@ def test_iminuit_upper_limits(fit_method, loss):
     # Fit 2: 5 detections including the outlier
     _, _, fit_results_detect, _, _ = find_best_spectral_fit(
         "no_upper_limits",
-        freqs_all, bands_all, fluxes_all, flux_errs_all,
-        [0] * 5, ["Fake data"] * 5,
+        freqs_all,
+        bands_all,
+        fluxes_all,
+        flux_errs_all,
+        [0] * 5,
+        ["Fake data"] * 5,
         method=fit_method,
         likelihood=loss,
         plot_compare=True,
@@ -323,8 +332,12 @@ def test_iminuit_upper_limits(fit_method, loss):
     # Fit 3: outlier treated as an upper limit
     _, _, fit_results_upper, _, _ = find_best_spectral_fit(
         "upper_limits",
-        freqs_all, bands_all, fluxes_all, flux_errs_all,
-        [0, 0, 0, 0, -1], ["Fake data"] * 4 + ["Fake upper limit"],
+        freqs_all,
+        bands_all,
+        fluxes_all,
+        flux_errs_all,
+        [0, 0, 0, 0, -1],
+        ["Fake data"] * 4 + ["Fake upper limit"],
         method=fit_method,
         likelihood=loss,
         plot_compare=True,
@@ -339,18 +352,25 @@ def test_iminuit_upper_limits(fit_method, loss):
     print(f"alpha_upper  = {alpha_upper:.4f}  shift={alpha_upper - alpha_base:+.4f}")
 
     # 1. Baseline exactly recovers the true alpha (noiseless data, MLE is exact)
-    npt.assert_allclose(alpha_base, alpha_true, atol=1e-3,
-                        err_msg=f"Baseline should recover alpha_true={alpha_true}, got {alpha_base:.4f}")
+    npt.assert_allclose(
+        alpha_base,
+        alpha_true,
+        atol=1e-3,
+        err_msg=f"Baseline should recover alpha_true={alpha_true}, got {alpha_base:.4f}",
+    )
 
     # 2. Outlier treated as detection measurably biases alpha shallower
     assert alpha_detect > alpha_base + 0.002, (
-        f"Detection outlier should bias alpha shallower: "
-        f"alpha_detect={alpha_detect:.4f}, alpha_base={alpha_base:.4f}"
+        f"Detection outlier should bias alpha shallower: alpha_detect={alpha_detect:.4f}, alpha_base={alpha_base:.4f}"
     )
 
     # 3. Outlier treated as upper limit gives the exact baseline result
-    npt.assert_allclose(alpha_upper, alpha_base, atol=1e-3,
-                        err_msg=f"Upper limit fit should match baseline; got alpha_upper={alpha_upper:.4f}")
+    npt.assert_allclose(
+        alpha_upper,
+        alpha_base,
+        atol=1e-3,
+        err_msg=f"Upper limit fit should match baseline; got alpha_upper={alpha_upper:.4f}",
+    )
 
     # 4. Upper limit is at least 5x closer to ground truth than the biased detection
     assert abs(alpha_upper - alpha_true) < abs(alpha_detect - alpha_true) / 5, (

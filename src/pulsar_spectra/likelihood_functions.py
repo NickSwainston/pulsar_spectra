@@ -1,10 +1,13 @@
 """
-Cost functions (i.e. negative log-likelihoods) used for model fitting.
+Likelihoods and related functions for model fitting.
+
+Loss function = the negative log-likelihood
+Cost function = the sum of the loss for all data points in a model fit
 """
 
 import numpy as np
-from scipy.stats import norm, t
 from scipy.special import huber
+from scipy.stats import norm, t
 
 
 def array_data_type_check(x):
@@ -268,27 +271,24 @@ def tobit_log_likelihood(residuals, limit_signs, loss="Gaussian", df=4):
     if loss == "Gaussian":
         return np.where(
             is_limit,
-            norm.logcdf(-limit_signs * residuals),   # CDF for limits
-            norm.logpdf(residuals),                  # PDF for detections
+            norm.logcdf(-limit_signs * residuals),  # CDF for limits
+            norm.logpdf(residuals),  # PDF for detections
         )
     elif loss == "Huber":
         return np.where(
             is_limit,
-            norm.logcdf(-limit_signs * residuals),   # Gaussian CDF for limits
-            -huber(df, np.abs(residuals)),           # Huber pseudo-logpdf for detections
+            norm.logcdf(-limit_signs * residuals),  # Gaussian CDF for limits
+            -1.0 * huber(df, np.abs(residuals)),  # Huber pseudo-logpdf for detections
         )
     elif loss == "t":
         return np.where(
             is_limit,
             t.logcdf(-limit_signs * residuals, df),  # CDF for limits
-            t.logpdf(residuals, df),                 # PDF for detections
+            t.logpdf(residuals, df),  # PDF for detections
         )
     else:
         raise ValueError(f"Unknown loss function: {loss}")
 
-
-# Loss functions which are the negative log likelihoods for each data point,
-# which can be summed to get the total cost for a model fit.
 
 def loss_function_gaussian(sq_resi):
     """Compute the loss of a Gaussian normal PDF likelihood for a model given
@@ -305,7 +305,7 @@ def loss_function_gaussian(sq_resi):
         The cost of the model fit.
     """
     residuals = np.sqrt(np.abs(np.asarray(sq_resi)))
-    return -tobit_log_likelihood(residuals, np.zeros_like(residuals), loss="Gaussian")
+    return -1.0 * tobit_log_likelihood(residuals, np.zeros_like(residuals), loss="Gaussian")
 
 
 def loss_function_huber(sq_resi, k=1.345):
@@ -326,7 +326,7 @@ def loss_function_huber(sq_resi, k=1.345):
         The cost of the model fit.
     """
     residuals = np.sqrt(np.abs(np.asarray(sq_resi)))
-    return -tobit_log_likelihood(residuals, np.zeros_like(residuals), loss="Huber", df=k)
+    return -1.0 * tobit_log_likelihood(residuals, np.zeros_like(residuals), loss="Huber", df=k)
 
 
 def loss_function_t(sq_resi, df=4):
@@ -346,4 +346,4 @@ def loss_function_t(sq_resi, df=4):
         The cost of the model fit.
     """
     residuals = np.sqrt(np.abs(np.asarray(sq_resi)))
-    return -tobit_log_likelihood(residuals, np.zeros_like(residuals), loss="t", df=df)
+    return -1.0 * tobit_log_likelihood(residuals, np.zeros_like(residuals), loss="t", df=df)
