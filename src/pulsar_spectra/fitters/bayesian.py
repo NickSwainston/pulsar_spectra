@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 from format_multiple_errors import format_multiple_errors
 
-from pulsar_spectra.likelihood_functions import tobit_log_likelihood
+from pulsar_spectra.likelihoods import tobit_log_likelihood
 from pulsar_spectra.models import latex_params, model_settings
 
 try:

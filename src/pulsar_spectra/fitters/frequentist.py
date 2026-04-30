@@ -11,7 +11,7 @@ from iminuit import Minuit
 from iminuit.cost import UnbinnedNLL
 from jacobi import propagate
 
-from pulsar_spectra.likelihood_functions import tobit_log_likelihood
+from pulsar_spectra.likelihoods import tobit_log_likelihood
 from pulsar_spectra.models import latex_params, model_settings
 
 logger = logging.getLogger(__name__)
