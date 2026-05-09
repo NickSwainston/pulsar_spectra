@@ -74,7 +74,7 @@ parameters given the data and model, :math:`P(\mathbf{\Theta}|\mathbf{D}, M)`. T
 inverting the probability follows Bayes' Rule:
 
 .. math::
-    
+
     P(\mathbf{\Theta}|\mathbf{D}, M) = \frac{P(\mathbf{D}|\mathbf{\Theta}, M)P(\mathbf{\Theta}|M)}{P(\mathbf{D}|M)}
 
 where :math:`P(\mathbf{D}|\mathbf{\Theta}, M)` is the *likelihood*, :math:`P(\mathbf{\Theta}|M)` is
@@ -121,17 +121,17 @@ The combined Gaussian likelihood, :math:`L_\mathrm{G}`, of :math:`N` measurement
 
 .. math::
 
-    L_\mathrm{G} = \prod_i^N \frac{1}{\sqrt{2\pi}\sigma_{y,i}} 
+    L_\mathrm{G} = \prod_i^N \frac{1}{\sqrt{2\pi}\sigma_{y,i}}
     \exp \left[ - \frac{1}{2} \left( \frac{M(x_i,\mathbf{\Theta})-y_i}{\sigma_{y,i}} \right)^2 \right].
 
 The cost function for the Gaussian likelihood follows a :math:`\chi^2` distribution:
 
 .. math::
 
-    \beta \equiv \chi^2 = -\log L_\mathrm{G} = 
+    \beta \equiv \chi^2 = -\log L_\mathrm{G} =
     \sum_i^N \frac{1}{2} \left( \frac{M(x_i,\mathbf{\Theta})-y_i}{\sigma_{y,i}}  \right)^2 + C,
 
-where the constant :math:`C` can be neglected for the purposes of finding the best-fit model. 
+where the constant :math:`C` can be neglected for the purposes of finding the best-fit model.
 For this likelihood, minimising :math:`\beta` is equivalent to weighted least-squares fitting.
 
 .. _huber-likelihood:
@@ -458,7 +458,7 @@ To find the best-fit model out of those implemented in ``pulsar_spectra``, you c
 
     cat_dict = collect_catalogue_fluxes()
     pulsar = "J1327-6222"
-    freqs, bands, fluxs, flux_errs, refs = cat_dict[pulsar]
+    freqs, bands, fluxs, flux_errs, limit_signs, refs = cat_dict[pulsar]
 
     best_model_name, p_best, fit_results, aic_dict, plot_dicts = find_best_spectral_fit(
         pulsar,
@@ -466,6 +466,7 @@ To find the best-fit model out of those implemented in ``pulsar_spectra``, you c
         bands,
         fluxs,
         flux_errs,
+        limit_signs,
         refs,
         plot_best=True,
     )
@@ -473,15 +474,15 @@ To find the best-fit model out of those implemented in ``pulsar_spectra``, you c
 The parameters returned are: the name of the best-fit model, the :math:`p_\mathrm{best}` of the
 best-fit model, a dictionary of ``iminuit`` or ``Bilby`` results objects, a dictionary of AICc
 values, and a dictionary of data and metadata used to plot the model fits. Here, we have specified
-``plot_best=True``, which will create a plot of the data showing the best-fit spectral model:
-
-.. image:: figures/J1327-6222_broken_power_law_maximum-likelihood_Huber_fit.png
-  :width: 800
-
-If you would instead like to visually compare all of the models that were tested, then you can
-use the option ``plot_compare=True``. This will produce the following comparison plot:
+``plot_compare=True``, which will produce a comparison plot showing all tested models:
 
 .. image:: figures/J1327-6222_maximum-likelihood_Huber_comparison_fit.png
+  :width: 800
+
+If you would instead like to show only the best-fit model, use ``plot_best=True``. This will
+produce the following plot:
+
+.. image:: figures/J1327-6222_broken_power_law_maximum-likelihood_Huber_fit.png
   :width: 800
 
 By default, :ref:`maximum-likelihood-estimation` and the :ref:`huber-likelihood` likelihood will be
@@ -497,6 +498,7 @@ options. For example:
         bands,
         fluxs,
         flux_errs,
+        limit_signs,
         refs,
         plot_best=True,
         method="bayesian-nested-sampling",

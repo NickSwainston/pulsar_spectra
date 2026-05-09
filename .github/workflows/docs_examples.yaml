@@ -1,0 +1,45 @@
+name: docs-examples
+
+on:
+  push:
+    branches:
+      - main
+  pull_request: null
+
+jobs:
+  check-and-run-examples:
+    name: Check and run doc example scripts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv and set the python version
+        uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.11"
+          enable-cache: true
+
+      - name: Install pulsar_spectra
+        run: uv sync --locked --dev
+
+      - name: Check script references are consistent
+        run: uv run python docs/check_example_scripts.py
+
+      - name: Run example scripts
+        working-directory: docs
+        env:
+          MPLBACKEND: Agg  # prevent scripts from opening a display
+        run: |
+          set -e
+          # peak_frequency_lps.py  — excluded from docs (.. .. script location:)
+          # plot_best_bayesian.py  — too slow for CI (nested sampling)
+          SKIP="peak_frequency_lps.py plot_best_bayesian.py"
+          for script in example_scripts/*.py; do
+            name=$(basename "$script")
+            if echo "$SKIP" | grep -qw "$name"; then
+              echo "Skipping $script"
+              continue
+            fi
+            echo "Running $script ..."
+            uv run python "$script"
+          done

@@ -38,16 +38,10 @@ The following code can be run to fit PSR J0332+5434:
 
     cat_dict = collect_catalogue_fluxes()
     pulsar = "J0332+5434"
-    freqs, bands, fluxs, flux_errs, refs = cat_dict[pulsar]
-    
+    freqs, bands, fluxs, flux_errs, limit_signs, refs = cat_dict[pulsar]
+
     best_model_name, p_best, fit_results, aic_dict, plot_dicts = find_best_spectral_fit(
-        pulsar,
-        freqs,
-        bands,
-        fluxs,
-        flux_errs,
-        refs,
-        plot_best=True
+        pulsar, freqs, bands, fluxs, flux_errs, limit_signs, refs, plot_best=True
     )
 
 This will produce ``J0332+5434_broken_power_law_maximum-likelihood_Huber_best_fit.png``.
@@ -66,7 +60,7 @@ can print them like so:
     print(f"Best fit model: {best_model_name}")
     for p, v, e in zip(result.parameters, result.values, result.errors):
         if p.startswith("v"):
-            print(f"{p} = {v/1e6:.1f} +/- {e/1e6:.1f} MHz")
+            print(f"{p} = {v / 1e6:.1f} +/- {e / 1e6:.1f} MHz")
         else:
             print(f"{p} = {v:.5f} +/- {e:.5f}")
 
@@ -94,21 +88,16 @@ Expanding on the previous example, you add your own data to the fit as follows:
 
     cat_list = collect_catalogue_fluxes()
     pulsar = "J0040+5716"
-    freqs, bands, fluxs, flux_errs, refs = cat_list[pulsar]
-    freqs = [300.] + freqs
-    bands = [30.] + bands
-    fluxs = [10.] + fluxs
-    flux_errs = [2.] + flux_errs
+    freqs, bands, fluxs, flux_errs, limit_signs, refs = cat_list[pulsar]
+    freqs = [300.0] + freqs
+    bands = [30.0] + bands
+    fluxs = [10.0] + fluxs
+    flux_errs = [2.0] + flux_errs
+    limit_signs = [0] + limit_signs
     refs = ["Your Work"] + refs
 
     best_model_name, p_best, fit_results, aic_dict, plot_dicts = find_best_spectral_fit(
-        pulsar,
-        freqs,
-        bands,
-        fluxs,
-        flux_errs,
-        refs,
-        plot_best=True
+        pulsar, freqs, bands, fluxs, flux_errs, limit_signs, refs, plot_best=True
     )
 
 This will produce ``J0040+5716_simple_power_law_maximum-likelihood_Huber_best_fit.png`` with your
@@ -128,12 +117,13 @@ You can create a plot containing multiple pulsars by handing ``find_best_spectra
 .. code-block:: python
 
     import matplotlib.pyplot as plt
-    from pulsar_spectra.spectral_fit import find_best_spectral_fit
+
     from pulsar_spectra.catalogue import collect_catalogue_fluxes
+    from pulsar_spectra.spectral_fit import find_best_spectral_fit
 
     # Pulsar, flux, flux_err
     pulsar_flux = [
-        ("J0820-1350", 200, 9,  0),
+        ("J0820-1350", 200, 9, 0),
         ("J0837+0610", 430, 10, 1),
         ("J1453-6413", 630, 20, 2),
         ("J1456-6843", 930, 25, 3),
@@ -142,15 +132,16 @@ You can create a plot containing multiple pulsars by handing ``find_best_spectra
     ]
     cols = 2
     rows = 3
-    fig, axs = plt.subplots(nrows=rows, ncols=cols, figsize=(6*cols, 4*rows))
+    fig, axs = plt.subplots(nrows=rows, ncols=cols, figsize=(6 * cols, 4 * rows))
 
     cat_dict = collect_catalogue_fluxes()
     for pulsar, flux, flux_err, ax_i in pulsar_flux:
-        freqs, bands, fluxs, flux_errs, refs = cat_dict[pulsar]
-        freqs = [150.] + freqs
-        bands = [10.] + bands
+        freqs, bands, fluxs, flux_errs, limit_signs, refs = cat_dict[pulsar]
+        freqs = [150.0] + freqs
+        bands = [10.0] + bands
         fluxs = [flux] + fluxs
         flux_errs = [flux_err] + flux_errs
+        limit_signs = [0] + limit_signs
         refs = ["Your Work"] + refs
 
         find_best_spectral_fit(
@@ -159,12 +150,13 @@ You can create a plot containing multiple pulsars by handing ``find_best_spectra
             bands,
             fluxs,
             flux_errs,
+            limit_signs,
             refs,
             plot_best=True,
             legend_style="compact",
-            plot_kwargs={"axis": axs[ax_i//cols, ax_i%cols]},
+            plot_kwargs={"axis": axs[ax_i // cols, ax_i % cols]},
         )
-        axs[ax_i//cols, ax_i%cols].set_title("PSR "+pulsar)
+        axs[ax_i // cols, ax_i % cols].set_title("PSR " + pulsar)
 
     fig.tight_layout(pad=2.5)
     fig.savefig("multi_pulsar_spectra.png", bbox_inches="tight", dpi=300)
@@ -185,13 +177,13 @@ You can use the pulsar's fit to estimate a pulsar's flux density at a certain fr
 .. script location: example_scripts/estimate_flux.py
 .. code-block:: python
 
+    from pulsar_spectra.analysis import estimate_flux_density
     from pulsar_spectra.catalogue import collect_catalogue_fluxes
     from pulsar_spectra.spectral_fit import find_best_spectral_fit
-    from pulsar_spectra.analysis import estimate_flux_density
 
     cat_dict = collect_catalogue_fluxes()
     pulsar = "J0820-1350"
-    freqs, bands, fluxs, flux_errs, refs = cat_dict[pulsar]
+    freqs, bands, fluxs, flux_errs, limit_signs, refs = cat_dict[pulsar]
 
     best_model_name, _, fit_results, _, _ = find_best_spectral_fit(
         pulsar,
@@ -199,14 +191,11 @@ You can use the pulsar's fit to estimate a pulsar's flux density at a certain fr
         bands,
         fluxs,
         flux_errs,
+        limit_signs,
         refs,
     )
 
-    fitted_flux, fitted_flux_err = estimate_flux_density(
-        150.,
-        best_model_name,
-        fit_results[best_model_name]
-    )
+    fitted_flux, fitted_flux_err = estimate_flux_density(150.0, best_model_name, fit_results[best_model_name])
 
     print(f"{pulsar} estimated flux: {fitted_flux:.1f} ± {fitted_flux_err:.1f} mJy")
 
@@ -276,13 +265,13 @@ To perform this calculation, use the in-built function as follows:
 .. script location: example_scripts/estimate_emission_height.py
 .. code-block:: python
 
+    from pulsar_spectra.analysis import calc_high_frequency_cutoff_emission_height
     from pulsar_spectra.catalogue import collect_catalogue_fluxes
     from pulsar_spectra.spectral_fit import find_best_spectral_fit
-    from pulsar_spectra.analysis import calc_high_frequency_cutoff_emission_height
 
     cat_dict = collect_catalogue_fluxes()
     pulsar = "J0955-5304"
-    freqs, bands, fluxs, flux_errs, refs = cat_dict[pulsar]
+    freqs, bands, fluxs, flux_errs, limit_signs, refs = cat_dict[pulsar]
 
     best_model_name, _, fit_results, _, _ = find_best_spectral_fit(
         pulsar,
@@ -290,6 +279,7 @@ To perform this calculation, use the in-built function as follows:
         bands,
         fluxs,
         flux_errs,
+        limit_signs,
         refs,
     )
 
@@ -301,8 +291,8 @@ To perform this calculation, use the in-built function as follows:
             result.values[0],
             result.errors[0],
         )
-        print(f"B_pc:    ({B_pc/1e11:.2f} +/- {u_B_pc/1e11:.2f})x10^11 G")
-        print(f"B_surf:  {B_surf/1e12:.2f}x10^12 G")
+        print(f"B_pc:    ({B_pc / 1e11:.2f} +/- {u_B_pc / 1e11:.2f})x10^11 G")
+        print(f"B_surf:  {B_surf / 1e12:.2f}x10^12 G")
         print(f"B_LC:    {B_lc:.2f} G")
         print(f"R_LC:    {r_lc:.0f} km")
         print(f"z_e:     {z_e:.1f} +/- {u_z_e:.1f} km")

@@ -18,11 +18,12 @@ fig, axs = plt.subplots(nrows=rows, ncols=cols, figsize=(6 * cols, 4 * rows))
 
 cat_dict = collect_catalogue_fluxes()
 for pulsar, flux, flux_err, ax_i in pulsar_flux:
-    freqs, bands, fluxs, flux_errs, refs = cat_dict[pulsar]
+    freqs, bands, fluxs, flux_errs, limit_signs, refs = cat_dict[pulsar]
     freqs = [150.0] + freqs
     bands = [10.0] + bands
     fluxs = [flux] + fluxs
     flux_errs = [flux_err] + flux_errs
+    limit_signs = [0] + limit_signs
     refs = ["Your Work"] + refs
 
     find_best_spectral_fit(
@@ -31,6 +32,7 @@ for pulsar, flux, flux_err, ax_i in pulsar_flux:
         bands,
         fluxs,
         flux_errs,
+        limit_signs,
         refs,
         plot_best=True,
         legend_style="compact",
