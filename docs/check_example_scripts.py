@@ -66,9 +66,7 @@ def extract_code_blocks(rst_file: Path) -> list[tuple[str, str]]:
                 while code_lines and not code_lines[-1].strip():
                     code_lines.pop()
                 # Remove the 4-space RST indent
-                code_text = "\n".join(
-                    line[4:] if line.startswith("    ") else "" for line in code_lines
-                )
+                code_text = "\n".join(line[4:] if line.startswith("    ") else "" for line in code_lines)
                 pairs.append((script_path, code_text))
             continue
         i += 1
@@ -105,9 +103,7 @@ for rst_file, script_path, code_block in all_code_blocks:
 
     # 1. Referenced file must exist
     if not full_path.exists():
-        errors.append(
-            f"{rst_file.name}: referenced script not found: docs/{script_path}"
-        )
+        errors.append(f"{rst_file.name}: referenced script not found: docs/{script_path}")
         continue
 
     # 2. Code block must appear verbatim in the script

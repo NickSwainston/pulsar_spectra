@@ -11,7 +11,7 @@ from scipy.stats import norm
 from scipy.stats import t as t_dist
 
 from pulsar_spectra.catalogue import collect_catalogue_fluxes
-from pulsar_spectra.likelihood_functions import tobit_log_likelihood
+from pulsar_spectra.likelihoods import tobit_log_likelihood
 from pulsar_spectra.spectral_fit import find_best_spectral_fit
 
 spectral_fit_tests = [
