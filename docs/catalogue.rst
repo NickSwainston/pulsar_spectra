@@ -41,7 +41,7 @@ cat_dict will have the format
                                 ["The reference label (in the format 'Author_year')"]],
                 }
 
-See the :ref:`Limit index` section for more information on the limit signs.
+See the :ref:`upper-lower-limits` section for more information on the limit signs.
 
 For example, this is the data for PSR J2256-1024.
 
@@ -232,7 +232,19 @@ If you would like to add a new paper to the catalogue, you should first format t
     J0034-0534,150,20,202.8,7.9
     J0034-0721,150,20,367.9,10.5
 
-If the paper does not provide a flux density, then the script will assume a 50\% uncertainty if you do not have to include it in your CSV like so:
+If the paper includes upper limits (non-detections), add a sixth column ``Limit index``:
+
+.. code-block:: bash
+
+    Pulsar Jname,Frequency (MHz),Bandwidth (MHz),Flux Density (mJy),Flux Density Uncertainty (mJy),Limit index
+    J0030+0451,150,20,37.6,4.4,0
+    J0034-0534,150,20,5.0,2.5,-1
+
+where ``0`` is a normal detection, ``-1`` is an upper limit, and ``+1`` is a lower limit.
+If the column is omitted, all measurements are assumed to be detections.
+See the :ref:`upper-lower-limits` section for more details on how limits are handled during model fitting.
+
+If the paper does not provide a flux density uncertainty, then the script will assume a 50\% uncertainty and you do not have to include it in your CSV like so:
 
 .. code-block:: bash
 

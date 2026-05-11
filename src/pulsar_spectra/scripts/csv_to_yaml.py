@@ -38,13 +38,16 @@ def convert_csv_to_yaml(csv_location, ref_label, obs_span, data_type):
         next(spamreader)
         print("Input data:")
         for row in spamreader:
-            # logger.debug(row)
-            # print(row)
-            if len(row) == 5:
+            if len(row) == 6:
+                pulsar, freq, band, flux, flux_err, limit_index = row
+                limit_index = int(limit_index)
+            elif len(row) == 5:
                 pulsar, freq, band, flux, flux_err = row
+                limit_index = 0
             elif len(row) == 4:
                 pulsar, freq, band, flux = row
                 flux_err = float(flux) * 0.5
+                limit_index = 0
             else:
                 print(f"Error on row: {row}")
                 continue
@@ -63,6 +66,7 @@ def convert_csv_to_yaml(csv_location, ref_label, obs_span, data_type):
                 pulsar_dict[pulsar]["Bandwidth MHz"].append(float(band))
                 pulsar_dict[pulsar]["Flux Density mJy"].append(float(flux))
                 pulsar_dict[pulsar]["Flux Density error mJy"].append(float(flux_err))
+                pulsar_dict[pulsar]["Limit index"].append(limit_index)
             else:
                 # Make dict for this pulsar
                 pulsar_dict[pulsar] = {
@@ -70,6 +74,7 @@ def convert_csv_to_yaml(csv_location, ref_label, obs_span, data_type):
                     "Bandwidth MHz": [float(band)],
                     "Flux Density mJy": [float(flux)],
                     "Flux Density error mJy": [float(flux_err)],
+                    "Limit index": [limit_index],
                 }
 
     # Dump the dict to the yaml file in the catalogue directory
