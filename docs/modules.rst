@@ -41,9 +41,9 @@ Bayesian
 .. automodule:: pulsar_spectra.fitters.bayesian
     :members:
 
-Cost functions
-==============
-.. automodule:: pulsar_spectra.cost_functions
+Likelihoods
+===========
+.. automodule:: pulsar_spectra.likelihoods
     :members:
 
 Spectral fit

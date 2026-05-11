@@ -31,34 +31,48 @@ cat_dict will have the format
                                 ["List of bandwidths in MHz"],
                                 ["List of flux densities in mJy"],
                                 ["List of flux density uncertainties in mJy"],
+                                ["List of limit signs (0 for detections, -1 for upper limits)"],
                                 ["The reference label (in the format 'Author_year')"]],
                 "Other pulsar":[["List of frequencies in MHz"],
                                 ["List of bandwidths in MHz"],
                                 ["List of flux densities in mJy"],
                                 ["List of flux density uncertainties in mJy"],
+                                ["List of limit signs (0 for detections, -1 for upper limits)"],
                                 ["The reference label (in the format 'Author_year')"]],
                 }
+
+See the :ref:`Limit index` section for more information on the limit signs.
 
 For example, this is the data for PSR J2256-1024.
 
 .. code-block:: python
 
     print(cat_dict['J2256-1024'])
-    [[350.0, 350, 820, 822, 1392, 1500, 350.0, 350.0],
-     [100.0, 200, 200, 64, 64, 200, 100.0, 100.0],
-     [8.3, 13.0, 1.9, 1.7, 0.73, 1.2, 7.0, 17.8],
-     [4.15, 6.5, 0.9, 0.85, 0.365, 0.6, 3.5, 3.5],
-     ['Bangale_2024', 'Crowter_2020', 'Crowter_2020', 'Crowter_2020', 'Crowter_2020', 'Crowter_2020', 'Hessels_2011', 'McEwen_2020']]
+    [ [350.0, 350, 820, 822, 1392, 1500, 350.0, 154.24, 350.0],
+      [100.0, 200, 200, 64, 64, 200, 100.0, 30.72, 100.0],
+      [8.3, 13.0, 1.9, 1.7, 0.73, 1.2, 7.0, 170.0, 17.8],
+      [4.15, 6.5, 0.95, 0.85, 0.365, 0.6, 3.5, 85.0, 8.9],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      ['Bangale_2024',
+        'Crowter_2020',
+        'Crowter_2020',
+        'Crowter_2020',
+        'Crowter_2020',
+        'Crowter_2020',
+        'Hessels_2011',
+        'Lee_2025',
+        'McEwen_2020']]
 
 You can add your data like so before fitting the spectra
 
 .. code-block:: python
 
-    freqs, bands, fluxs, flux_errs, refs = cat_dict[pulsar]
+    freqs, bands, fluxs, flux_errs, limit_signs, refs = cat_dict[pulsar]
     freqs += [150.]
     bands += [30.]
     fluxs += [1000.]
     flux_errs += [100.]
+    limit_signs += [0]
     refs += ["Your Work"]
 
 You can `exclude` papers that you don't trust the results or if you think they're negatively affecting your fit.
@@ -122,6 +136,8 @@ that the paper is classified as "Single-epoch" and the flux density uncertaintie
         - 0.7
       Flux Density error mJy:
         - 0.1
+      Limit index:
+        - 0
     J1327-6222:
       Frequency MHz:
         - 6591
@@ -131,6 +147,8 @@ that the paper is classified as "Single-epoch" and the flux density uncertaintie
         - 0.9
       Flux Density error mJy:
         - 0.2
+      Limit index:
+        - 0
 
 When you use the ``collect_catalogue_fluxes`` function, it will automatically adjust the uncertainties of the flux density measurements based on the observation span of the paper.
 For example, if we run the following code:
@@ -267,9 +285,8 @@ For flux density measurements to be uploaded to the catalogue, they must meet th
 4. Flux density uncertainties
     If the paper does not supply a flux density uncertainty, assume a relative uncertainty of 50 %.
 
-5. Do not include upper limits
-    The catalogue does not currently have a way of handling upper limits, so do not include them.
-    If you have a suggestion for handling upper limits, please make an issue or start a discussion on the GitHub page.
+5. Include upper limits
+    The catalogue can now handle upper limits. Use a limit sign of -1 for upper limits and 0 for detections.
 
 
 Uploading the new catalogue to GitHub
@@ -361,6 +378,9 @@ The catalogue is made up of YAML files of each paper. The format of the YAML fil
       Flux Density error mJy:
         - First flux density uncertainty value in mJy
         - Second flux density uncertainty value in mJy
+      Limit index:
+        - First limit sign (0 for detections, -1 for upper limits)
+        - Second limit sign (0 for detections, -1 for upper limits)
 
 For example:
 
@@ -382,6 +402,9 @@ For example:
         Flux Density error mJy:
           - 2.2
           - 1.6
+        Limit index:
+          - 0
+          - 0
     J0034-0534:
         Frequency MHz:
           - 150.0
@@ -391,6 +414,9 @@ For example:
           - 7.9
         Flux Density error mJy:
           - 3.95
+        Limit index:
+          - 0
+          - 0
 
 Where the ``Paper Metadata`` section contains information about the paper as a whole, and each pulsar has its own section with lists of frequencies, bandwidths, flux densities and flux density uncertainties.
 The ``Data Type`` can be either ``Beamforming`` or ``Imaging``, and the ``Observation Span`` can be either ``Single-epoch``, ``Several-epoch`` or ``Multi-epoch`` (for details on the observation span, see the :ref:`observation_span` section).

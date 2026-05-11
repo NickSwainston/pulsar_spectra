@@ -29,7 +29,7 @@ def make_tobit_cost(data, spectral_model, loss="Gaussian"):
         (freqs, fluxs_Jy, flux_errs_Jy, limit_signs). For bandwidth
         integration, freqs should be (min_freqs_Hz, max_freqs_Hz).
     spectral_model : `callable`
-        Spectral model function with signature f(freqs, *params).
+        Spectral model function with signature f(freqs, \*params).
     loss : `str`, optional
         Distribution to use ('Gaussian', 'Huber', 't'). |br| Default: 'Gaussian'.
 

@@ -157,6 +157,14 @@ is the distance threshold. By penalising outliers, data with unaccounted systema
 less weight in the fit. This technique will be most effective when there is enough good data points
 to delineate which of the data are outliers.
 
+.. warning::
+
+   Because the Huber loss function is not a proper probability distribution, it has no closed-form
+   CDF. When upper or lower limits are present, the Gaussian CDF is used for those censored terms
+   as an approximation. This means the detection and limit terms come from different distributions,
+   which is statistically inconsistent. If your dataset contains limits, prefer the ``'t'`` or
+   ``'Gaussian'`` likelihood for a self-consistent treatment.
+
 .. _t-likelihood:
 
 :math:`t` distribution
@@ -181,7 +189,58 @@ the cost function,
 we make use of the ``scipy.stats.t.logpdf`` function in ``SciPy``. Using the :math:`t` distribution,
 it is straight-forward to include upper/lower limits in the fit by constructing a
 `Tobit likelihood <https://en.wikipedia.org/wiki/Tobit_model>`_, which uses the CDF rather than the
-PDF of the distribution.
+PDF of the distribution. This is described in detail in the next section.
+
+.. _upper-lower-limits:
+
+Upper and lower limits
+^^^^^^^^^^^^^^^^^^^^^^
+Upper and lower limits arise when there is a non-detection of a flux density measurement — that is, the true flux
+density is known only to lie on one side of a reported threshold. A common example is a upper limit non-detection,
+where the observer can only report that the flux density is below some upper limit value.
+
+To handle censored measurements, we use the `Tobit model
+<https://en.wikipedia.org/wiki/Tobit_model>`_. For a detection, the contribution to the
+log-likelihood is the log of the probability density function (PDF) evaluated at the observed
+residual :math:`R_i = \left[M(x_i, \mathbf{\Theta}) - y_i\right] / \sigma_{y,i}`. For a censored
+measurement, it is replaced by the log of the cumulative distribution function (CDF), which gives
+the probability that the true value lies below (upper limit) or above (lower limit) the threshold.
+The combined log-likelihood is:
+
+.. math::
+
+    \log L = \sum_{i \in \mathcal{D}} \log f(R_i) +
+             \sum_{i \in \mathcal{U}} \log F(R_i) +
+             \sum_{i \in \mathcal{L}} \log \left[1 - F(R_i)\right],
+
+where :math:`f` and :math:`F` are respectively the PDF and CDF of the chosen distribution,
+:math:`\mathcal{D}` is the set of detections, :math:`\mathcal{U}` is the set of upper limits, and
+:math:`\mathcal{L}` is the set of lower limits.
+
+Each data point carries a ``limit_sign`` value that encodes its type:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+
+   * - ``limit_sign``
+     - Meaning
+   * - ``0``
+     - Detection — PDF term used
+   * - ``-1``
+     - Upper limit — CDF term used (:math:`S_\nu < y_i`)
+   * - ``+1``
+     - Lower limit — complementary CDF term used (:math:`S_\nu > y_i`)
+
+.. note::
+
+   All three likelihoods support upper and lower limits, but the CDF used for the censored term
+   differs. The :ref:`Gaussian <gaussian-likelihood>` and :ref:`t <t-likelihood>` likelihoods use
+   their own CDF for both detections and limits, giving a self-consistent model. The
+   :ref:`Huber <huber-likelihood>` likelihood is a loss-function modification of the Gaussian and
+   does not have a closed-form CDF, so it falls back to the **Gaussian CDF** for the censored term.
+   This is an approximation — the detection and limit terms are not from the same distribution —
+   so for data with limits the ``'t'`` or ``'Gaussian'`` likelihood is preferred.
 
 .. _model-selection:
 
