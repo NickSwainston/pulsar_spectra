@@ -160,7 +160,7 @@ def test_find_best_spectral_fit(fit_method, pulsar, exp_model_name, frozen_refs,
     freq_all, band_all, flux_all, flux_err_all, limit_signs, ref_all = cat_list[pulsar]
     for freq, band, flux, flux_err, ref in zip(freq_all, band_all, flux_all, flux_err_all, ref_all):
         print(f"{float(freq):8.1f}{float(band):8.1f}{float(flux):12.4f}{float(flux_err):12.4f} {str(ref):20s}")
-    best_fit_model_name, _, fit_results, _, _ = find_best_spectral_fit(
+    result = find_best_spectral_fit(
         pulsar,
         freq_all,
         band_all,
@@ -173,14 +173,14 @@ def test_find_best_spectral_fit(fit_method, pulsar, exp_model_name, frozen_refs,
         plot_compare=True,
         plot_kwargs={"ref_markers": ref_markers},
     )
-    iminuit_result = fit_results[best_fit_model_name]
-    if fit_method == "maximum-likelihood":
-        for p, v, e in zip(iminuit_result.parameters, iminuit_result.values, iminuit_result.errors):
-            if p.startswith("v"):
-                print(f"{p} = {v / 1e6:8.1f} +/- {e / 1e6:8.1} MHz")
-            else:
-                print(f"{p} = {v:.5f} +/- {e:.5}")
-    np.testing.assert_string_equal(best_fit_model_name, exp_model_name)
+    assert result is not None
+    for p, v in result.params.items():
+        e = result.param_errs[p]
+        if p.startswith("v"):
+            print(f"{p} = {v:8.1f} +/- {e:8.1f} MHz")
+        else:
+            print(f"{p} = {v:.5f} +/- {e:.5f}")
+    np.testing.assert_string_equal(result.model, exp_model_name)
 
 
 def test_plot_methods():
@@ -303,7 +303,7 @@ def test_iminuit_upper_limits(fit_method, loss):
     flux_errs_all = np.append(flux_errs_base, obs_err_extra)
 
     # Fit 1: baseline — 4 exact detections only
-    _, _, fit_results_base, _, _ = find_best_spectral_fit(
+    result_base = find_best_spectral_fit(
         "baseline_no_upper_limits",
         freqs_base,
         bands_base,
@@ -315,9 +315,10 @@ def test_iminuit_upper_limits(fit_method, loss):
         likelihood=loss,
         plot_compare=True,
     )
+    fit_results_base = result_base.fit_results
 
     # Fit 2: 5 detections including the outlier
-    _, _, fit_results_detect, _, _ = find_best_spectral_fit(
+    result_detect = find_best_spectral_fit(
         "no_upper_limits",
         freqs_all,
         bands_all,
@@ -329,9 +330,10 @@ def test_iminuit_upper_limits(fit_method, loss):
         likelihood=loss,
         plot_compare=True,
     )
+    fit_results_detect = result_detect.fit_results
 
     # Fit 3: outlier treated as an upper limit
-    _, _, fit_results_upper, _, _ = find_best_spectral_fit(
+    result_upper = find_best_spectral_fit(
         "upper_limits",
         freqs_all,
         bands_all,
@@ -343,6 +345,7 @@ def test_iminuit_upper_limits(fit_method, loss):
         likelihood=loss,
         plot_compare=True,
     )
+    fit_results_upper = result_upper.fit_results
 
     if fit_method == "bayesian-nested-sampling":
         _, params_beta_min_base = bilby_compute_maximum_posterior_likelihood(

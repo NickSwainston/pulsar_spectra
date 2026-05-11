@@ -2,16 +2,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from pulsar_spectra.catalogue import collect_catalogue_fluxes
+from pulsar_spectra.fitters.frequentist import propagate_flux_n_err
 from pulsar_spectra.models import double_turn_over_spectrum
-from pulsar_spectra.spectral_fit import find_best_spectral_fit, propagate_flux_n_err
+from pulsar_spectra.spectral_fit import find_best_spectral_fit
 
-# v1.4
 cat_dict = collect_catalogue_fluxes()
 pulsar = "J1852-0635"
-freqs, fluxs, flux_errs, refs = cat_dict[pulsar]
-best_model_name, iminuit_result, fit_info, p_best, p_category = find_best_spectral_fit(
-    pulsar, freqs, fluxs, flux_errs, refs
-)
+freqs, bands, fluxs, flux_errs, limit_signs, refs = cat_dict[pulsar]
+fit_result = find_best_spectral_fit(pulsar, freqs, bands, fluxs, flux_errs, limit_signs, refs)
+iminuit_result = fit_result.fit_results[fit_result.model]
 
 # Cherry picked data
 freqs = [650, 1400.29, 5000]
@@ -50,7 +49,7 @@ for line_colour in ("black", "white"):
     # Create fit line
     fitted_freq = np.logspace(np.log10(600), np.log10(8000), 100)
     fitted_flux, fitted_flux_prop = propagate_flux_n_err(fitted_freq, double_turn_over_spectrum, iminuit_result)
-    ax.plot(fitted_freq, fitted_flux, line_colour, label=fit_info, linewidth=3, zorder=0.5)
+    ax.plot(fitted_freq, fitted_flux, line_colour, linewidth=3, zorder=0.5)
 
     # Format plot and save
     ax.set_xscale("log")

@@ -33,6 +33,7 @@ release = "1.0"
 # ones.
 extensions = [
     "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
     "sphinx.ext.doctest",
     "sphinx.ext.intersphinx",
     "sphinx.ext.todo",
@@ -44,6 +45,9 @@ extensions = [
     "numpydoc",
     "myst_parser",
 ]
+
+autosummary_generate = True
+numpydoc_class_members_toctree = False
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]

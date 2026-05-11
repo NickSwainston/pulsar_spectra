@@ -11,6 +11,6 @@ flux_errs = [2.0] + flux_errs
 limit_signs = [0] + limit_signs
 refs = ["Your Work"] + refs
 
-best_model_name, p_best, fit_results, aic_dict, plot_dicts = find_best_spectral_fit(
+result = find_best_spectral_fit(
     pulsar, freqs, bands, fluxs, flux_errs, limit_signs, refs, plot_best=True
 )

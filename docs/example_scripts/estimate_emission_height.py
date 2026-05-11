@@ -6,7 +6,7 @@ cat_dict = collect_catalogue_fluxes()
 pulsar = "J0955-5304"
 freqs, bands, fluxs, flux_errs, limit_signs, refs = cat_dict[pulsar]
 
-best_model_name, _, fit_results, _, _ = find_best_spectral_fit(
+result = find_best_spectral_fit(
     pulsar,
     freqs,
     bands,
@@ -16,13 +16,11 @@ best_model_name, _, fit_results, _, _ = find_best_spectral_fit(
     refs,
 )
 
-if best_model_name == "high_frequency_cut_off_power_law":
-    result = fit_results[best_model_name]
-
+if result.model == "high_frequency_cut_off_power_law":
     B_pc, u_B_pc, B_surf, B_lc, r_lc, z_e, u_z_e, z_percent, u_z_percent = calc_high_frequency_cutoff_emission_height(
         pulsar,
-        result.values[0],
-        result.errors[0],
+        result.params["vc"] * 1e6,
+        result.param_errs["vc"] * 1e6,
     )
     print(f"B_pc:    ({B_pc / 1e11:.2f} +/- {u_B_pc / 1e11:.2f})x10^11 G")
     print(f"B_surf:  {B_surf / 1e12:.2f}x10^12 G")
@@ -31,4 +29,4 @@ if best_model_name == "high_frequency_cut_off_power_law":
     print(f"z_e:     {z_e:.1f} +/- {u_z_e:.1f} km")
     print(f"z/R_LC:  {z_percent:.2f} +/- {u_z_percent:.2f} %")
 else:
-    print("Not a power-law with high-frequency cut-off fit")
+    print(f"Best model was {result.model}, not a power-law with high-frequency cut-off fit")

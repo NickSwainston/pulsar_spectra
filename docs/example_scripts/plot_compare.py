@@ -5,7 +5,7 @@ cat_dict = collect_catalogue_fluxes()
 pulsar = "J1327-6222"
 freqs, bands, fluxs, flux_errs, limit_signs, refs = cat_dict[pulsar]
 
-best_model_name, p_best, fit_results, aic_dict, plot_dicts = find_best_spectral_fit(
+result = find_best_spectral_fit(
     pulsar,
     freqs,
     bands,

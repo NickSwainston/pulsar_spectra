@@ -6,7 +6,7 @@ cat_dict = collect_catalogue_fluxes()
 pulsar = "J0820-1350"
 freqs, bands, fluxs, flux_errs, limit_signs, refs = cat_dict[pulsar]
 
-best_model_name, _, fit_results, _, _ = find_best_spectral_fit(
+result = find_best_spectral_fit(
     pulsar,
     freqs,
     bands,
@@ -16,6 +16,6 @@ best_model_name, _, fit_results, _, _ = find_best_spectral_fit(
     refs,
 )
 
-fitted_flux, fitted_flux_err = estimate_flux_density(150.0, best_model_name, fit_results[best_model_name])
+fitted_flux, fitted_flux_err = estimate_flux_density(150.0, result.model, result.fit_results[result.model])
 
 print(f"{pulsar} estimated flux: {fitted_flux:.1f} ± {fitted_flux_err:.1f} mJy")

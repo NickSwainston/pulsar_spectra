@@ -3,6 +3,8 @@ The top-level function for finding the best-fit spectral model.
 """
 
 import logging
+from dataclasses import dataclass, field
+from importlib.metadata import version as _importlib_version
 
 import numpy as np
 
@@ -11,6 +13,143 @@ from pulsar_spectra.models import model_settings
 from pulsar_spectra.plotting import make_comparison_plot, plot_fit
 
 logger = logging.getLogger(__name__)
+
+_PULSAR_SPECTRA_VERSION = _importlib_version("pulsar_spectra")
+
+
+@dataclass
+class SpectralFitResult:
+    """Fitter-agnostic summary of the best-fit spectral model.
+
+    Frequency parameters (``v*``) are in MHz; the flux density normalisation
+    (``c``) is in mJy; all other parameters are dimensionless. Raw fitter
+    objects are preserved in ``fit_results`` for advanced use.
+
+    Attributes
+    ----------
+    pulsar : str
+        Name of the pulsar.
+    model : str
+        Name of the best-fit model from
+        :py:meth:`pulsar_spectra.models.model_settings`.
+    method : str
+        Fitting method: ``'maximum-likelihood'`` or
+        ``'bayesian-nested-sampling'``.
+    likelihood : str
+        Likelihood function: ``'Gaussian'``, ``'Huber'``, or ``'t'``.
+    p_best : float
+        Akaike probability that this is the best model among those compared.
+    params : dict
+        Best-fit parameter values in user-facing units. Frequency parameters
+        (names starting with ``v``) are in MHz; the flux density
+        normalisation ``c`` is in mJy; all others are dimensionless.
+    param_errs : dict
+        Symmetric 1-sigma parameter uncertainties in the same units as
+        ``params``. For maximum-likelihood these are Hesse errors; for
+        Bayesian nested sampling they are posterior standard deviations.
+    aic : float
+        AICc value for the best-fit model.
+    aic_dict : dict
+        AICc values for every fitted model, keyed by model name.
+    n_data : int
+        Number of data points used in the fit.
+    band_bool : bool
+        Whether bandwidth integration was applied to the best-fit model.
+    exclude_models : list
+        Model names that were excluded from the comparison.
+    pulsar_spectra_version : str
+        Version string of ``pulsar_spectra`` at the time of fitting,
+        useful for reproducibility.
+    fit_results : dict
+        Raw fitter objects keyed by model name (``iminuit.Minuit`` for
+        maximum-likelihood, ``bilby.core.result.Result`` for Bayesian
+        nested sampling). Preserved for advanced post-processing.
+    plot_dicts : dict
+        Plot data dicts keyed by model name, passed directly to
+        :py:meth:`pulsar_spectra.plotting.plot_fit`.
+    """
+
+    pulsar: str
+    model: str
+    method: str
+    likelihood: str
+    p_best: float
+    params: dict
+    param_errs: dict
+    aic: float
+    aic_dict: dict
+    n_data: int
+    band_bool: bool
+    exclude_models: list
+    pulsar_spectra_version: str
+    fit_results: dict = field(default_factory=dict)
+    plot_dicts: dict = field(default_factory=dict)
+
+    def to_dict(self):
+        """Serialise the result to a plain Python dict suitable for JSON or YAML output.
+
+        Raw fitter objects (``fit_results``, ``plot_dicts``) are excluded because
+        they are not serialisable.  All numeric values are converted to Python
+        floats so the output round-trips through JSON and PyYAML without issue.
+        """
+        return {
+            "pulsar": self.pulsar,
+            "model": self.model,
+            "method": self.method,
+            "likelihood": self.likelihood,
+            "p_best": float(self.p_best),
+            "params": {k: float(v) for k, v in self.params.items()},
+            "param_errs": {k: float(v) for k, v in self.param_errs.items()},
+            "aic": float(self.aic),
+            "aic_dict": {k: float(v) for k, v in self.aic_dict.items()},
+            "n_data": int(self.n_data),
+            "band_bool": bool(self.band_bool),
+            "exclude_models": list(self.exclude_models),
+            "pulsar_spectra_version": self.pulsar_spectra_version,
+        }
+
+
+def _iminuit_params_to_user_units(m):
+    """Return (params, param_errs) dicts from a Minuit result in user-facing units."""
+    params = {}
+    param_errs = {}
+    for p in m.parameters:
+        v = m.values[p]
+        e = m.errors[p]
+        if p.startswith("v"):
+            params[p] = v / 1e6
+            param_errs[p] = e / 1e6
+        elif p == "c":
+            params[p] = v * 1e3
+            param_errs[p] = e * 1e3
+        else:
+            params[p] = v
+            param_errs[p] = e
+    return params, param_errs
+
+
+def _bilby_params_to_user_units(map_params, bilby_result):
+    """Return (params, param_errs) dicts from a Bilby MAP estimate in user-facing units.
+
+    Point estimates come from ``map_params`` (the posterior sample with the
+    maximum likelihood); uncertainties are the posterior standard deviations.
+    """
+    params = {}
+    param_errs = {}
+    param_keys = bilby_result.search_parameter_keys + bilby_result.fixed_parameter_keys
+    params_std = bilby_result.posterior[param_keys].std()
+    for p, v in map_params.items():
+        e = float(params_std.get(p, 0.0))
+        if p.startswith("v"):
+            params[p] = v / 1e6
+            param_errs[p] = e / 1e6
+        elif p == "c":
+            params[p] = v * 1e3
+            param_errs[p] = e * 1e3
+        else:
+            params[p] = v
+            param_errs[p] = e
+    return params, param_errs
 
 
 def find_best_spectral_fit(
@@ -120,20 +259,25 @@ def find_best_spectral_fit(
 
     Returns
     -------
-    best_fit_model_name : `str`
-        The best fit model name from :py:meth:`pulsar_spectra.models`.
-    p_best : `float`
-        The probability that the selected model is the best-fitting model out
-        of the models compared.
-    fit_results : `dict[str, iminuit.Minuit | bilby.core.result.Result]`
-        A dictionary of fit results with the keys being model names from
-        :py:meth:`pulsar_spectra.models.model_settings`.
-    aic_dict : `dict[str, float]`
-        A dictionary of AICc values with the keys being model names from
-        :py:meth:`pulsar_spectra.models.model_settings`.
-    plot_dicts : `dict[str, dict[str, Any]]`
-        A dictionary of plot dictionaries with the keys being model names from
-        :py:meth:`pulsar_spectra.models.model_settings`.
+    result : `SpectralFitResult` or `None`
+        A fitter-agnostic summary of the best-fit model, or ``None`` if no
+        model could be fitted.  Key attributes:
+
+        * ``pulsar`` — pulsar name.
+        * ``model`` — best-fit model name.
+        * ``method`` / ``likelihood`` — settings used.
+        * ``p_best`` — Akaike probability of the best model.
+        * ``params`` / ``param_errs`` — best-fit values and symmetric
+          uncertainties in user-facing units (MHz for frequencies, mJy for
+          the flux density normalisation ``c``).
+        * ``aic`` / ``aic_dict`` — AICc of the best model and all models.
+        * ``n_data`` — number of data points.
+        * ``band_bool`` — whether bandwidth integration was used.
+        * ``exclude_models`` — model names excluded from comparison.
+        * ``pulsar_spectra_version`` — software version string.
+        * ``fit_results`` — raw fitter objects keyed by model name
+          (``iminuit.Minuit`` or ``bilby.core.result.Result``).
+        * ``plot_dicts`` — plot data dicts keyed by model name.
     """
     if sampler_kwargs is None:
         sampler_kwargs = {}
@@ -171,11 +315,11 @@ def find_best_spectral_fit(
         )
     else:
         logger.error(f"Invalid fitting method: {method}.")
-        return None, None, None, None, None
+        return None
 
     if likelihood not in ("Gaussian", "Huber", "t"):
         logger.error(f"Invalid likelihood: {likelihood}.")
-        return None, None, None, None, None
+        return None
 
     if exclude_models is None:
         exclude_models = []
@@ -203,6 +347,8 @@ def find_best_spectral_fit(
     fit_results = {}
     plot_dicts = {}
     beta_mins = {}
+    band_bool_dict = {}
+    map_params_dict = {}  # Bayesian MAP parameter estimates, keyed by model name
     for model_name in model_dict.keys():
         if model_name in exclude_models:
             continue
@@ -263,6 +409,7 @@ def find_best_spectral_fit(
                 band_bool,
                 likelihood=likelihood,
             )
+            map_params_dict[model_name] = params_beta_min
             plot_dict = bilby_interpolate_model(
                 fit_result,
                 model_name,
@@ -274,12 +421,21 @@ def find_best_spectral_fit(
         fit_results[model_name] = fit_result
         plot_dicts[model_name] = plot_dict
         beta_mins[model_name] = beta_min
+        band_bool_dict[model_name] = band_bool
 
     if len(fit_results.keys()) == 0:
-        return None, None, None, None, None
+        return None
 
     # Select the best-fit model out of those fitted
     aic_dict, best_fit_model_name, p_best = select_best_fit_model(beta_mins, len(freqs_MHz))
+
+    # Extract best-fit parameters in a fitter-agnostic format
+    if method == "maximum-likelihood":
+        params, param_errs = _iminuit_params_to_user_units(fit_results[best_fit_model_name])
+    else:
+        params, param_errs = _bilby_params_to_user_units(
+            map_params_dict[best_fit_model_name], fit_results[best_fit_model_name]
+        )
 
     if legend_style == "compact":
         legend_inside_bbox = True
@@ -334,4 +490,20 @@ def find_best_spectral_fit(
                 **plot_kwargs,
             )
 
-    return best_fit_model_name, p_best, fit_results, aic_dict, plot_dicts
+    return SpectralFitResult(
+        pulsar=pulsar,
+        model=best_fit_model_name,
+        method=method,
+        likelihood=likelihood,
+        p_best=p_best,
+        params=params,
+        param_errs=param_errs,
+        aic=aic_dict[best_fit_model_name],
+        aic_dict=aic_dict,
+        n_data=len(freqs_MHz),
+        band_bool=band_bool_dict[best_fit_model_name],
+        exclude_models=exclude_models,
+        pulsar_spectra_version=_PULSAR_SPECTRA_VERSION,
+        fit_results=fit_results,
+        plot_dicts=plot_dicts,
+    )

@@ -1,7 +1,11 @@
 #!/usr/bin/env python
 
 import argparse
+import json
 import logging
+import os
+
+import yaml
 
 from pulsar_spectra.catalogue import collect_catalogue_fluxes
 from pulsar_spectra.spectral_fit import find_best_spectral_fit
@@ -65,8 +69,10 @@ def quick_fit(
     point_estimate="max-std",
     likelihood="Huber",
     sampler_kwargs=None,
+    output=None,
 ):
     cat_list = collect_catalogue_fluxes()
+    output_data = {}
     for pulsar in pulsars:
         logger.info(f"Fitting {pulsar}")
         freq_all, band_all, flux_all, flux_err_all, limit_signs, ref_all = cat_list[pulsar]
@@ -98,7 +104,7 @@ def quick_fit(
         else:
             logger.warning("No plotting action selected.")
 
-        best_fit_model_name, p_best, fit_results, aic_dict, plot_dicts = find_best_spectral_fit(
+        result = find_best_spectral_fit(
             pulsar,
             freq_all,
             band_all,
@@ -114,16 +120,29 @@ def quick_fit(
             **plot_opt,
         )
 
-        logger.info(f"{pulsar} fit: {best_fit_model_name} (p_best={p_best:.3f})")
+        if result is None:
+            logger.warning(f"No valid fit found for PSR {pulsar}")
+            continue
 
-        # TODO: implement a package-agnostic method for printing results
-        if method == "maximum-likelihood" and fit_results is not None:
-            result = fit_results[best_fit_model_name]
-            for p, v, e in zip(result.parameters, result.values, result.errors):
-                if p.startswith("v"):
-                    logger.info(f"{p} = {v / 1e6:8.1f} +/- {e / 1e6:8.1} MHz")
-                else:
-                    logger.info(f"{p} = {v:.5f} +/- {e:.5}")
+        logger.info(f"{pulsar} fit: {result.model} (p_best={result.p_best:.3f})")
+        for p, v in result.params.items():
+            e = result.param_errs[p]
+            if p.startswith("v"):
+                logger.info(f"{p} = {v:8.1f} +/- {e:8.1f} MHz")
+            else:
+                logger.info(f"{p} = {v:.5f} +/- {e:.5f}")
+
+        output_data[pulsar] = result.to_dict()
+
+    if output is not None and output_data:
+        ext = os.path.splitext(output)[1].lower()
+        with open(output, "w") as f:
+            if ext in (".yaml", ".yml"):
+                yaml.dump(output_data, f, sort_keys=False)
+            elif ext == ".json":
+                json.dump(output_data, f, indent=2)
+            else:
+                raise ValueError(f"Unrecognised output format '{ext}' — use .yaml, .yml, or .json")
 
 
 def main():
@@ -218,6 +237,13 @@ def main():
             "This options is only applicable to the nested sampling method."
         ),
     )
+    parser.add_argument(
+        "-o",
+        "--output",
+        type=str,
+        default=None,
+        help="Write fit results to this file. Format is determined by extension: .yaml, .yml, or .json.",
+    )
     args = parser.parse_args()
 
     setup_logger("pulsar_spectra", log_level=args.loglvl)
@@ -235,6 +261,7 @@ def main():
         point_estimate=args.point_estimate,
         likelihood=args.likelihood,
         sampler_kwargs={"npool": args.npool},
+        output=args.output,
     )
 
 

@@ -5,15 +5,14 @@ cat_dict = collect_catalogue_fluxes()
 pulsar = "J0332+5434"
 freqs, bands, fluxs, flux_errs, limit_signs, refs = cat_dict[pulsar]
 
-best_model_name, p_best, fit_results, aic_dict, plot_dicts = find_best_spectral_fit(
+result = find_best_spectral_fit(
     pulsar, freqs, bands, fluxs, flux_errs, limit_signs, refs, plot_best=True
 )
 
-result = fit_results[best_model_name]
-
-print(f"Best fit model: {best_model_name}")
-for p, v, e in zip(result.parameters, result.values, result.errors):
+print(f"Best fit model: {result.model}")
+for p, v in result.params.items():
+    e = result.param_errs[p]
     if p.startswith("v"):
-        print(f"{p} = {v / 1e6:.1f} +/- {e / 1e6:.1f} MHz")
+        print(f"{p} = {v:.1f} +/- {e:.1f} MHz")
     else:
         print(f"{p} = {v:.5f} +/- {e:.5f}")

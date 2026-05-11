@@ -19,7 +19,7 @@ simplest use case is as follows:
     quick-fit -p J0332+5434
 
 This will produce a plot of the best-fit spectrum for J0332+5434 with the default fitting method.
-You can select the :ref:`fitting method <fitting-methods>` with ``--method`` and the 
+You can select the :ref:`fitting method <fitting-methods>` with ``--method`` and the
 :ref:`likelihood function <likelihoods>` with ``--likelihood``. The output plots can be customised
 with ``--plot_type``, ``--legend_style``, and ``--point_estimate``. Lastly, for the nested sampling
 method, you will likely want to make use of parallelisation. The number of CPUs used can be selected
@@ -40,7 +40,7 @@ The following code can be run to fit PSR J0332+5434:
     pulsar = "J0332+5434"
     freqs, bands, fluxs, flux_errs, limit_signs, refs = cat_dict[pulsar]
 
-    best_model_name, p_best, fit_results, aic_dict, plot_dicts = find_best_spectral_fit(
+    result = find_best_spectral_fit(
         pulsar, freqs, bands, fluxs, flux_errs, limit_signs, refs, plot_best=True
     )
 
@@ -55,12 +55,11 @@ can print them like so:
 .. script location: example_scripts/simple_example.py
 .. code-block:: python
 
-    result = fit_results[best_model_name]
-
-    print(f"Best fit model: {best_model_name}")
-    for p, v, e in zip(result.parameters, result.values, result.errors):
+    print(f"Best fit model: {result.model}")
+    for p, v in result.params.items():
+        e = result.param_errs[p]
         if p.startswith("v"):
-            print(f"{p} = {v / 1e6:.1f} +/- {e / 1e6:.1f} MHz")
+            print(f"{p} = {v:.1f} +/- {e:.1f} MHz")
         else:
             print(f"{p} = {v:.5f} +/- {e:.5f}")
 
@@ -96,9 +95,10 @@ Expanding on the previous example, you add your own data to the fit as follows:
     limit_signs = [0] + limit_signs
     refs = ["Your Work"] + refs
 
-    best_model_name, p_best, fit_results, aic_dict, plot_dicts = find_best_spectral_fit(
+    result = find_best_spectral_fit(
         pulsar, freqs, bands, fluxs, flux_errs, limit_signs, refs, plot_best=True
     )
+
 
 This will produce ``J0040+5716_simple_power_law_maximum-likelihood_Huber_best_fit.png`` with your
 data included in the fit and plot.
@@ -185,7 +185,7 @@ You can use the pulsar's fit to estimate a pulsar's flux density at a certain fr
     pulsar = "J0820-1350"
     freqs, bands, fluxs, flux_errs, limit_signs, refs = cat_dict[pulsar]
 
-    best_model_name, _, fit_results, _, _ = find_best_spectral_fit(
+    result = find_best_spectral_fit(
         pulsar,
         freqs,
         bands,
@@ -195,14 +195,14 @@ You can use the pulsar's fit to estimate a pulsar's flux density at a certain fr
         refs,
     )
 
-    fitted_flux, fitted_flux_err = estimate_flux_density(150.0, best_model_name, fit_results[best_model_name])
+    fitted_flux, fitted_flux_err = estimate_flux_density(150.0, result.model, result.fit_results[result.model])
 
     print(f"{pulsar} estimated flux: {fitted_flux:.1f} ± {fitted_flux_err:.1f} mJy")
 
 Which will output
 
 .. code-block::
-    
+
     J0820-1350 estimated flux: 225.4 ± 21.9 mJy
 
 .. NOTE: Commented out because the LPS model is no longer included
@@ -273,7 +273,7 @@ To perform this calculation, use the in-built function as follows:
     pulsar = "J0955-5304"
     freqs, bands, fluxs, flux_errs, limit_signs, refs = cat_dict[pulsar]
 
-    best_model_name, _, fit_results, _, _ = find_best_spectral_fit(
+    result = find_best_spectral_fit(
         pulsar,
         freqs,
         bands,
@@ -283,13 +283,11 @@ To perform this calculation, use the in-built function as follows:
         refs,
     )
 
-    if best_model_name == "high_frequency_cut_off_power_law":
-        result = fit_results[best_model_name]
-
+    if result.model == "high_frequency_cut_off_power_law":
         B_pc, u_B_pc, B_surf, B_lc, r_lc, z_e, u_z_e, z_percent, u_z_percent = calc_high_frequency_cutoff_emission_height(
             pulsar,
-            result.values[0],
-            result.errors[0],
+            result.params["vc"] * 1e6,
+            result.param_errs["vc"] * 1e6,
         )
         print(f"B_pc:    ({B_pc / 1e11:.2f} +/- {u_B_pc / 1e11:.2f})x10^11 G")
         print(f"B_surf:  {B_surf / 1e12:.2f}x10^12 G")
@@ -298,7 +296,7 @@ To perform this calculation, use the in-built function as follows:
         print(f"z_e:     {z_e:.1f} +/- {u_z_e:.1f} km")
         print(f"z/R_LC:  {z_percent:.2f} +/- {u_z_percent:.2f} %")
     else:
-        print("Not a power-law with high-frequency cut-off fit")
+        print(f"Best model was {result.model}, not a power-law with high-frequency cut-off fit")
 
 Which will output
 

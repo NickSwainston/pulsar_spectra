@@ -282,6 +282,59 @@ We can then calculate :math:`p_\mathrm{best}`:
 where :math:`T` is the number of models being tested. This probability is included in the legend
 of each ``pulsar_spectra`` plot to assist with interpreting the fit.
 
+.. _spectral-fit-result:
+
+Fit result
+----------
+
+:py:meth:`pulsar_spectra.spectral_fit.find_best_spectral_fit` returns a
+:py:class:`~pulsar_spectra.spectral_fit.SpectralFitResult` object that
+collects everything needed to understand and reproduce the fit in a single,
+fitter-agnostic container.
+
+All frequency parameters (those whose names start with ``v``) are reported
+in **MHz** and the flux density normalisation ``c`` is in **mJy**, so you
+can read the values without any unit conversion:
+
+.. code-block:: python
+
+    from pulsar_spectra.catalogue import collect_catalogue_fluxes
+    from pulsar_spectra.spectral_fit import find_best_spectral_fit
+
+    cat_dict = collect_catalogue_fluxes()
+    pulsar = "J0332+5434"
+    freqs, bands, fluxs, flux_errs, limit_signs, refs = cat_dict[pulsar]
+
+    result = find_best_spectral_fit(
+        pulsar, freqs, bands, fluxs, flux_errs, limit_signs, refs
+    )
+
+    print(result.model)          # e.g. "simple_power_law"
+    print(result.p_best)         # e.g. 0.83
+    print(result.params["a"])    # spectral index (dimensionless)
+    print(result.params["c"])    # flux density at reference frequency (mJy)
+    print(result.params["v0"])   # reference frequency (MHz)
+    print(result.aic_dict)       # AICc for every fitted model
+
+The raw fitter objects are preserved in ``fit_results`` for advanced use:
+
+.. code-block:: python
+
+    # Maximum-likelihood: access the iminuit.Minuit object
+    m = result.fit_results[result.model]
+
+    # Bayesian: access the bilby.core.result.Result object
+    bilby_result = result.fit_results[result.model]
+
+Results can be serialised to a plain dict (suitable for JSON or YAML) with
+:py:meth:`~pulsar_spectra.spectral_fit.SpectralFitResult.to_dict`, or written
+directly from the command line via ``quick-fit --output results.yaml``.
+
+.. autoclass:: pulsar_spectra.spectral_fit.SpectralFitResult
+   :members:
+   :noindex:
+
+
 Models
 ------
 This fit is done for all functions in the :ref:`models module<models_module>` that are included in :py:meth:`pulsar_spectra.models.model_settings`.
@@ -519,7 +572,7 @@ To find the best-fit model out of those implemented in ``pulsar_spectra``, you c
     pulsar = "J1327-6222"
     freqs, bands, fluxs, flux_errs, limit_signs, refs = cat_dict[pulsar]
 
-    best_model_name, p_best, fit_results, aic_dict, plot_dicts = find_best_spectral_fit(
+    result = find_best_spectral_fit(
         pulsar,
         freqs,
         bands,
@@ -552,15 +605,13 @@ options. For example:
 .. code-block:: python
 
     from pulsar_spectra.catalogue import collect_catalogue_fluxes
-    from pulsar_spectra.fitters.bayesian import bilby_compute_maximum_posterior_likelihood
-    from pulsar_spectra.likelihoods import t_cost_function
     from pulsar_spectra.spectral_fit import find_best_spectral_fit
 
     cat_dict = collect_catalogue_fluxes()
     pulsar = "J1327-6222"
     freqs, bands, fluxs, flux_errs, limit_signs, refs = cat_dict[pulsar]
 
-    best_model_name, p_best, fit_results, aic_dict, plot_dicts = find_best_spectral_fit(
+    result = find_best_spectral_fit(
         pulsar,
         freqs,
         bands,
@@ -574,27 +625,16 @@ options. For example:
         sampler_kwargs={"npool": 10},
     )
 
-    beta_min, params_beta_min = bilby_compute_maximum_posterior_likelihood(
-        freqs,
-        bands,
-        fluxs,
-        flux_errs,
-        fit_results[best_model_name],
-        best_model_name,
-        True,
-        t_cost_function,
-    )
-
-    print(f"{pulsar} fit: {best_model_name} (p_best={p_best:.3f})")
-    print("Maximum-likelihood parameter values:")
-    for p in params_beta_min.keys():
-        v = params_beta_min[p]
+    print(f"{pulsar} fit: {result.model} (p_best={result.p_best:.3f})")
+    print("Maximum-posterior parameter values:")
+    for p, v in result.params.items():
+        e = result.param_errs[p]
         if p.startswith("v"):
-            print(f"{p} = {v / 1e6:.1f} MHz")
+            print(f"{p} = {v:.1f} +/- {e:.1f} MHz")
         elif p == "c":
-            print(f"{p} = {v:.5f} mJy")
+            print(f"{p} = {v:.5f} +/- {e:.5f} mJy")
         else:
-            print(f"{p} = {v:.5f}")
+            print(f"{p} = {v:.5f} +/- {e:.5f}")
 
 This will produce the following plot, which shows samples from the posterior distribution of the
 best-fit model (grey lines), as well as the sample with the maximum likelihood (black dashed line).
