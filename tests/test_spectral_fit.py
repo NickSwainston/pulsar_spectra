@@ -11,6 +11,7 @@ from scipy.stats import norm
 from scipy.stats import t as t_dist
 
 from pulsar_spectra.catalogue import collect_catalogue_fluxes
+from pulsar_spectra.fitters.bayesian import bilby_compute_maximum_posterior_likelihood
 from pulsar_spectra.likelihoods import tobit_log_likelihood
 from pulsar_spectra.spectral_fit import find_best_spectral_fit
 
@@ -284,10 +285,10 @@ def test_iminuit_upper_limits(fit_method, loss):
     c_true_mJy = 1000.0
 
     # 4 exact detections — data lies exactly on the power law
-    freqs_det = np.array([100.0, 300.0, 3000.0, 10000.0])
-    bands_det = freqs_det / 10.0
-    fluxes_det = c_true_mJy * (freqs_det / v_pivot_MHz) ** alpha_true
-    flux_errs_det = 0.1 * fluxes_det
+    freqs_base = np.array([100.0, 300.0, 3000.0, 10000.0])
+    bands_base = freqs_base / 10.0
+    fluxes_base = c_true_mJy * (freqs_base / v_pivot_MHz) ** alpha_true
+    flux_errs_base = 0.1 * fluxes_base
 
     # Extra point: 5x the true power-law flux, 10% proportional error
     freq_extra = 30000.0
@@ -296,18 +297,18 @@ def test_iminuit_upper_limits(fit_method, loss):
     obs_flux_extra = 5.0 * true_flux_extra
     obs_err_extra = 0.1 * obs_flux_extra
 
-    freqs_all = np.append(freqs_det, freq_extra)
-    bands_all = np.append(bands_det, band_extra)
-    fluxes_all = np.append(fluxes_det, obs_flux_extra)
-    flux_errs_all = np.append(flux_errs_det, obs_err_extra)
+    freqs_all = np.append(freqs_base, freq_extra)
+    bands_all = np.append(bands_base, band_extra)
+    fluxes_all = np.append(fluxes_base, obs_flux_extra)
+    flux_errs_all = np.append(flux_errs_base, obs_err_extra)
 
     # Fit 1: baseline — 4 exact detections only
     _, _, fit_results_base, _, _ = find_best_spectral_fit(
         "baseline_no_upper_limits",
-        freqs_det,
-        bands_det,
-        fluxes_det,
-        flux_errs_det,
+        freqs_base,
+        bands_base,
+        fluxes_base,
+        flux_errs_base,
         [0] * 4,
         ["Fake data"] * 4,
         method=fit_method,
@@ -343,9 +344,49 @@ def test_iminuit_upper_limits(fit_method, loss):
         plot_compare=True,
     )
 
-    alpha_base = fit_results_base["simple_power_law"].values["a"]
-    alpha_detect = fit_results_detect["simple_power_law"].values["a"]
-    alpha_upper = fit_results_upper["simple_power_law"].values["a"]
+    if fit_method == "bayesian-nested-sampling":
+        _, params_beta_min_base = bilby_compute_maximum_posterior_likelihood(
+            freqs_base,
+            bands_base,
+            fluxes_base,
+            flux_errs_base,
+            [0] * 4,
+            fit_results_base["simple_power_law"],
+            "simple_power_law",
+            True,
+            likelihood=loss,
+        )
+        alpha_base = params_beta_min_base["a"]
+
+        _, params_beta_min_detect = bilby_compute_maximum_posterior_likelihood(
+            freqs_all,
+            bands_all,
+            fluxes_all,
+            flux_errs_all,
+            [0] * 5,
+            fit_results_detect["simple_power_law"],
+            "simple_power_law",
+            True,
+            likelihood=loss,
+        )
+        alpha_detect = params_beta_min_detect["a"]
+
+        _, params_beta_min_upper = bilby_compute_maximum_posterior_likelihood(
+            freqs_all,
+            bands_all,
+            fluxes_all,
+            flux_errs_all,
+            [0, 0, 0, 0, -1],
+            fit_results_upper["simple_power_law"],
+            "simple_power_law",
+            True,
+            likelihood=loss,
+        )
+        alpha_upper = params_beta_min_upper["a"]
+    else:
+        alpha_base = fit_results_base["simple_power_law"].values["a"]
+        alpha_detect = fit_results_detect["simple_power_law"].values["a"]
+        alpha_upper = fit_results_upper["simple_power_law"].values["a"]
 
     print(f"alpha_base   = {alpha_base:.4f}")
     print(f"alpha_detect = {alpha_detect:.4f}  shift={alpha_detect - alpha_base:+.4f}")
